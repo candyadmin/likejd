@@ -1,0 +1,54 @@
+
+请确保mysql数据库编码为utf-8  JDK版本为1.6或1.7 最好是1.7
+
+mysql数据库编码查看
+SHOW VARIABLES LIKE 'character%';
+
+mysql数据库编码查看
+SHOW VARIABLES LIKE 'character%';
+
+mysql数据库编码查看
+SHOW VARIABLES LIKE 'character%';
+
+重要的事说三遍，出现？乱码请检查数据库字符集
+
+
+导入数据库脚本shopping.sql文件即可，此版本不再需要安装。
+
+
+如果有server或database编码不是utf8，使用以下命令更改
+SET character_set_server = utf8 ;
+SET character_set_database = utf8 ;
+
+有的数据库无法直接使用命令更改成功，更改my.ini配置文件的编码
+[mysqld]
+character-set-server=utf8
+
+[client]
+default-character-set=utf8
+
+[mysql]
+default-character-set=utf8
+
+
+
+
+导入工程到myeclipse这样的工具中，然后更改项目中的数据库配置文件。
+
+部署项目到tomcat等应用服务器中。
+
+创建一个空的mysql数据库【重要：确保 mysql数据库编码为utf-8】。
+
+导入sql脚本！！！
+
+启动项目。
+
+
+
+部署到服务器：
+
+在本地使用myeclipse之类的工具将项目打包成war包，上传到服务器tomcat的webapps目录下。
+
+或者直接在本地tomcat的webapps下面部署的项目压缩一下，上传到服务器tomcat的webapps目录下并解压缩。
+
+启动服务器上得tomcat服务器

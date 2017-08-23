@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!obj.gg_name - 团购信息 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/groupbuy.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script type="text/javascript">
+function timeCount(remain_id){
+   function _fresh(){
+      var nowDate = new Date(),                                    //当前时间
+      endDate = new Date($('#'+remain_id).attr('endtime')),    //截止时间
+      totalS  = parseInt((endDate.getTime() - nowDate.getTime()) / 1000);     //总秒数
+      _day    = parseInt(totalS / 3600 / 24);
+      _hour   = parseInt((totalS / 3600) % 24);
+      _minute = parseInt((totalS / 60) % 60);
+      _second = parseInt(totalS % 60);
+     jQuery('#'+remain_id).html('<b>' + _day +'</b><i>天</i><b>' + _hour + '</b><i>小时</i><b>' + _minute + '</b><i>分</i><b>' + _second + '</b><i>秒</i>');
+     if( totalS <= 0){
+       jQuery('#'+remain_id).html('该团购已结束');
+       clearInterval(sh);
+     }
+  }
+  _fresh();
+  var sh = setInterval(_fresh,1000);
+}
+jQuery(document).ready(function(){
+  timeCount("time_down_info");
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> 
+  $!httpInclude.include("/group_head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="index2">
+      <div class="gp_goodstop">
+        <div class="gp_topbar"><span class="gp_topa"><a href="$!webPath/group_list.htm?time=soon">即将开始</a>|<a href="$!webPath/group_list.htm?time=history">往期团购</a></span>
+          <h2>商品团购</h2>
+          <b><strong>$!{obj.group.group_name}</strong>$!CommUtil.formatTime("yyyy年MM月dd日 HH:mm",$!obj.group.beginTime) 至 $!CommUtil.formatTime("yyyy年MM月dd日 HH:mm",$!obj.group.endTime)</b>
+          </div>
+      </div>
+      <div class="tuan_details">
+        <div class="tuan_left_box">
+          <div class="tuan_dleft">
+            <h2 class="tuanname"><a href="$!webPath/goods_$!{obj.gg_goods.id}.htm">$!obj.gg_name</a></h2>
+            <div class="tuanbuy_box">
+              <div class="tuanbuy_left">    
+                <div class="tuanbtop">
+              #set($save_money=$!obj.gg_goods.goods_price - $!obj.gg_price)
+              #if($!obj.gg_status==1)
+               #if($!obj.gg_count>0)
+                <span class="tuanbuyt"><b>
+                  <p>¥$!{obj.gg_price}</p>
+                  </b><a href="$!webPath/goods_$!{obj.gg_goods.id}.htm"  class="buytuan"></a>
+                </span>
+                #else
+                 <span class="tuanbuyt_hui"><b>
+                  <p>¥$!{obj.gg_price}</p>
+                  </b><a href="$!webPath/goods_$!{obj.gg_goods.id}.htm"  class="buytuan"></a>
+                </span>
+                #end
+              #else
+              <span class="tuanbuyt_green"><b>
+                  <p>¥$!{obj.gg_price}</p>
+                  </b>
+              </span>
+              #end  
+                  <span class="tuanbuyb"> <i><em>原价</em><b>¥$!{obj.gg_goods.goods_price}</b></i> <i><em>折扣</em><strong>$!{obj.gg_rebate}</strong></i> <i><em>节省</em><strong>¥$!save_money</strong></i> </span> 
+                  </div>
+                <div class="tuanbotm">
+                  #set($buyer_count=$!obj.gg_def_count+$!obj.gg_vir_count)
+                  <div class="tuan_buyed"> <span><b>$!{buyer_count}人已购买</b></span> <span>本单仅剩：$!obj.gg_count份，欲购从速</span> </div>
+                  #if($!buyer_count>=$!obj.gg_group_count)
+                  <div class="tuansuces"> <span><img src="$!imageWebServer/resources/style/system/front/default/images/group/buysucess.jpg" width="53" height="58" /></span>#if($!obj.gg_count>0)团购成功!还可继续购买... #else 卖光了! #end</div>
+                  #else
+                  <div class="tuansuces"> <span><img src="$!imageWebServer/resources/style/system/front/default/images/group/buysucess2.jpg" width="53" height="58" /></span>即将成功!赶紧加入团购... </div>                  
+                  #end
+                  <div class="tuanlimit">
+                    <div class="tuanlitm">距离本次团购结束还有：</div>
+                    <div class="tuanlitime" id="time_down_info" endTime="$!CommUtil.formatTime('MM/dd/yyyy HH:mm:ss',$!{obj.group.endTime})"> <b>14</b><i>天</i><b>05</b><i>小时</i><b>43</b><i>分</i><b>46</b><i>秒</i> </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tuanbuy_right"> <span class="gp_img_cspan">
+                <p><img src="$!imageWebServer/$!obj.gg_img.path/$!obj.gg_img.name" width="463" height="463"  /></p>
+                </span> </div>
+            </div>
+          </div>
+          <div class="tuan_left_botm">
+            <div class="tuan_btm_left">
+              <h3 class="tuan_btm_h3">商品信息</h3>
+              <div class="tuan_btm_deta">$!obj.gg_content</div>
+              <div class="tuan_order_buy">
+                <div class="tuan_buy_rush">
+                 #if($!obj.gg_status==1)
+                   #if($!obj.gg_count>0)
+                   <a class="rush_btn" href="$!webPath/goods_$!{obj.gg_goods.id}.htm"></a>
+                   #else
+                   <a class="buyout_btn" href="javascript:;"></a>
+                   #end
+                 #else
+                 <a  class="wait_btn" href="javascript:;"></a>
+                 #end
+                  <span class="tuan_rush_m">¥$!{obj.gg_price}</span> <span class="tuan_rush_money"><i><b>原价</b><s>¥$!{obj.gg_goods.goods_price}</s></i><i><b>折扣</b><em>$!{obj.gg_rebate}折</em></i><i><b>节省</b><em>¥$!save_money</em></i></span> </div>
+                <div class="tuan_buyer">
+                  <h4>他们刚刚购买了</h4>
+                  <div class="tuan_buyer_info">
+                    <table width="573" border="0" cellspacing="0" cellpadding="0" class="tuanin_table">
+                      <tr class="tuanin_th">
+                        <td width="140" align="center"><b>卖家</b></td>
+                        <td width="83"  align="center"><b>购买数量</b></td>
+                        <td width="150" align="center"><b>单价</b></td>
+                        <td width="200" align="center"><b>下单时间</b></td>
+                      </tr>
+                      #foreach($gc in $gcs)
+                      <tr class="tuanin_tb">
+                        <td>$!gc.of.user.userName</td>
+                        <td>$!gc.count</td>
+                        <td>¥$!gc.price</td>
+                        <td>$!CommUtil.formatLongDate($!gc.of.addTime)</td>
+                      </tr>
+                      #end
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tuan_btm_right">
+              <h3 class="tuanrbt_h3"><span>店铺信息</span></h3>
+              <h4 class="tuanrbt_h4"><span>商品所在店铺</span></h4>
+              <div class="tuanrbt_shop"><a href="$!webPath/store_$!{obj.gg_goods.goods_store.id}.htm" target="_blank" class="tuan_shopa">$!{obj.gg_goods.goods_store.store_name}</a></div>
+              <h4 class="tuanrbt_h4"><span>店铺推荐商品</span></h4>
+              #foreach($goods in $recommend_goods)
+              <ul class="tuan_btr_u">
+                <li class="tuan_btr_img"><span class="gp_img_cspan">
+                #if($!goods.goods_main_photo)
+                  #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+                  #else
+                  #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                  #end
+                  <p><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank"><img src="$!img" width="120" height="120" /></a></p>
+                  </span></li>
+                <li class="tuan_btr_name"><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!goods.goods_name</a></li>
+                <li class="tuan_btr_money">市场价：<s>¥$!{goods.goods_price}</s></li>
+                <li class="tuan_btr_money">商城价：<b>¥$!{goods.store_price}</b></li>
+              </ul>
+              #end
+            </div>
+          </div>
+        </div>
+        <div class="tuan_dright">
+          <h3 class="tuandr_h3">本期热门团购</h3>
+          <div class="tuan_drbox">
+           #foreach($gg in $hot_ggs) 
+            <ul class="tuan_dru">
+              <li class="tuandru_img"><span class="gp_img_cspan">
+                <p><a href="$!webPath/group_view_$!{gg.id}.htm"><img src="$!imageWebServer/$!gg.gg_img.path/$!gg.gg_img.name" width="178" height="178" /></a></p>
+                </span><b class="tuandru_filter"><i></i><em><s>¥$!{gg.gg_goods.goods_price}</s><strong>¥$!{gg.gg_price}</strong></em></b></li>
+              <li class="tuandru_name"><a href="$!webPath/group_view_$!{gg.id}.htm" target="_blank">$!gg.gg_name</a></li>
+               #set($buyer_count=$!obj.gg_def_count+$!obj.gg_vir_count)
+              <li class="tuandru_m"><a href="$!webPath/group_view_$!{gg.id}.htm" target="_blank" class="tuandru_rush">立即抢购</a><b>已购买<strong>$!buyer_count</strong>件</b></li>
+            </ul>
+           #end            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

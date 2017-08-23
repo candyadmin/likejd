@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+	<diskStore path="java.io.tmpdir" />
+	<defaultCache maxElementsInMemory="1000" eternal="false"
+		timeToIdleSeconds="1200" timeToLiveSeconds="1200"
+		overflowToDisk="true" clearOnFlush="true"
+		memoryStoreEvictionPolicy="LFU">
+	</defaultCache>
+	<cache name="SimplePageFragmentCachingFilter" maxElementsInMemory="10"
+		maxElementsOnDisk="10" eternal="false" overflowToDisk="true"
+		diskSpoolBufferSizeMB="20" timeToIdleSeconds="120"
+		timeToLiveSeconds="120" memoryStoreEvictionPolicy="LFU" />
+	<!-- 单独对某个entity的缓存策略设置
+		<cache name="com.shopping.domain.User"
+		maxElementsInMemory="100" eternal="false" timeToIdleSeconds="1200"
+		timeToLiveSeconds="1200" overflowToDisk="true" clearOnFlush="true">
+		</cache>
+	-->
+</ehcache>

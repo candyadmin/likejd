@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd">
+
+	<beans:bean id="loggerListener"
+		class="org.springframework.security.event.authentication.LoggerListener" />
+	<beans:bean id="securityManager"
+		class="com.shopping.core.security.support.SecurityManagerSupport" />
+	<beans:bean id="sessionRegistry"
+		class="org.springframework.security.concurrent.SessionRegistryImpl" />
+	<global-method-security secured-annotations="enabled"></global-method-security>
+	<http auto-config="false" entry-point-ref="loginUrlEntryPoint">
+		<!--不用Filter去处理的url-->
+		<intercept-url pattern="/login.htm*" filters="none" />
+		<intercept-url pattern="/domain_error.htm*" filters="none" />
+		<intercept-url pattern="*.css" filters="none" />
+		<intercept-url pattern="*.gif" filters="none" />
+		<intercept-url pattern="*.jpg" filters="none" />
+		<intercept-url pattern="*.jpeg" filters="none" />
+		<intercept-url pattern="*.png" filters="none" />
+		<intercept-url pattern="*.bmp" filters="none" />
+		<!-- max-sessions允许最大登录用户数，exception-if-maximum-exceeded为false时候第二个用户登录踢出第一个，为true拒绝第二个用户登录 -->
+		<concurrent-session-control max-sessions="1"
+			exception-if-maximum-exceeded="false" expired-url="/outline.htm"
+			session-registry-alias="sessionRegistry" />
+	</http>
+	<authentication-manager alias="authenticationManager" />
+
+	<beans:bean id="shopAuthenticationProvider"
+		class="com.shopping.core.security.support.ShopAuthenticationProvider">
+		<custom-authentication-provider />
+		<beans:property name="userDetailsService" ref="securityManager" />
+	</beans:bean>
+
+	<beans:bean id="accessDecisionManager"
+		class="org.springframework.security.vote.AffirmativeBased">
+		<beans:property name="allowIfAllAbstainDecisions" value="false" />
+		<beans:property name="decisionVoters">
+			<beans:list>
+				<beans:bean
+					class="org.springframework.security.vote.RoleVoter" />
+				<beans:bean
+					class="org.springframework.security.vote.AuthenticatedVoter" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="resourceSecurityInterceptor"
+		class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+		<beans:property name="authenticationManager"
+			ref="authenticationManager" />
+		<beans:property name="accessDecisionManager"
+			ref="accessDecisionManager" />
+		<beans:property name="objectDefinitionSource"
+			ref="secureResourceFilterInvocationDefinitionSource" />
+		<beans:property name="observeOncePerRequest" value="false" />
+		<custom-filter after="LAST" />
+	</beans:bean>
+	<beans:bean id="secureResourceFilterInvocationDefinitionSource"
+		class="com.shopping.core.security.interceptor.SecureResourceFilterInvocationDefinitionSource" />
+	<!-- 自定义登录过滤器 -->
+	<beans:bean id="loginAuthenticationFilter"
+		class="com.shopping.core.security.support.LoginAuthenticationFilter">
+		<custom-filter position="AUTHENTICATION_PROCESSING_FILTER" />
+		<beans:property name="usernameParameter" value="username" />
+		<beans:property name="passwordParameter" value="password" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="authenticationFailureUrl" value="/login_error.htm" />
+		<beans:property name="defaultTargetUrl" value="/login_success.htm" />
+		<beans:property name="alwaysUseDefaultTargetUrl" value="true" />
+		<beans:property name="filterProcessesUrl" value="/shopping_login.htm" />
+	</beans:bean>
+	<!-- 自定义异常过滤器 -->
+	<beans:bean id="exceptionFilter"
+		class="com.shopping.core.security.support.ShopSecurityExceptionFilter">
+		<beans:property name="authenticationEntryPoint" ref="loginUrlEntryPoint" />
+		<custom-filter after="EXCEPTION_TRANSLATION_FILTER" />
+	</beans:bean>
+	<!-- 重写用户退出过滤器 -->
+	<beans:bean id="_logoutProcessingFilter" class="com.shopping.core.filter.NorLogoutFilter">
+		<beans:property name="filterProcessesUrl" value="/shopping_logout.htm" />
+		<beans:constructor-arg value="/logout_success.htm" />
+		<beans:constructor-arg>
+			<beans:list>
+				<beans:bean class="org.springframework.security.ui.logout.SecurityContextLogoutHandler">
+					<beans:property name="invalidateHttpSession" value="false" />
+				</beans:bean>
+			</beans:list>
+		</beans:constructor-arg>
+		<custom-filter before="LOGOUT_FILTER" />
+	</beans:bean>
+</beans:beans>

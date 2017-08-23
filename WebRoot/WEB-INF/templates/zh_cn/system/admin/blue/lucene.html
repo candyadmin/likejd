@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+function update_keyword(){
+  var hotSearch=jQuery("#hotSearch").val();
+  jQuery.ajax({type:'POST',
+			   url:'$!webPath/admin/lucene_hot_save.htm',
+			   data:{"id":"$!config.id","hotSearch":hotSearch},
+			   beforeSend:function(){
+				    jQuery("#hot_wait").show();
+				   },
+			   success:function(data){
+				      jQuery("#hot_wait").hide();
+				      if(data=="true"){
+					    alert("关键词保存成功");
+					  }else{
+						 alert("关键词保存失败"); 
+					  }
+				   }
+			 });
+}
+function update_lucene(){
+  jQuery.ajax({type:'POST',url:'$!webPath/admin/lucene_update.htm',data:'',dataType:"json",
+			  beforeSend:function(){
+				          jQuery("#lucene_wait").show();
+						 },
+			  success:function(json){
+				       jQuery("#lucene_wait").hide();
+					   jQuery("#update_time").text(json.update_time);
+					   jQuery("#file_size").text(json.file_size);
+					   jQuery("#lucene_update_result").text("索引更新完毕，花费"+json.run_time+"毫秒").show();
+					   jQuery("#lucene_update_result").fadeOut(8000);
+					  }
+			  });
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">全文检索</h1>
+  <div class="settab"> <span class="tab-one"></span> <span class="tabs"> <a href="javascript:void(0);" class="this" id="site_base">基本设置</a></span><span class="tab-two"></span></div>
+  <div class="operation">
+    <h3>Lucene全文检索</h3>
+    <ul>
+      <li>全文检索便于用户快速查询与关键字相关内容，减轻服务器检索压力</li>
+      <li>全文检索索引默认每天更新一次，也可以点击手动更新索引，建议在访问量低时候再手动更新</li>
+    </ul>
+  </div>
+    <div class="setcont" id="base">
+      <ul class="set1">
+        <li>热门搜索</li>
+        <li> <span class="webname">
+          <input name="hotSearch" type="text" id="hotSearch" value="$!config.hotSearch" />
+          </span> <span id="nothis"> <strong class="q"></strong> <strong class="w">显示在搜索框下面 前台点击时直接作为关键词进行搜索 新增多个关键词是用" , "隔开</strong> <strong class="c"></strong> </span> </li>
+      </ul>
+    </div>
+    <div class="submit">
+      <input type="button" value="保存" style="cursor:pointer;" onclick="update_keyword();"/>
+      <img id="hot_wait"  style="vertical-align:middle; display:none;" src="$!webPath/resources/style/common/images/loader.gif" />
+    </div>
+    <div class="setcont">
+      <ul class="set1">
+        <li style="color:#F00; display:none;" id="lucene_update_result"></li>
+        <li>索引更新时间:<i id="update_time">$!{CommUtil.formatLongDate($!config.lucene_update)}</i></li>
+         <li>索引空间路径:<i id="file_path">$!lucene_disk_path</i></li>
+        <li>索引占用空间：<i id="file_size">$!{lucene_disk_size}</i> M</li>
+      </ul>
+  </div>
+    <div class="submit">
+      <input name="save" type="button" value="更新索引" onclick="update_lucene()" />
+       <img id="lucene_wait"  style="vertical-align:middle; display:none;" src="$!webPath/resources/style/common/images/loader.gif" />
+    </div>
+</div>
+</body>
+</html>

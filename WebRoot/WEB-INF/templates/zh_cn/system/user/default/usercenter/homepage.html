@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!config.title - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+	//查询状态设置选项卡
+	#if(!$!type)
+	jQuery("div.like_tab_box").attr("style","display:block;");
+	jQuery("#li_baby").attr("class","current_b");
+	jQuery("#li_store").attr("class","current_d").find("div").css("display","none");
+	jQuery("#li_dy").attr("class","current_w").find("div").css("display","none");
+	#end
+	
+	#if($!type==1)
+		jQuery("#li_baby").attr("class","current_bb").find("div").css("display","none");
+		jQuery("#li_store").attr("class","current_dd").find("div").css("display","block");
+		jQuery("#li_dy").attr("class","current_w").find("div").css("display","none");
+	#end
+	
+	#if($!type==2)
+		jQuery("#li_baby").attr("class","current_bb").find("div").css("display","none");
+		jQuery("#li_store").attr("class","current_d").find("div").css("display","none");
+		jQuery("#li_dy").attr("class","current_ww").find("div").css("display","block");
+	#end
+								
+jQuery("ul[id^=per_enby_]").mouseover(function(){
+	var obj_id= jQuery(this).attr("obj_id");
+	jQuery("#per_fun_do_"+obj_id).show();
+	});	
+jQuery("ul[id^=per_enby_]").mouseleave(function(){
+	var obj_id= jQuery(this).attr("obj_id");
+	jQuery("#per_fun_do_"+obj_id).hide();
+	});	
+//动态设置
+jQuery("div[id^=dy_set_]").click(
+	function(){
+		var obj_id = jQuery(this).attr("obj_id");
+		var display = jQuery("#dy_ul_"+obj_id).css("display");
+		if(display=="block"){
+			jQuery("#dy_ul_"+obj_id).slideUp();
+			}
+		else{
+			jQuery("#dy_ul_"+obj_id).slideDown();
+		}	
+	});
+//鼠标移出动态事件
+jQuery("div[id^=div_content_]").mouseleave(function(){
+		var obj_id = jQuery(this).attr("obj_id");
+		jQuery("#dy_ul_"+obj_id).hide();
+	});
+
+//新鲜事加密
+	jQuery("a[id^=dy_lock_]").click(function(){
+	 var lock_mark = jQuery(this).attr("lock_mark");
+	 var obj_id = jQuery(this).attr("obj_id");
+	 jQuery("#obj_id").val(obj_id);
+	 var lock_message = "";
+	 if(lock_mark=="false"){
+		lock_message="私密"; 
+		 }else{
+		lock_message="公开"; 	 
+			 }
+		showDialog("dynamic_lock_switch","系统提示","亲，您确定要将该信息设置为"+lock_message+"？",1,"question","",dynamic_locked);
+		});
+	//删除动态
+	jQuery("a[id^=dy_delete_]").click(function(){
+		var obj_id = jQuery(this).attr("obj_id");
+		jQuery("#obj_id").val(obj_id);
+		showDialog("dynamic_delete","系统提示","删除后数据不可恢复，是否删除？",1,"question","",dynamic_delete);
+		});
+	
+	//个人主页显示删除访客按钮
+	jQuery("li[id^=visit_list_]").hover(
+			function(){
+				jQuery(this).find("div.per_interview_x").show();	
+				},
+			function(){
+				jQuery(this).find("div.per_interview_x").hide();
+				});
+	//个人主页删除访客ajax
+	jQuery("a[id^=visit_dele_]").click(function(){
+												
+		jQuery("#visit_dele_id").val(jQuery(this).attr("visit_id"));
+		showDialog("dele_visit","系统提示","删除后不可恢复，是否删除该条访问记录？",1,"question","",visit_dele);
+	});
+	//点击评论
+	jQuery("a[id^=dis_]").click(function(){
+		var obj_id = jQuery(this).attr("obj_id");
+		jQuery("#per_enby_"+obj_id).slideUp();
+		jQuery("#dis_ul_"+obj_id).fadeIn(800);
+	});
+	//点击返回
+	jQuery("input[id^=comeback_]").click(function(){
+		var obj_id =jQuery(this).attr("obj_id");
+		jQuery("#dis_ul_"+obj_id).hide();
+		jQuery("#per_enby_"+obj_id).fadeIn();
+		});
+	
+	//点击评论提交事件
+	jQuery("input[id^=dis_button_]").click(function(){
+		var obj_id =jQuery(this).attr("obj_id");
+		var content =jQuery("#dis_content_"+obj_id).val();
+		if(content.length>0){
+				jQuery.post("$!webPath/buyer/dynamic_ajax_reply.htm",
+					   {
+						"reply_content":content,
+						"parent_id":obj_id
+					   },
+					   function(data){
+						   if(data){
+							  jQuery("textarea[id^=dis_content_]").val(""); 
+							   showDialog("share_sns","系统提示","评论成功！",0,"succeed",3);
+						   }else{
+							   showDialog("share_sns","系统提示","评论失败！",0,"error",3); 
+							   }
+							},"text");
+			}else{
+			 jQuery("#dis_content_"+obj_id).attr("placeholder","请输入内容！")	
+				}
+		
+	});
+	
+});
+	function dynamic_delete(){
+		var obj_id =jQuery("#obj_id").val(); 
+		jQuery.post("$!webPath/buyer/homepage_dynamic_del.htm",
+					{"id":obj_id,
+					"currentPage":jQuery("#currentPage").val(),	
+					"type":jQuery("#type").val()
+						},
+						function(data){
+							if(data=="true"){
+								jQuery("#div_content_"+obj_id).hide(300);
+								}else{
+								 showDialog("dele_err","系统提示","删除失败！",0,"error",3); 	
+									}		
+							},"text");
+		};
+
+
+	function dynamic_locked(){
+		var obj_id =jQuery("#obj_id").val();		
+		jQuery.post("$!webPath/buyer/homepage_dynamic_lock.htm",
+					{
+					"dynamic_id":jQuery("#obj_id").val()
+					},function(data){
+						if(data=="false"){
+							jQuery("#dy_lock_"+obj_id).attr("lock_mark","false").html("√ 公开");
+							}
+							else{
+							jQuery("#dy_lock_"+obj_id).attr("lock_mark","true").html("⊙ 私密");	
+								}
+						},"text");
+		};
+	
+	function visit_dele(){
+		var visit_id=jQuery("#visit_dele_id").val();
+		jQuery.post("$!webPath/buyer/homepage_visit_dele.htm",
+				   {
+				    "visit_id":visit_id
+				   },
+				   function(data){
+					 if(data=="true"){
+								jQuery("#visit_list_"+visit_id).slideUp();
+							 }else{
+								 showDialog("share_sns","系统提示","删除失败！",0,"error",3);
+								 }
+	   					},"text");	
+		};
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+#if($!owner.id==$!user.id)
+$!httpInclude.include("/buyer/homepage_head.htm")
+#else
+$!httpInclude.include("/buyer/homepage_head.htm?uid=$!owner.id")
+#end
+<!--通栏蓝色导航-->
+<div style="width:100%; height:40px; background-color:#ff8800">
+  <div class="main">
+    <div class="home_nav">
+      <ul class="home_nav_ul">
+       #if($!owner.id !=$!user.id)
+        <li class="nav_this"><a href="$!webPath/buyer/homepage.htm?uid=$!{owner.id}">TA的主页</a></li>
+        #else
+        <li class="nav_this"><a href="$!webPath/buyer/homepage.htm">我的主页</a></li>
+        #end
+        #if($!owner.id !=$!user.id)
+        <li><a href="$!webPath/buyer/homepage/myfriends.htm?uid=$!owner.id">好友</a></li>
+        #else
+        <li><a href="$!webPath/buyer/homepage/myfriends.htm">好友</a></li>
+        #end
+        #if($!owner.id !=$!user.id)
+        <li><a href="$!webPath/buyer/homepage/myattention.htm?uid=$!owner.id">关注</a></li>
+        #else
+        <li><a href="$!webPath/buyer/homepage/myattention.htm">关注</a></li>
+        #end
+        #if($!owner.id !=$!user.id)
+        <li><a href="$!webPath/buyer/homepage/myfans.htm?uid=$!owner.id">粉丝</a></li>
+        #else
+        <li><a href="$!webPath/buyer/homepage/myfans.htm">粉丝</a></li>
+        #end
+      </ul>
+      <div class="home_nav_right"> <span>$!CommUtil.substring("$!{user.userName}",12)你好，欢迎来到$!CommUtil.substring("$!{config.websiteName}",8)！</span> </div>
+    </div>
+  </div>
+</div>
+<!--宝贝导航-->
+<div class="tab_nav">
+  <!--选项卡 开始-->
+  <div class="like_tab">
+    <ul class="like_tab_list">
+    
+      <li id="li_baby" class="current_b">
+        <div class="num_tips" >#if(!$!allNum)0 #else $!allNum #end</div>
+        #if($!owner.id!=$!user.id)
+        <a href="$!webPath/buyer/homepage.htm?uid=$!owner.id"><span>宝贝</span></a> 
+        #else
+        <a href="$!webPath/buyer/homepage.htm"><span>宝贝</span></a> 
+        #end
+       </li>
+        
+      <li id="li_store" class="current_dd">
+        <div class="num_tips" >#if(!$!allNum)0 #else $!allNum #end</div>
+        #if($!owner.id!=$!user.id)
+        <a href="$!webPath/buyer/homepage.htm?type=1&uid=$!owner.id"><span>店铺</span></a> 
+        #else
+        <a href="$!webPath/buyer/homepage.htm?type=1"><span>店铺</span></a> 
+      	#end
+        </li>
+      <li class="current_ww" id="li_dy">
+        <div class="num_tips" >#if(!$!allNum)0 #else $!allNum #end</div>
+         #if($!owner.id!=$!user.id)
+          <a href="$!webPath/buyer/homepage.htm?type=2&uid=$!owner.id"><span>新鲜事</span></a>
+         #else
+        <a href="$!webPath/buyer/homepage.htm?type=2"><span>新鲜事</span></a>
+        #end
+         </li>
+        
+    </ul>
+  </div>
+  <!--选项卡 结束-->
+  <!--标签列表 开始-->
+    <div class="like_tab_box"  style="display:none">
+    	<div class="like_tab_list_ul">
+          <ul>
+            	<li #if(!$!goodclass_id) class="this" #end><a href="$!webPath/buyer/homepage.htm?uid=$!owner.id">全部</a></li>
+                #foreach($hgc in $hgcs)
+                <li #if($!hgc.gc.id==$!goodclass_id) class="this" #end><a href="$!webPath/buyer/homepage.htm?goodclass_id=$!hgc.gc.id&uid=$!owner.id">$!hgc.gc.className</a></li>
+                #end
+            </ul>      
+        </div>
+    </div>
+    <!--标签列表 结束-->
+  
+  
+</div>
+<!--个人主页开始-->
+<div class="per_homepage_bg">
+  <div class="per_homepg_box">
+    <div class="per_home_page">
+      <div class="per_page_right">
+        <div class="per_right_box">
+          <form id="ListForm" name="ListForm" method="post"  action="$!webPath/buyer/homepage.htm">
+          <input id="type" name="type" value="$!type" type="hidden"/>
+          #if($!owner.id!=$!user.id)
+          <input id="uid" name="uid" value="$!owner.id" type="hidden"/>
+          #end
+          <div class="per_enjoy_box">
+            <!--已购买-->
+            <div class="per_enjoy_buyed">
+             #foreach($obj in $!objs)
+              #if(!$!type)
+              #set($goods_logo="$!webPath/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}")
+			<div id="div_content_$!obj.id"  obj_id="$!obj.id" style="width:210px; height:270px; float:left; margin-left:30px; _margin-left:15px; margin-right:5px; margin-top:20px; border:2px solid #DCDCDC;">
+              <ul class="per_enby" id="per_enby_$!obj.id"  obj_id=$!obj.id  >
+                <li class="per_enby_img"> <span class="compimg_span">
+                  <p><a href="$!webPath/goods_$!{obj.goods.id}.htm" target="_blank"><img src=$!goods_logo width="210" height="210" /></a></p>
+                  </span>
+                  
+                   #if($!owner.id==$!user.id)
+                  <div class="per_fun_do" id="per_fun_do_$!obj.id" style="display:none"> 
+                  		<div class="per_fun_twt" style="cursor:pointer" id="dy_set_$!obj.id" obj_id="$!obj.id">设置</div>	
+                        <div class="per_fun_xiala" style="display:none" id="dy_ul_$!obj.id">
+                        	<ul>
+                                <li><a href="javascript:void(0);" id="dy_lock_$!obj.id" lock_mark="$!obj.locked" obj_id="$!obj.id">#if($!obj.locked==false)√ 公开#else⊙ 私密#end</a></li>
+                                <li><a href="javascript:void(0);"  id="dy_delete_$!obj.id" obj_id="$!obj.id">X 删除</a></li>
+                            </ul>
+                        </div>
+                   </div>
+                  #end 
+                  
+                  </li>
+                <li class="per_enby_discuss">$!obj.content</li>
+                <li class="per_enby_collect"><a href="javascript:void(0);" id="dis_$!obj.id" obj_id="$!obj.id" class="linksee"></a><span class="collect_object"><b>收藏<strong>$!obj.goods.goods_collect</strong></b> </span></li>
+              </ul>
+              
+              <div class=".per_enby_comments"  id="dis_ul_$!obj.id"  style="display:none">
+                <ul class="per_enby_comments_ul"  >
+                #set($user_img ="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+                #foreach($child in $obj.childs)
+                #if($!child.user.phtot)
+                 #set($user_img ="$!webPath/$!child.user.photo.path/$!child.user.photo.name")
+                #end
+                    <li class="per_enby_comments_ul_li"><span class="pic">
+                    <img src="$!user_img" width="24" height="24" />
+                    </span><span class="word">$!child.content</span></li>
+                #end       
+                </ul>
+                <div class="per_enby_comments_com">
+                <textarea id="dis_content_$!obj.id" name="dis_content_$!obj.id"></textarea>
+                <input type="button" value="◀返回" id="comeback_$!obj.id" obj_id="$!obj.id" class="back"/>
+                <input type="button" value="评论" id="dis_button_$!obj.id" class="com" obj_id="$!obj.id" />
+                </div>
+                </div>                
+				</div>
+              #end 
+              
+              
+              
+              #if($!type==1)
+              #if($!obj.store.store_logo)
+              #set($store_logo="$!webPath/$!{obj.store.store_logo.path}/$!{obj.store.store_logo.name}")
+              #else
+              #set($store_logo="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+              #end
+              <div id="div_content_$!obj.id"  obj_id="$!obj.id" style="width:210px; height:270px; float:left; margin-left:30px; _margin-left:15px; margin-right:5px; margin-top:20px; border:2px solid #DCDCDC;">
+              <ul class="per_enby" id="per_enby_$!obj.id"  obj_id=$!obj.id >
+                <li class="per_enby_img"> <span class="compimg_span">
+                  <p><a href="$!webPath/store_$!{obj.store.id}.htm" target="_blank"><img src=$!store_logo width="120" height="120" /></a></p>
+                  </span> #if($!owner.id==$!user.id)
+                  <div class="per_fun_do" id="per_fun_do_$!obj.id" style="display:none"> 
+                  
+                 <div class="per_fun_twt" style="cursor:pointer" id="dy_set_$!obj.id" obj_id="$!obj.id">设置</div>	
+                        <div class="per_fun_xiala" style="display:none" id="dy_ul_$!obj.id">
+                        	<ul>
+                                <li><a href="javascript:void(0);" id="dy_lock_$!obj.id" lock_mark="$!obj.locked" obj_id="$!obj.id">#if($!obj.locked==false)√ 公开#else⊙ 私密#end</a></li>
+                                <li><a href="javascript:void(0);"  id="dy_delete_$!obj.id" obj_id="$!obj.id">X 删除</a></li>
+                            </ul>
+                        </div>
+                  
+                   </div>
+                  #end </li>
+                <li class="per_enby_discuss">$!obj.content</li>
+                <li class="per_enby_collect"><a href="javascript:void(0);" id="dis_$!obj.id" obj_id="$!obj.id" class="linksee"></a><span class="collect_object"><b>收藏<strong>$!obj.store.favorite_count</strong></b> </span></li>
+              </ul>
+              
+              <div class=".per_enby_comments"  id="dis_ul_$!obj.id"  style="display:none">
+                <ul class="per_enby_comments_ul"  >
+                #set($user_img ="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+                #foreach($child in $obj.childs)
+                #if($!child.user.phtot)
+                 #set($user_img ="$!webPath/$!child.user.photo.path/$!child.user.photo.name")
+                #end
+                    <li class="per_enby_comments_ul_li"><span class="pic">
+                    <img src="$!user_img" width="24" height="24" />
+                    </span><span class="word">$!child.content</span></li>
+                #end       
+                </ul>
+                <div class="per_enby_comments_com">
+                <textarea id="dis_content_$!obj.id" name="dis_content_$!obj.id"></textarea>
+                <input type="button" value="◀返回" id="comeback_$!obj.id" obj_id="$!obj.id" class="back"/>
+                <input type="button" value="评论" id="dis_button_$!obj.id" class="com" obj_id="$!obj.id" />
+                </div>
+                </div>
+              </div>
+              #end  
+              #if($!type==2)
+              <div id="div_content_$!obj.id"  obj_id="$!obj.id" style="width:210px; height:270px; float:left; margin-left:30px; _margin-left:15px; margin-right:5px; margin-top:20px; border:2px solid #DCDCDC;">
+              <ul class="per_enby" id="per_enby_$!obj.id"  obj_id=$!obj.id >
+                <li class="per_enby_img"> <span class="compimg_span">
+                  <div class="per_enby_font"> $!obj.content </div>
+                  </span> #if($!owner.id==$!user.id)
+                  <div class="per_fun_do" id="per_fun_do_$!obj.id" style="display:none"> 
+                  
+                 <div class="per_fun_twt" style="cursor:pointer" id="dy_set_$!obj.id" obj_id="$!obj.id">设置</div>	
+                        <div class="per_fun_xiala" style="display:none" id="dy_ul_$!obj.id">
+                        	<ul>
+                                <li><a href="javascript:void(0);" id="dy_lock_$!obj.id" lock_mark="$!obj.locked" obj_id="$!obj.id">#if($!obj.locked==false)√ 公开#else⊙ 私密#end</a></li>
+                                <li><a href="javascript:void(0);"  id="dy_delete_$!obj.id" obj_id="$!obj.id">X 删除</a></li>
+                            </ul>
+                        </div>
+                  
+                  </div>
+                  #end </li>
+                <li class="per_enby_discuss"></li>
+                <li class="per_enby_collect"><a href="javascript:void(0);" id="dis_$!obj.id" obj_id="$!obj.id" class="linksee"></a><span class="collect_object"><b>评论<strong>$!obj.childs.size()</strong></b> </span></li>
+              </ul>
+              
+              <div class=".per_enby_comments"  id="dis_ul_$!obj.id"  style="display:none">
+                <ul class="per_enby_comments_ul"  >
+                #set($user_img ="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+                #foreach($child in $obj.childs)
+                #if($!child.user.phtot)
+                 #set($user_img ="$!webPath/$!child.user.photo.path/$!child.user.photo.name")
+                #end
+                    <li class="per_enby_comments_ul_li"><span class="pic">
+                    <img src="$!user_img" width="24" height="24" />
+                    </span><span class="word">$!child.content</span></li>
+                #end       
+                </ul>
+                <div class="per_enby_comments_com">
+                <textarea id="dis_content_$!obj.id" name="dis_content_$!obj.id"></textarea>
+                <input type="button" value="◀返回" id="comeback_$!obj.id" obj_id="$!obj.id" class="back"/>
+                <input type="button" value="评论" id="dis_button_$!obj.id" class="com" obj_id="$!obj.id" />
+                </div>
+                </div>
+              </div>
+              #end 
+              #end </div>
+            <div class="alldel">
+              <div  class="userfenye"> $!gotoPageFormHTML </div>
+            </div>
+          </div>
+          <input id="obj_id" name="obj_id" value="" type="hidden"/>
+           <input id="goodclass_id" name="goodclass_id" value="$!goodclass_id" type="hidden"/>
+          <input id="lock_text" name="lock_text" value="" type="hidden"/>
+          <input id="currentPage" name="currentPage" value="$!currentPage" type="hidden"/>
+          </form>
+        </div>
+      </div>
+#if($!owner.id==$!user.id)
+$!httpInclude.include("/buyer/homepage_visit.htm")
+#else
+$!httpInclude.include("/buyer/homepage_visit.htm?uid=$!owner.id")
+#end
+    </div>
+  </div>
+  
+</div>
+
+</body>
+</html>

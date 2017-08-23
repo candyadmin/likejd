@@ -1,0 +1,585 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>闲置商品发布 -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/second.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script src="$!webPath/resources/js/swfupload.js"></script>
+<script src="$!webPath/resources/js/swfupload.queue.js"></script>
+<script>
+//options为编辑配置属性
+var options = {
+        cssPath : '$!webPath/resources/editor/themes/default/default.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '700px',
+		height:'400px',
+		allowFlashUpload : false,
+		allowMediaUpload : false,
+		allowFileManager : false,
+		allowImageUpload : false,
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+};
+
+//图片上传
+var swf_upload;
+var select_count=5;
+var photo_count=0;
+var user_goods_class_count=2;																
+jQuery(document).ready(function(){
+var settings_object = {//定义参数配置对象
+        upload_url : "$!webPath/seller/sparegoods_swf_upload.htm",
+            flash_url : "$!webPath/resources/flash/swfupload.swf",
+            file_post_name : "imgFile",
+            use_query_string : false,
+            requeue_on_error : false,
+            file_types : "$!imageSuffix",
+            file_types_description: "商品图片",
+            file_size_limit : "$!config.imageFilesize",
+            file_upload_limit : 0,
+            file_queue_limit : 0,
+            debug : false,
+            prevent_swf_caching : true,
+            preserve_relative_urls : false,     
+            button_placeholder_id : "upload_imgs",
+            button_image_url : "$!webPath/resources/style/system/front/default/images/spare_add_button.jpg",
+            button_width : 102,
+            button_height : 27,
+            button_text : "<b></b> <span class='upload_text'>上传图片</span>",
+            button_text_style : ".upload_text { color: #666666;font-size:12px;margin-left:30px; }",
+            button_text_left_padding : 3,
+            button_text_top_padding : 5,
+            button_action : SWFUpload.BUTTON_ACTION.SELECT_FILES,
+            button_disabled : false,
+            button_cursor : SWFUpload.CURSOR.HAND,
+            button_window_mode : SWFUpload.WINDOW_MODE.TRANSPARENT,
+			file_dialog_start_handler:fileDialogStart,
+			file_dialog_complete_handler:fileDialogComplete,
+            upload_start_handler:upload_start_handler,
+            upload_success_handler:uploadSuccess,
+			upload_complete_handler:uploadComplete
+			
+    }; 
+																
+    swf_upload = new SWFUpload(settings_object);//实例化一个SWFUpload，传入参数配置对象
+	function fileDialogStart(){
+	  var stats = this.getStats();
+	  stats.successful_uploads=5 - select_count;
+	  this.setStats(stats);
+	}
+	function fileDialogComplete(numFilesSelected, numFilesQueued) {
+	try {
+	    var upload=0;
+		var stats = this.getStats();
+		var last_place =jQuery(".form_right_line_06").find("img[status='deleted']").length;
+		if(last_place==0){
+			alert("已经没有位置可上传图片");
+			this.cancelQueue();
+			upload=1;
+			}
+		var last = last_place - numFilesSelected;
+		if(last<0){
+			alert("剩余"+last_place+"个位置可以上传");	
+			this.cancelQueue();
+			upload=1;	
+			}	
+		if(stats.successful_uploads>=5){
+			this.cancelQueue();
+			upload=1;
+		}
+		if(upload==0){
+		   this.startUpload();
+		}
+	} catch (ex)  {
+        this.debug(ex);
+	}
+    }
+	function upload_start_handler(){
+	  jQuery("#upload_wait").show();
+	}
+	
+	//单个图片上传成功
+	function uploadSuccess(file, serverData){
+	  var obj=eval("("+serverData+")");
+	  var img_url = "$!webPath/"+obj.url;
+	  var img_id =obj.id;	 
+		photo_count++;
+	    jQuery(".form_right_line_06").find("img[status='deleted']").first()
+		.attr("src", img_url).css("display","block").attr("img_id",img_id).parent().find("div.img").hide();
+		var mark=jQuery(".form_right_line_06").find("img[status='deleted']").first().removeAttr("status").attr("mark");
+		jQuery("#img"+mark+"_id").val(img_id);
+	
+	    var stats = this.getStats(); 	 
+		 }	
+	
+	function uploadComplete(file) {
+	try {
+		if (this.getStats().files_queued == 0) {
+           jQuery("#upload_wait").hide();
+		} else {	
+		   if(this.getStats.successful_uploads>=5){
+			   this.cancelQueue();
+		   }else{
+		       this.startUpload();
+		   }
+		}
+	} catch (ex) {
+		this.debug(ex);
+	}
+}					
+
+		//设为封面
+		jQuery(".line_06_img_box").find("p a").click(function(){
+			var status =jQuery(this).parent().parent().find("img").attr("status");
+			if(status!='deleted'){
+				jQuery(".line_06_img_box").find("p a").html("设为封面");												  
+				var img_id = jQuery(this).html("封面").attr("img_id");
+				jQuery("#main_img_id").val(img_id);
+				}else{
+					alert("图片不存在，设置失败");
+					}
+			});
+		//显示删除按钮和设为封面按钮
+		jQuery(".line_06_img_box").find("img[status!='deleted']").live("mouseover",function(){
+				jQuery(".line_06_img").find("a").hide();									
+				jQuery(this).parent().find("a").show();													
+				});
+
+		//图片删除
+		jQuery("a[id^=removeImg_]").click(function(){
+		  var con =jQuery(this).parent().parent().find("p a").html();
+			if(jQuery.trim(con)=="封面"){
+				alert("封面不可删除");
+				}else{
+			var count = jQuery(this).attr("count");										   									
+			var id =jQuery("#id").val();
+			var img_id =jQuery(this).parent().parent().find("img").attr("img_id");
+				 jQuery.post("$!webPath/seller/sparegoods_removeimg.htm",
+				 {
+					"count":count,
+					"sp_id":id,
+					"img_id":img_id
+					},function(data){
+						if(data=="true"){
+							jQuery("img[mark='"+count+"']").attr("status","deleted").attr("src","$!webPath/resources/style/system/front/default/images/special_img/icon_5.png");
+							jQuery("#img"+count+"_id").val("");
+							jQuery("#removeImg_"+count).hide();
+							jQuery("#feng_"+count).hide();
+							photo_count--;
+							}else{
+								alert("删除失败");	
+								}
+						},"text");
+
+					}
+			});	
+
+
+								
+		//分类
+		#if($!obj)
+		jQuery("#class_id").val("$!obj.spareGoodsClass.id");
+		jQuery("#input_class").val("$!obj.spareGoodsClass.className");
+		jQuery(".form_right_03").find("input").removeClass("this");
+			#if($!obj.oldAndnew==0)
+			jQuery("#old").addClass("this");
+			#else
+			jQuery("#new").addClass("this");
+			#end
+		#end
+		jQuery("input[class='btn']").click(function(){
+				jQuery(this).attr("class","btn_d").parent().parent().find(".btn_ul").fadeIn();
+				});
+		jQuery(".btn_ul").mouseleave(function(){
+				jQuery(this).fadeOut().parent().find("input").attr("class","btn");							  
+				});
+		jQuery(".form_right_btn").mouseleave(function(){
+				jQuery(this).find(".btn_ul").fadeOut();									  
+				});
+		jQuery(".btn_list ul li[class='item']").hover(function(){
+				jQuery(".btn_list").find(".down").hide();
+				jQuery(this).addClass("this").find(".down").show();									 
+			},function(){
+				jQuery(".btn_list").find(".down").hide();
+				jQuery(this).removeClass("this").find(".down").hide();		
+				});
+		//
+		jQuery(".form_right_03").find("input").click(function(){
+				jQuery(this).parent().find("input").removeClass("this");
+				jQuery(this).addClass("this");
+				});
+			
+		#if($!obj.area.id)
+			jQuery(".city_input[area_mark='privence']").find("span").html("$!obj.area.parent.parent.areaName");
+			jQuery(".city_input[area_mark='city']").find("span").html("$!obj.area.parent.areaName");
+			jQuery(".city_input[area_mark='last']").find("span").html("$!obj.area.areaName");
+			jQuery("#area_id").val("$!obj.area.id");
+		#end
+		   //地区列表下拉
+	  	  jQuery(".form_right_line_05 .city_input").click(function(){	
+					var dis =jQuery(this).parent().find(".Select").css("display");
+					jQuery(".Select").hide();
+					if(dis=="none"){
+						jQuery(this).parent().find(".Select").show();
+						}else{
+						jQuery(this).parent().find(".Select").hide();
+							}
+	 				 });
+		    //地区列表点击
+		   jQuery(".Select_box").find("ul li").live("click",function(){
+					var obj_id = jQuery(this).attr("obj_id");
+					var obj_name = jQuery(this).attr("obj_name");
+					var area_mark = jQuery(this).attr("area_mark");
+					jQuery(this).parent().parent().parent().parent().find(".city_input")
+					.find("span").html(obj_name).parent().parent().find(".Select").hide();
+					//下级地区信息加载
+					if(area_mark=="last"){
+						jQuery("#area_id").val(obj_id);
+						}else{
+						jQuery.post("$!webPath/seller/sparegoods_area_data.htm",
+								{
+									"parent_id":obj_id,
+									"area_mark":area_mark
+									},function(data){
+										if(data){
+											jQuery(".Select[parent_area='"+area_mark+"']").html(data);
+											}
+										},"text");
+						}
+						if(area_mark=="privence"){
+						jQuery("#area_id").val("");
+						jQuery(".city_input[area_mark!='privence']").find("span").html("请选择...")
+						.parent().parent().find(".Select_box").html("");
+						}
+						if(area_mark=="city"){
+						jQuery("#area_id").val("");
+						jQuery(".city_input[area_mark='last']").find("span").html("请选择...")
+						.parent().parent().find(".Select_box").html("");
+						}
+					});
+		   jQuery(".form_right_city").live("mouseleave",function(){
+					jQuery(this).find(".Select").hide();					   
+				   });
+//地区结束
+
+
+ editor = KindEditor.create('#content',options);
+ jQuery("#goods_price,#goods_old_price").live("keyup",function(){
+	 jQuery("#goods_price,#goods_old_price").each(function(){
+		var reg = new RegExp("^[0-9]*$");
+		if(!reg.test(jQuery(this).val())){
+		    jQuery(this).val("0");
+		}
+	 });
+  });
+ 
+ 
+jQuery("#theForm").validate({
+	errorPlacement: function(error, element) {  
+    error.appendTo(element.parent());  
+			},						
+    rules:{
+	  title:{required :true,rangelength:[5,50]},
+	  class_id:{required:true},
+	  goods_price:{required :true},
+	  goods_old_price:{required :true},
+	  phone:{required :true},
+	  name:{required :true}
+	 },
+	messages:{
+	  title:{required:"标题不能为空",rangelength:"长度必须为10~30个汉字"},
+	  class_id:{required:"类目不能为空"},
+	  goods_price:{required :"物品价格不能为空"},
+	  goods_old_price:{required :"物品原价不能为空"},
+	  phone:{required :"电话不能为空"},
+	  name:{required :"姓名不能为空"}
+	}
+  });
+		jQuery(".form_right_line_06").find("input[type='file']").change(function(){
+				jQuery(this).parent().append("<span  style='color:#F00'>已选择</span>");												
+				});
+
+});
+function setoldAndnew(obj){
+	jQuery("#oldAndnew").val(obj);
+	}	
+function setClass(obj,name){
+	jQuery("#class_id").val(obj);
+	jQuery("#input_class").val(name);
+	}
+	
+	
+function saveForm(){
+	photo_count =jQuery(".form_right_line_06").find("img[status!='deleted']").length;
+	if(photo_count==0){
+		alert("请上传商品图片");
+		}else{
+	var class_id =jQuery("#class_id").val();
+	var area_id =jQuery("#area_id").val();
+	if(class_id==""){
+		alert("请选择类目");
+		}
+		else{			
+	if(area_id==""){
+		alert("请选择地区");
+		}else{
+		 editor.sync();
+		jQuery("#theForm").submit();			
+			}		
+		}
+					}
+	}	
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/sparegoods_head.htm") </div>
+$!httpInclude.include("/sparegoods_nav.htm") 
+<!--导航 end-->
+<div class="main">
+  <div class="Idle_baby"> 
+    <!--左侧 start-->
+    <div class="Idle_baby_left">
+      <h1>今天您有什么闲置宝贝想要出售</h1>
+      <div class="Idle_baby_tab">
+        <ul>
+          <li class="this"><a href="javascript:void(0);">发布闲置</a></li>
+        </ul>
+        <span><a href="$!webPath/seller/add_goods_first.htm" target="_blank">我要开店批量卖宝贝</a></span> </div>
+      <form id="theForm" name="theForm" action="$!webPath/seller/spare_goods_save.htm" method="post"  enctype="multipart/form-data">
+        <input id="oldAndnew"  name="oldAndnew" type="hidden" value="$!obj.oldAndnew"/>
+        <input id="class_id"  name="class_id" type="hidden" value="$!obj.spareGoodsClass.id"/>
+        <input id="id"  name="id" type="hidden" value="$!obj.id"/>
+        <input id="area_id"  name="area_id" type="hidden" value="$!obj.area_id"/>
+        <input id="img1_id" name="img1_id" type="hidden" value="$!obj.img1.id"/>
+        <input id="img2_id" name="img2_id" type="hidden" value="$!obj.img2.id"/>
+        <input id="img3_id" name="img3_id" type="hidden" value="$!obj.img3.id"/>
+        <input id="img4_id" name="img4_id" type="hidden" value="$!obj.img4.id"/>
+        <input id="img5_id" name="img5_id" type="hidden" value="$!obj.img5.id"/>
+        <input id="main_img_id" name="main_img_id" type="hidden" value="$!obj.main_img.id"/>
+        <input name="spare_goods_session" type="hidden" id="spare_goods_session" value="$!spare_goods_session" />
+        <div class="Idle_baby_form">
+          <ul>
+            <li>
+              <div class="form_left" ><a name="spare_goods_base">标题</a></div>
+              <div class="form_right">
+                <input class="title" id="title" name="title" type="text" value="$!obj.title" />
+              </div>
+            </li>
+            <li>
+              <div class="form_left">类目</div>
+              <div class="form_right_btn"> <span> 
+                <!--点击后class变为btn_d-->
+                <input type="button" id="input_class"  class="btn" value="请选择"/>
+                </span>
+                <div class="btn_ul" style="display:none">
+                  <div class="btn_list">
+                    <ul>
+                      #foreach($sgc in $level2)
+                      <li class="item"><a href="javascript:void(0);" onclick="setClass('$!sgc.id','$!sgc.className')">$!sgc.className</a> #if($!sgc.childs.size()>0)
+                        <div class="down" style="display:none">
+                          <ul>
+                            #foreach($child in $sgc.childs)
+                            <li ><a href="javascript:void(0);" onclick="setClass('$!child.id','$!child.className')">$!child.className</a></li>
+                            #end
+                          </ul>
+                        </div>
+                        #end </li>
+                      #end
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="form_left">新旧</div>
+              <div class="form_right_line_03">
+                <div class="form_right_03">
+                  <input type="button"  onclick="setoldAndnew(0)" id="old" class="btn_03 this" value="非全新" />
+                  <input type="button"  onclick="setoldAndnew(1)" id="new" class="btn_03" value="全新" />
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="form_left">价格</div>
+              <div class="form_right_line_04">
+                <input type="text"  id="goods_price" name="goods_price" value="$!obj.goods_price" />
+                元 </div>
+            </li>
+            <li>
+              <div class="form_left">原价</div>
+              <div class="form_right_line_04">
+                <input type="text" name="goods_old_price" id="goods_old_price" value="$!obj.goods_old_price" />
+                元 </div>
+            </li>
+            <li>
+              <div class="form_left">电话</div>
+              <div class="form_right_line_04">
+                <input type="text" id="phone" name="phone" value="$!obj.phone" />
+              </div>
+            </li>
+            <li>
+              <div class="form_left">QQ</div>
+              <div class="form_right_line_04">
+                <input type="text" id="QQ" name="QQ" value="$!obj.QQ" />
+              </div>
+            </li>
+            <li>
+              <div class="form_left">姓名</div>
+              <div class="form_right_line_04">
+                <input type="text" id="name" name="name" value="$!obj.name" />
+              </div>
+            </li>
+            <li>
+              <div class="form_left">所在地</div>
+              <div class="form_right_line_05">
+                <div class="form_right_city">
+                  <div class="city_input" area_mark="privence"><span>请选择...</span><b></b></div>
+                  <div class="Select" style="display:none">
+                    <div class="Select_box">
+                      <ul>
+                        #foreach($area in $areas)
+                        <li obj_id="$!area.id" obj_name="$!area.areaName" area_mark="privence"> <a href="javascript:void(0);">$!area.areaName</a> </li>
+                        #end
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="form_right_city">
+                  <div class="city_input" area_mark="city"><span>请选择...</span><b></b></div>
+                  <div class="Select" parent_area="privence" style="display:none">
+                    <div class="Select_box">
+                      <ul>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="form_right_city">
+                  <div class="city_input" area_mark="last"><span>请选择...</span><b></b></div>
+                  <div class="Select" parent_area="city" style="display:none">
+                    <div class="Select_box">
+                      <ul>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="baby_img">
+              <div class="form_left"><a name="spare_goods_photo">宝贝图片</a></div>
+              <div style=" width:612px; float:left; margin-bottom:5px;"> <a href="javascript:void(0);"><span id="upload_imgs"></span><img id="upload_wait" style="display:none;" src="$!webPath/resources/style/common/images/loader.gif" /></a></div>
+              <div class="form_right_line_06"> #set($img1="$!webPath/resources/style/system/front/default/images/special_img/icon_5.png") 
+                #if($!obj.img1.id)
+                #set($img1 = "$!webPath/$!obj.img1.path/$!obj.img1.name")
+                #end
+                <div class="line_06_img_box">
+                  <div class="line_06_img"> <img mark="1" src="$!img1" width="110" height="110" #if(!$!obj.img1.id) status="deleted"  #else img_id="$!obj.img1.id"  #end/>
+                    <div style=" width:13px; height:17px; line-height:17px; position:absolute; top:0px; right:0px;"> <a style="display:none;"  id="removeImg_1" count="1" href="javascript:void(0);">X</a> </div>
+                    <p class="form_fm"><a href="javascript:void(0);" id="feng_1" style="display:none" img_id="$!obj.img1.id" main_img="$!obj.main_img.id">#if($!obj.main_img.id==$!obj.img1.id || !$!obj.main_img.id)封面  #else 设为封面 #end </a></p>
+                  </div>
+                </div>
+                #set($img2="$!webPath/resources/style/system/front/default/images/special_img/icon_5.png") 
+                #if($!obj.img2.id)
+                #set($img2 = "$!webPath/$!obj.img2.path/$!obj.img2.name")
+                #end
+                <div class="line_06_img_box">
+                  <div class="line_06_img"> <img mark="2" src="$!img2" width="110" height="110" #if(!$!obj.img2.id) status="deleted" #else img_id="$!obj.img2.id" #end />
+                    <div style=" width:13px; height:17px; line-height:17px; position:absolute; top:0px; right:0px;"> <a style="display:none;" id="removeImg_2" href="javascript:void(0);" count="2">X</a> </div>
+                    <p class="form_fm"><a href="javascript:void(0);" id="feng_2" style="display:none" img_id="$!obj.img2.id">#if($!obj.main_img.id==$!obj.img2.id)封面#else设为封面 #end</a></p>
+                  </div>
+                </div>
+                #set($img3="$!webPath/resources/style/system/front/default/images/special_img/icon_5.png") 
+                #if($!obj.img3.id)
+                #set($img3 = "$!webPath/$!obj.img3.path/$!obj.img3.name")
+                #end
+                <div class="line_06_img_box">
+                  <div class="line_06_img"> <img mark="3" src="$!img3" width="110" height="110" #if(!$!obj.img3.id) status="deleted" #else img_id="$!obj.img3.id"  #end/>
+                    <div style=" width:13px; height:17px; line-height:17px; position:absolute; top:0px; right:0px;"> <a style="display:none;" id="removeImg_3" href="javascript:void(0);" count="3">X</a> </div>
+                    <p class="form_fm"><a href="javascript:void(0);" id="feng_3"  style="display:none" img_id="$!obj.img3.id">#if($!obj.main_img.id==$!obj.img3.id)封面#else设为封面 #end</a></p>
+                  </div>
+                </div>
+                #set($img4="$!webPath/resources/style/system/front/default/images/special_img/icon_5.png") 
+                #if($!obj.img4.id)
+                #set($img4 = "$!webPath/$!obj.img4.path/$!obj.img4.name")
+                #end
+                <div class="line_06_img_box">
+                  <div class="line_06_img"> <img mark="4" src="$!img4" width="110" height="110" #if(!$!obj.img4.id) status="deleted" #else img_id="$!obj.img4.id"  #end />
+                    <div style=" width:13px; height:17px; line-height:17px; position:absolute; top:0px; right:0px;"> <a style="display:none;" id="removeImg_4" href="javascript:void(0);" count="4">X</a></div>
+                    <p class="form_fm"><a href="javascript:void(0);"  id="feng_4" style="display:none" img_id="$!obj.img4.id">#if($!obj.main_img.id==$!obj.img4.id)封面#else设为封面 #end</a></p>
+                  </div>
+                </div>
+                #set($img5="$!webPath/resources/style/system/front/default/images/special_img/icon_5.png") 
+                #if($!obj.img5.id)
+                #set($img5 = "$!webPath/$!obj.img5.path/$!obj.img5.name")
+                #end
+                <div class="line_06_img_box">
+                  <div class="line_06_img"> <img mark="5" src="$!img5" width="110" height="110" #if(!$!obj.img5.id) status="deleted"#else img_id="$!obj.img5.id"  #end />
+                    <div style="width:13px; height:17px; line-height:17px; position:absolute; top:0px; right:0px;"> <a style="display:none;" id="removeImg_5" href="javascript:void(0);" count="5">X</a></div>
+                    <p class="form_fm"><a href="javascript:void(0);" id="feng_5" style="display:none" img_id="$!obj.img5.id">#if($!obj.main_img.id==$!obj.img5.id)封面#else设为封面 #end</a></p>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="baby_img">
+              <div class="form_left"><a name="spare_goods_detail">宝贝描述</a></div>
+              <div class="form_right_line_07">
+                <textarea class="text" id="content" name="content" >$!obj.content</textarea>
+              </div>
+            </li>
+            <li class="baby_img">
+              <div class="form_left">&nbsp;</div>
+              <div class="form_right_line_08">
+                <input type="button" value="立即发布"  onclick="saveForm()"/>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </form>
+    </div>
+    <!--左侧 end--> 
+    <!--右侧 start-->
+    <div class="Idle_baby_right">
+      <h4><img src="$!webPath/resources/style/system/front/default/images/icon_6.png" width="248" height="136" /></h4>
+      <ul>
+        <li><a href="#spare_goods_base"><b>①</b>完善宝贝基本信息</a></li>
+        <li><a href="#spare_goods_photo"><b>②</b>上图上真相</a></li>
+        <li><a href="#spare_goods_detail"><b>③</b>宝贝故事描述</a></li>
+      </ul>
+    </div>
+    <!--右侧 end--> 
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

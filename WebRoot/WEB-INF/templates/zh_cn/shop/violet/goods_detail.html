@@ -1,0 +1,13 @@
+﻿<script>
+jQuery(document).ready(function(){
+  var data='$!obj.goods_property';
+  var properties=eval("("+data+")");
+  jQuery.each(properties,function(index,item){
+      jQuery(".goodsintro").append("<span>"+item.name+":"+item.val+"</span>");
+  });
+});
+</script>
+<div class="goodsdetails" id="details_tab">
+  <div class="goodsintro"></div>
+  <div style="margin-top:10px;">$!obj.goods_details</div>
+</div>

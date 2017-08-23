@@ -1,0 +1,32 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+function switch_reason(){
+  var ck=jQuery("#reason_other").attr("checked");
+  if(ck=="checked"){
+    jQuery("#other_reason").show();
+  }else{
+	jQuery("#other_reason").hide();  
+  }
+}
+</script>
+<form action="$!webPath/buyer/integral_order_cofirm_save.htm" method="post" id="theForm">
+  <table style="float:left;" width="390" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td align="left" valign="top" >您是否确已经收到以下兑换的礼品?</td>
+    </tr>
+    <tr>
+      <td align="center" valign="top">订单号：        <span style="color:#393;">$!obj.igo_order_sn</span></td>
+    </tr>
+    <tr>
+      <td align="left" valign="top"><span style="color:#F00">注意：</span><span style="color:#999; font-weight:normal;">如果你尚未收到货品请不要点击“确认”。大部分被骗案件都是由于提前确认付款被骗的，请谨慎操作！</span>
+</td>
+    </tr>
+    <tr>
+      <td align="center"><span class="inputbtn">
+        <input type="submit" value="确认" style="cursor:pointer;"/>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        <input name="id" type="hidden" id="id" value="$!obj.id" />
+      </span></td>
+    </tr>
+  </table>
+</form>

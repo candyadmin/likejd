@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>支付方式 - Powered by shopping</title>
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+   jQuery(":radio[id=install][value=$!obj.install]").attr("checked","checked");
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=payment")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>线下支付配置</span></div></div>
+        <div class="productmain">
+          <div class="ordernav">
+              <ul class="orderul">
+                <li><a href="$!webPath/seller/payment.htm">支付方式</a></li>
+                <li class="this">支付配置</li>
+              </ul>
+            </div>
+          <div class="ordercon">
+            <form action="$!webPath/seller/payment_save.htm" method="post" name="theForm" id="theForm">
+                <table width="705" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                  <tr>
+                    <td width="100" align="right" valign="top">支付方式名称 ：</td>
+                    <td class="px10 message">线下支付
+                      <input name="mark" type="hidden" id="mark" value="outline" />
+                      <input name="id" type="hidden" id="id" value="$!obj.id" /></td>
+                  </tr>
+                  <tr>
+                    <td width="100" align="right" valign="top">简介：</td>
+                    <td class="px10 message"><textarea name="content" cols="40" rows="6" id="content">$!obj.content</textarea></td>
+                  </tr>
+                 <tr>
+                    <td align="right" valign="top">是否启用：</td>
+                    <td class="px10"><input name="install" type="radio" id="install" value="true" />
+                     启用
+                       <input type="radio" name="install" id="install" value="false" />
+                       禁用</td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td class="px10"><span class="setsub">
+                      <input name="提交" type="submit"  value="保存"  style="cursor:pointer;"/>
+                      </span></td>
+                  </tr>
+                </table>
+				</form>
+          </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+   $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

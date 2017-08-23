@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!config.title -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+ jQuery(document).ready(function(){
+   jQuery("#theForm").validate({
+ 	 errorPlacement: function(error, element) { 
+	    element.parent().parent().parent().find("td:last").html("");
+        error.appendTo(element.parent().parent().parent().find("td:last"));  
+     },
+	ignore: "",
+    rules:{
+	  store_ower:{
+	    required :true
+	  },
+	  store_name:{
+	    required :true,
+		maxlength:20,
+		remote:{
+		  url:"$!webPath/verify_storename.htm",
+		  type : "get",
+		  dataType:"json",
+          data : {
+              "store_name" : function(){return jQuery("#store_name").val();},"id":""
+		  }
+		 }
+	  },
+	  store_ower_card:{
+	    required:true
+	  },
+	  sc_id:{
+	    required :true
+	  },
+	  area_id:{
+	    required:true
+	  },
+	  zip:{
+	     number: true,
+         minlength: 6,
+         maxlength: 6
+	  },
+	  telphone:{
+	   required :true
+	  },
+	  card_file:{
+	    accept:"$!config.imageSuffix"
+	  },
+	  license_file:{
+	    accept:"$!config.imageSuffix"
+	  },
+	  agree:{required :true}
+	 },
+	messages:{
+	  store_ower:{required:"店主名不能为空"},
+	  store_name:{required:"店铺名称不能为空",maxlength:"店铺名最大不能超过20字符",remote:"店铺名已经存在"},
+	  store_ower_card:{required:"身份证号码不能为空"},
+	  sc_id:{required :"店铺分类不能为空"},
+	  area_id:{required:"店铺区域不能为空"},
+	  zip:{number:"邮编只能为数字",minlength:"只能为6位",maxlength:"只能为6位"},
+	  telphone:{required :"联系电话不能为空"},
+	  card_file:{accept:"身份证格式不对,只能为$!config.imageSuffix"},
+	  license_file:{accept:"营业执照格式不对,只能为$!config.imageSuffix"},
+	  agree:{required:"请接收开店协议"}
+	}
+  });
+ //
+ jQuery("select").change(function(){
+     var level=jQuery(this).attr("level");
+	 var id=jQuery(this).val();
+	 if(id!=""){
+	  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	     jQuery("#area"+level).empty();
+		  jQuery("#area"+level).append("<option value=''>请选择</option>");
+	    jQuery.each(data, function(index,item){
+		  jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+		  jQuery("#area"+level).show();
+		});
+	  },"json");
+	 }else{
+	   for(var i=level;i<=3;i++){
+	    jQuery("#area"+i).empty();
+	    jQuery("#area"+i).hide();
+	   }
+	 }
+  });
+  //
+ jQuery("#area3").change(function(){
+   var id=jQuery(this).val();
+   jQuery("#area_id").val(id);
+ });
+  //	
+});
+</script>
+<style type="text/css">
+<!--
+.STYLE1 {color: #FF0000}
+-->
+</style>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="index2">
+      <div class="openshop">
+        <div class="openshopstep">
+          <div class="openstep4"></div>
+          <div class="openstep5"></div>
+          <div class="openstep6"></div>
+        </div>
+        <div class="openshoptb">
+          <div class="openleft">
+		  <form action="$!webPath/seller/store_create_finish.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="opentable">
+              <tr>
+                <td width="191"  class="opentableleft"><span class="STYLE1">*</span>店主姓名：</td>
+                <td width="346"><span class="openstxt">
+                  <input name="store_ower" type="text" id="store_ower" />
+                </span></td>
+                <td width="363">&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="opentableleft"><span class="STYLE1">*</span>身份号码：</td>
+                <td><span class="openstxt">
+                  <input name="store_ower_card" type="text" id="store_ower_card" />
+                </span></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="opentableleft"><span class="STYLE1">*</span>店铺名称：</td>
+                <td><span class="openstxt">
+                  <input name="store_name" type="text" id="store_name" />
+                </span></td>
+                <td>名称字数最佳在20字以内</td>
+              </tr>
+              <tr>
+                <td class="opentableleft"><span class="STYLE1">*</span>店铺分类：</td>
+                <td><span class="opensele">
+                  <select name="sc_id" id="sc_id">
+				  <option value="" selected="selected">请选择店铺分类</option>
+                    #foreach($sc in $scs)
+                    <option  value="$!sc.id">$!sc.className</option>
+				      #foreach($sc1 in $sc.childs)
+					    <option value="$!sc1.id">&nbsp;&nbsp;&nbsp;$!sc1.className</option>
+					  #end
+					#end
+                  
+                  </select>
+                </span></td>
+                <td>店铺种类的选择正确有利于店铺在商城快速搜索</td>
+              </tr>
+              <tr>
+                <td class="opentableleft">所在地区：</td>
+                <td><span class="openselead">
+                  <select name="area1" id="area1" level="2">
+                    <option value="" selected="selected">请选择地区</option>
+                    
+                    
+				  #foreach($area in $areas)
+                    
+                    <option value="$!area.id">$!area.areaName</option>
+                    
+				  #end
+                  
+                  
+                  </select>
+                  <select name="area2" id="area2" style="display:none;" level="3">
+                  </select>
+                  <select name="area3" id="area3" style="display:none;" level="4">
+                  </select>
+                  <input name="area_id" type="hidden" id="area_id"  value=""/>
+                </span></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="opentableleft">详细地址：</td>
+                <td><span class="openstxt">
+                  <input name="store_address" type="text" id="store_address" />
+                </span></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="opentableleft">邮政编码：</td>
+                <td><span class="openstxt">
+                  <input name="store_zip" type="text" id="store_zip" />
+                </span></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="opentableleft">联系电话：</td>
+                <td><span class="openstxt">
+                  <input name="store_telphone" type="text" id="store_telphone" />
+                </span></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="opentableleft">上传身份证：</td>
+                <td><span class="opensfile">
+                  <input type="file" name="card_file" id="card_file" />
+                </span><span style="margin-left:10px;"><a href="$!webPath/doc_realname.htm" target="_blank" class="red">什么是实名认证？</a></span> </td>
+                <td>支持格式jpg,jpeg,png,gif，请保证图片清晰且文件大小不超过1M</td>
+              </tr>
+              <tr>
+                <td class="opentableleft">上传执照：</td>
+                <td><span class="opensfile">
+                  <input name="license_file" type="file" id="license_file" />
+                </span><span  style="margin-left:10px;"><a href="$!webPath/doc_realstore.htm" target="_blank" class="red">什么是实体店铺认证？</a></span></td>
+                <td>支持格式jpg,jpeg,png,gif，请保证图片清晰且文件大小不超过1M</td>
+              </tr>
+              <tr>
+                <td class="opentableleft">&nbsp;</td>
+                <td>
+                <label>
+                <span>
+                  <input type="checkbox" name="agree" id="agree" />
+                </span><span class="hui2">我已认真阅读并同意<a href="$!webPath/doc_store.htm" target="_blank" class="red">开店协议</a>中的所有条款</span> 
+                </label>
+                </td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="opentableleft">&nbsp;</td>
+                <td colspan="2"><span class="openshopsub">
+                  <input type="submit" name="button" id="button" value="立即开店"  style="cursor:pointer;"/>
+                </span> <input name="grade_id" type="hidden" id="grade_id" value="$!grade_id" />
+                <input name="store_create_session" type="hidden" id="store_create_session" value="$!store_create_session" /></td>
+              </tr>
+            </table>
+			</form>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

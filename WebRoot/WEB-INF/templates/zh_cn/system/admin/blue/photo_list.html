@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+function dele_ablum(mark,obj_id){
+	if(mark=="false"){
+		 if(confirm("删除相册将会影响到对应商品的显示图片，是否继续？")){
+		  window.location.href="$!webPath/admin/user_photo_del.htm?mulitId="+obj_id;
+		 }
+		}else{
+	      alert("默认相册不能删除");		
+			}
+	};
+	
+/* 
+系统通用方法，根据参数来决定处理的url和参数
+*/
+function cmd2(){
+	var url=arguments[0];
+	var mulitId="";
+	jQuery(":checkbox:checked").each(function(){
+	  if(jQuery(this).val()!=""){	  
+	    mulitId=mulitId+","+jQuery(this).val();
+	  }
+	});
+	if(mulitId!=""){
+	  jQuery("#ListForm #mulitId").val(mulitId);
+	  if(confirm("删除相册将会影响到对应商品的显示图片，是否继续？")){
+	     jQuery("#ListForm").attr("action",url);
+	     jQuery("#ListForm").submit();
+	  }
+	}else{
+       alert("至少选择一条数据记录");
+	}
+}	
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">图片管理</h1>
+  <div class="settab"><span class="tab1"></span> <span class="tabs"> <a href="javascript:void(0);" class="this">相册列表</a> </span> <span class="tab2"></span></div>
+  <form id="queryForm" name="queryForm" method="post" action="$!webPath/admin/user_photo_list.htm">
+    <div class="orders">
+      <ul>
+        <li><span style="font-weight:bold">请输入店铺名称</span> <span class="allmen size6">
+          <input name="store_name" type="text" value="$!store_name" />
+          </span> </span> <span class="btn_search">
+          <input name="" type="submit"  value="搜索" style="cursor:pointer"/>
+          </span> </li>
+      </ul>
+    </div>
+  </form>
+  <form id="ListForm" name="ListForm" action="$!webPath/admin/user_photo_list.htm" method="post">
+    <input id="currentPage" name="currentPage" value="$!currentPage" type="hidden"/>
+    <input id="store_name" name="store_name" value="$!store_name" type="hidden"/>
+    <input type="hidden" name="mulitId" id="mulitId" />
+    <div class="allshop_table">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <th width="52"  align="left"></th>
+          <th width="80"  align="center">封面</th>
+          <th width="449"  align="left">相册</th>
+          <th width="248"  align="left">店铺</th>
+          <th width="170" align="center">图片数</th>
+          <th width="515"  align="center">操作</th>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+          <td><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td align="center" ><span class="allmen size5"> #set($cover_img="$!webPath/resources/style/system/front/default/images/user_photo/photom.jpg")
+            #if($!obj.album_cover)
+            #set($cover_img ="$!webPath/$!obj.album_cover.path/$!obj.album_cover.name")
+            #end <a href="$!webPath/admin/user_pic_list.htm?aid=$!obj.id"><img src="$!cover_img" width="70" height="70" /></a> </span></td>
+          <td><span class="allmen size7">$!obj.album_name</span></td>
+          <td><span class="tpborder">$!obj.user.store.store_name</span></td>
+          <td align="center">$!obj.photos.size()</td>
+          <td  align="center" class="aoprater"><a onclick="dele_ablum('$!obj.album_default','$!obj.id')" href="javascript:void(0);" class="blue">删除</a></td>
+        </tr>
+        #end
+        <tr style="background:#F2F2F2; height:30px;">
+          <td colspan="8"><div class="fenye3">$!gotoPageFormHTML</div>
+            <div class="shopbtn shopfx">
+              <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+              &nbsp;&nbsp; <label  for="all" >全部</label></div>
+            <div class="shop_btn_del shopbtn">
+              <input name="" type="button" value="删除" onclick="cmd2('$!webPath/admin/user_photo_del.htm');"/>
+            </div></td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</div>
+</body>
+</html>

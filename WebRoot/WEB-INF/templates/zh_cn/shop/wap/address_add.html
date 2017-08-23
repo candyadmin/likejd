@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+	<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+	<script src="$!webPath/resources/style/system/front/wap/js/jquery.validate.min.js"></script>
+	
+<script>
+jQuery.validator.addMethod("mobile_telephone",function(value,element){
+  if(jQuery("#telephone").val()==""&&jQuery("#mobile").val()==""){
+     return false;
+	 
+  }else return true;
+});
+jQuery(document).ready(function(){
+  //								
+ jQuery("#theForm").validate({
+	ignore: "",
+    rules:{
+	  trueName:{required :true},
+	  area_id:{required :true},
+	  area_info:{required :true},
+	  telephone:{mobile_telephone :true}
+	 },
+	messages:{
+	  trueName:{required :"收货人不能为空"},
+	  area_id:{required :"请选择详细区域"},
+	  area_info:{required :"详细地址不能为空"},
+	  telephone:{mobile_telephone :"联系电话、手机至少填写一项"} 
+	}
+  });
+    //
+ jQuery("select").change(function(){
+     var level=jQuery(this).attr("level");
+	 var id=jQuery(this).val();
+	 if(id!=""){
+	  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	     jQuery("#area"+level).empty();
+		  jQuery("#area"+level).append("<option value=''>请选择</option>");
+	    jQuery.each(data, function(index,item){
+		  jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+		  jQuery("#area"+level).show();
+		});
+	  },"json");
+	 }else{
+	   for(var i=level;i<=3;i++){
+	    jQuery("#area"+i).empty();
+	    jQuery("#area"+i).hide();
+	   }
+	 }
+  });
+  //
+ jQuery("#area3").change(function(){
+   var id=jQuery(this).val();
+   jQuery("#area_id").val(id);
+ });
+});
+
+function saveForm(){
+	jQuery("#theForm").submit();
+}	
+	
+</script>
+</head>
+<body>
+	<div class="user_bar"><a href="$!webPath/buyer/address.htm" class="back"><img width="30" height="30" src="$!webPath/resources/style/system/front/wap/images/back_black.png"></a><span class="fl">地址添加</span></div>
+	
+	<div class="info_form">
+	  <form action="$!webPath/buyer/address_save.htm" id="theForm" name="theForm" method="post" novalidate="novalidate">
+	  <div style="height:49px;" class="mt50"></div>
+	  <ul>
+	    <li><span class="form_title">收货人</span><span class="form_size300">
+	      <input type="text" id="trueName" name="trueName" value="$!obj.trueName" />
+	      <input name="id" type="hidden" id="id" value="$!obj.id" />
+	      </span>
+	    </li>
+	    <li><span class="form_title">手机</span><span class="form_size300">
+	      <input type="text" value="$!obj.mobile" id="mobile" name="mobile">
+	      </span>
+	    </li>
+	    <li>
+			<span class="select_left">所在区域</span>
+	        <span id="area_area_info">$!{obj.area.parent.parent.areaName} $!{obj.area.parent.areaName} $!{obj.area.areaName}</span>
+	        <select name="area1" id="area1" level="2" style="width:100px;#if($!obj)display:none;#end">
+	                    <option value="" selected="selected">请选择地区</option>
+	 				  #foreach($area in $areas)
+	                     <option value="$!area.id">$!area.areaName</option>
+					  #end
+	        </select>
+	        <input type="button" name="area_edit" id="area_edit" value="修改" #if(!$!obj)style="display:none;"#end onclick="javascript:jQuery('#area1').show();jQuery('#area_area_info').empty();jQuery('#area_id').val('');jQuery(this).hide();" />
+	        <select name="area2" id="area2" style="display:none;width:60px;" level="3"></select>
+	        <select name="area3" id="area3" style="display:none;width:60px;" level="4"></select>
+	        <input name="area_id" type="hidden" id="area_id"  value="$!obj.area.id"/>    
+	    </li>
+	  	<li><span class="form_title">详细地址</span><span class="form_size300">
+	      <input name="area_info" type="text" id="area_info" value="$!obj.area_info" />
+	      </span>
+	    </li>
+	    <li><span class="form_title">邮编</span><span class="form_size300">
+	      <input name="zip" type="text" id="zip" value="$!obj.zip" />
+	      </span>
+	    </li>
+	  </ul>
+	  
+	  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	  
+	 </form>
+	  <div class="red_submit"><a onclick="saveForm();" href="javascript:void(0);">提交</a></div>
+	</div>
+<div style="height:49px;" class="mt50"></div>
+
+$!httpInclude.include("/footer.htm") 
+
+
+</body>
+</html>

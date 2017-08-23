@@ -1,0 +1,29 @@
+﻿<div class="nav"> <span class="navright"></span>
+    <div class="navleft">
+    
+        <b class="nav_lefts">全部商品分类
+    <span>
+    </span></b>
+    </div>
+    <ul class="navul">
+    #set($navs=$!navTools.queryNav(0,-1))
+    #foreach($nav in $navs)
+    #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+      #set($url="$!nav.url")
+    #else
+      #set($url="$!webPath/$!{nav.url}")
+    #end
+    <li><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a></li>
+    #end
+    </ul>
+  </div>
+<script>
+jQuery(document).ready(function(){
+  jQuery(".navul a").each(function(){
+    var original_url=jQuery(this).attr("original_url");
+	if("$!{current_url}".indexOf(original_url)>=0){
+	   jQuery(this).addClass("this");	
+	}
+  });
+});
+</script>

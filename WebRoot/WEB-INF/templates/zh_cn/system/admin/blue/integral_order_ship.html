@@ -1,0 +1,53 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+jQuery(document).ready(function(){
+    jQuery("#theForm").validate({
+	   rules:{
+		   igo_ship_code:{required:true},
+		   igo_ship_time:{required:true}
+		   },
+	   messages:{
+	       igo_ship_code:{required:"物流单号不能为空"},
+		   igo_ship_time:{required:"发货时间不能为空"}
+	   }
+	}); 
+ jQuery('#igo_ship_time').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+});
+</script>
+<form action="$!webPath/admin/integral_order_ship_save.htm" method="post" id="theForm">
+  <table style="float:left;" width="390" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td align="right" valign="top">兑换用户：</td>
+      <td align="left">$!obj.igo_user.userName</td>
+    </tr>
+    <tr>
+      <td width="100" align="right" valign="top">兑换单号：
+      </td>
+      <td align="left">$!obj.igo_order_sn</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">物流单号：</td>
+      <td align="left"><input name="igo_ship_code" type="text" id="igo_ship_code" value="$!obj.igo_ship_code" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">发货日期：</td>
+      <td align="left"><input name="igo_ship_time" type="text" id="igo_ship_time" value="$!obj.igo_ship_time" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">发货说明：</td>
+      <td align="left"><textarea name="igo_ship_content" id="igo_ship_content" cols="40" rows="6">$!obj.igo_ship_content</textarea></td>
+    </tr>
+    
+    <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+        <input name="" type="submit" value="提交" style="cursor:pointer;"/>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        <input name="id" type="hidden" id="id" value="$!obj.id" />
+      </span></td>
+    </tr>
+  </table>
+</form>

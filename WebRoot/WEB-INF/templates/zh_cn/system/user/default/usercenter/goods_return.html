@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>退货管理 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#beginTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=goods_return")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>退货记录</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this">退货记录</li>
+              </ul>
+            </div>
+            <div class="ordercon">
+            <form action="$!webPath/seller/goods_return.htm" method="post" id="queryForm">
+              <div class="ordersear"> <span class="ordersel">
+                <select name="data_type" id="data_type">
+                  <option value="order_id">订单编号</option>
+                  <option value="buyer_name">买家会员名</option>
+                </select>
+                </span> <span class="ordersp1 size7">
+                <input name="data" type="text" id="data" />
+                </span> <span class="px10">退款时间：</span> <span class="ordersp1 size6 sporder">
+                <input name="beginTime" type="text" id="beginTime" readonly="readonly" />
+                </span><span>——</span><span class="ordersp1 size6 sporder">
+                <input name="endTime" type="text" id="endTime" readonly="readonly"/>
+                </span><span class="orderbtn">
+                <input name="" type="submit" value="搜索" style="cursor:pointer;" />
+              </span> </div>
+              </form>
+                <form action="$!webPath/seller/goods_return.htm" method="post" id="ListForm">
+              <div class="operation">
+                <table width="790" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                  <tr id="opertitle">
+                    <td width="150">退货编号</td>
+                    <td width="150">订单编号</td>
+                    <td width="100">买家会员名</td>
+                    <td width="100">退货数量</td>
+                    <td width="150">退货时间</td>
+                    <td>操作</td>
+                  </tr>
+                  #foreach($obj in $objs)
+                  <tr>
+                    <td style="color:#0DA6EB">$!obj.return_id</td>
+                    <td style="color:#068642"><a href="$!webPath/seller/order_view.htm?id=$!obj.of.id" target="_blank">$!obj.of.order_id</a></td>
+                    <td  >$!obj.of.user.userName</td>
+                    #set($count=0)
+                    #foreach($item in $obj.items)
+                      #set($count=$count+$item.count)
+                    #end
+                    <td >$!count</td>
+                    <td  >$!CommUtil.formatLongDate($!obj.addTime)</td>
+                    <td ><span class="refundsee"><a  href="javascript:void(0);" dialog_uri="$!webPath/seller/return_view.htm?id=$!obj.id" dialog_title="退货记录" dialog_width="400" dialog_height="100" dialog_id="refund_view">查看</a></span></td>
+                  </tr>
+                  #end
+                </table>
+              </div>
+              <div class="alldel">
+                <div  class="userfenye">
+                  <input name="data" type="hidden" id="data" value="$!data" />
+                  <input name="data_type" type="hidden" id="data_type" value="$!data_type" />
+<input name="beginTime" type="hidden" id="beginTime" value="$!beginTime" />
+                  <input name="endTime" type="hidden" id="endTime" value="$!endTime" />
+                  $!gotoPageFormHTML</div>
+              </div>
+              </form>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

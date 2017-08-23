@@ -1,0 +1,142 @@
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery(".black_overlay").css("height",jQuery(document).height());
+   jQuery("#close").click(function(){
+		jQuery("#homepage_query_stores").remove();						  
+	});
+   
+   jQuery("a[id^=favorite_a_]").click(function(){
+		 var obj_id =jQuery(this).attr("obj_id");
+		 var store_id =jQuery(this).attr("store_id");
+		 jQuery("#store_id").val(store_id);
+		 jQuery("li[id^=favorite_li_]").removeClass("this");
+		 jQuery("#favorite_li_"+obj_id).addClass("this");
+												
+	});
+   
+   //提交点击事件
+	jQuery("#share_store").click(function(){
+	addVelue();									  
+	var store_id = jQuery("#store_id").val();
+	if(store_id=="")
+	{
+		alert("请选择店铺！");
+		}
+	else{	
+	var content =jQuery("#share_content").val();
+		if(content.length==0){
+			jQuery("#showError").html("请输入内容！");
+			}else{
+				if(content.length>140){
+					jQuery("#showError").html("输入字数不能多于140个字！");
+					}else{
+				jQuery.post("$!webPath/buyer/dynamic_save.htm",
+						   {
+							"content":content,
+							"store_id":store_id
+						   },
+						   function(data){
+							   if(data){
+								 jQuery("#homepage_query_stores").hide();  
+								 showDialog("share_sus","系统提示","发布成功！",0,"succeed",3);
+								  window.location.href="$!webPath/buyer/homepage.htm?uid=$!user.id"
+								   }else{
+									showDialog("share_sus","系统提示","发布失败！",0,"error",3);   
+									   }
+								},"text");	 
+				}
+				}
+	}
+	});
+   
+   //收藏店铺切换点击事件
+	jQuery("a[id^=favorite_switch_]").click(function(){
+			var currentCount= jQuery("#currentCount").val();
+					var mark = jQuery(this).attr("mark");
+					if(mark=="left"){//左切换
+						currentCount--;
+						if(currentCount<0){
+							currentCount = 0;
+							}
+					}	
+				if(mark=="right"){//右切换
+					currentCount++;
+					#if($!favorite_Allsize)
+					var allCount = $!favorite_Allsize;
+					#else
+					var allCount = 0;
+					#end
+					var jian = allCount-7;
+					if(currentCount>jian)
+					{
+						currentCount = jian;
+						}		
+				}
+			   jQuery.post("$!webPath/buyer/homepage_query_stores_ajax.htm",
+							   {
+								"currentCount":currentCount
+							   },
+							   function(data){
+								   if(data){
+									  jQuery("#favorite_div").html(data); 
+									   }
+									},"text");						   
+						});   
+});
+
+//页面首次加载设置每个ul-li-中首个li商品id为goods_id
+function addVelue(){
+	 var fav_display =	jQuery("#favorite_div").css("display");	
+	if(fav_display=="block"){
+		var temp_store_id=jQuery("#favorite_div").find("ul").find("li").first().attr("store_id");
+		}
+	jQuery("#store_id").val(temp_store_id);
+	};
+</script>
+
+<div id="homepage_query_stores">
+  <div class="addition_page">
+    <div class="addition_page_title"><span class="addition_page_title_left">分享精品店铺</span><span class="addition_page_title_right"><a href="javascript:void(0);" id="close">×</a></span></div>
+    <div class="addition_page_tab">
+      <ul>
+        <li class="this"><a href="javascript:void(0);">已收藏</a></li>
+      </ul>
+    </div>
+    <div class="addition_page_ul">
+      <div class="addition_page_ul_left">
+      <a href="javascript:void(0);" id="favorite_switch_left" mark="left">&lt;</a>
+      </div>
+      <div class="addition_page_ul_pic" id="favorite_div">
+        <ul>
+          #set($f_img="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+           #foreach($fav in $favorites)
+           #if($!fav.store.store_logo)
+           #set($f_img="$!webPath/$!fav.store.store_logo.path/$!fav.store.store_logo.name" )
+           #end
+         <li #if($!velocityCount==1)class="this"#end  store_id="$!fav.store.id"  id="favorite_li_$!fav.id">
+         <a href="javascript:void(0);" id="favorite_a_$!fav.id" obj_id="$!fav.id" store_id="$!fav.store.id" title="$!fav.store.store_name">
+         <img src="$!f_img" width="60" height="60" />
+         </a></li>
+         #end 
+        </ul>
+      </div>
+      <div class="addition_page_ul_left">
+      <a href="javascript:void(0);" id="favorite_switch_right" mark="right">&gt;</a>
+      </div>
+    </div>
+     	<input  type="hidden" id="currentCount" name="currentCount" value="$!currentCount" />
+        <input  type="hidden" id="store_id" name="store_id" value="" />
+    <div class="addition_page_bottom">
+         <textarea id="share_content" name="share_content" placeholder=" 生活每天都有新鲜事.每天都来聊一聊"></textarea>
+    </div>
+    <div class="addition_page_bottom">
+      <div style="float:left; color:#F00;" id="showError"></div>
+      <input type="button" id="share_store" name="share_store" value="确定" />
+    </div>
+  </div>     
+  <div class="black_overlay"></div>
+</div>

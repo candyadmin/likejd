@@ -1,0 +1,89 @@
+<script>
+jQuery(document).ready(function(){
+			#if($!user)
+		jQuery(".My_idle").hover(function(){
+					    var user_id = jQuery(this).find("a:first").attr("user_id");
+						if(user_id!=""){
+						var dis =jQuery(".My_idle_list").css("display");
+						jQuery(".My_idle_list").show();
+							}
+						},function(){
+						var user_id = jQuery(this).find("a:first").attr("user_id");	
+						if(user_id!=""){
+						var dis =jQuery(".My_idle_list").css("display");
+						jQuery(".My_idle_list").hide();
+							}
+							});
+		#end						
+								
+		jQuery(".Classify,.Classify_ul").hover(function(){
+				jQuery(".Classify_ul").css("display","block");	
+				jQuery(".Classify").find("a").addClass("this");
+				},function(){
+				jQuery(".Classify_ul").css("display","none");
+				jQuery(".Classify").find("a").removeClass("this");
+					});
+		jQuery(".Classify_ul ul li").hover(
+				function(){
+					jQuery(this).find("div.item").addClass("this").parent().find(".ul_right").show();
+				},function(){
+					jQuery(this).find("div.item").removeClass("this").parent().find(".ul_right").hide();
+				});
+	
+									
+});
+</script>
+
+<div class="Idle_nav">
+  <div class="Idle_menu">
+    <div class="Classify" > <a href="javascript:void(0);">所有分类</a><span>|</span> </div>
+    <ul class="navigation">
+       #foreach($nav in $navs)
+      <li><a href="$!nav.url"  #if($!nav.new_win==1)target="_blank" #end>$!nav.title</a></li>
+     #end 
+    </ul>
+    <div class="My_idle"> <a href="javascript:void(0);" user_id="$!user.id" #if(!$!user) dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="450" dialog_height="100" dialog_id="user_login" #end>我的闲置</a>
+      <div class="My_idle_list" style="display:none">
+        <ul >
+          <li><a href="$!webPath/seller/spare_goods.htm?type=0" target="_blank">出售中: <span> $!selling </span>件</a></li>
+          <li><a href="$!webPath/seller/spare_goods.htm?type=-1" target="_blank">下架中: <span> $!down </span>件</a></li>
+          <li><a href="$!webPath/seller/spare_goods.htm" target="_blank">违规中: <span> $!drops </span>件</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="release"><a href="$!webPath/seller/add_spare_goods.htm" target="_blank">发布宝贝</a></div>
+    <!--所有分类下拉 start-->
+    <div class="Classify_ul" style="display:none;">
+      <ul>
+        #foreach($sgc in $sgcs)
+        <li>
+          <div class="item">
+            <div class="ul_left">
+              <div class="links"> #foreach($child in $sgc.childs) <a href="$!webPath/sparegoods_search.htm?cid=$!{child.id}">$!child.className</a> #end </div>
+            </div>
+          </div>
+          <div class="ul_right" style="display:none">
+            <div class="right_l"> #foreach($child in $sgc.childs)
+              #if($!child.childs.size()>0)
+              <dl>
+                <dt>$!child.className</dt>
+                #if($!child.childs.size()>0)
+                <dd>
+                  <ul>
+                    #foreach($c in $child.childs)
+                    <li><a href="$!webPath/sparegoods_search.htm?cid=$!{c.id}">$!c.className</a></li>
+                    #end
+                  </ul>
+                </dd>
+                #end
+              </dl>
+              #end 
+              #end </div>
+          </div>
+        </li>
+        #end
+      </ul>
+    </div>
+    <!--所有分类下拉 end-->
+  </div>
+</div>

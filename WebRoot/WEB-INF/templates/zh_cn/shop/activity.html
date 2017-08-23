@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!act.ac_title - $!config.title - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goodshidden.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script>
+jQuery(document).ready(function(){
+ jQuery(".imgcenter_span img").lazyload({effect:"fadeIn",width:170,height:170});
+});
+</script>
+</head>
+
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="position">当前位置：<a href="$!webPath/index.htm" >首页</a> > <span>$!act.ac_title</span></div>
+    <form method="post" id="ListForm">
+      <div class="index2"> #if($!objs)
+        <div class="active_box">
+          <div class="active_banner">
+            <div class="active_left">
+              <div class="active_banner_img"><img  src="$!imageWebServer/$!act.ac_acc.path/$!act.ac_acc.name" width="980" height="341" /></div>
+              <span class="active_title">活动说明</span> <span class="active_p">$!act.ac_content</span> </div>
+            <div class="active_right"><script src="$!webPath/advert_invoke.htm?id=262151"></script></div>
+          </div>
+          <div class="active_list">
+            <div class="active_list_box"> #foreach($obj in $objs)
+              <div class="active_list_one"> <a href="$!webPath/goods_$!{obj.ag_goods.id}.htm" target="_blank">
+                <ul class="active_list_ul">
+                  <li class="active_list_img"> #if($!obj.ag_goods.goods_main_photo)
+                    #set($img="$!imageWebServer/$!{obj.ag_goods.goods_main_photo.path}/$!{obj.ag_goods.goods_main_photo.name}")
+                    #else
+                    #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                    #end
+                    <p><span class="imgcenter_span"> <img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28"/> </span></p>
+                  </li>
+                  <li class="active_list_txt">$!CommUtil.substring("$!obj.ag_goods.goods_name",26)</li>
+                  <li class="active_list_money">店铺价：¥$!obj.ag_goods.store_price</li>
+                  <li class="active_list_btn"><span>促销价：<b>¥$!obj.ag_price</b></span></li>
+                </ul>
+                </a> </div>
+              #end </div>
+          </div>
+        </div>
+        <div class="active_page">
+          <div class="fenye">
+            <input name="currentPage" id="currentPage" type="hidden" value="$!currentPage" />
+            $!gotoPageFormHTML</div>
+        </div>
+        #else
+        <div class="starshop_list" style="clear:both; margin:0px auto;">
+          <div class="sigh"> <span><img src="$!imageWebServer/resources/style/system/front/default/images/sigh.png" width="120" height="109" /></span> <b>对不起，没有对应的数据!</b> </div>
+        </div>
+        #end </div>
+    </form>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

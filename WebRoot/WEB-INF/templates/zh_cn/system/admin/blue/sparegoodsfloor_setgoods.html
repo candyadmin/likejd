@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<body>
+<div class="cont">
+  <h1 class="seth1">闲置商品楼层</h1>
+  <div class="settab"> <span class="tab-one"></span> <span class="tabs"> <a href="javascript:void(0);"  class="this">楼层商品设置</a> </span> <span class="tab-two"></span> </div>
+  <form name="ListForm" id="ListForm" action="$!webPath/admin/sparegoodsfloor_setgoods.htm" method="post">
+    <div class="brandtable">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="brand_table">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="45">&nbsp;</td>
+          <td width="65" align="center">图片</td>
+          <td width="500">闲置商品标题</td>
+          <td width="200" align="center">分类</td>
+          <td width="150">发布时间</td>
+          <td align="center">操作</td>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+          <td align="center"><input type="checkbox" name="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td align="center"><a href="$!webPath/sparegoods_detail.htm?id=$!obj.id" target="_blank"><img src="$!webPath/$!obj.main_img.path/$!obj.main_img.name" width="50" height="50"/></a></td>
+          <td><a href="$!webPath/sparegoods_detail.htm?id=$!obj.id" target="_blank">$!obj.title</a></td>
+          <td  align="center">$!obj.spareGoodsClass.className</td>
+          <td >$!CommUtil.formatLongDate($!obj.addTime)</td>
+          <td class="ac8" align="center"><a href="$!webPath/sparegoods_detail.htm?id=$!obj.id" target="_blank">详情</a>|<a title="#if($!obj.viewInFloor==true)当前在楼层中显示#end #if($!obj.viewInFloor==false)当前不在楼层中显示 #end" href="$!webPath/admin/sparegoodsfloor_setgoods_switch.htm?mulitId=$!obj.id&fid=$!fid&currentPage=$!currentPage">#if($!obj.viewInFloor==true)隐藏#end #if($!obj.viewInFloor==false)显示 #end</a></td>
+        </tr>
+        #end
+        <tr style="background:#F2F2F2; height:30px;">
+          <td align="center"><input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/></td>
+          <td colspan="2" class="bdel"><span class="sp1">
+            <label for="all">全部</label>
+            </span> <span class="sp2">
+            <div class="shop_btn_del shopbtn">
+              <input name="" type="button" style="cursor:pointer;" value="显示" onclick="cmd('$!webPath/admin/sparegoodsfloor_setgoods_switch.htm?type=show');"/>
+            </div>
+            </span> <span class="sp2">
+            <div class="shop_btn_del shopbtn">
+              <input name="" type="button" style="cursor:pointer;" value="不显示" onclick="cmd('$!webPath/admin/sparegoodsfloor_setgoods_switch.htm?type=hide');"/>
+            </div>
+            </span></td>
+          <td colspan="4"></td>
+        </tr>
+      </table>
+      <div class="fenye" align="right" id="queryCondition">
+        <input name="fid" id="fid" type="hidden"  value="$!fid" />
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        <input name="mulitId" type="hidden" id="mulitId" />
+        $!gotoPageFormHTML </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

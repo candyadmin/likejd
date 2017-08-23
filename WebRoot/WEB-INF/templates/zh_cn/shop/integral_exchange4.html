@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>购物车 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/integral.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+//返回当前页面高度
+function order_pay(){
+  var h=document.body.clientHeight;
+  var top= document.documentElement.scrollTop;
+  top=top+(h-top)/2;
+  jQuery('.black_overlay').css("height",h);
+  jQuery(".white_content").css("top",top);
+  jQuery('#pay_overlay').show()
+  jQuery('#theForm').submit();
+}
+window.onscroll=function(){
+  var h=document.body.clientHeight;
+  var top= document.documentElement.scrollTop;
+  top=top-50+(h-top)/2;
+  jQuery(".white_content").css("top",top);
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="index2">
+     <div class="inte_step">
+<div class="stepcenter">
+<span class="inte_step1a"></span>
+<span class="inte_step2"></span>
+<span class="inte_step3a"></span>
+</div>
+</div>
+
+      <form action="$!webPath/integral_order_pay.htm" method="post" target="_blank" id="theForm">
+      <div class="payorder">
+        <div class="pay_top">
+          <div class="payhh"></div>
+          <div class="paybot">
+            <h1>积分商城订单提交成功，您需要支付礼品运费</h1>
+            <h2>您的订单已成功生成，选择您想用的支付支付方式进行支付</h2>
+            <ul>
+              <li><strong>订单编号：</strong><strong class="orange">$!{obj.igo_order_sn}</strong></li>
+              <li><strong>运费金额：</strong><strong class="orange">¥$!{obj.igo_trans_fee}</strong></li>
+            </ul>
+            <h3>您可以在用户中心中<a href="$!webPath/buyer/integral_order_list.htm">“我的积分商城”</a>查看该订单</h3>
+          </div>
+        </div>
+        <div class="bank">
+          <div class="banktitle">
+            <h1><span>您可以选择付款方式</span></h1>
+          </div>
+          <div class="bankcar">
+            <ul>
+              <li>
+                <h1>在线支付</h1>
+                #set($map=$!paymentTools.queryShopPayment("alipay"))
+                #set($install=$!map.get("install"))
+                #set($content=$!map.get("content"))
+                #if($!install==true)
+                <div class="bankone">
+                <span class="banksp">
+                <input name="payType" type="radio" value="alipay" checked="checked" />
+                </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/alipay.jpg" width="125" height="47" /></span>
+               <span class="bank_txt">$!content</span>
+                </div>
+                #end
+                #set($map=$!paymentTools.queryShopPayment("tenpay"))
+                #set($install=$!map.get("install"))
+                #set($content=$!map.get("content"))
+                #if($!install==true)                
+                <div class="bankone">
+                <span class="banksp">
+                 <input name="payType" type="radio" value="tenpay" />
+                </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/tenpay.jpg" width="125" height="47" /></span>
+               <span class="bank_txt">$!content</span>
+                </div>
+                #end
+                #set($map=$!paymentTools.queryShopPayment("chinabank"))
+                #set($install=$!map.get("install"))
+                #set($content=$!map.get("content"))
+                #if($!install==true)                  
+                <div class="bankone">
+                <span class="banksp">
+                 <input name="payType" type="radio" value="chinabank" />
+                </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/chinabank.jpg" width="125" height="47" /></span>
+               <span class="bank_txt">$!content</span>
+                </div>
+                #end
+                #set($map=$!paymentTools.queryShopPayment("bill"))
+                #set($install=$!map.get("install"))
+                #set($content=$!map.get("content"))
+                #if($!install==true)
+                <div class="bankone">
+                <span class="banksp">
+                 <input name="payType" type="radio" value="bill" />
+                </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/bill.jpg" width="125" height="47" /></span>
+               <span class="bank_txt">$!obj.content</span>
+                </div>
+                #end
+                </li>
+              <li>
+                <h1>线下支付</h1>
+                #set($map=$!paymentTools.queryShopPayment("outline"))
+                #set($install=$!map.get("install"))
+                #set($content=$!map.get("content"))
+                #if($!install==true)
+                <div class="bankone">
+                <span class="banksp">
+                <input name="payType" type="radio" value="outline" />
+                </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/outline.jpg" width="125" height="47" /></span>
+               <span class="bank_txt">$!content</span>
+                </div>
+                #end
+                </li>
+                 <li>
+                <h1>预存款支付</h1>
+                #set($map=$!paymentTools.queryShopPayment("balance"))
+                #set($install=$!map.get("install"))
+                #set($content=$!map.get("content"))
+                #if($!install==true)
+                <div class="bankone">
+                <span class="banksp">
+                <input name="payType" type="radio" value="balance" />
+                </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/balance.jpg" width="125" height="47" /></span>
+               <span class="bank_txt">$!content</span>
+                </div>
+                #end
+                </li>
+            </ul>
+          </div>
+          <div class="banknextbtn">
+            <input name="" type="button"  value="确认支付" onclick="order_pay();" style="cursor:pointer;"/>
+            <input name="integral_order_id" type="hidden" id="integral_order_id" value="$!{obj.id}" />
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+    $!httpInclude.include("/footer.htm")
+</div>
+<div style="display:none;" id="pay_overlay">
+  <div class="white_content"> <a href="javascript:void(0);" onclick="javascript:jQuery('#pay_overlay').hide();" class="white_close"><img src="$!imageWebServer/resources/style/system/front/default/images/close.jpg" width="14" height="14" /></a>
+    <div class="white_box">
+      <h1>支付提醒</h1>
+      <dl class="white_dl">
+        <dt></dt>
+        <dd>
+          <div class="payf"><a href="$!webPath/integral_order_finish.htm?order_id=$!{obj.id}">已经完成支付！</a></div>
+          <div class="payf"><a href="javascript:void(0);"  onclick="javascript:jQuery('#pay_overlay').hide();" >支付出现问题！</a></div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="black_overlay"></div>
+</div>
+</body>
+</html>

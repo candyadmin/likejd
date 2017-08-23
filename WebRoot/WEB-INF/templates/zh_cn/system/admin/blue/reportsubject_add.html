@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  type_id:{
+	    required :true
+	  },
+	  title:{required :true,maxlength:255}
+	 },
+	messages:{
+	  type_id:{required:"举报类型不能为空"},
+	  title:{required :"举报主题不能为空",maxlength:"最多{0}个字符"}
+	}
+  });
+//
+jQuery("#type_id").val("$!obj.type.id");
+});
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">举报管理</h1>
+  <div class="settab"><span class="tab-one"></span>
+      <span class="tabs"> <a href="$!webPath/admin/report_list.htm">未处理举报</a> | <a href="$!webPath/admin/report_handle_list.htm">已处理举报</a>|<a href="$!webPath/admin/reporttype_list.htm">举报类型</a>|<a href="$!webPath/admin/reporttype_add.htm">新增举报类型</a>|<a href="$!webPath/admin/reportsubject_list.htm">举报主题</a>|<a href="$!webPath/admin/reportsubject_add.htm" class="this">新增举报主题</a> </span>
+      
+      <span class="tab-two"></span></div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/reportsubject_save.htm" method=post>
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/reportsubject_list.htm" />
+  <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/reportsubject_add.htm" />
+  <div class="setcont">
+    <!--鼠标经过样式-->
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>举报类型</li>
+      <li><span class="webname">
+      <select name="type_id" id="type_id">
+        <option value="">请选择举报类型...</option>
+        #foreach($type in $types)
+        <option value="$!type.id">$!type.name</option>
+        #end
+      </select>
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>举报主题</li>
+      <li><span class="webname">
+        <textarea name="title" cols="40" rows="6" id="title">$!obj.title</textarea>
+      </span></li>
+    </ul>
+    </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<body>
+<div class="cont">
+  <h1 class="seth1">积分商城</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="javascript:void(0);" class="this">礼品列表</a> | <a href="javascript:void(0);">新增礼品</a> | <a href="javascript:void(0);">兑换列表</a> </span> <span class="tab-two"></span></div>
+  <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li> 通过会员管理，你可以进行查看、编辑会员资料以及删除会员等操作</li>
+      <li>你可以根据条件搜索会员，然后选择相应的操作</li>
+      <li>可用金额，会员可以用来支付，和提现的金额</li>
+      <li>冻结金额，当会员进行提现操作后，提现金额变为冻结金额等待管理员审核操作。当会员使用预存款支付购买时，在订单支付后且未收货之前，
+        可用金额减少，支付的金额变为冻结金额，直到确认收货后，冻结金额减少，卖家可用金额增加。冻结金额不能用来支付或提现</li>
+    </ul>
+  </div>
+  <div class="allpro_search">
+    <ul>
+      <li> <span>礼品名称</span><span class="allpro size3">
+        <input name="" type="text" />
+        </span> <span>
+        <select name="">
+          <option>状态</option>
+        </select>
+        </span> <span class="btn_search">
+        <input name="" type="button"  value="搜索"/>
+        </span> </li>
+    </ul>
+  </div>
+  <div class="allpro_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="56">&nbsp;</td>
+        <td colspan="2">礼品名称</td>
+        <td width="76" align="center">兑换积分</td>
+        <td width="60" align="center">礼品原价</td>
+        <td width="50" align="center">库存</td>
+        <td width="48" align="center">浏览</td>
+        <td width="48" align="center">售出</td>
+        <td width="47" align="center">上架</td>
+        <td width="50" align="center">推荐</td>
+        <td width="120" align="center">操作</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" name="checkbox" id="checkbox" />
+        </td>
+        <td width="56"><span><img src="$!webPath/resources/style/system/manage/blue/images/imgtu.jpg" width="45" height="49" /></span></td>
+        <td width="160" class="proname"><a href="" class="blue">(所属店铺：shopping)</a></td>
+        <td align="center">300</td>
+        <td align="center">13.00</td>
+        <td align="center">20</td>
+        <td align="center">1</td>
+        <td align="center">0</td>
+        <td align="center"><img src="$!webPath/resources/style/system/manage/blue/images/tops.jpg" width="23" height="23" /></td>
+        <td align="center"><img src="$!webPath/resources/style/system/manage/blue/images/duih.jpg" width="25" height="21" /></td>
+        <td align="center"  class="blue xiahua"><a href="">编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="">删除</a></td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" name="checkbox" id="checkbox" />
+        </td>
+        <td width="56"><span><img src="$!webPath/resources/style/system/manage/blue/images/imgtu.jpg" width="45" height="49" /></span></td>
+        <td width="160" class="proname"><a href="" class="blue">(所属店铺：shopping)</a></td>
+        <td align="center">300</td>
+        <td align="center">12.00</td>
+        <td align="center">19</td>
+        <td align="center">2</td>
+        <td align="center">1</td>
+        <td align="center"><img src="$!webPath/resources/style/system/manage/blue/images/tops2.jpg" width="23" height="23" /></td>
+        <td align="center"><img src="$!webPath/resources/style/system/manage/blue/images/cuoh.jpg" width="25" height="21" /></td>
+        <td align="center"  class="blue xiahua"><a href="">编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="">删除</a></td>
+      </tr>
+      <tr style="background:#F2F2F2; height:30px;">
+        <td colspan="11"><div class="shopbtn shopfx">
+            <input name="" type="checkbox" value="" />
+            &nbsp;&nbsp;全部</div>
+          <div class="shop_btn_del shopbtn">
+            <input name="" type="button" value="删除" />
+          </div>
+          <div class="shop_btn_del shopbtn">
+            <input name="" type="button" value="编辑" />
+          </div>
+          <div class="shop_btn_del shopbtn">
+            <input name="" type="button" value="推荐" />
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  <div class="fenye">$!gotoPageHTML</div>
+  
+</div>
+</body>
+</html>

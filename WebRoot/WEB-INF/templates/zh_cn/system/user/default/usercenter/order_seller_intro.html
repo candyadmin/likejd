@@ -1,0 +1,19 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+  <table style="float:left;" width="390" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td align="left" valign="top">订单号：
+      <input name="id" type="hidden" id="id" value="$!obj.id" />      
+      <span style="color:#393;">$!obj.order_id</span></td>
+    </tr>
+    <tr>
+      <td align="left" valign="top">
+       <span style="color:#F00">以下是卖家提交的虚拟商品信息：</span><br />
+      <span style="color:#999; font-weight:normal;">$!{obj.order_seller_intro}</span>
+</td>
+    </tr>
+    <tr>
+      <td align="center"><span class="inputbtn">
+        <input name="按钮" type="button" style="cursor:pointer;" value="确认" onclick="javascript:jQuery('#order_cancel').remove();" />
+      </span></td>
+    </tr>
+  </table>

@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新浪微博登录 - $!config.title - Powered by shoppingl</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<link href="../../../resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="../../../resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script>
+jQuery(document).ready(function(){
+   jQuery(".bind_info_tab li").css("cursor","pointer").click(function(){
+	  jQuery(".bind_info_tab li").removeClass("this");
+	  jQuery(this).addClass("this");
+	  var tab_id=jQuery(this).attr("tab");
+	  jQuery(".bind_tabone").hide();
+	  jQuery("#"+tab_id).fadeIn('normal');
+	});
+   jQuery("#theForm").validate({
+      rules:{
+		   userName:{
+		   required:true,
+           remote:{
+		    url: "$!webPath/verify_username.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "userName": function(){return jQuery("#userName").val();}
+		     }
+			}
+		},
+        password:{
+		  required:true,
+		  minlength:6,
+		  maxlength:20  
+		},
+		password1:{
+		  required:true,
+		  equalTo:"#password" 
+		},
+		email:{
+		  required:true,
+		  email:true,
+		  remote:{
+		    url: "$!webPath/verify_email.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "email": function(){return jQuery("#email").val();}
+		     }
+		  }
+		},
+		agree:{
+		  required:true
+		}
+		  },
+	  messages:{
+		    userName:{required:"用户名不能为空",remote:"用户名已存在"},
+			password:{required:"密码不能为空"},
+			password1:{required:"重复密码不能为空",equalTo:"两次密码不一样"},
+			email:{required:"Email不能为空",remote:"Email已经存在"},
+			agree:{required:"请接受用户协议"}
+		  }
+   });
+   jQuery("#theForm1").validate({
+	   rules:{
+		   userName:{
+		     required:true
+		     },
+		   password:{
+		     required:true
+		     }
+		   },
+	    messages:{
+			userName:{required:"用户名不能为空"},
+			password:{required:"密码不能为空"}
+			}	   
+	});
+});
+</script>
+</head>
+<body>
+<div class="main">
+  $!httpInclude.include("/top.htm")
+  $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index2">
+    <div class="binding_user">
+      <div class="binding_left">
+        <div class="bind_ph">
+          <div class="bind_bg">
+            <div class="bind_heph"><i class="qqph"><img src="$!imageWebServer/resources/style/system/front/default/images/sinaph.jpg" width="114" height="114" /></i><span class="photo_box"></span></div>
+            <div class="bind_name">新浪微博账户</div>
+          </div>
+        </div>
+      </div>
+      <div class="binding_right">
+        <div class="bind_info">
+          <div class="bind_info_tab">
+            <ul>
+              <li class="this" tab="user_new">完善账号信息</li>
+              <li tab="user_bind">已有账号！绑定我的账号</li>
+            </ul>
+          </div>
+          <div class="bind_tab_box">
+            <form action="$!webPath/sina_login_bind_finish.htm" method="post" id="theForm">
+            <div class="bind_tabone" id="user_new">
+              <table width="393" border="0" cellspacing="0" cellpadding="0" class="bind_table">
+              <tr>
+                  <td colspan="2" align="center" valign="top">新浪微博登录成功，默认密码为123456，请自行修改</td>
+                  </tr>
+                <tr>
+                <tr>
+                  <td width="105" align="right" valign="top"><b>
+                    用户名：</b></td>
+                  <td>
+                    <input name="userName" type="text" class="bind_txt" id="userName" value="$!user.userName" />
+                    </td>
+                </tr>
+                <tr>
+                  <td align="right" valign="top"><b>设置密码：</b></td>
+                  <td>
+                    <input name="password" type="password" class="bind_txt" id="password" value="123456" />
+                 </td>
+                </tr>
+                <tr>
+                  <td align="right" valign="top"><b>重复密码：</b></td>
+                  <td>
+                    <input name="password1" type="password" id="password1" class="bind_txt" />
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right" valign="top"><b>邮箱：</b></td>
+                  <td>
+                    <input name="email" type="text" id="email" class="bind_txt" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td>
+                    <input name="agree" type="checkbox" value="true" id="agree" />
+                    <a href="$!webPath/doc_agree.htm" target="_blank">同意用户协议</a></td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td><span class="bind_ok">
+                    <input name="" type="submit" value="确认提交" style="cursor:pointer;" />
+                    </span></td>
+                </tr>
+              </table>
+            </div>
+            </form>
+            <form action="$!webPath/sina_login_bind_finish.htm" method="post" id="theForm1">
+            <div class="bind_tabone" id="user_bind" style="display:none;">
+            <table width="393" border="0" cellspacing="0" cellpadding="0" class="bind_table">
+                <tr>
+                  <td width="105" align="right" valign="top"><b>
+                  <input name="bind_already" type="hidden" id="bind_already" value="yes" />
+用户名：</b></td>
+                  <td>
+                    <input name="userName" type="text" id="userName" class="bind_txt" />
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right" valign="top"><b>密码：</b></td>
+                  <td>
+                    <input name="password" type="password" id="password" class="bind_txt" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td><span class="bind_ok">
+                    <input name="" type="submit" value="确认提交" style="cursor:pointer;" />
+                    </span></td>
+                </tr>
+              </table>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

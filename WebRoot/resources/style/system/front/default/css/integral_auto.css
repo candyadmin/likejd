@@ -1,0 +1,18 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*积分商城*/
+@media screen and (min-widht:800px) and (max-width:1024px){
+	.integral_right{ width:730px;}
+	.inte_top_adv{ display:none;}
+	.exchange_ul{ width:700px;}
+	.exchange_goods h3{left:0px; }
+	.goods_one{ margin-left:3px; padding:4px; }
+}
+@media screen and (min-width:1024px) {
+.integral_right{ width:930px;}
+.inte_top_adv{ display:block; border-bottom:1px solid #ddd; border-top:1px solid #ddd; border-right:1px solid #ddd; height:248px; width:197px; float:left; padding:1px;}
+.exchange_ul{ width:930px; margin-left:0px;}
+.exchange_goods h3{left:-27px; }
+.goods_one{margin-left:11px;padding:5px; }
+}

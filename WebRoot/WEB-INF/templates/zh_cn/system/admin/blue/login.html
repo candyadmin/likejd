@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>shopping商城系统后台登录</title>
+</head>
+<link href="$!webPath/resources/style/system/manage/blue/login.css" rel="stylesheet" type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+function refreshCode(){
+	jQuery("#code_img").attr("src","$!webPath/verify.htm?d"+new Date().getTime());
+}
+function login(){
+	jQuery("#theForm").submit();
+}
+var EnterSubmit = function(evt){
+evt = window.event || evt;
+ if (evt.keyCode == 13)
+ { 
+  login();
+ }
+}
+window.document.onkeydown=EnterSubmit;
+jQuery(document).ready(function(){
+     if(top.location!=this.location)top.location=this.location;//跳出框架在主窗口登录
+	jQuery('#username').focus();	
+});
+</script>
+<body>
+<form name="theForm" id="theForm" action="$!webPath/shopping_login.htm" method="post">
+<div class="main_body">
+  <div class="login_top"> </div>
+  <div class="login_mid">
+    <div class="login_left"></div>
+    <div class="login_m">
+      <ul>
+        <li>
+          <div class="usename"></div>
+		  #if($!user)
+		  <div class="utxt">
+			<input name="username" type="hidden" id="username" value="$!user.userName" />$!user.userName
+		 </div>
+		  #else
+          <div class="ntxt">
+            <input name="username" type="text" id="username"  autocomplete="false"/>
+          </div>
+		  #end
+        </li>
+        <li>
+          <div class="password"></div>
+          <div class="ptxt">
+            <input name="password" type="password" id="password"  autocomplete="false"/>
+          </div>
+        </li>
+        <li>
+          <div class="yzm"></div>
+          <div class="ytxt">
+            <input name="code" type="text" id="code"  style="text-transform:uppercase;" autocomplete="false"/>
+          </div>
+          <div class="yzmimg"><img style="cursor:pointer;" src="$!webPath/verify.htm" id="code_img" onclick="refreshCode();" width="59" height="27" /></div>
+        </li>
+      </ul>
+    </div>
+    <div class="login_r"></div>
+  </div>
+  <div class="login_mid2">
+    <div class="login_left2"></div>
+    <div class="login_m2">
+	  <div style="width:140px;float:left;"><a href="$!webPath/index.htm" target="_blank" style="padding-top:0px; display:block; float:right; margin-right:30px;color:#fff">返回首页</a></div>
+      <div class="m1">
+        <input name="" type="button"  value="" onclick="login();" style="cursor:pointer"/>
+        <input name="login_role" type="hidden" id="login_role" value="admin" />
+      </div>
+      <div class="m2">
+        <input name="" type="reset"  value=""  style="cursor:pointer"/>
+      </div>
+    </div>
+    <div class="login_r2"></div>
+  </div>
+  <div class="bottom">
+    <div class="bottoml"></div>
+    <div class="bottomm"></div>
+    <div class="bottomr"></div>
+  </div>
+  <div class="tell">
+    <p>Copyright 2011-2014 © <a href="#" target="_blank"><span style="color: #2662AC;">shopping</span></a> xxx</p>
+    </div>
+</div>
+</form>
+</body>
+</html>

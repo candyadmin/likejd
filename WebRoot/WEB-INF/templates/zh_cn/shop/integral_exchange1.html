@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>积分兑换 -$!config.title - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/integral.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+function integral_adjust_count(goods_id,count){
+   jQuery.post("$!webPath/integral_adjust_count.htm",{"goods_id":goods_id,"count":count},function(data){
+	  jQuery("#ic_"+goods_id).text(data.integral);
+	  jQuery("#total_integral").text(data.total_integral);
+	  jQuery("#count_"+goods_id).val(data.count);
+	  jQuery("#count_"+goods_id).attr("goods_count",data.count);	  
+	},"json");
+}
+jQuery(document).ready(function(){
+   jQuery("input[id^=count_]").keyup(function(){
+      var count=jQuery(this).val().replace(/\D/g,'');
+	  var goods_id=jQuery(this).attr("goods_id");
+	  if(count==""){
+	    count=1;
+	  }
+	  jQuery(this).val(count);
+	  jQuery(this).attr("goods_count",count);
+	  integral_adjust_count(goods_id,count)
+   });
+   jQuery(".cut_num").click(function(){
+	  var goods_id=jQuery(this).attr("goods_id");
+	  var count=jQuery("#count_"+goods_id).attr("goods_count");
+	  if(count>1){
+	    count=parseInt(count)-1;
+		jQuery("#count_"+goods_id).val(count);
+		jQuery("#count_"+goods_id).attr("goods_count",count);
+		integral_adjust_count(goods_id,count)
+	  }
+   });
+   //
+   jQuery(".add_num").click(function(){
+	  var goods_id=jQuery(this).attr("goods_id");
+	  var count=jQuery("#count_"+goods_id).attr("goods_count");
+	  count=parseInt(count)+1;
+      jQuery("#count_"+goods_id).val(count);
+	  jQuery("#count_"+goods_id).attr("goods_count",count);
+	  integral_adjust_count(goods_id,count)
+   });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="inte_step">
+      <div class="stepcenter"> <span class="inte_step1"></span> <span class="inte_step2"></span> <span class="inte_step3"></span> </div>
+    </div>
+    #if($!integral_cart.size()>0)
+    <div class="integ_car">
+      <h1>已选择兑换的礼品</h1>
+      <div class="tntcartable">
+        <table width="980" border="0" cellspacing="0" cellpadding="0" class="intcar_table">
+          <tr class="intcar_thead">
+            <td width="110">&nbsp;</td>
+            <td width="360" align="left">礼品名称 </td>
+            <td width="110" align="center">兑换积分</td>
+            <td width="110" align="center">兑换数量</td>
+            <td width="130" align="center">积分小计</td>
+            <td align="center">操作</td>
+          </tr>
+          #foreach($obj in $integral_cart)
+          <tr>
+          #if($!obj.goods.ig_goods_img)
+            #set($img="$!imageWebServer/$!{obj.goods.ig_goods_img.path}/$!{obj.goods.ig_goods_img.name}_small.$!{obj.goods.ig_goods_img.ext}")
+          #else
+            #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+          #end
+            <td><span class="tabimg"><a href="$!webPath/integral_view_$!{obj.goods.id}.htm" target="_blank"><img src="$!img" width="65" height="65" /></a></span></td>
+            <td valign="top" class="tabimg_name"><a href="$!webPath/integral_view_$!{obj.goods.id}.htm" target="_blank">$!{obj.goods.ig_goods_name}</a></td>
+            <td align="center"><span class="tabimg_name">$!obj.goods.ig_goods_integral</span></td>
+            <td style="position:relative"><span class="intg_addnum"><a href="javascript:void(0);" class="cut_num" goods_id="$!obj.goods.id"></a>
+              <input name="count_$!{obj.goods.id}" type="text"  class="countertxt" id="count_$!{obj.goods.id}" value="$!obj.count" goods_count="$!obj.count" goods_id="$!obj.goods.id" />
+              <a href="javascript:void(0);" class="add_num" goods_id="$!obj.goods.id"></a></span></td>
+            <td align="center" id="ic_$!{obj.goods.id}">$!obj.integral</td>
+            <td align="center"><a href="javascript:void(0);" onclick="integral_cart_remove('$!obj.goods.id',this)" class="integ_del">删除</a></td>
+          </tr>
+          <script>
+		  function integral_cart_remove(id,obj){
+		     jQuery.post("$!webPath/integral_cart_remove.htm",{"id":id},function(data){
+				if(data.status==100){
+					jQuery(obj).parent().parent().remove();
+				    jQuery("#total_integral").text(data.total_integral);
+					if(data.size==0){
+					  jQuery(".integ_car").hide();
+					  jQuery(".index_width").show();
+					}
+				}else alert("删除失败，请尝试重新操作！");																   
+			 },"json");
+		  }
+		  </script>
+          #end
+        </table>
+      </div>
+      <div class="integ_cost"> <span><i>您当前积分：$!{user.integral} 分</i>|<i>所需总积分：<strong id="total_integral">$!total_integral</strong>分</i></span> </div>
+      <div class="integ_submit"> <span><a href="$!webPath/integral.htm">继续兑换</a><i>
+        <a href="$!webPath/integral_exchange2.htm">填写并确认兑换</a>
+        </i></span> </div>
+    </div>
+    #end
+    <div class="index_width" #if($!integral_cart.size()>0) style="display:none;"#end>
+      <div class="car_nogoods">
+        <div class="shopcar">
+          <dl>
+            <dt><img src="$!imageWebServer/resources/style/system/front/default/images/shopping_cart.jpg" width="130" height="118" /></dt>
+            <dd>
+              <h1>您还没有兑换任何礼品</h1>
+              <span><a href="$!webPath/integral.htm">马上去兑换>></a></span><span><a href="$!webPath/buyer/integral_order_list.htm">查看已兑换的礼品>></a></span> </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

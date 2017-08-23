@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>预付款支付 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+		pay_msg:{required:true}
+	},
+	messages:{
+	    pay_msg:{
+			required:"付款说明不能为空"
+		}
+	}
+ });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+   <form action="$!webPath/integral_order_pay_balance.htm" method="post" id="theForm">
+    <div class="index2">
+      <div class="buy_step_last">
+        <ul>
+          <li>
+            <h1>积分兑换预存款支付</h1>
+          </li>
+          <li>
+            <h2>预存款支付</h2>
+          </li>
+          <li>
+            <h3>请输入支付信息 (如转账的账号、时间等，您也可以稍后在用户中心“我的订单”中进行付款)：</h3>
+          </li>
+          <li><span class="steptext">
+            <textarea name="igo_pay_msg" cols="" rows="6" id="igo_pay_msg"></textarea>
+          </span></li>
+          <li><span class="stepbtn">
+            <input name="" type="submit"  value="提交" style="cursor:pointer;"/>
+          </span>
+            <input name="integral_order_id" type="hidden" id="integral_order_id" value="$!integral_order_id" />
+          </li>
+        </ul>
+      </div>
+    </div>
+    </form>
+  </div>
+ $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+	//好友评论点击回复按钮ajax
+	jQuery("a[id^=child_reply_]").click(function(){
+	   var child_name = jQuery(this).attr("child_name");
+	    var parent_id = jQuery(this).attr("parent_id");
+		jQuery("#reply_content_"+parent_id).val("回复"+child_name+":");
+		 
+		});
+	//动态显示评论的回复与删除
+	jQuery("dl[id^=id_dl_]").hover(
+			function(){
+			 var hide_child_id =jQuery(this).attr("child_id");	
+			 jQuery("#hide_span_"+hide_child_id).show(); 
+							},
+			function(){
+			 var hide_child_id =jQuery(this).attr("child_id");	
+			 jQuery("#hide_span_"+hide_child_id).hide();
+		});
+		//删除动态下方的评论
+	jQuery("a[id^=reply_dele_ajax_]").click(function(){										 
+			jQuery("#hidden_dynamic_id").val(jQuery(this).attr("child_id"));
+			jQuery("#hidden_parent_dynamic_id").val(jQuery(this).attr("parent_id"));
+			showDialog("share_sns","系统提示","删除后不可恢复，是否继续？",1,"question",10,dele_dynamic_reply);
+			});	
+});
+
+	//删除动态下方评论
+function dele_dynamic_reply(){
+	var child_id = jQuery("#hidden_dynamic_id").val();
+	var parent_id = jQuery("#hidden_parent_dynamic_id").val();	
+ 	jQuery.post("$!webPath/buyer/dynamic_reply_del.htm",
+					   {    
+						"id":child_id,
+						"parent_id":parent_id
+					   },
+					   function(data){
+						   if(data){
+							   jQuery("#child_list_"+parent_id).html(data);
+							   showDialog("share_sns","系统提示","删除成功！",0,"succeed",3);
+							   }
+	   							},"text");
+	
+}
+</script>
+
+#foreach($child in $obj.childs)
+#set($child_img="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+#if($!child.user.photo)
+#set($child_img="$!webPath/$!child.user.photo.path/$!child.user.photo.name")
+#end
+<dl id="id_dl_$!{child.id}" child_id=$!child.id>
+  <dt><img src="$!child_img" width="40" height="40" /></dt>
+  <dd>
+    <div class="enjoy_rptext"><a href="javascript:void(0);" class="blue2">$!child.user.userName：</a>$!child.content</div>
+    <div class="enjoy_fbtime">$!CommUtil.formatLongDate($!child.addTime) <span class="reply_fun" id="hide_span_$!{child.id}"  style="display:none"> #if($!child.user.id!=$!user.id) <a href="javascript:void(0);" id="child_reply_$!{child.id}" parent_id=$!obj.id  child_name=$!child.user.userName >回复</a> #end   #if($!child.user.id==$!user.id)<a href="javascript:void(0);"  id="reply_dele_ajax_$!{child.id}" child_id=$!child.id parent_id=$!obj.id>删除</a>#end</span></div>
+  </dd>
+</dl>
+#end 

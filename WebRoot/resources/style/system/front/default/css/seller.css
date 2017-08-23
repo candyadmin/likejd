@@ -1,0 +1,78 @@
+* { padding:0px; margin:0px;}
+img { border:0px;}
+li { list-style-type:none;}
+a { color:#020202; text-decoration:none;}
+
+/**2013-08-20 配送方式配置start--------------------------------------***/
+
+.db_box { width:743px; margin:0px auto;}
+.db_box_top { width:743px; float:left; margin-top:20px;}
+.db_box_top li { width:743px; height:30px; float:left;}
+.db_box_top .li_left { width:70px; float:left; line-height:30px; text-align:center;}
+.db_box_top .li_right { line-height:20px;margin-top:5px;}
+.db_box_top .li_right input { width:130px; height:20px; float:left; line-height:20px;}
+.db_box_top .li_right_font { height:30px; float:left; line-height:30px; color:#787878;}
+.db_box_main { width:673px; float:right;}
+.db_box_main_input { width:673px; height:30px; line-height:30px; float:left;font-size:14px;}
+.db_box_main_rdinary { width:661px; float:left; border:1px solid #becee8; padding:10px 5px; overflow:hidden;}
+.rdinary_top {line-height:30px; background-color:#f3feed; padding:0px 10px;}
+.rdinary_top .piece { width:38px; height:20px; line-height:20px; border-top:1px solid #c7ccc6; border-left:1px solid #c7ccc6; border-right:1px solid #ebebeb; border-bottom:1px solid #ebebeb; border-radius:2px;}
+.rdinary_top .yuan { width:50px; height:20px; line-height:20px; border-top:1px solid #c7ccc6; border-left:1px solid #c7ccc6; border-right:1px solid #ebebeb; border-bottom:1px solid #ebebeb; border-radius:2px;}
+.rdinary_ul { width:661px; float:left; margin-top:10px; border-top:1px solid #bcbcbc; border-left:1px solid #bcbcbc;}
+.rdinary_ul li { width:661px; height:32px; line-height:32px; border-bottom:1px solid #bcbcbc; float:left;}
+.rdinary_ul li span { border-right:1px solid #bcbcbc; text-align:center;}
+.rdinary_ul .bg_color { background-color:#f5f5f5;}
+.rdinary_ul .width1 { width:240px;float:left;}
+.rdinary_ul .width2 { height:32px;}
+.rdinary_ul .width3 { width:47px; height:32px; float:left;}
+.rdinary_ul i { float:left; font-style:normal; margin-left:10px; padding-top:5px;}
+.rdinary_ul a { float:right; font-weight:normal; margin-right:10px; text-decoration:none; color:#0030ff;}
+.rdinary_ul a:hover { text-decoration:underline;}
+.rdinary_ul .in { width:65px; height:20px; line-height:20px; border-top:1px solid #c7ccc6; border-left:1px solid #c7ccc6; border-right:1px solid #ebebeb; border-bottom:1px solid #ebebeb; border-radius:2px; margin-top:5px; background-color:#fbfbfb;}
+.rdinary_ul_bottom { width:651px; float:left; line-height:30px; color:#0030ff; padding-left:10px;}
+.rdinary_ul_bottom a { color:#0030ff; text-decoration:none;}
+.db_box_save { width:734px; height:40px; float:left; text-align:center;}
+.db_box_save input { width:120px; height:34px; margin-top:10px; cursor:pointer;}
+/**2013-08-20 配送方式配置 end--------------------------------------***/
+/**2013-08-19 区域框start--------------------------------------***/
+.area_box { width:580px; margin:0px auto;border:1px solid #dedede; background-color:#FFF;position:absolute;top:100px; left:100px; z-index:9999;}
+.area_box_title { width:560px; height:24px; line-height:24px; margin-top:1px; background-color:#e9f1f4; border-bottom:1px solid #dedede; padding:0px 10px;}
+.area_box_title_left { float:left;}
+.area_box_title_right { float:right; font-size:20px;}
+.area_box_title_right a { color:#666; text-decoration:none;}
+.area_box_title_right a:hover { color:#333;}
+.area_box_main { width:502px; float:left;}
+.area_bg_blue { width:580px; float:left; background-color:#ecf4ff;}
+.area_bg_white { width:580px; float:left; background-color:#ffffff;}
+.area_before { width:73px; float:left; line-height:35px; height:35px; padding-left:5px;} 
+.area_box_main li { width:91px; float:left; height:35px; line-height:35px;}
+.area_box_main li input { margin-right:5px; margin-top:8px; margin-left:5px; float:left;}
+.area_box_main li span { background:url(../images/sanjiao.png) no-repeat right center; float:left; padding-right:8px; cursor:pointer;}
+.area_box_main .this {width:91px; float:left; height:33px; line-height:33px;border:1px solid #ebe4ad; background-color:#fbfcc3; position:relative;}
+.area_box_main .area_level { position:absolute; width:225px; border:1px solid #ebe4ad; background-color:#fbfcc3; left:-1px; top:30px; display:none;}
+.area_level .close { width:225px; height:24px; float:left; line-height:24px; margin-bottom:10px;}
+.area_level .close input { float:right; cursor:pointer;}
+.area_level li { width:auto; height:30px; float:left; line-height:30px;}
+.area_box_bottom { width:580px; height:30px; line-height:30px; margin-top:10px; float:left; border-top:1px solid #dedede;}
+.area_box_bottom input { width:50px; height:24px; float:right; margin-right:10px; margin-top:5px; cursor:pointer;}
+.rdinary_ul table {text-align:center;}
+.rdinary_ul td { height:24px; line-height:24px;  border-right:1px solid #bcbcbc; border-bottom:1px solid #bcbcbc;}
+/**2013-08-19 end--------------------------------------***/
+
+/**************订单打印*****************/
+.print_box { width:960px; margin:0px auto; border:1px solid #CCC; background-color:#fafafa; padding:20px; overflow:hidden}
+.print_left { width:722px; float:left; border:1px dashed #CCC; background-color:#FFF; padding:37px;}
+.print_left h1 { text-align:center; font-size:30px; padding-bottom:20px;}
+.print_left ul { float:left; width:722px;}
+.print_left ul li { width:240px; line-height:24px; height:24px; float:left;}
+.print_left_tb { width:722px; float:left; border-top:2px solid #000;}
+.print_left_tb td { padding:5px 0px; border-bottom:2px solid #000;}
+.print_left_tb td li { width:180px; float:left; height:30px; line-height:30px;}
+.print_right { width:154px; float:left; padding-top:20px;}
+.print_right h1 { width:144px; float:left;}
+.print_right h1 span { width:83px; height:42px; float:right; background:url(../images/usercenter/print_01.jpg) no-repeat 10px 5px #FFF; border:1px solid #cbcbcb; border-radius:4px; text-align:right; line-height:42px; padding-right:20px; box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);}
+.print_right p { width:144px; float:left; padding-left:30px; margin-top:93px;}
+.print_right p img { width:112px; height:56px; float:left;}
+.print_right p em { font-style:normal; border-radius:10px; background-color:#000; color:#FFF; width:130px; height:18px; line-height:18px; float:left; text-align:center;}
+.print_right p b { font-weight:normal; float:left; width:135px; line-height:24px;}
+.print_right p b span { background-color:#09F; color:#FFF;}

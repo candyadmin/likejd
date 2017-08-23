@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+	 ad_title:{required:true},
+	 ad_ap_id:{required:true},
+	 ad_begin_time:{required:true},
+	 ad_end_time:{required:true},
+	 acc:{
+	    accept:"$!config.imageSuffix"
+	  }
+	 },
+    messages:{
+	 ad_title:{required:"广告标题不能为空"},
+	 ad_ap_id:{required:"广告位置不能为空"},
+	 ad_begin_time:{required:"开始时间不能为空"},
+	 ad_end_time:{required:"结束时间不能为空"},
+	 acc:{
+	    accept:"不允许的图片格式"
+	  }
+	}
+  });
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  //
+  jQuery("#logoShow").mouseover(function(){
+	    jQuery("#logoImg").css('display','block');
+   }).mouseout(function(){
+		jQuery("#logoImg").css('display','none');
+	});
+  //
+  jQuery("#acc").change(function(){
+	 jQuery("#textfield1").val(jQuery("#acc").val());
+   })
+  //
+  jQuery('#ad_begin_time').attr("readyonly","readyonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#ad_end_time').attr("readyonly","readyonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  //
+  jQuery("#ad_ap_id").change(function(){
+     var ap_type=jQuery(this).find('option:selected').attr("ap_type");
+	 if(ap_type=="text"){
+	   jQuery("#advert_text").show();
+	   jQuery("#advert_img").hide();
+	   jQuery("#advert_slide").hide();
+	 }
+	 if(ap_type=="slide"||ap_type=="wapslide"||ap_type=="indexslide"){
+	   jQuery("#advert_img").show();
+	   jQuery("#advert_slide").show();
+	   jQuery("#advert_text").hide();
+	 }
+	 if(ap_type=="img"||ap_type=="scroll"){
+	   jQuery("#advert_img").show();
+	   jQuery("#advert_text").hide();
+	   jQuery("#advert_slide").hide();
+	 }
+  });
+  //
+  jQuery("#ad_ap_id").val("$!obj.ad_ap.id");
+   #if($!obj.ad_ap.ap_type=="text")
+	   jQuery("#advert_text").show();
+	   jQuery("#advert_img").hide();
+	   jQuery("#advert_slide").hide();   
+   #end
+    #if($!obj.ad_ap.ap_type=="slide"||$!obj.ad_ap.ap_type=="wapslide"||$!obj.ad_ap.ap_type=="indexslide")
+	   jQuery("#advert_slide").show();
+	#end
+	#if($!obj.ad_ap.ap_type=="slide"||$!obj.ad_ap.ap_type=="wapslide"||$!obj.ad_ap.ap_type=="indexslide"||$!obj.ad_ap.ap_type=="img"||$!obj.ad_ap.ap_type=="scroll")
+	   jQuery("#advert_img").show();
+	   jQuery("#advert_text").hide();
+	   jQuery("#advert_slide").hide();	   
+	#end
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">广告管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/advert_list.htm">所有广告</a>| <a href="$!webPath/admin/advert_list_audit.htm" >未审核广告</a> | <a href="$!webPath/admin/advert_add.htm" #if(!$!edit)class="this"#end>新增广告</a>| <a href="$!webPath/admin/adv_pos_list.htm">所有广告位</a>| <a href="$!webPath/admin/adv_pos_add.htm">新增广告位</a>#if($!edit) | 
+	   <a href="javascript:void(0);" class="this">编辑</a>
+	   #end</span> <span class="tab-two"></span></div>
+  <form action="$!webPath/admin/advert_save.htm" method="post" enctype="multipart/form-data" id="theForm">
+  <div class="setcont">
+    <!--鼠标经过样式-->
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>广告名称</li>
+      <li><span class="webname">
+        <input name="ad_title" type="text" id="ad_title" value="$!obj.ad_title" />
+        </span></li>
+    </ul>
+    <!--鼠标未经过样式-->
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>广告位置</li>
+      <li><span class="webnamesec sizese">
+        <select name="ad_ap_id" id="ad_ap_id">
+          <option value="">请选择所属广告位...</option>
+          #foreach($ap in $aps)
+          <option value="$!ap.id" ap_type="$!ap.ap_type">$!{ap.ap_title}($!{ap.ap_width}*$!{ap.ap_height})</option>
+          #end
+        </select>
+        </span></li>
+    </ul>
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>开始时间</li>
+      <li><span class="webname">
+        <input name="ad_begin_time" type="text" id="ad_begin_time" value="$!obj.ad_begin_time" />
+        </span></li>
+    </ul>
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>结束时间</li>
+      <li><span class="webname">
+        <input name="ad_end_time" type="text" id="ad_end_time" value="$!obj.ad_end_time" />
+        </span></li>
+    </ul>
+    <ul class="set1" id="advert_img" style="display:none;">
+        <li>广告图片</li>
+        <li> <span class="size13" >
+          <input name="textfield" type="text" id="textfield1" />
+          </span> <span class="filebtn">
+          <input name="button" type="button" id="button1" value=""/>
+          </span> <span style="float:left;" class="file">
+          <input name="acc" type="file" id="acc" class="file-text" size="30"/>
+          </span> <span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span>#if(!$!obj.ad_acc)<span id="nothis"><strong class="q"></strong><strong class="w">暂无图片</strong><strong class="c"></strong></span>#end
+          #if($!obj.ad_acc)
+          <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!webPath/$!obj.ad_acc.path/$!obj.ad_acc.name"  width="$!obj.ad_acc.width" height="$!obj.ad_acc.height" id="logoShow2"/> </div>
+          #end
+        </li>
+      </ul>
+     <ul class="set1" id="advert_text" style="display:none;">
+      <li>广告文字：</li>
+      <li><span class="webname">
+        <input name="ad_text" type="text" id="ad_text" value="$!obj.ad_text" />
+        </span></li>
+    </ul> 
+     <ul class="set1" id="advert_url">
+      <li>广告链接：</li>
+      <li><span class="webname">
+        <input name="ad_url" type="text" id="ad_url" value="$!obj.ad_url" />
+        </span></li>
+    </ul> 
+    <ul class="set1" id="advert_slide" style="display:none;">
+      <li>幻灯片序号：</li>
+      <li><span class="webname">
+        <input name="ad_slide_sequence" type="text" id="ad_slide_sequence" value="$!obj.ad_slide_sequence" />
+        </span></li>
+    </ul>  
+  </div>
+  <div class="submit">
+    <input name="" type="submit" value="提交" style="cursor:pointer;" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/advert_add.htm" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/advert_list.htm" />
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  </div>
+  </form>
+</div>
+</body>
+</html>

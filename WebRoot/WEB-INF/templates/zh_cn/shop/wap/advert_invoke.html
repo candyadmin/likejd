@@ -1,0 +1,56 @@
+#if($!obj.ap_type=="img")  
+  document.write("<div style='float:left;overflow:hidden;'>");
+  document.write("<a href='$!webPath/advert_redirect.htm?url=$!obj.ap_acc_url&id=$!obj.adv_id' target='_blank'>");
+  document.write("<img width='$!obj.ap_width' height='$!obj.ap_height' src='$!webPath/$!obj.ap_acc.path/$!obj.ap_acc.name' style='border:none;' />");
+  document.write("</a>");
+  document.write("</div>"); 
+#end
+#if($!obj.ap_type=="slide")
+  document.write("<script\/>");
+  document.write("jQuery('document').ready(function(){");  
+  document.write("jQuery('#shopping_advert').KinSlideshow({btn:{btn_bgColor:'#FFFFFF',btn_bgHoverColor:'#FF8921',btn_fontColor:'#000000',btn_fontHoverColor:'#EEEEEE',btn_borderColor:'#666666',btn_borderHoverColor:'#FFFFFF',btn_borderWidth:1}});");
+  document.write("})");
+  document.write("</script>");
+  document.write("<div class='hdp' id='shopping_advert' style='visibility:hidden;'>");
+  document.write("<ul>");
+  #foreach($adv in $obj.advs)
+  document.write("<a href='$!webPath/advert_redirect.htm?url=$!adv.ad_url&id=$!adv.id' target='_blank'><img src='$!webPath/$!adv.ad_acc.path/$!adv.ad_acc.name' width='$!obj.ap_width' height='$!obj.ap_height' /></a>");
+  #end
+  document.write("</ul>");
+  document.write("</div>");
+#end
+#if($!obj.ap_type=="scroll")
+ #if($obj.advs.size()>0)
+  document.write("<div class='conti_left' id='advert_left'><span></span></div>");
+  document.write("<div class='conti'>");
+  document.write("<ul>");
+  #foreach($adv_list in $CommUtil.toRowChildList($obj.advs,4))
+  document.write("<li>");
+  #foreach($adv in $adv_list)
+  document.write("<a href='$!webPath/advert_redirect.htm?url=$!adv.ad_url&id=$!adv.id' target='_blank'><img src='$!webPath/$!adv.ad_acc.path/$!adv.ad_acc.name' width='$!obj.ap_width' height='$!obj.ap_height' /></a>");
+  #end
+  document.write("</li>");
+  #end
+  document.write("</ul>");
+  document.write("</div>");
+  document.write("<div class='conti_right' id='advert_right'><span></span></div>");
+  #end
+#end
+#if($!obj.ap_type=="text")  
+  document.write("<div style='width='$!obj.ap_width';height='$!obj.ap_height';float:left;overflow:hidden;'>");
+  document.write("<a href='$!webPath/advert_redirect.htm?url=$!obj.ap_acc_url&id=$!obj.adv_id' target='_blank'>");
+  document.write("$!obj.ap_text");
+  document.write("</a>");
+  document.write("</div>"); 
+#end
+#if($!obj.ap_type=="wapslide")
+  document.write("<div id='focus' class='focus'><div class='hd'><ul></ul></div><div class='bd'><div class='tempWrap' style='overflow: hidden; position: relative;'><ul>");
+  #foreach($adv in $obj.advs)
+      document.write("<li><a href='$!webPath/advert_redirect.htm?url=$!adv.ad_url&id=$!adv.id' target='_blank'><img src='$!webPath/$!adv.ad_acc.path/$!adv.ad_acc.name' width='100%' height='150' /></a></li>");
+  #end
+  document.write("</ul></div></div></div>");
+  document.write("<script\/>");
+  document.write("TouchSlide({slideCell:'#focus',titCell:'.hd ul',mainCell:'.bd ul',effect:'leftLoop',autoPlay:true,autoPage:true});");
+  document.write("</script>");
+#end
+

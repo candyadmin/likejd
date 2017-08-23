@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">商品评价</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"><a href="$!webPath/admin/evaluate_list.htm" class="this">所有评价</a> </span> <span class="tab-two"></span></div>
+  <form name="queryForm" id="queryForm" action="" method="post">
+    <div class="allmem_search">
+      <ul>
+        <li> <span>商品名称</span> <span class="allmen size4">
+          <input name="goods_name" type="text" id="goods_name" />
+          </span> <span>买家用户名</span> <span class="allmen size4">
+          <input name="userName" type="text" id="userName" />
+          </span> <span class="btn_search">
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;"/>
+        </span> </li>
+      </ul>
+    </div>
+  </form>
+  <form action="$!webPath/admin/evaluate_list.htm" method="post" id="ListForm">
+    <div class="brandtable">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="friend_table">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="391">商品名称</td>
+          <td width="143">买家名称 </td>
+          <td  width="174">买家评价</td>
+          <td width="239" >卖家店铺</td>
+          <td width="239" >卖家评价</td>
+          <td width="124" align="left">评价状态</td>
+          <td width="139" align="left">操作</td>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+          <td><span class="pxnum size5"> $!obj.evaluate_goods.goods_name </span></td>
+          <td><span class="pxnum size7">$!obj.evaluate_user.userName</span></td>
+          #if($!obj.evaluate_buyer_val==1)
+            #set($evaluate_buyer_val="好评")
+          #end
+          #if($!obj.evaluate_buyer_val==0)
+            #set($evaluate_buyer_val="中评")
+          #end
+          #if($!obj.evaluate_buyer_val==-1)
+            #set($evaluate_buyer_val="差评")
+          #end
+          <td>$!evaluate_buyer_val</td>
+          <td>$!obj.of.store.store_name</td>
+          #if($!obj.evaluate_seller_val==1)
+            #set($evaluate_seller_val="好评")
+          #end
+          #if($!obj.evaluate_seller_val==0)
+            #set($evaluate_seller_val="中评")
+          #end
+          #if($!obj.evaluate_seller_val==-1)
+            #set($evaluate_seller_val="差评")
+          #end          
+          <td>$!evaluate_seller_val</td>
+          #if($!obj.evaluate_status==0)
+            #set($status="正常显示")
+          #end
+          #if($!obj.evaluate_status==1)
+            #set($status="禁止显示")
+          #end
+          #if($!obj.evaluate_status==2)
+            #set($status="取消评价")
+          #end                    
+          <td>$!status</td>
+          <td class="ac8" align="left"><a href="$!webPath/admin/evaluate_edit.htm?id=$!obj.id&currentPage=$!currentPage">编辑</a></td>
+        </tr>
+        #end
+        <tr style="background:#F2F2F2;">
+          <td colspan="7"><div class="fenye">
+              <input name="goods_name" type="hidden" id="goods_name" value="$!goods_name" />
+              <input name="userName" type="hidden" id="userName" value="$!userName" />
+              <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+          $!gotoPageFormHTML</div></td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script>
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+    jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/store_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">店铺管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/store_list.htm"  class="this">管理</a> | <a href="$!webPath/admin/store_add.htm">新增</a>|<a href="$!webPath/admin/store_gradelog_list.htm">升级申请</a> </span> <span class="tab-two"></span></div>
+  <form action="$!webPath/admin/store_list.htm" method="post" name="queryForm" id="queryForm">
+  <div class="allmem_search">
+    <ul>
+      <li> <span>店铺名称</span> <span class="allmen size4">
+        <input name="store_name" type="text" id="store_name" />
+        </span> <span>店铺等级</span> <span class="allmen size4">
+        <select name="store.grade.id" id="store.grade.id">
+		  <option value="">请选择...</option>
+		  #foreach($!grade in $grades)
+		  <option value="$!grade.id">$!grade.gradeName</option>
+		  #end
+        </select>
+        </span> 
+        <span>店铺状态</span> <span class="allmen size4">
+        <select name="store_status" id="store_status">
+		  <option value="">请选择...</option>
+		  <option value="1">待审核</option>
+		  <option value="2">正常</option>
+		  <option value="3">违规关闭</option>
+        </select>
+        </span> 
+        <span class="btn_search">
+        <input name="" type="button"  value="搜索" style="cursor:pointer;" onclick="query();"/>
+        </span> </li>
+    </ul>
+  </div>
+  </form>
+    <form action="$!webPath/admin/store_list.htm" method="post" name="ListForm" id="ListForm">
+  <div class="leveltable">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="level_table">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td colspan="2">&nbsp;</td>
+        <td width="20%" >店铺名称</td>
+        <td width="15%">店主用户名 | 店主姓名</td>
+        <td  width="10%">所在地</td>
+        <td width="10%">店铺类别</td>
+        <td width="8%">店铺等级</td>
+        <td width="8%">有效期至</td>
+        <td width="6%">状态</td>
+        <td width="6%">推荐</td>
+        <td>操作</td>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td colspan="2"><input type="checkbox" name="checkbox" id="checkbox" value="$!obj.id" />        </td>
+        <td>$!obj.store_name</td>
+        <td>$!{obj.user.userName}|$!obj.store_ower</td>
+        <td>[$!obj.area.parent.areaName]$!obj.area.areaName</td>
+        <td>$!obj.sc.className</td>
+        <td>$!obj.grade.gradeName</td>
+		#if(!$!obj.validity)#set($validity="无限期")#else #set($validity=$!CommUtil.formatShortDate($!{obj.validity})) #end
+        <td>$!validity</td>
+		#if($!obj.store_status==1)
+		  #set($store_status="待审核")
+		#end
+		#if($!obj.store_status==2)
+		  #set($store_status="正常")
+		#end		
+		#if($!obj.store_status==3)
+		  #set($store_status="关闭")
+		#end
+        <td>$!store_status</td>
+        <td><img src="$!webPath/resources/style/system/manage/blue/images/$!{obj.store_recommend}.png" width="21" height="23" onclick="ajax_update('$!obj.id','store_recommend',this)"  style="cursor:pointer;" title="可编辑"/></td>
+        <td class="ac9"><a href="$!webPath/admin/store_edit.htm?id=$!obj.id">编辑</a> | <a href="javascript:void();" onclick="if(confirm('删除店铺将同步删除店铺对应的商品、订单，且不可恢复，是否继续？'))window.location.href='$!webPath/admin/store_del.htm?mulitId=$!obj.id'">删除</a> | <a href="$!webPath/store.htm?id=$!obj.id" target="_blank">查看店铺</a></td>
+      </tr>
+      #end
+      <tr>
+        <td width="61"><input type="checkbox" name="all" id="all" value="" onclick="selectAll(this);" /></td>
+        <td colspan="10"><span class="allevel">全部</span><span class="shop_btn_del">
+          <input name="" type="button" onclick="cmd('$!webPath/admin/store_del.htm','')" value="删除" style="cursor:pointer;" />
+          </span></td>
+      </tr>
+    </table>
+  </div>
+  <div class="fenye">
+    <input type="hidden" name="mulitId" id="mulitId" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	<span id="queryCondition">
+	#foreach($sm in $sms)
+	<input name="$!sm.key" type="hidden" id="$!sm.key" value="$!$!sm.value" />
+	#end
+	</span>
+  $!gotoPageFormHTML</div>
+  </form>
+</div>
+</body>
+</html>

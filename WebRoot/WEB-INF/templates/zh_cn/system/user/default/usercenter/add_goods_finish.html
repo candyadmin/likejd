@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商品发布成功 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/head.htm")
+  <div class="navdetai2"> <span class="navadd1 addcolor">选择商品所在分类</span> <span class="navadd2 addcolor">填写商品详细信息</span> <span class="navadd3  white">商品发布成功</span> </div>
+  <div class="success">
+    <div class="okimg"><img src="$!webPath/resources/style/system/front/default/images/usercenter/dui.jpg" width="60" height="66" /></div>
+    <div class="success_mid">
+      <h1>恭喜您！商品发布成功！</h1>
+      <span><a href="$!webPath/goods_$!{obj.id}.htm" target="_blank">查看商品详情>> </a></span><span> <a href="$!webPath/seller/goods_edit.htm?id=$!obj.id">编辑刚发布的商品>></a></span></div>
+    <div class="success_right">
+      <h2>您还可以:</h2>
+      <ul>
+        <li> 1. 继续 <a href="$!webPath/seller/add_goods_first.htm">"发布新商品"</a></li>
+        <li> 2. 进入 <a href="$!webPath/seller/index.htm">"用户中心"</a> 管理 <a href="$!webPath/seller/goods.htm">"商品列表"</a></li>
+        <li> 3. 进入 <a href="$!webPath/seller/ztc_apply.htm">"直通车管理"</a> 选择商品添加申请</li>
+        <li> 4. 参与<a href="$!webPath/seller/activity.htm">"商城活动"</a></li>
+      </ul>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

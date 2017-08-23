@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>闲置商品 - $!{config.title} -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/second.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/second_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script src="$!webPath/resources/js/jquery.KinSlideshow.min.js"></script>
+</head>
+
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/sparegoods_head.htm") </div>
+$!httpInclude.include("/sparegoods_nav2.htm?op=index")
+<div class="main">
+  <div class="Banner_line">
+    <div class="index_slider"> 
+      <script src="$!webPath/advert_invoke.htm?id=262146"></script> 
+    </div>
+    <div class="slider_right">
+      <div class="slider_right_top">
+        <h4>低碳生活从卖二手开始</h4>
+        <span><a href="$!webPath/seller/add_spare_goods.htm" target="_blank">发布闲置</a></span> </div>
+      <div class="silder_botm_img"> 
+        <script src="$!webPath/advert_invoke.htm?id=262147"></script></div>
+    </div>
+    <div class="banner_img_hidden"> 
+      <script src="$!webPath/advert_invoke.htm?id=262152"></script> 
+      <script src="$!webPath/advert_invoke.htm?id=262153"></script>
+    </div>
+  </div>
+  #foreach($floor in $floors)
+  <div class="index_floor">
+    <h1><a href="javascript:void(0);">$!floor.title</a></h1>
+    <div class="list">
+      <div class="left_list"> #set($floor_class = $!SpareGoodsTools.query_floorClass($!floor))
+        #foreach($f_class in $floor_class) <a href="$!webPath/sparegoods_search.htm?cid=$!f_class.id" target="_blank">$!f_class.className</a> #end 
+         <script src="$!webPath/advert_invoke.htm?id=262154"></script> </div>
+      <div class="mid_list">
+        <ul>
+          #foreach($sg in $floor.sgs)
+          #if($!velocityCount<=10)
+          #if($!sg.viewInFloor==true)
+          <li class="item"> <a href="$!webPath/sparegoods_$!{sg.id}.htm" target="_blank"> <img src="$!webPath/$!sg.main_img.path/$!sg.main_img.name"  width="145" height="145"/></a>
+            <p>$!sg.title</p>
+            <div class="price">¥<span>$!sg.goods_price</span></div>
+            #if($!sg.oldAndnew==1)
+            <div class="new">全新闲置</div>
+            #end </li>
+          #end
+          #end
+          #end
+        </ul>
+      </div>
+    </div>
+  </div>
+  #end
+  <div class="index_floor">
+    <h1><a href="javascript:void(0);">所有宝贝都在这里</a></h1>
+    <div class="list"> #foreach($sgc in $sgcs)
+      <div class="all_list">
+        <h1><a href="$!webPath/sparegoods_search.htm?cid=$!sgc.id" target="_blank">$!sgc.className</a></h1>
+        <div class="list_ul"> #set($list_class = $!SpareGoodsTools.query_childclass($!sgc))   
+          #foreach($class in $list_class) <a href="$!webPath/sparegoods_search.htm?cid=$!class.id" target="_blank">$!class.className</a> #end </div>
+      </div>
+      #end </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

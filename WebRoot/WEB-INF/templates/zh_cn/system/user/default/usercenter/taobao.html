@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>淘宝数据导入-$!{config.title}- Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  //								
+  jQuery("#theForm").validate({
+     ignore: "",
+     rules: {
+	          taobao_cvs:{ required:true,accept:"csv"},
+			  gc_id3:{ required:true }
+			},
+     messages: {
+		    taobao_cvs:{ required:"CSV文件不能为空",accept:"只能导入cvs文件" },
+	        gc_id3:{required:"商品分类不能为空"},
+		  }
+    });
+  //
+  jQuery("select[id^=gc_id]").change(function(){
+    var pid=jQuery(this).val();
+	var level=jQuery(this).attr("level");
+	if(level==1){
+	  jQuery("#gc_id2").empty();
+	  jQuery("#gc_id3").empty();
+	  jQuery("#gc_id2").hide();
+	  jQuery("#gc_id3").hide();
+	}
+	if(level==2){
+	  jQuery("#gc_id3").empty();
+	  jQuery("#gc_id3").hide();
+	}
+	if(pid!=""){
+	  var next_level=jQuery(this).attr("next_level");
+	  jQuery.ajax({type:'POST',url:'$!webPath/seller/load_goods_class.htm',dataType:"json",data:{"pid":pid,"session":false},
+				success:function(json){ 
+       				jQuery("#gc_id"+next_level).empty();
+					jQuery("#gc_id"+next_level).append("<option value=''>请选择...</option>");
+		            jQuery.each(json, function(index,item){
+			        jQuery("#gc_id"+next_level).append("<option value='"+item.id+"'>"+item.className+"</option>");
+		           });																												
+ 	             jQuery("#gc_id"+next_level).show();
+	            }
+			  });
+	}
+  });
+});
+function save_form(){
+  var ugc_ids="";
+  jQuery("select[id^=ugc_id]").each(function(){
+     if(jQuery(this).val()!=""){
+	   ugc_ids=jQuery(this).val()+","+ugc_ids;
+	 }
+  });
+  jQuery("#ugc_ids").val(ugc_ids);
+  jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=taobao")
+        <td id="centerbg" valign="top">
+          <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>淘宝导入</span></div></div>
+        <div class="productmain">
+            <div class="pdctitle blue2">淘宝导入</div>
+            <div class="step">
+            <form action="$!webPath/seller/taobao_import_csv.htm" method="post" enctype="multipart/form-data" id="theForm">
+              <div class="step1">
+                <h1><span class="add2"></span>第一步：导入CSV文件</h1>
+                <table width="780" border="0" cellspacing="0" cellpadding="0" class="taotable">
+                  <tr>
+                    <td width="80">请选择文件：</td>
+                    <td><span class="taofile">
+                      <input type="file" name="taobao_cvs" id="taobao_cvs" />
+                      </span><span class="hui2 px20">导入程序默认从第二行执行导入，请保留CSV文件第一行的标题行，最大10M</span></td>
+                  </tr>
+                  <tr>
+                    <td>商品分类：</td>
+                    <td>
+                      <select name="gc_id1" id="gc_id1" level="1" next_level="2">
+                        <option value="">请选择...</option>
+                        #foreach($gc in $gcs)
+                        <option value="$!gc.id">$!gc.className</option>
+                        #end
+                      </select>
+                      <select name="gc_id2" id="gc_id2" level="2" next_level="3" style="display:none;">
+                        <option value="">请选择...</option>
+                      </select>
+                      <select name="gc_id3" id="gc_id3" style="display:none;">
+                        <option value="">请选择...</option>
+                      </select>
+                      <span class="hui2 px20">请选择商品分类（必须选到最后一级）</span></td>
+                  </tr>
+                  <tr>
+                    <td>本店分类：</td>
+                    <td>
+            <select name="ugc_id_1" id="ugc_id_1">
+              <option value="">请选择本店分类...</option>   
+			  #foreach($ugc in $ugcs)
+			   <option value="$!ugc.id">$!ugc.className</option>
+ 			  #foreach($c_ugc in $ugc.childs)
+	            <option value="$!c_ugc.id">&nbsp;&nbsp;$!c_ugc.className</option>
+  			  #end
+			  #end
+              </select>
+          <script>
+		  var user_goods_class_count=2;
+		  function add_goods_class(){
+		    var s="<select name='ugc_id_0' id='ugc_id_0'><option value=''>请选择本店分类...</option>#foreach($ugc in $ugcs)<option value='$!ugc.id'>$!ugc.className</option> #foreach($c_ugc in $ugc.childs) <option value='$!c_ugc.id'>&nbsp;&nbsp;$!c_ugc.className</option>#end #end </select>";
+			s=s.replace(new RegExp("ugc_id_0","gm"),"ugc_id_"+user_goods_class_count)
+			jQuery("#ugc_id_"+(user_goods_class_count-1)).after(s);
+			user_goods_class_count++;
+		  }
+		</script>
+              <a href="javascript:void(0);" onclick="add_goods_class();" class="px20">新增分类</a><span class="hui2 px20" >可以从属于多个本店分类</span></td>
+                  </tr>
+                  <tr>
+                    <td>字符编码：</td>
+                    <td>Unicode 默认淘宝助理导出编码即可</td>
+                  </tr>
+                  <tr>
+                    <td>文件格式：</td>
+                    <td>CSV文件</td>
+                  </tr>
+                  <tr>
+                    <td>导入说明：</td>
+                    <td class="taoli"><span class="hui2">
+                      <ul>
+                        <li>1.如果修改CSV文件请务必使用微软excel软件，且必须保证第一行表头名称含有如下项目：宝贝名称、宝贝类目、宝贝价格、宝贝数量、放入仓库、橱窗推荐、商品描述、新图片。</li>
+                        <li>2.系统当前支持淘宝助理最新版数据导入，如其他版本数据有问题，请您提交到官网论坛。</li>
+                        <li>3.如果CSV文件超过10M请通过excel软件编辑拆成多个文件进行导入</li>
+                        <li>4.每个商品最多支持导入5张图片</li>
+                      </ul>
+                      </span></td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td><span class="import">
+                      <input name="btn" type="button" style="cursor:pointer;" onclick="save_form();" value="导入淘宝数据"/>
+                      <input type="hidden" name="ugc_ids" id="ugc_ids" />
+                    </span></td>
+                  </tr>
+                </table>
+              </div>
+              </form>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+   $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

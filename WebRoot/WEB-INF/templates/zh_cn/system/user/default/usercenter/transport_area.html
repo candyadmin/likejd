@@ -1,0 +1,149 @@
+<script>
+jQuery(function(){ 
+//disable已经选择的区域信息
+	  var count=jQuery("#"+"$!{trans_city_type}_trans_city_info table tr").length;
+	  for(var i=1;i<=count-1;i++){
+		 var ids=jQuery("#"+"$!{trans_city_type}_city_ids"+i).val().split(","); 
+		 if(i!=$!{trans_index}){ 
+		   jQuery(".area_box :checkbox").each(function(){
+		     var id=jQuery(this).val();
+			 for(var i=0;i<ids.length;i++){
+			    if(ids[i]==id){
+				  jQuery(this).attr("disabled","disabled"); 
+				} 
+			 }
+		   });
+		 }else{
+		   jQuery(".area_box :checkbox").each(function(){
+		     var id=jQuery(this).val();
+			 for(var i=0;i<ids.length;i++){
+			    if(ids[i]==id){
+				  jQuery(this).attr("checked",true); 
+				}
+			 }
+		   });	
+		   
+		 }
+	  }  
+   jQuery(".area_box_main>ul>li").each(function(){
+      var count=jQuery(this).find(".area_level :checkbox[checked=true]").length;
+	  if(count>0){
+	    jQuery(this).find("b").html("("+count+")");
+	  }
+   });
+   jQuery(".area_box_main li span").click(function(){
+      jQuery(".area_box_main li").removeClass("this");
+	  jQuery(".area_level").hide();
+	  jQuery(this).parent().addClass("this");												   
+      jQuery(this).parent().find(".area_level").show();
+   });
+   jQuery(".area_before>:checkbox").click(function(){
+	  if(jQuery(this).attr("checked")=="checked"){
+        jQuery(this).parent().parent().find(":checkbox[disabled!=true]").attr("checked",true);
+		jQuery(this).parent().parent().find(":checkbox[id^=province_]").each(function(){
+		   var count=jQuery(this).parent().find(":checkbox[id^=city_][disabled!=true]").length;
+		   if(count>0){
+		      jQuery(this).parent().find("b").html("("+count+")");
+		   }
+		})
+	  }else{
+	    jQuery(this).parent().parent().find(":checkbox[disabled!=true]").attr("checked",false);
+		jQuery(this).parent().parent().find(":checkbox[id^=province_]").each(function(){
+		   jQuery(this).parent().find("b").html("");
+		})
+	  }
+   });
+   jQuery(":checkbox[id^=province_]").click(function(){
+      if(jQuery(this).attr("checked")=="checked"){
+		  jQuery(this).parent().find(":checkbox[id^=city_][disabled!=true]").attr("checked",true);
+	      var count=jQuery(this).parent().find(":checkbox[id^=city_][disabled!=true]").length;
+		  if(count>0){
+		    jQuery(this).parent().find("b").html("("+count+")");
+		  }
+	  }else{
+		  jQuery(this).parent().find(":checkbox[id^=city_][disabled!=true]").attr("checked",false);
+	      jQuery(this).parent().find("b").html("");
+	  }
+	  var count=jQuery(this).parent().parent().parent().parent().find(":checkbox[id^=province_][checked=true]").length;
+      var total_count=jQuery(this).parent().parent().parent().parent().find(":checkbox[id^=province_]").length;
+	  if(count==total_count){
+	     jQuery(this).parent().parent().parent().parent().find(":checkbox[id^=group_]").attr("checked",true);
+	  }else{
+	     jQuery(this).parent().parent().parent().parent().find(":checkbox[id^=group_]").attr("checked",false);
+	  }
+   });
+   jQuery(":checkbox[id^=city_]").click(function(){
+      var count=jQuery(this).parent().parent().parent().parent().parent().find(":checkbox[id^=city_][checked=true]").length;
+	  jQuery(this).parent().parent().parent().parent().parent().find("b").html("("+count+")");
+	  var total_count=jQuery(this).parent().parent().parent().parent().parent().find(":checkbox[id^=city_]").length;
+	  if(count==total_count){
+	    jQuery(this).parent().parent().parent().parent().parent().find(":checkbox[id^=province_]").attr("checked",true);
+	  }else{
+	    jQuery(this).parent().parent().parent().parent().parent().find(":checkbox[id^=province_]").attr("checked",false);
+	  }
+	  var p_count=jQuery(this).parent().parent().parent().parent().parent().parent().parent().parent().find(":checkbox[id^=province_][checked=true]").length;
+      var p_total_count=jQuery(this).parent().parent().parent().parent().parent().parent().parent().parent().find(":checkbox[id^=province_]").length;
+	  if(p_count==p_total_count){
+	     jQuery(this).parent().parent().parent().parent().parent().parent().parent().parent().find(":checkbox[id^=group_]").attr("checked",true);
+	  }else{
+	     jQuery(this).parent().parent().parent().parent().parent().parent().parent().parent().find(":checkbox[id^=group_]").attr("checked",false);
+	  }	  
+   });
+   
+})
+function generic_area(){
+  var trans_city_type=jQuery("#trans_city_type").val();
+  var trans_index=jQuery("#trans_index").val();
+  var citys="";
+  var city_ids="";
+  jQuery(":checkbox[id^=city_][checked=true]").each(function(){
+     citys=jQuery(this).attr("city_name")+"、"+citys;
+	 city_ids=jQuery(this).val()+","+city_ids;
+  });
+  var the_id=trans_city_type+trans_index;
+  var city_id=trans_city_type+"_city_ids"+trans_index;
+  var city_names=trans_city_type+"_city_names"+trans_index;
+  jQuery("#"+the_id).html(citys);
+  jQuery("#"+city_id).val(city_ids);
+  jQuery("#"+city_names).val(citys);
+  jQuery(".area_box").remove();
+}
+</script>
+<div class="area_box">
+    <div class="area_box_title">
+        <span class="area_box_title_left">选择区域</span>
+        <span class="area_box_title_right"><a href="javascript:void(0);" onclick="javascript:jQuery('.area_box').remove();">×</a></span>
+    </div>  
+  <!--蓝色背景:area_bg_blue 白色背景:area_bg_white-->
+  #foreach($obj in $objs)
+  <div class="area_bg_white">
+      <div class="area_before"><input name="group_$!{obj.id}" id="group_$!{obj.id}" type="checkbox" value="$!{obj.id}" /><label style="padding-left:3px;" for="group_$!{obj.id}">$!{obj.areaName}</label></div>
+        <div class="area_box_main">
+            <ul>
+               #foreach($info in $obj.childs)
+                <li>
+                <input name="province_$!{info.id}" id="province_$!{info.id}" type="checkbox" value="$info.id" />
+                <span><label for="province_${info.id}" style="float:left;">$!{info.areaName}</label><b id="city_count_$!{info.id}" style="color:#F60"></b></span>
+                  #if($info.childs.size()>0)
+                     <div class="area_level">
+                        <ul>
+                            #foreach($info1 in $info.childs)
+                            <li><label><input name="city_$!{info1.id}" id="city_$!{info1.id}" city_name="$!{info1.areaName}" type="checkbox" value="$!{info1.id}"  />$!info1.areaName</label></li>
+                            #end
+                            <li class="close"><input type="button" value="关闭" onclick="jQuery(this).parent().parent().parent().hide();jQuery('.area_box_main li').removeClass('this');" /></li>
+                        </ul>
+                    </div>
+                  #end  
+                </li>
+               #end
+            </ul>
+        </div>
+  </div>
+  #end
+	<div class="area_box_bottom">
+        <input type="button" value="取消" onclick="jQuery('.area_box').remove();" />
+    	<input type="button" value="确定" onclick="generic_area();" />
+      <input name="trans_index" type="hidden" id="trans_index" value="$!trans_index" />
+	  <input name="trans_city_type" type="hidden" id="trans_city_type" value="$!trans_city_type" />
+	</div>
+</div>

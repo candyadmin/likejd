@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>账号绑定-$!{config.title}-Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> 
+$!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/buyer/account_nav.htm?op=bind")
+        <td id="centerbg" valign="top"><div class="buyer_position">
+            <div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">我的账户</a> > <span>账号绑定</span></div>
+          </div>
+          <div class="bound"> #if($!user.qq_openid)
+            <div class="bound_box">
+              <h1>已绑定</h1>
+              <div class="bound_QQ">
+                <div class="bound_QQ_left"> <span class="QQ_pic"><img src="$!webPath/resources/style/system/front/default/images/bound.jpg" /></span> <span class="QQ_pic_r"> <em>您已成功绑定</em> <b class="QQ_btn"><a href="javascript:void(0);" onclick="if(confirm('接触QQ绑定后将不能使用QQ账号登录商城，是否继续?'))window.location.href='$!webPath/account_bind_cancel.htm?account=qq'">解绑</a></b> </span> </div>
+                <div class="bound_QQ_right"> <span class="bound_sq"><img src="$!webPath/resources/style/system/front/default/images/sq.jpg" /></span> <span class="bound_acc"> <b>账户授权</b>
+                  <p class="acc_p">账户关系绑定</p>
+                  <p class="acc_m">可使用QQ账号直接登录shopping</p>
+                  </span> </div>
+              </div>
+            </div>
+            #end
+            #if($!user.sina_openid)
+            <div class="bound_box">
+              <h1>已绑定</h1>
+              <div class="bound_QQ">
+                <div class="bound_QQ_left"> <span class="QQ_pic"><img src="$!webPath/resources/style/system/front/default/images/sina.jpg" /></span> <span class="QQ_pic_r"> <em>您已成功绑定</em> <b class="QQ_btn"><a href="javascript:void(0);" onclick="if(confirm('接触新浪微博绑定后将不能使用新浪微博账号登录商城，是否继续?'))window.location.href='$!webPath/account_bind_cancel.htm?account=sina'">解绑</a></b> </span> </div>
+                <div class="bound_QQ_right"> <span class="bound_sq"><img src="$!webPath/resources/style/system/front/default/images/sq.jpg" /></span> <span class="bound_acc"> <b>账户授权</b>
+                  <p class="acc_p">账户关系绑定</p>
+                  <p class="acc_m">可使用新浪微博直接登录shopping</p>
+                  </span> </div>
+              </div>
+            </div>
+            #end
+            #if(!$!user.qq_openid)
+            <div class="bound_box">
+              <h1>未绑定</h1>
+              <div class="bound_sina">
+                <div class="bound_QQ_left"> <span class="QQ_pic"><img src="$!webPath/resources/style/system/front/default/images/bound.jpg" /></span> <span class="QQ_pic_r"> <em>账户关系绑定</em> <em>绑定成功后可使用QQ直接登录shopping</em></span> </div>
+                <div class="bound_sina_right"> <a href="$!webPath/qq_login_api.htm">立即绑定</a> </div>
+              </div>
+            </div>
+            #end
+            #if(!$!user.sina_openid)
+            <div class="bound_box" style="border-top:none;">
+              <h1>未绑定</h1>
+              <div class="bound_sina">
+                <div class="bound_QQ_left"> <span class="QQ_pic"><img src="$!webPath/resources/style/system/front/default/images/sina.jpg" /></span> <span class="QQ_pic_r"> <em>账户关系绑定</em> <em>绑定成功后可使用新浪微博直接登录shopping</em></span> </div>
+                <div class="bound_sina_right"> <a href="$!webPath/sina_login_api.htm">立即绑定</a> </div>
+              </div>
+            </div>
+            #end </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

@@ -1,0 +1,246 @@
+@charset "utf-8";
+/* CSS Document */
+/*锁屏*/
+.black_overlay {
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	background-color:#000;
+	z-index:10000000;
+	-moz-opacity: 0.5;
+	opacity:.50;
+	filter: alpha(opacity=50);
+}
+.white_content {
+	position: absolute;
+	top: 50%;
+	left:40%;
+	margin-top:-60px;
+	width: 404px;
+	background-color:none;
+	z-index:10000000000;
+	overflow: auto;
+}
+.content_load{
+    background:url(../images/ajax_loader.gif) no-repeat center center;
+	margin-top:10px;
+	float:left;
+	display:block;
+	width:400px;
+	height:50px;
+
+}
+.white_close {
+	background:url(../images/close.jpg) no-repeat center right; width:14px; height:14px;
+	float:right;
+	right:15px;
+	top:10px;
+	display:block;
+	position:absolute;
+	z-index:1000000;
+}
+.white_box {
+	width:98%;
+	background:#fff;
+	margin-left:auto;
+	margin-right:auto;
+	padding-bottom:30px;
+	text-align:center;
+	border:2px solid #CCC; overflow:hidden;
+}
+.white_dl{ width:400px; float:left; overflow:hidden;}
+.white_dl dt{ background:url(../images/bag.jpg) no-repeat center right; width:150px; height:55px; float:left; overflow:hidden;}
+.white_dl dd{ width:250px; float:left; overflow:hidden}
+.white_box h1{ background:#fff; color:#E98900; float:left; width:100%; border-bottom:1px solid #CCC; line-height:30px; padding-left:10px; text-align:left; font-size:16px; margin-bottom:20px;}
+
+
+.wx_content {
+	position: absolute;
+	top: 50%;
+	left:36%;
+	margin-top:-60px;
+	width: 454px;
+	background-color:none;
+	z-index:10000000000;
+	overflow: auto;
+}
+.wx_box {
+	width:98%;
+	background:#fff;
+	margin-left:auto;
+	margin-right:auto;
+	padding-bottom:30px;
+	text-align:center;
+	border:2px solid #CCC; overflow:hidden;
+}
+.wx_dl{ width:450px; float:left; overflow:hidden;}
+.wx_dl dt{ background:url(../images/bag.jpg) no-repeat center right; width:200px; height:200px; float:left; overflow:hidden;}
+.wx_dl dd{ width:250px; float:left; overflow:hidden}
+.wx_box h1{ background:#fff; color:#E98900; float:left; width:100%; border-bottom:1px solid #CCC; line-height:30px; padding-left:10px; text-align:left; font-size:16px; margin-bottom:20px;}
+
+
+/*消息框+锁屏*/
+.message_black_overlay {
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	background-color:#000;
+	z-index:9999;
+	-moz-opacity: 0.5;
+	opacity:.50;
+	filter: alpha(opacity=50);
+}
+.message_white_content {
+	position: absolute;
+	top: 40%;
+	left:55%;
+	margin-left:-300px;
+	_margin-left:-100px;
+	width: 400px;
+	background-color:none;
+	z-index:10000005;
+	overflow: auto;
+}
+.message_white_iframe {
+	border:1px solid #CCCCCC;
+	width:392px;
+	margin-left:auto;
+	margin-right:auto;
+	height:150px;
+	background:#fff;
+	border:1px solid #ccc;
+}
+.message_white_title {
+	height:30px;
+	line-height:30px;
+	background: #69F;
+	font-size:14px;
+	padding:0px;
+	margin:0px;
+}
+.message_white_title_bottom {
+	height:30px;
+	line-height:30px;
+	font-size:10px;
+	text-align:left;
+	padding-left:15px;
+	margin:0px;
+	border-top:1px solid #ccc;
+	font-family:"微软雅黑";
+	color:#999;
+}
+.message_white_title span {
+	padding-left:20px;
+	color:#fff;
+}
+.message_white_box {
+	padding-top:30px;
+	padding-left:70px;
+	height:55px;
+}
+.message_white_img_succeed {
+	background:url(../images/icon/succeed.png) no-repeat;
+	text-align:center;
+	float:left;
+	width:48px;
+	height:48px;
+	margin-right:10px;
+}
+.message_white_img_warning {
+	background:url(../images/icon/warning.png) no-repeat;
+	text-align:center;
+	float:left;
+	width:48px;
+	height:48px;
+	margin-right:10px;
+}
+.message_white_img_question {
+	background:url(../images/icon/question.png) no-repeat;
+	text-align:center;
+	float:left;
+	width:48px;
+	height:48px;
+	margin-right:10px;
+}
+.message_white_img_smile {
+	background:url(../images/icon/smile.png) no-repeat;
+	text-align:center;
+	float:left;
+	width:48px;
+	height:48px;
+	margin-right:10px;
+}
+.message_white_img_sad {
+	background:url(../images/icon/sad.png) no-repeat;
+	text-align:center;
+	float:left;
+	width:48px;
+	height:48px;
+	margin-right:10px;
+}
+.message_white_img_error {
+	background:url(../images/icon/error.png) no-repeat;
+	text-align:center;
+	float:left;
+	width:48px;
+	height:48px;
+	margin-right:10px;
+}
+.message_white_font {
+	float:left;
+	font-weight:bold;
+	font-family:"微软雅黑";
+	margin-top:8px;
+	font-size:16px;
+	width:255px;
+}
+/*------------*/
+.message_white_box1 {
+	padding:10px 85px;
+	float:left;
+	margin-top:5px;
+	margin-bottom:10px;
+}
+.message_white_box1 input {
+	cursor:pointer;
+	margin:0px 15px;
+	width:60px;
+	border:1px solid #36F;
+	background-color:#639aff;
+	color:#FFF;
+	float:left;
+	line-height:22px;
+	_height:24px;
+}
+.message_white_box_del {
+	padding-top:30px;
+	padding-left:20px;
+	height:45px;
+	float:left;
+}
+.message_white_iframe_del {
+	border:1px solid #CCCCCC;
+	width:392px;
+	margin-left:auto;
+	margin-right:auto;
+	height:160px;
+	background:#fff;
+	border:1px solid #ccc;
+}
+.message_white_title_bottom_del {
+	height:30px;
+	line-height:30px;
+	font-size:10px;
+	text-align:left;
+	padding-left:15px;
+	margin:0px;
+	border-top:1px solid #ccc;
+	font-family:"微软雅黑";
+	color:#999;
+	float:left;
+	width:377px;
+}

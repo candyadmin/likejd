@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(e) {
+    jQuery(".address_list dt").click(function(){
+		var id = jQuery(this).attr("mark");
+		//var store_id = jQuery("#store_id").val();
+		window.location.href="$!webPath/buyer/address_edit.htm?id="+id+"&currentPage=$!currentPage";
+	})
+});
+</script>
+</head>
+
+<body class="order_bg">
+
+<div class="user_bar">
+	<a href="$!webPath/buyer/service_center.htm" class="back">
+	<img width="30" height="30" src="$!webPath/resources/style/system/front/wap/images/back_black.png">
+	</a>
+	<span class="fl">地址管理</span>
+	<span class="fr"><a onclick="window.location.href='$!webPath/buyer/address_add.htm?currentPage=$!currentPage'" href="javascript:void(0);">+新增</a></span>
+</div>
+
+<div class="main">
+  <div style="height:49px;" class="mt50"></div>
+  <div class="address_list">
+  #foreach($obj in $objs)
+  	   <dl>
+	      <dt mark="$!obj.id">
+	        <h3><b>$!obj.mobile</b><strong>$!obj.trueName</strong></h3>
+	        #set($address="$!obj.area.parent.parent.areaName $!obj.area.parent.areaName $!obj.area.areaName")
+	        <span>$!address<br>$!obj.area_info</span>
+	      </dt>
+	      <dd>
+		      <a class="address_list_edit" href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/buyer/address_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'">
+			      <span><img src="$!webPath/resources/style/system/front/wap/images/user_del.png"></span>
+			      <b>删除</b>
+		      </a>
+	      </dd>
+	    </dl>
+  #end     
+      </div>
+</div>
+
+$!httpInclude.include("/footer.htm")
+
+</body></html>

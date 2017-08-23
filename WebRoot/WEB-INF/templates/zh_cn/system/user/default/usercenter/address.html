@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>收货地址-$!{config.title}-Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+         $!httpInclude.include("/buyer/account_nav.htm?op=address")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">我的账户</a> > <span>收货地址</span></div></div>
+        <div class="productmain">
+            <div class="pdctitle blue2">地址列表</div>
+            <div class="alldel">
+              <div class="right">
+               <a href="javascript:void(0);" dialog_uri="$!webPath/buyer/address_add.htm?currentPage=$!currentPage" dialog_title="新增地址" dialog_width="500" dialog_height="100" dialog_id="buyer_address" class="button_common">新增地址</a>
+              </div>
+            </div>
+            <div class="operation">
+              <table width="942" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                <tr id="opertitle">
+                  <td width="115">收货人姓名</td>
+                  <td width="162">所在地区</td>
+                  <td  width="111">详细地址</td>
+                  <td width="111">联系电话</td>
+                  <td width="88">手机号码</td>
+                  <td width="211" align="left">操作</td>
+                </tr>
+                #foreach($obj in $objs)
+                <tr class="opertr" id="$!obj.id">
+                  <td width="115">$!obj.trueName</td>
+                  #set($address="$!obj.area.parent.parent.areaName $!obj.area.parent.areaName $!obj.area.areaName")
+                  <td width="162" area_info_id="$!obj.id">$!address</td>
+                  <td width="111" >$!obj.area_info </td>
+                  <td  width="111">$!obj.telephone</td>
+                  <td width="88">$!obj.mobile</td>
+                  <td align="left"><span class="edit"><a href="javascript:void(0);" dialog_uri="$!webPath/buyer/address_edit.htm?id=$!obj.id&currentPage=$!currentPage" dialog_title="编辑地址" dialog_width="500" dialog_height="100" dialog_id="cart_address">编辑</a></span><span class="del"><a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/buyer/address_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'">删除</a></span></td>
+                </tr>
+                #end
+              </table>
+            </div>
+            <div class="alldel">
+              <div  class="userfenye">$!gotoPageHTML</div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

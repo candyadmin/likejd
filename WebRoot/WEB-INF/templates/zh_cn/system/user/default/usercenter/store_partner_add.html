@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>友情链接设置 -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script>
+ jQuery(document).ready(function(){
+	jQuery("#theForm").validate({
+        rules:{
+	  	  title:{required :true},
+		  url:{required :true}
+	  	 },
+	    messages:{
+	  	  title:{required:"标题不能为空"},
+		  url:{required:"url不能为空"}
+	  	}
+     });
+	//
+ });
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+           $!httpInclude.include("/seller/nav.htm?op=store_partner")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>新增友情链接</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="other"><a href='$!webPath/seller/store_partner.htm'>友情链接列表</a></li>
+                <li #if(!$!edit)class="this"#end><a href='$!webPath/seller/store_partner_add.htm'>新增友情链接</a></li>
+                #if($!edit)
+                 <li class="this"><a href='$!webPath/seller/store_nav_edit.htm?id=$!obj.id'>编辑友情链接</a></li>
+                #end
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+                <form action="$!webPath/seller/store_partner_save.htm" method="post" name="theForm" id="theForm">
+                  <table width="98%" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                    <tr>
+                      <td width="141" align="right"><input name="id" type="hidden" id="id" value="$!obj.id" />
+                      标题：</td>
+                      <td width="651" class="px10"><span class="setinput">
+                        <input name="title" type="text" id="title" value="$!obj.title" />
+                      </span></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top">序号：</td>
+                      <td  class="px10"><span class="setinput">
+                        <input name="sequence" type="text" id="sequence" value="$!obj.sequence" />
+                        序号越小越靠前
+                      </span></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top">URL：</td>
+                      <td  class="px10"><span class="setinput">
+                        <input name="url" type="text" id="url" value="$!obj.url" />
+                        URL需要带http://</span></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td class="px10"><span class="setsub">
+                        <input type="submit"  value="保存" style="cursor:pointer;"/>
+                        </span></td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

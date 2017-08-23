@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>购物车 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+//返回当前页面高度
+function order_pay(){
+  var h=document.body.clientHeight;
+  var top= document.documentElement.scrollTop;
+  top=top+(h-top)/2;
+  jQuery('.black_overlay').css("height",h);
+  jQuery(".white_content").css("top",top);
+  
+  var payType = jQuery('#selectpay input[name="payType"]:checked ').val();
+  var orderId = jQuery("#order_id").val();
+  
+  if(payType=="wxcodepay"){
+  	var html = '';
+  	jQuery.get("$!webPath/wechat/wxcodepay.htm",{"order_id":orderId},function(data){
+  		html += data;
+		jQuery(html).appendTo("#wxPayCode");
+		jQuery("#wxcodepay_overlay").show();
+  	},"text");
+  	/* jQuery.ajax({type:'POST',url:"$!webPath/wechat/wxcodepay.htm",async:false,data:{"order_id":orderId},success:function(html){
+		jQuery("#wxPayCode").html(html);
+		jQuery("#wxcodepay_overlay").show();
+	}}); */ 
+  } else {
+  	jQuery('#pay_overlay').show();
+  	jQuery('#theForm').submit();
+  }
+  
+}
+window.onscroll=function(){
+  var h=document.body.clientHeight;
+  var top= document.documentElement.scrollTop;
+  top=top-50+(h-top)/2;
+  jQuery(".white_content").css("top",top);
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/head.htm")
+  <div class="index">
+    <div class="index2">
+      <div class="Steps">
+            <ul>
+                <li>1.查看购物车</li>
+                <li>2.确认订单信息</li>
+                <li class="this">3.付款到卖家</li>
+                <li>4.确认收货</li>
+                <li class="last">5.评价</li>
+            </ul>
+        </div>
+      <form action="$!webPath/order_pay.htm" method="post" target="_blank" id="theForm">
+      <div class="payorder">
+        <div class="pay_top">
+          <div class="payhh"></div>
+          <div class="paybot">
+            <h1>订单提交成功</h1>
+            <h2>您的订单已成功生成，选择您想用的支付支付方式进行支付</h2>
+            <ul>
+              <li><strong>订单编号：</strong><strong class="orange">$!{of.order_id}</strong></li>
+              <li><strong>应付金额：</strong><strong class="orange">¥$!{of.totalPrice}</strong></li>
+            </ul>
+            <h3>您可以在用户中心中<a href="$!webPath/buyer/order.htm">“我的订单”</a>查看该订单</h3>
+          </div>
+        </div>
+        <div class="bank">
+          <div class="banktitle">
+            <h1><span>您可以选择付款方式</span></h1>
+          </div>
+          <div id="selectpay" class="bankcar">
+            #set($paym=$!config.getConfig_payment_type())
+                
+              #if($!paym==1)
+              <ul>
+                <li>
+                  <h1>在线支付</h1>
+                  #set($install=$!paymentTools.queryShopPayment("alipay").get("install"))
+                  #set($content=$!paymentTools.queryShopPayment("alipay").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> 
+                  	<span class="banksp">
+                    <input name="payType" type="radio" value="alipay" checked="checked" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/alipay.jpg" width="125" height="47" /></span> 
+                    <span class="bank_txt">$!content</span> 
+                  </div>
+                  #end
+                  #set($install=$!paymentTools.queryShopPayment("paypal").get("install"))
+                  #set($content=$!paymentTools.queryShopPayment("paypal").get("content"))
+                  #if($!install==true)
+                  <div class="bankone">
+	                <span class="banksp">
+	                <input name="payType" type="radio" value="paypal" />
+	                </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/paypal.jpg" width="125" height="47" /></span>
+	                <span class="bank_txt">$!content</span>
+                  </div>
+                  #end
+                  #set($install=$!paymentTools.queryShopPayment("tenpay").get("install"))
+                  #set($content=$!paymentTools.queryShopPayment("tenpay").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> 
+                  	<span class="banksp">
+                    <input name="payType" type="radio" value="tenpay" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/tenpay.jpg" width="125" height="47" /></span> 
+                    <span class="bank_txt">$!content</span> 
+                  </div>
+                  #end
+                  
+                  #set($install=$!paymentTools.queryShopPayment("wxcodepay").get("install"))
+                  #set($content=$!paymentTools.queryShopPayment("wxcodepay").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> 
+                  	<span class="banksp">
+                    <input name="payType" type="radio" value="wxcodepay" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/weixin.png" width="125" height="47" /></span> 
+                    <span class="bank_txt">$!content</span> 
+                  </div>
+                  #end
+                  
+                  #set($install=$!paymentTools.queryShopPayment("chinabank").get("install"))
+                  #set($content=$!paymentTools.queryShopPayment("chinabank").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> 
+                  	<span class="banksp">
+                    <input name="payType" type="radio" value="chinabank" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/chinabank.jpg" width="125" height="47" /></span> 
+                    <span class="bank_txt">$!content</span> 
+                  </div>
+                  #end
+                  #set($install=$!paymentTools.queryShopPayment("bill").get("install"))
+                  #set($content=$!paymentTools.queryShopPayment("bill").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> 
+                  	<span class="banksp">
+                    <input name="payType" type="radio" value="bill" />
+                    </span> 
+                    <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/bill.jpg" width="125" height="47" /></span> 
+                    <span class="bank_txt">$!obj.content</span> 
+                  </div>
+                  #end 
+                  </li>
+                  <li>
+                  <h1>线下支付</h1>
+                  #set($install=$!paymentTools.queryShopPayment("outline").get("install"))
+                  #set($content=$!paymentTools.queryShopPayment("outline").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> 
+                    <span class="banksp">
+                    <input name="payType" type="radio" value="outline" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/outline.jpg" width="125" height="47" /></span> 
+                    <span class="bank_txt">$!content</span> 
+                  </div>
+                  #end
+                  </li>
+                  <li>
+                  <h1>货到付款</h1>
+                  #set($install=$!paymentTools.queryShopPayment("payafter").get("install"))
+                  #set($content=$!paymentTools.queryShopPayment("payafter").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> 
+                  	<span class="banksp">
+                    <input name="payType" type="radio" value="payafter" />
+                    </span> 
+                    <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/payafter.jpg" width="125" height="47" /></span> 
+                    <span class="bank_txt">$!content</span> 
+                  </div>
+                  #end 
+                </li>
+                <li>
+                  <h1>预存款支付</h1>
+                  #set($install=$!paymentTools.queryShopPayment("balance").get("install"))
+                  #set($content=$!paymentTools.queryShopPayment("balance").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> 
+                    <span class="banksp">
+                    <input name="payType" type="radio" value="balance" />
+                    </span> 
+                    <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/balance.jpg" width="125" height="47" /></span> 
+                    <span class="bank_txt">$!content</span> 
+                  </div>
+                  #end 
+                </li>
+              </ul>
+              
+              #else
+              
+              <ul>
+                <li>
+                  <h1>在线支付</h1>
+                  #set($install=$!paymentTools.queryStorePayment("alipay","$!{of.store.id}").get("install"))
+                  #set($content=$!paymentTools.queryStorePayment("alipay","$!{of.store.id}").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> <span class="banksp">
+                    <input name="payType" type="radio" value="alipay" checked="checked" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/alipay.jpg" width="125" height="47" /></span> <span class="bank_txt">$!content</span> </div>
+                  #end
+                   #set($install=$!paymentTools.queryStorePayment("paypal","$!{of.store.id}").get("install"))
+                  #set($content=$!paymentTools.queryStorePayment("paypal","$!{of.store.id}").get("content"))
+                  #if($!install==true)
+                <div class="bankone">
+                <span class="banksp">
+                <input name="payType" type="radio" value="paypal" />
+                </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/paypal.jpg" width="125" height="47" /></span>
+               <span class="bank_txt">$!content</span>
+                </div>
+                  #end
+                  #set($install=$!paymentTools.queryStorePayment("tenpay","$!{of.store.id}").get("install"))
+                  #set($content=$!paymentTools.queryStorePayment("tenpay","$!{of.store.id}").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> <span class="banksp">
+                    <input name="payType" type="radio" value="tenpay" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/tenpay.jpg" width="125" height="47" /></span> <span class="bank_txt">$!content</span> </div>
+                  #end
+                  
+                  #set($install=$!paymentTools.queryStorePayment("wxcodepay","$!{of.store.id}").get("install"))
+                  #set($content=$!paymentTools.queryStorePayment("wxcodepay","$!{of.store.id}").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> 
+                  	<span class="banksp">
+                    <input name="payType" type="radio" value="wxcodepay" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/weixin.png" width="125" height="47" /></span> 
+                    <span class="bank_txt">$!content</span> 
+                  </div>
+                  #end
+                  
+                  
+                  #set($install=$!paymentTools.queryStorePayment("chinabank","$!{of.store.id}").get("install"))
+                  #set($content=$!paymentTools.queryStorePayment("chinabank","$!{of.store.id}").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> <span class="banksp">
+                    <input name="payType" type="radio" value="chinabank" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/chinabank.jpg" width="125" height="47" /></span> <span class="bank_txt">$!content</span> </div>
+                  #end
+                  #set($install=$!paymentTools.queryStorePayment("bill","$!{of.store.id}").get("install"))
+                  #set($content=$!paymentTools.queryStorePayment("bill","$!{of.store.id}").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> <span class="banksp">
+                    <input name="payType" type="radio" value="bill" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/bill.jpg" width="125" height="47" /></span> <span class="bank_txt">$!obj.content</span> </div>
+                  #end </li>
+                <li>
+                  <h1>线下支付</h1>
+                  #set($install=$!paymentTools.queryStorePayment("outline","$!{of.store.id}").get("install"))
+                  #set($content=$!paymentTools.queryStorePayment("outline","$!{of.store.id}").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> <span class="banksp">
+                    <input name="payType" type="radio" value="outline" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/outline.jpg" width="125" height="47" /></span> <span class="bank_txt">$!content</span> </div>
+                  #end
+                   </li>
+                   <li>
+                  <h1>货到付款</h1>
+                  #set($install=$!paymentTools.queryStorePayment("payafter","$!{of.store.id}").get("install"))
+                  #set($content=$!paymentTools.queryStorePayment("payafter","$!{of.store.id}").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> <span class="banksp">
+                    <input name="payType" type="radio" value="payafter" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/payafter.jpg" width="125" height="47" /></span> <span class="bank_txt">$!content</span> </div>
+                  #end </li>
+                <li>
+                  <h1>预存款支付</h1>
+                  #set($install=$!paymentTools.queryStorePayment("balance","$!{of.store.id}").get("install"))
+                  #set($content=$!paymentTools.queryStorePayment("balance","$!{of.store.id}").get("content"))
+                  #if($!install==true)
+                  <div class="bankone"> <span class="banksp">
+                    <input name="payType" type="radio" value="balance" />
+                    </span> <span class="bankimg"><img src="$!imageWebServer/resources/style/common/images/payment/balance.jpg" width="125" height="47" /></span> <span class="bank_txt">$!content</span> </div>
+                  #end </li>
+              </ul>
+              #end
+            </div>
+          <div class="banknextbtn">
+            <input name="" type="button"  value="确认支付" onclick="order_pay();" style="cursor:pointer;"/>
+            <input name="order_id" type="hidden" id="order_id" value="$!{of.id}" />
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+    $!httpInclude.include("/footer.htm")
+</div>
+<div style="display:none;" id="pay_overlay">
+  <div class="white_content"> 
+  	<a href="javascript:void(0);" onclick="javascript:jQuery('#pay_overlay').hide();" class="white_close"><img src="$!imageWebServer/resources/style/system/front/default/images/close.jpg" width="14" height="14" /></a>
+    <div class="white_box">
+      <h1>支付提醒</h1>
+      <dl class="white_dl">
+        <dt></dt>
+        <dd>
+          <div class="payf"><a href="$!webPath/order_finish.htm?order_id=$!{of.id}">已经完成支付！</a></div>
+          <div class="payf"><a href="javascript:void(0);"  onclick="javascript:jQuery('#pay_overlay').hide();" >支付出现问题！</a></div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="black_overlay"></div>
+</div>
+
+<div style="display:none;" id="wxcodepay_overlay">
+  <div class="wx_content"> 
+  	<a href="javascript:void(0);" onclick="javascript:jQuery('#wxcodepay_overlay').hide();" class="white_close"><img src="$!imageWebServer/resources/style/system/front/default/images/close.jpg" width="14" height="14" /></a>
+    <div class="wx_box">
+      <h1>微信二维码扫码支付</h1>
+      <dl class="wx_dl">
+        <dt id="wxPayCode"></dt>
+        <dd>
+          <div class="payf"><a href="$!webPath/order_finish.htm?order_id=$!{of.id}">完成支付！</a></div>
+          <div class="payf"><a href="javascript:void(0);"  onclick="javascript:jQuery('#wxcodepay_overlay').hide();" >支付出现问题！</a></div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="black_overlay"></div>
+</div>
+
+</body>
+</html>

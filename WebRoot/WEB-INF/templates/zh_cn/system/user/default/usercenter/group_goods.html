@@ -1,0 +1,71 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+function query_goods(){
+   jQuery("#wait_query").show();
+   var goods_name=jQuery("#query_goods_name").val();
+   var gc_id=jQuery("#query_gc_id").val();
+   jQuery.getJSON("$!webPath/seller/group_goods_load.htm",{"goods_name":goods_name,"gc_id":gc_id},function(data){
+	  jQuery("#goods_list").empty();	
+	  jQuery("#wait_query").hide();
+      jQuery.each(data, function(index,item){
+	     var s="<option store_price='"+item.store_price+"' store_inventory='"+item.store_inventory+"' value='"+item.id+"'>"+item.goods_name+"</option>";
+		 jQuery("#goods_list").append(s);
+	  });
+   });
+}
+function group_goods_sel(){
+   var goods_id=jQuery("#goods_list").val();
+   var goods_name=jQuery("#goods_list option:selected").text();
+   var store_price=jQuery("#goods_list option:selected").attr("store_price");
+   var store_inventory=jQuery("#goods_list option:selected").attr("store_inventory");
+   if(goods_id!=null){
+   jQuery("#store_price_info").text("¥"+store_price);
+   jQuery("#store_price").show();
+   jQuery("#store_inventory_info").html("<span style='color:#f00'>"+store_inventory+"</span>");
+   jQuery("#store_inventory").show();
+   jQuery("#goods_id").val(goods_id);
+   jQuery("#goods_name").val(goods_name);
+   jQuery("#group_goods").remove();
+   }else{
+     alert("请选择一款商品");
+   }
+}
+</script>
+  <table style="float:left;" width="390" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td width="100" align="right" valign="top">商品名称：
+      </td>
+      <td align="left"><input name="query_goods_name" type="text" id="query_goods_name" size="30" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">商品分类：</td>
+      <td align="left">
+      <select name="query_gc_id" id="query_gc_id">
+      <option value="" selected="selected">请选择商品分类...</option>
+      #foreach($gc in $gcs)
+      <option value="$!gc.id">$!gc.className</option>
+       #foreach($c_gc in $gc.childs)
+        <option value="$!c_gc.id">&nbsp;&nbsp;&nbsp;&nbsp;$!c_gc.className</option>
+       #end
+      #end
+      </select>
+      </td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">&nbsp;</td>
+      <td align="left"><input name="input" type="button" value="查询" class="btn_white_a" style="cursor:pointer;" onclick="query_goods();"/><img id="wait_query" src="$!webPath/resources/style/common/images/wait.gif" style="display:none;" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">商品列表：</td>
+      <td align="left">
+      <select name="goods_list" size="10" id="goods_list" style="width:300px;">
+      </select></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center">
+      <span class="setsub">
+        <input name="按钮" type="button" style="cursor:pointer;" value="确定"  onclick="group_goods_sel();" />
+      </span>
+      </td>
+    </tr>
+  </table>

@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/activity_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+//向前count天 向后count天
+function before_set(count,date){
+   jQuery.post("$!webPath/admin/date_query_set.htm",{"count":count,"date":date},function(data){
+	 jQuery("#the_day").html(data);
+   });
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">天天特价</h1>
+  <div class="settab"><span class="tab-one"></span> 
+  <span class="tabs"> 
+	<a href="$!webPath/admin/set_bargain.htm">通用设置</a> | 
+	<a href="$!webPath/admin/bargain_add.htm">特价设置</a> |
+	<a href="$!webPath/admin/bargain_list.htm" class="this">设置列表</a>|
+	</span>
+	<span id="the_day" class="tabs">
+	<a href="javascript:void(0);" onclick="before_set(-3,'$!CommUtil.formatShortDate($!dates.get(0))');">前三天</a>|
+	#foreach($date in $dates)
+	<a href="$!webPath/admin/bargain_goods_list.htm?bargain_time=$!CommUtil.formatShortDate($!date)">$!CommUtil.formatShortDate($!date)</a>|
+	#end
+	<a href="javascript:void(0);" onclick="before_set(3,'$!CommUtil.formatShortDate($!dates.get(0))');">后三天</a> 	
+	</span>	 
+ <span class="tab-two"></span></div>
+  <form method="post" id="ListForm" action="$!webPath/admin/bargain_list.htm">
+    <div class="allshop_table">
+    <table width="98%" border="0" cellspacing="0" cellpadding="0">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="46"></td>
+        <td width="234" align="center">特价开始时间</td>
+        <td  align="center" width="189">特价商品最多数</td>
+        <td  align="center" width="121">已申请</td>
+        <td  align="center" width="121">已审核</td>
+        <td  align="center" width="121">折扣</td>
+        <td  align="center">操作</td>
+      </tr>
+      #foreach($obj in $objs)
+      <tr id="column_$!{obj.id}">
+        <td><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+        <td align="center">$!obj.bargain_time</td>
+        <td align="center">$!obj.maximum</td>
+        <td align="center">$!bargainManageTools.query_bargain_apply($!obj.bargain_time)</td>
+        <td align="center">$!bargainManageTools.query_bargain_audit($!obj.bargain_time)</td>
+        <td align="center">$!obj.rebate</td>
+        <td  align="center" class="aoprater"><a href="$!webPath/admin/bargain_goods_list.htm?bargain_time=$!CommUtil.formatShortDate($!obj.bargain_time)" class="blue">申请列表</a>|<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续？'))window.location.href='$!webPath/admin/bargain_del.htm?bargain_time=$!CommUtil.formatShortDate($!obj.bargain_time)&currentPage=$!currentPage'" class="blue">删除</a></td>
+      </tr>
+      #end
+	  <tr style="background:#F2F2F2; height:30px;">
+        <td colspan="8"><div class="fenye3">
+          <input name="orderBy" type="hidden" id="orderBy" value="bargain_time" />
+          <input name="orderType" type="hidden" id="orderType" value="desc" />
+          <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+          $!gotoPageFormHTML</div>
+          <div class="shopbtn shopfx">
+            <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+            &nbsp;&nbsp;全部</div>
+          <div class="shop_btn_del shopbtn">
+            <input name="" type="button" value="删除" onclick="cmd('$!webPath/admin/bargain_del.htm');"/>
+         </div></td>
+      </tr>
+    </table>
+  </div>
+  </form>
+</div>
+</body>
+</html>

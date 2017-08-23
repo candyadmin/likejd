@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericAreaTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+#if($!some.ga_level>0)
+#foreach($count in [0..$!some.ga_level])&nbsp;&nbsp;#end #end $!some.ga_name</option>
+#genericAreaTree($some.childs) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  ga_name:{
+	    required :true,
+	    remote:{
+		    url: "$!webPath/admin/group_area_verify.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "ga_name": function(){return jQuery("#ga_name").val();},
+				  "id":function(){return jQuery("#id").val()},
+				  "pid":function(){return jQuery("#pid").val()}
+		     }
+			}
+	   }
+	 },
+	messages:{
+	  ga_name:{required:"区域名称不能为空",remote:"该区域已经存在"}
+	}
+  });	
+  //
+  jQuery("#pid").val("$!obj.parent.id");
+});
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">团购区域</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"><a href="$!webPath/admin/group_list.htm">团购列表</a> | <a href="$!webPath/admin/group_add.htm">新增团购</a>|<a href="$!webPath/admin/group_class_list.htm" >团购分类</a> |<a href="$!webPath/admin/group_class_add.htm">新增分类</a>|<a href="$!webPath/admin/group_area_list.htm" >团购区域</a>|<a href="$!webPath/admin/group_area_add.htm" #if(!$!edit)class="this"#end>新增区域</a>|<a href="$!webPath/admin/group_price_list.htm" >价格区间</a>|<a href="$!webPath/admin/group_price_add.htm" >添加区间</a> #if($!edit)<a href="javascript:void(0);" class="this">编辑</a> #end</span> <span class="tab-two"></span></div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/group_area_save.htm" method=post>
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <div class="setcont">
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>区域名称</li>
+      <li><span class="webname">
+        <input name="ga_name" type="text" id="ga_name" value="$!obj.ga_name" size="40" />
+      </span></li>
+    </ul>
+    <!--鼠标未经过样式-->
+    <ul class="set1">
+      <li>上级区域</li>
+      <li><span class="webnamesec sizese">
+        <select name="pid" id="pid">
+              <option value="">请选择...</option>
+			  #genericAreaTree($!gas)
+         </select>
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li>排序</li>
+      <li><span class="webname">
+        <input name="ga_sequence" type="text" id="ga_sequence" value="$!obj.ga_sequence" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小，区域显示越靠前</strong><strong class="c"></strong></span></li>
+    </ul>
+  </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

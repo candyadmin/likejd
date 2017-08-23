@@ -1,0 +1,78 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+jQuery(document).ready(function(){
+    jQuery("#theForm").validate({
+	   rules:{
+		   goods_amount:{number:true},
+		   ship_price:{number:true}
+	   },
+	   messages:{
+	       goods_amount:{number:"订单金额只能为数字"},
+		   ship_price:{number:"配送金额只能为数字"}
+	   }
+	});
+	jQuery("#goods_amount").keyup(function(){
+	   var goods_amount=jQuery("#goods_amount").val();
+	   var ship_price=jQuery("#ship_price").val();
+	   if(goods_amount==""){
+		   goods_amount=0;
+	       jQuery("#goods_amount").val("0");
+	   }
+	   if(ship_price==""){
+	       ship_price=0;
+	       jQuery("#ship_price").val("0");
+	   }
+	   var totalPrice=parseFloat(goods_amount)+parseFloat(ship_price);
+	   jQuery("#total_price_text").html(totalPrice);
+	   jQuery("#totalPrice").val(totalPrice);
+	});
+	jQuery("#ship_price").keyup(function(){
+	   var goods_amount=jQuery("#goods_amount").val();
+	   var ship_price=jQuery("#ship_price").val();
+	   if(goods_amount==""){
+		   goods_amount=0;
+	       jQuery("#goods_amount").val("0");
+	   }
+	   if(ship_price==""){
+	       ship_price=0;
+	       jQuery("#ship_price").val("0");
+	   }
+	   var totalPrice=parseFloat(goods_amount)+parseFloat(ship_price);
+	   jQuery("#total_price_text").html(totalPrice);
+	   jQuery("#totalPrice").val(totalPrice);
+	});
+});
+</script>
+<form action="$!webPath/seller/order_fee_save.htm" method="post" id="theForm">
+  <table style="float:left;" width="390" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td align="right" valign="top">买家用户：</td>
+      <td align="left">$!obj.user.userName</td>
+    </tr>
+    <tr>
+      <td width="100" align="right" valign="top">订单号：
+        <input name="id" type="hidden" id="id" value="$!obj.id" />
+      </td>
+      <td align="left">$!obj.order_id</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">商品总价：</td>
+      <td align="left"><input name="goods_amount" type="text" id="goods_amount" value="$!obj.goods_amount" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">配送金额：</td>
+      <td align="left"><input name="ship_price" type="text" id="ship_price" value="$!obj.ship_price" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">订单金额：</td>
+      <td align="left"><span style="color:#F00; font-weight:bold;" id="total_price_text">$!{obj.totalPrice}
+      </span><input name="totalPrice" type="hidden" id="totalPrice" value="$!obj.totalPrice" /></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+        <input name="" type="submit" value="提交" style="cursor:pointer;"/>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      </span></td>
+    </tr>
+  </table>
+</form>

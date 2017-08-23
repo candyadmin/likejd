@@ -1,0 +1,14 @@
+﻿<ul class="floor_sear_pro">
+#foreach($obj in $objs)
+  #if($!obj.goods_main_photo)               #set($img="$!webPath/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+    #else
+    #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+    #end
+  <li> <a href="javascript:void(0);" onclick="goods_list_set(this);" img_uri="$!img" goods_name="$!obj.goods_name" goods_id="$!obj.id" class="floor_sear_a"> <span  class="floor_sear_img"> 
+ <img src="$!img" width="70" height="70" /> </span> <span class="floor_sear_name">$!obj.goods_name</span> </a> 
+  </li>
+#end  
+</ul>
+<div class="floor_page">
+<span>$!gotoPageAjaxHTML</span>
+</div>

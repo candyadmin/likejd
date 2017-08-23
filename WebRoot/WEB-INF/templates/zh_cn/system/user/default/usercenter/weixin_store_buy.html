@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>微信商城申请 -$!{config.title} -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+//
+	jQuery("#theForm").validate({	
+        rules:{
+	  	  count:{required :true,digits:true,min:1,max:12}
+	  	 },
+	    messages:{
+	  	  count:{required:"购买数量不能为空",digits:"购买数量只能为整数",min:"购买数量不能小于{0}",max:"购买数量不能大于{0}"}
+	  	}
+     });
+ });
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=weixin_store")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>微信商城</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                 <li><a href="$!webPath/seller/weixin_store.htm">微信商城</a></li>
+                 <li><a href="$!webPath/seller/weixin_store_log.htm">购买日志</a></li>
+                 #if($!store.weixin_status==1)
+                <li><a href="$!webPath/seller/weixin_store_menu.htm">微信菜单</a></li>
+                #end
+                 <li class="this"><a href="$!webPath/seller/weixin_store_buy.htm">申请开通</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+                <form action="$!webPath/seller/weixin_store_buy_save.htm" method="post" name="theForm" id="theForm">
+                  <table width="98%" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+					<tr>
+					  <td align="right">金币余额：</td>
+					  <td class="px10">$!{user.gold}金币</td>
+				    </tr>
+					<tr>
+					  <td align="right">微信店铺到期：</td>
+					  <td class="px10">#if($!user.store.weixin_end_time)$!CommUtil.formatShortDate($!user.store.weixin_end_time)#else 未开通 #end</td>
+				    </tr>
+					<tr>
+                      <td align="right">微信购买时长：</td>
+                      <td class="px10"><span class="setinput">
+                        <input name="count" type="text" id="count" />
+                        个月($!{config.weixin_amount}金币/月)
+                      </span></td>
+                    </tr>
+                    <tr>
+                      <td width="141" align="right">&nbsp;</td>
+                      <td width="651" class="px10"><span class="setinput">
+                      购买单位为月，一次最多购买12个月，购买后您可以发布商品参与买即送活动，申请会一次性扣除所需金币数，申请成功后立即生效
+                      </span></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td class="px10"><span class="setsub">
+                        <input type="submit"  value="保存" style="cursor:pointer;"/>
+                      </span>
+                      </td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
++------------------------------------+
+ ShopNC多用户商城系统 水印字体扩充包
++------------------------------------+
+
+包括如下字体：
+
+simsun.ttf  宋体
+simhei.ttf  黑体
+simkai.ttf  楷体
+simli.ttf   隶书
+msyh.ttf    微软雅黑
+arialbd.ttf 英文粗体
+ariali.ttf  英文斜体
+
++----------------------------------+
+ 扩充水印字体库方法
++----------------------------------+
+您可以在ShopNC官方网站下载所需要的字体库
+
+下载地址：http://www.baidu.com/downloads/product/multishop/fonts.zip
+
+使用方法：将您下载到的字体库上传到网站根目录下\resource\font这个文件夹内，同时需要修改此文件夹下的font.info.php文件。例如：您下载了一个“宋体”字库simsun.ttf，将其放置于前面所述文件夹内，打开font.info.php文件在其中的$fontInfo = array('arial'=>'Arial')数组后面添加宋体字库信息,“=>”符号左边是文件名，右边是您想在网站上显示的文字信息，添加后的样子是array('arial'=>'Arial','simsun'=>'宋体')
+
+**扩充包里提供了一个写好的字体配置文件，您可以参考使用**

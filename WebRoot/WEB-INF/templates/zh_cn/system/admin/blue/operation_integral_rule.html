@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+	  memberRegister:{
+	    number :true
+	  },
+	  memberDayLogin:{
+	    number :true
+	  },
+	  indentComment:{
+	    number :true
+	  },
+	  consumptionRatio:{
+	    number :true
+	  },
+	  everyIndentLimit:{
+	    number :true
+	  }	  	  
+	 },
+	messages:{
+	  memberRegister:{
+	    number :"只能为数字"
+	  },
+	  memberDayLogin:{
+	    number :"只能为数字"
+	  },
+	  indentComment:{
+	    number :"只能为数字"
+	  },
+	  consumptionRatio:{
+	    number :"只能为数字"
+	  },
+	  everyIndentLimit:{
+	    number :"只能为数字"
+	  }	  	
+	}
+  });	
+});
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/integral_rule_save.htm" method="post" name="theForm" id="theForm">
+<div class="cont">
+  <h1 class="seth1">积分规则</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="#"  class="this">积分规则</a>&nbsp; </span> <span class="tab-two"></span>
+    <input name="id" type="hidden" id="id" value="$!config.id" />
+  </div>
+  <div class="paytable">
+    <div>积分规则如下：</div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pay_table">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="220">项目赠送</td>
+        <td>赠送积分</td>
+      </tr>
+      <tr>
+        <td>会员注册</td>
+        <td ><span class="allmen size5">
+          <input name="memberRegister" type="text" id="memberRegister" value="$!config.memberRegister" />
+          </span></td>
+      </tr>
+      <tr>
+        <td>会员每天登陆</td>
+        <td ><span class="allmen size5">
+          <input name="memberDayLogin" type="text" id="memberDayLogin" value="$!config.memberDayLogin" />
+          </span></td>
+      </tr>
+      <tr>
+        <td>订单商品评论</td>
+        <td ><span class="allmen size5">
+          <input name="indentComment" type="text" id="indentComment" value="$!config.indentComment" />
+          </span></td>
+      </tr>
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td colspan="2">购物赠送</td>
+      </tr>
+      <tr>
+        <td>购物积分</td>
+        <td ><span class="allmen size5">
+          <input name="consumptionRatio" type="text" id="consumptionRatio" value="$!config.consumptionRatio" />
+          订单金额：积分，如：10，表示10货币赠送1积分 </span></td>
+      </tr>
+      <tr>
+        <td>购物积分上限</td>
+        <td ><span class="allmen size5">
+          <input name="everyIndentLimit" type="text" id="everyIndentLimit" value="$!config.everyIndentLimit" />
+          每个订单最多赠送积分数</span></td>
+      </tr>
+    </table>
+  </div>
+  <div class="submit">
+    <input name="" type="submit" value="提交" />
+  </div>
+</div>
+</form>
+</body>
+</html>

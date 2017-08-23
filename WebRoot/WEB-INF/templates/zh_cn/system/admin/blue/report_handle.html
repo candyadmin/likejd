@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+function saveForm(){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">举报管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/report_list.htm">未处理举报</a> | <a href="$!webPath/admin/report_handle_list.htm">已处理举报</a>|<a href="$!webPath/admin/reporttype_list.htm">举报类型</a>|<a href="$!webPath/admin/reporttype_add.htm">新增举报类型</a>|<a href="$!webPath/admin/reportsubject_list.htm">举报主题</a>|<a href="$!webPath/admin/reportsubject_add.htm">新增举报主题</a>|<a href="javascript:void(0);" class="this">处理举报</a></span> <span class="tab-two"></span></div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/report_handle_save.htm" method="post">
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <div class="setcont">
+    <!--鼠标经过样式-->
+    <ul class="set1">
+      <li>举报商品</li>
+      <li><span class="webname">
+       $!obj.goods.goods_name
+      </span></li>
+    </ul>
+      <ul class="set1">
+      <li>处理结果
+        </li>
+        <li>
+          <input name="result" id="type" type="radio" value="-1" style="border:none;width:16px;height:16px;"/>
+          无效举报-举报不符合要求，商品正常销售 
+        </li>
+        <li>
+          <input name="result" type="radio" id="type" style="border:none;width:16px;height:16px;" value="1" checked="checked"/>
+          有效举报-举报符合要求，商品违规下架 
+        </li>
+        <li>
+          <input name="result" id="type" type="radio" value="-2" style="border:none;width:16px;height:16px;"/>
+          恶意举报-买家恶意举报，用户从此禁止举报 
+        </li>
+	</ul>
+    <ul class="set1">
+      <li>处理意见</li>
+      <li><span class="webname">
+        <textarea name="handle_info" cols="40" rows="6" id="handle_info">
+</textarea>
+      </span></li>
+    </ul>
+    
+  </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

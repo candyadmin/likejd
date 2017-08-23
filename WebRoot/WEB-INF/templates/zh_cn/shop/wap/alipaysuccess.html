@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+
+</head>
+<body>
+
+<div class="main">
+  
+  	<div class="user_bar">
+		<a class="back" href="$!webPath/buyer/order.htm">
+			<img src="$!webPath/resources/style/system/front/wap/images/back_black.png" width="25" height="25">
+		</a>
+		<span class="fl">支付结果反馈</span>
+		<a class="edit fr" href="$!webPath/wap/index.htm">
+			<img src="$!webPath/resources/style/system/front/wap/images/home.png" width="25" height="25">
+		</a>
+	</div>
+	
+	
+	<div class="info_form">
+	  <div style="height:49px;" class="mt50"></div>
+	  
+	  <ul>
+	    <li>
+	    	支付成功! 您可以在<a href="$!webPath/buyer/order.htm">"我的订单"</a>查询该订单信息!
+	    </li>
+	  </ul>
+	</div>
+	
+	<div style="display:none" id="note" class="note"></div>
+	<div style="display:none" class="brand_class_opcity"></div>
+  	
+  
+   $!httpInclude.include("/footer.htm")
+   
+</div>
+
+</body>
+</html>

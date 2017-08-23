@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">投诉管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"><a href="$!webPath/admin/complaint_list.htm">新投诉</a> | <a href="#">待申诉</a>|<a href="#">对话中</a>|<a href="#">等仲裁</a>|<a href="#">已关闭</a>|<a href="$!webPath/admin/complaintsubject_list.htm" class="this">投诉主题</a>|<a href="$!webPath/admin/complaintsubject_add.htm">新增投诉主题</a>|<a href="$!webPath/admin/complaint_set.htm">投诉设置</a></span> <span class="tab-two"></span></div>
+  <form id="queryForm">
+  <div class="allpro_search">
+    <ul>
+      <li><span>投诉类别</span><span class="allpro size8">
+        <select name="type" id="type">
+          <option value="">请选择</option>
+          <option value="seller">卖家</option>
+          <option value="buyer">买家</option>
+</select>
+      </span><span class="btn_search">
+        <input name="" type="button"  value="搜索" onclick="query();" style="cursor:pointer;"/>
+      </span> </li>
+    </ul>
+  </div>
+  </form>
+  <form method="post" id="ListForm">
+  <div class="allmem_table">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="46" align="left">&nbsp;</td>
+          <td width="120" align="left">投诉主题</td>
+          <td width="120" align="center">主题类别</td>
+          <td width="400" align="center">主题描述</td>
+          <td  width="116" align="center">操作</td>
+        </tr>
+        #foreach($!obj in $objs)
+        <tr style="height:35px;">
+          <td  align="left"><input name="id" type="checkbox" id="id" style="width:16px; border:none;" value="$!obj.id" /></td>
+          <td  align="left">$!obj.title</td>
+          #if($!obj.type=="buyer")
+            #set($type="买家")
+          #end
+          #if($!obj.type=="seller")
+            #set($type="卖家")
+          #end
+          <td align="center">$!type</td>
+          <td class="lightred" align="center">$!obj.content</td>
+          <td align="center"  class="blue xiahua"><a href="$!webPath/admin/complaintsubject_edit.htm?id=$!obj.id">编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0);" onclick="if(confirm('删除信息不可恢复，是否继续？'))window.location.href='$!webPath/admin/complaintsubject_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'">删除</a></td>
+        </tr>
+        #end
+        <tr style="background:#F2F2F2; height:30px;">
+          <td colspan="5"><div class="shopbtn shopfx">
+              <input name="all" type="checkbox" id="all" onclick="selectAll(this)" value="" />
+              &nbsp;&nbsp;全部</div>
+            <div class="shop_btn_del shopbtn">
+              <input name="" type="button" value="删除" style="cursor:pointer;" onclick="cmd('$!webPath/admin/complaintsubject_del.htm')"/>
+            </div></td>
+        </tr>
+      </table>
+    </div>
+  <div class="fenye">
+  <span id="queryCondition" style="display:none;">
+  #foreach($sm in $sms)
+  <input type="hidden" name="$!sm.key" id="$!sm.key" value="$!sm.value" />
+  #end
+  </span>
+    <div class="fenye3">
+      <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      <input type="hidden" name="mulitId" id="mulitId" />
+      $!gotoPageFormHTMl</div>
+  </div>
+  </form>
+</div>
+</body>
+</html>

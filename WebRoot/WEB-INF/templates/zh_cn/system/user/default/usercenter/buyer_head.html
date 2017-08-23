@@ -1,0 +1,94 @@
+﻿<script>
+jQuery(document).ready(function(){
+  jQuery(".users_menu>li>em>a").mouseover(function(){
+    jQuery(".users_menu>li").removeClass();												
+	jQuery(this).parent().parent().addClass("hover_use");	
+	jQuery("div[class=users_navh]").hide();	
+    jQuery(this).parent().parent().find("div[class=users_navh]").show(); 
+  })
+  jQuery(".users_menu>li").mouseleave(function(){
+    jQuery("div[class=users_navh]").hide();																	 
+	 jQuery(".users_menu>li").removeClass();
+  });
+  jQuery("#search_type").mouseover(function(){
+    var clz=jQuery(this).attr("class");
+	if(clz=="sear_type"){
+	  jQuery(this).attr("class","sear_type active");
+	}
+	jQuery(this).find("ul li").show();	
+  }).mouseleave(function(){
+     jQuery(this).attr("class","sear_type");
+	 jQuery(this).find("ul li").hide();
+	  jQuery(this).find("ul li:first").show();
+  });
+
+  jQuery(".sear_type").find("ul li").click(function(){
+		var type =jQuery(this).attr("type");
+		jQuery("#type").val(type);
+		var ht =jQuery(this).find("a").html();
+		jQuery(this).parent().find("li:first").html(ht);
+		jQuery(this).parent().find("li").hide();
+		jQuery(this).parent().find("li:first").show();
+		 });
+  
+  jQuery(".user_ser_btn").click(function(){
+		var type =jQuery("#type").val();
+		if(type==""){
+			jQuery("#type").val("goods");
+			}
+		jQuery("#SearchForm").submit();													   
+		});
+});
+</script>
+<form action="$!webPath/search.htm" method="post" id="SearchForm">
+<input name="type" type="hidden" id="type" value="goods" />
+<div class="head">
+  <div class="logo"> #if($!config.websiteLogo) <a href="$!webPath/index.htm"><img src="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name" border="0" /></a>#else<a href="$!webPath/index.htm"><img src="$!imageWebServer/resources/style/system/front/default/images/logo.png"  border="0" /></a>#end  </div>
+  <div class="usersearch">
+    <ul class="users_menu">
+      <li class="this"><em><a href="$!webPath/buyer/index.htm">买家首页</a></em></li>
+      <li ><em><a href="$!webPath/buyer/homepage.htm" target="_blank">个人主页</a></em></li>
+      <!--hover_use经过下拉样式class="hover_use"-->
+      <li><em><a href="$!webPath/buyer/friend.htm">好友<s></s></a></em>
+        <div class="users_navh" style="display:none;">
+          <div class="users_navh_box"><span>
+           <a href="$!webPath/buyer/friend_add.htm" target="_blank">找人</a>
+          </span><span><a href="$!webPath/buyer/homepage/myattention.htm" target="_blank">关注</a>
+          </span><span><a href="$!webPath/buyer/homepage/myfans.htm" target="_blank">粉丝</a>
+          </span></div>
+        </div>
+      </li>
+      <li><em><a href="javascript:void(0);">交易<s></s></a></em>
+        <div class="users_navh" style="display:none">
+          <div class="users_navh_box"><span><a href="$!webPath/goods_cart1.htm">我的购物车</a></span> <span><a href="$!webPath/buyer/order.htm">已买到的商品</a></span> <span><a href="$!webPath/buyer/favorite_goods.htm">我的收藏</a></span> <span><a href="$!webPath/buyer/complaint.htm">投诉管理</a></span></div>
+        </div>
+      </li>
+      <li><em><a href="javascript:void(0);">设置<s></s></a></em>
+        <div class="users_navh" style="display:none">
+          <div class="users_navh_box"><span><a href="$!webPath/buyer/account.htm">个人资料</a></span> <span><a href="$!webPath/buyer/address.htm">收货地址</a></span> </div>
+        </div>
+      </li>
+      <li><em><a href="javascript:void(0);">消息<s></s></a></em>
+        <div class="users_navh" style="display:none">
+          <div class="users_navh_box"> <span><a href="$!webPath/buyer/message.htm?type=0">系统消息</a></span><span><a href="$!webPath/buyer/message.htm">站内私信</a></span></div>
+        </div>
+      </li>
+    </ul>
+    <div class="user_ser">
+      <!--展开时加active-->
+      <div class="sear_type" id="search_type">
+        <ul>
+          <li><a href="javascript:void(0);">商品</a></li>
+          <li type="goods" style="display:none" ><a href="javascript:void(0);">商品</a></li>
+          <li type="store" style="display:none"><a href="javascript:void(0);">店铺</a></li>
+        </ul>
+        <s></s></div>
+        
+      <div class="user_ser_box">
+        <input name="keyword" type="text" class="user_ser_txt" placeholder=" 搜索真的很简单！" id="keyword" x-webkit-speech lang="zh-CN" onwebkitspeechchange="jQuery('#SearchForm').submit()"/>
+        <input name="" type="button" class="user_ser_btn" style="cursor:pointer;" />
+      </div>
+    </div>
+  </div>
+</div>
+</form>

@@ -1,0 +1,43 @@
+﻿
+<script>
+jQuery(document).ready(function(){
+			//滚动条滚动事件
+	jQuery(window).scroll(function(){
+	var top = jQuery(document).scrollTop();
+	if(top==0){
+		jQuery(".back_box").hide();
+		}else{
+		jQuery(".back_box").show();	
+			}
+	});						
+});
+</script>
+<div class="footer">
+<div class="footerArea">
+  <ul>
+    <li>
+    #set($navs=$!navTools.queryNav(1,-1))
+    #foreach($nav in $navs)
+     #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+      #set($url="$!nav.url")
+    #else
+      #set($url="$!webPath/$!{nav.url}")
+    #end
+    <a href="$!url" #if($!nav.new_win==1)target="_blank"#end>$!{nav.title}</a>#if($!{velocityCount}<$navs.size())|#end
+    #end   
+    </li>
+    <li class="hui2">Copyright 2011-2015 shopping Inc. All rights reserved</li>
+    <li class="hui2">Powered by shopping V2.0</li>
+    <li>$!config.codeStat</li>
+  </ul>
+</div>
+</div>
+
+
+<!--返回最顶部-->
+<div class="back_box"  style=" display:none;width:50px; height:50px;position:fixed; bottom:180px; right:25px; _position:absolute;/*兼容IE6的代码*/
+_bottom:auto;/*兼容IE6的代码*/
+_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0))); ">
+    <div class="back_index"><a href="$!webPath/index.htm" target="_blank"  title="返回主页"></a></div>
+    <div class="back_top"><a id="toTop" href="#" bosszone="hometop" style="display: block;" onclick="window.scrollTo(0,0);return false" title="返回顶部" target="_self" ></a></div>
+</div>

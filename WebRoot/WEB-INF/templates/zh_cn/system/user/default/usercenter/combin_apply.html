@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加组合销售 -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+ jQuery(function(){ 
+	//
+ jQuery.validator.methods.endTime = function(value, element, param) {
+   var startDate = jQuery(param).val();
+   var date1=new Date(Date.parse(startDate));
+   var date2=new Date(Date.parse(value));
+   if(jQuery.browser.msie==true){
+      date1 = new Date(Date.parse(startDate.replace("-", "/")));
+      date2 = new Date(Date.parse(value.replace("-", "/")));
+   }
+   return date1 < date2;
+ };
+ jQuery.validator.methods.beginTime = function(value, element, param) {
+   var endDate = jQuery(param).val();
+   var date1=new Date(Date.parse(endDate));
+   var date2=new Date(Date.parse(value));
+   if(jQuery.browser.msie==true){
+      date1 = new Date(Date.parse(endDate.replace("-", "/")));
+      date2 = new Date(Date.parse(value.replace("-", "/")));
+   }
+   return date1 > date2;
+ };
+	//			 
+    jQuery('#combin_begin_time').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true, 
+	  minDate:$!{minDate}, 
+	  maxDate: "+$!{maxDate}D",
+	  onSelect:function(dateText,inst){
+
+	  }
+   });
+  jQuery('#combin_end_time').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true, 
+	  minDate:$!{minDate}, 
+	  maxDate: "+$!{maxDate}D",
+	  onSelect:function(dateText,inst){
+
+	  }
+   });	
+  //
+  jQuery.validator.methods.comparePirce=function(value,elment,param){
+    var combin_goods_price=parseFloat(jQuery("#combin_goods_price").html());
+	var combin_price=parseFloat(jQuery(param).val());
+	return combin_price<combin_goods_price;
+  }
+  jQuery("#theForm").validate({
+		ignore: "",					  
+        rules:{
+	  	  combin_begin_time:{required :true},
+		  combin_end_time:{required:true,endTime:"#combin_begin_time"},
+		  combin_main_goods_id:{required :true},
+		  combin_goods_ids:{required:true},
+		  combin_price:{required:true,number:true,comparePirce:"#combin_price",min:0}
+	  	 },
+	    messages:{
+	  	  combin_begin_time:{required:"开始时间不能为空"},
+		  combin_end_time:{required:"结束时间不能为空",endTime:"结束时间必须大于开始时间"},
+		  combin_main_goods_id:{required:"主商品不能为空"},
+		  combin_goods_ids:{required:"组合商品不能为空"},
+		  combin_price:{required:"组合价格不能为空",number:"组合价格只能为数字",min:"组合价格不能为负数",comparePirce:"组合价格必须小于实际价格"}
+	  	}
+     });
+  //
+  #if($!obj)
+    #set($combin_goods_price=$!obj.goods_current_price)
+    #foreach($info in $obj.combin_goods)
+	   #set($img="$!webPath/resources/style/common/images/good.jpg")
+       #if($!obj.goods_main_photo) 
+         #set($img="$!imageWebServer/$!{info.goods_main_photo.path}/$!{info.goods_main_photo.name}_small.$!{info.goods_main_photo.ext}")
+       #else
+           #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+       #end
+	   #set($goods_name=$!CommUtil.substring("$!info.goods_name",8))
+	   jQuery("img[combin_goods_img=false]").first().attr("src","$!img");
+       jQuery("img[combin_goods_img=false]").first().parent().parent().find("i").html("$goods_name");
+       jQuery("img[combin_goods_img=false]").first().attr("goods_current_price","$!info.goods_current_price");
+       jQuery("img[combin_goods_img=false]").first().attr("goods_id","$!info.goods_id");
+       jQuery("img[combin_goods_img=false]").first().attr("combin_goods_img","true");
+	   #set($combin_goods_price=$combin_goods_price + $info.goods_current_price)
+	#end
+	jQuery("#combin_goods_price").html("$!combin_goods_price");
+  #end
+ })
+ function combin_goods(obj){
+    var search_target=jQuery(obj).attr("search_target"); 
+    var goods_name=jQuery("#"+search_target).val(); 
+	var target_id=jQuery(obj).attr("target_id");
+	var goods_type=jQuery(obj).attr("goods_type");
+    jQuery.ajax({type:'POST',url:'$!webPath/seller/combin_goods.htm',data:{"goods_name":goods_name,"target_id":target_id,"goods_type":goods_type},
+				 beforeSend:function(){
+					  jQuery(obj).parent().find("img").show();
+					 }, 
+				 success:function(data){
+					  jQuery(obj).parent().find("img").hide();
+					  jQuery("#"+target_id).parent().show();
+					  jQuery("#"+target_id).empty().append(data);
+				     }
+			   });
+ } 
+ function remove_combin_main_goods(obj){
+    jQuery(obj).parent().parent().find("img").attr("src","$!webPath/resources/style/common/images/good.jpg").attr("goods_current_price","0");
+	jQuery(obj).parent().parent().find("i").html("主商品信息");
+	jQuery("#combin_main_goods_id").val("");
+	var total_price=parseFloat(jQuery("#combin_main_goods_img").attr("goods_current_price"));
+	jQuery("img[combin_goods_img=true]").each(function(){
+	   var combin_goods_price=jQuery(this).attr("goods_current_price");
+	   if(combin_goods_price!=undefined){
+	     total_price=total_price+parseFloat(combin_goods_price);
+	   }
+	});
+   jQuery("#combin_goods_price").html(total_price);
+ }
+  function remove_combin_goods(obj){
+    jQuery(obj).parent().parent().find("img").attr("src","$!webPath/resources/style/common/images/good.jpg").attr("combin_goods_img","false").attr("goods_id","").attr("goods_current_price","0");
+	jQuery(obj).parent().parent().find("i").html("组合商品信息");
+	var total_price=parseFloat(jQuery("#combin_main_goods_img").attr("goods_current_price"));
+	jQuery("img[combin_goods_img=true]").each(function(){
+	   var combin_goods_price=jQuery(this).attr("goods_current_price");
+	   if(combin_goods_price!=undefined){
+	     total_price=total_price+parseFloat(combin_goods_price);
+	   }
+	});
+   jQuery("#combin_goods_price").html(total_price);	
+ }
+  function save_form(){
+    var combin_goods_ids="";
+	jQuery("img[combin_goods_img=true]").each(function(){
+	   var goods_id=jQuery(this).attr("goods_id");
+	   combin_goods_ids=combin_goods_ids+","+goods_id;
+	});
+	jQuery("#combin_goods_ids").val(combin_goods_ids);
+	jQuery("#theForm").submit();
+ }
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=combin")
+        <td id="centerbg" valign="top"><div class="buyer_position">
+            <div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>添加组合销售</span></div>
+          </div>
+          <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li><a href="$!webPath/seller/combin.htm">组合销售商品</a></li>
+                <li><a href="$!webPath/seller/combin_buy.htm">购买套餐</a></li>
+                <li><a href="$!webPath/seller/combin_log.htm">套餐购买日志</a></li>
+                <li class="this"><a href="$!webPath/seller/combin_apply.htm">添加组合销售</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+                <form action="$!webPath/seller/combin_save.htm" method="post" name="theForm" id="theForm">
+                  <table width="98%" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                    <tr>
+                      <td valign="top" align="right">开始日期：</td>
+                      <td id="main_goods_list3" class="px10"><span class="setinput">
+                        <input name="combin_begin_time" type="text" id="combin_begin_time" value="$!obj.combin_begin_time" readonly="readonly" />
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td valign="top" align="right">结束日期：</td>
+                      <td id="main_goods_list2" class="px10"><span class="setinput">
+                        <input name="combin_end_time" type="text" id="combin_end_time" value="$!obj.combin_end_time" readonly="readonly" />
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td valign="top" align="right">主体商品：</td>
+                      <td class="px10"><div class="main_body">
+                          <ul>
+                            <li class="item"> <span>
+                            #set($img="$!webPath/resources/style/common/images/good.jpg")
+                            #if($!obj)
+                               #if($!obj.goods_main_photo) 
+                                 #set($img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+                              #else
+                                 #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                              #end
+                            #end
+                            <img id="combin_main_goods_img" goods_current_price="0" src="$!img" width="110" height="110" /></span> <i id="combin_main_goods_name">主商品信息</i>
+                              <div class="add_gp">
+                                <input type="button" value="删除主商品" class="delete_ip" onclick="remove_combin_main_goods(this);" />
+                              </div>
+                            </li>
+                          </ul>
+                        </div></td>
+                    </tr>
+                    <tr>
+                      <td width="141" align="right">主体商品搜索：</td>
+                      <td width="651" class="px10"><span class="setinput">
+                        <input name="goods_name" type="text" id="goods_name" />
+                        <input name="search" search_target="goods_name" type="button" goods_type="main" target_id="main_goods_list" style="cursor:pointer;width:60px;"  value="搜索" onclick="combin_goods(this);" />
+                        <label>
+                          <input  onclick='javascript:jQuery("#main_goods_list").empty();jQuery("#main_goods_list").parent().hide();'  style="cursor:pointer;width:60px;" type="button" name="button2" id="button"  value="关闭" />
+                        </label>
+                      <img src="$!webPath/resources/style/common/images/wait.gif" style="display:none;" ></span> <input name="combin_main_goods_id" type="hidden" id="combin_main_goods_id" value="$!obj.id" /></td>
+                    </tr>
+                    <tr id="main_goods_info" style="display:none;">
+                      <td align="right" valign="top">&nbsp;</td>
+                      <td  class="px10" id="main_goods_list">
+                       
+                      </td>
+                    </tr>
+                    <tr>
+                      <td valign="top" align="right">组合商品：</td>
+                      <td  class="px10" id="combin_goods_info">
+                       <div class="main_body">
+                          <ul>
+                          #foreach($count in [1..$!{config.combin_count}])
+                            <li class="item"> 
+                            <span>
+                            <img src="$!webPath/resources/style/common/images/good.jpg" goods_current_price="0" goods_id=""  combin_goods_img="false" width="110" height="110" /></span> <i>组合商品信息</i>
+                              <div class="add_gp">
+                                <input type="button" value="从组合删除" class="delete_ip" onclick="remove_combin_goods(this);" />
+                              </div>
+                            </li>
+                           #end
+                          </ul>
+                        </div></td>
+                    </tr>
+                    <tr>
+                      <td width="141" align="right">组合商品搜索：</td>
+                      <td width="651" class="px10"><span class="setinput">
+                        <input name="combin_goods_name" type="text" id="combin_goods_name"   />
+                        <input name="search" search_target="combin_goods_name" type="button" style="cursor:pointer;width:60px;" target_id="combin_goods_list" goods_type="combin"  value="搜索" onclick="combin_goods(this);" />
+                        <img src="$!webPath/resources/style/common/images/wait.gif" style="display:none;" >
+                        <input  onclick='javascript:jQuery("#combin_goods_list").empty();jQuery("#combin_goods_list").parent().hide();'  style="cursor:pointer;width:60px;" type="button"  value="关闭" />
+                        <input name="combin_goods_ids" id="combin_goods_ids" type="hidden" value="" />
+                      </span></td>
+                    </tr>
+                     <tr id="commbin_goods_info" style="display:none;">
+                      <td align="right" valign="top">&nbsp;</td>
+                      <td  class="px10" id="combin_goods_list">
+                       
+                      </td>
+                    </tr>
+                    <tr>
+                      <td valign="top" align="right">组合原价：</td>
+                      <td class="px10">¥<span class="setinput" id="combin_goods_price" style="color:#F00;">0</span></td>
+                    </tr>
+                    <tr>
+                      <td valign="top" align="right">组合价格：</td>
+                      <td  class="px10"><span class="setinput">
+                        <input name="combin_price" type="text" id="combin_price" value="$!obj.combin_price" />
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td valign="top" align="right">&nbsp;</td>
+                      <td  class="px10"><span class="setsub">
+                        <input name="button" type="button" style="cursor:pointer;" onclick="save_form();"  value="保存"/>
+                        <input name="combin_session" type="hidden" id="combin_session" value="$!combin_session" />
+                        <input name="id" type="hidden" id="id" value="$!obj.id" />
+                      </span></td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

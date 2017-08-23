@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+<div class="cont">
+<h1 class="seth1">竞价直通车</h1>
+<div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/ztc_set.htm">直通车设置</a> | <a href="$!webPath/admin/ztc_apply.htm">直通车申请</a> | <a href="$!webPath/admin/ztc_goods.htm" class="this">直通车商品</a> | <a href="$!webPath/admin/ztc_gold_log.htm">金币日志</a> </span> <span class="tab-two"></span></div>
+<form method="post" id="queryForm">
+  <div class="orders">
+    <ul>
+      <li><span><span class="allmen size6">
+        <input name="userName" type="text" id="userName" />
+      </span>商品名称</span><span class="allmen size6">
+        <input name="goods_name" type="text" id="goods_name" />
+        </span><span>会员名称</span><span>店铺名称</span> <span class="allmen size6">
+        <input name="store_name" type="text" id="store_name" />
+        </span><span class="btn_search">
+        <input name="" type="submit"  value="搜索" style="cursor:pointer;"/>
+        </span> </li>
+    </ul>
+  </div>
+</form>
+<form method="post" id="ListForm">
+  <div class="allshop_table">
+    <table width="98%" border="0" cellspacing="0" cellpadding="0">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="100">商品名称</td>
+        <td width="100">会员名称</td>
+        <td width="100" align="center">剩余金币（枚）</td>
+        <td align="center" width="130">直通车价格（金币/天）</td>
+        <td align="center" width="100">开始时间</td>
+        <td align="center" width="140" >直通车浏览次数</td>
+        </tr>
+      #foreach($obj in $objs)
+      <tr>
+        <td><a href="$!webPath/goods_$!{obj.id}.htm" target="_blank">$!obj.goods_name</a></td>
+        <td>$!obj.goods_store.user.userName</td>
+        <td align="center">$!obj.ztc_gold</td>
+        <td align="center">$!obj.ztc_price</td>
+        <td align="center">$!obj.ztc_begin_time</td>
+        <td align="center" class="xiahua">$!obj.ztc_click_num</td>
+        </tr>
+      #end
+      <tr style="background:#F2F2F2; height:30px;">
+        <td colspan="6">&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  <div class="fenye">
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    $!gotoPageFormHTML</div>
+  </form>
+</div>
+</body>
+</html>

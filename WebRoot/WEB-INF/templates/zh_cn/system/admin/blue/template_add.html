@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script>
+//options为编辑配置属性
+var options = {
+        cssPath : '$!webPath/resources/editor/themes/default/default.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '700px',
+		height:'400px',
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+};
+jQuery(document).ready(function(){
+//
+jQuery("#type").val("$!obj.type");
+//设置默认状态以及判断初始显示状态
+  jQuery("#theForm").validate({
+    rules:{
+	  info:{
+	    required :true
+	  },
+	  title:{
+	    required :true
+	  },
+	  mark:{
+	    required :true,
+		remote:{
+			 url: "$!webPath/template/verify_mark.htm",     //后台处理程序
+             type: "post",               //数据发送方式
+             dataType: "json",           //接受数据格式   
+             data: {                     //要传递的数据
+                  "mark": function(){return jQuery("#mark").val();},
+				  "id":"$!obj.id"
+		      }
+			}
+	  },
+	  type:{
+	    required :true
+	  }
+	 },
+	messages:{
+	  info:{required:"模板描述不能为空"}, 
+	  title:{required:"模板标题不能为空"},
+	  mark:{required:"模板标识不能为空",remote:"模板标识已经存在"},
+	  type:{required:"模板类型不能为空"}
+	}
+  });
+  //
+  editor = KindEditor.create('#content',options); 
+  //
+});
+
+function saveForm(method){
+   editor.sync();
+   jQuery("#theForm").submit();
+}
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">通知模板</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"><a href="$!webPath/admin/template_list.htm?type=msg">站内信模板</a> |<a href="$!webPath/admin/template_list.htm?type=email">邮件模板</a>|<a href="$!webPath/admin/template_list.htm?type=sms">手机短信模板</a>|<a href="$!webPath/admin/template_add.htm" #if(!$!edit)class="this"#end >新增</a>#if($!edit) <a href="javascript:void(0);" class="this">编辑模板</a> #end </span> <span class="tab-two"></span></div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/template_save.htm" method=post>
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/template_list.htm" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/template_add.htm" />
+    <div class="setcont">
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>模板描述</li>
+        <li><span class="webname">
+          <input name="info" type="text" id="info" value="$!obj.info" size="40" />
+          </span></li>
+      </ul>
+	  <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>模板标题</li>
+        <li><span class="webname">
+          <input name="title" type="text" id="title" value="$!obj.title" size="40" />
+          </span></li>
+      </ul>
+	  <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>模板标识</li>
+        <li><span class="webname">
+          <input name="mark" type="text" id="mark" value="$!obj.mark" size="40" />
+          </span></li>
+      </ul>
+	   <ul class="set1">
+        <li>模板类型</li>
+        <li><span class="webnamesec sizese">
+        <select name="type" id="type">
+		  <option value="">请选择模板类型...</option>
+		  <option value="msg">站内短信模板</option>
+          <option value="email">邮件模板</option>
+          <option value="sms">手机短信模板</option>
+        </select>
+      </span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>内容</li>
+        <li><span class="webname">
+          <textarea name="content" cols="40" id="content">$!obj.content</textarea>
+          </span></li>
+      </ul>
+    </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+	  userName:{
+	    required :true,
+	     remote:{
+		    url: "$!webPath/verify_username.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "userName": function(){return jQuery("#userName").val();},
+				  "id":function(){return jQuery("#id").val()}
+		     }
+			}
+	  },
+	  email:{
+	    required :true,
+		email:true,
+		remote:{
+		    url: "$!webPath/verify_email.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "mail": function(){return jQuery("#userName").val();},
+				  "id":function(){return jQuery("#id").val()}
+		     }
+			}
+	  }#if(!$!edit),
+	  password:{
+	    required:true,
+		minlength:6,
+		maxlength:20
+	  }
+	  #end
+	 },
+	messages:{
+	  userName:{required:"用户名不能为空",remote:"该用户名已经存在"},
+	  email:{required:"电子邮箱不能为空",email:"邮箱格式不对",remote:"该邮箱已被使用"}#if(!$!edit),
+	  password:{required:"密码不能为空",minlength:"密码不能少于{0}位",maxlength:"密码不能大于{0}位"}#end
+	}
+  });	
+  jQuery(":radio[id=sex]").each(function(){
+    if(jQuery(this).val()=="$!obj.sex")jQuery(this).attr("checked",true);
+  });
+  jQuery(":radio[id=report][value=$!obj.report]").attr("checked",true);
+});
+
+function saveForm(){
+   jQuery("#theForm").submit();
+}
+
+
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">商品评价</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"><a href="$!webPath/admin/evaluate_list.htm">所有评价</a> <a href="javascript:void(0);" class="this">编辑</a></span> <span class="tab-two"></span></div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/evaluate_save.htm" method="post">
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/evaluate_list.htm" />
+  <div class="setcont">
+    <ul class="set1">
+      <li>商品名称</li>
+      <li><span class="webname">
+       <a href="$!webPath/goods_$!{obj.evaluate_goods.id}.htm" target="_blank">$!obj.evaluate_goods.goods_name</a> </span></li>
+    </ul>
+    #if($!obj.goods_spec!="")
+    <ul class="set1">
+      <li>商品规格</li>
+      <li><span class="webname">
+       $!obj.goods_spec
+      </span></li>
+    </ul>
+    #end
+    <ul class="set1">
+      <li>买家名称</li>
+      <li><span class="webname">
+       $!obj.evaluate_user.userName
+      </span></li>
+    </ul>
+     <ul class="set1">
+      <li>买家评价</li>
+          #if($!obj.evaluate_buyer_val==1)
+            #set($evaluate_buyer_val="好评")
+          #end
+          #if($!obj.evaluate_buyer_val==0)
+            #set($evaluate_buyer_val="中评")
+          #end
+          #if($!obj.evaluate_buyer_val==-1)
+            #set($evaluate_buyer_val="差评")
+          #end
+      <li><span class="webname">
+       $!evaluate_buyer_val
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li>买家评价时间</li>
+      <li><span class="webname">
+      $!CommUtil.formatLongDate($!obj.addTime)
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li>买家评价信息</li>
+      <li><span class="webname">
+      $!obj.evaluate_info
+      </span></li>
+    </ul>    
+    <ul class="set1">
+      <li>卖家店铺</li>
+      <li><span class="webname">
+      $!obj.of.store.store_name
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li>卖家评价</li>
+          #if($!obj.evaluate_seller_val==1)
+            #set($evaluate_seller_val="好评")
+          #end
+          #if($!obj.evaluate_seller_val==0)
+            #set($evaluate_seller_val="中评")
+          #end
+          #if($!obj.evaluate_seller_val==-1)
+            #set($evaluate_seller_val="差评")
+          #end        
+      <li><span class="webname">
+       $!evaluate_seller_val
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li>卖家评价时间</li>
+      <li><span class="webname">
+      $!CommUtil.formatLongDate($!obj.evaluate_seller_time)
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li>卖家评价信息</li>
+      <li><span class="webname">
+      $!obj.evaluate_seller_info
+      </span></li>
+    </ul>    
+    #if($!obj.evaluate_status==0)
+    <ul class="set1">
+      <li>评价状态
+        <input name="edit" type="hidden" id="edit" value="true" />
+      </li>
+	   <li><span class="webname">
+      <input style="border:none; height:16px; width:16px;" name="evaluate_status" id="evaluate_status"  type="radio" value="2" />
+      取消评价
+	  <input style="border:none; height:16px; width:16px;"type="radio" id="evaluate_status" name="evaluate_status" value="1" />
+	  禁止显示
+	   </span><span id="nothis"><strong class="q"></strong><strong class="w">管理员只能操作一次评价，取消评价后，买卖双方评分失效，禁止显示，评分有效但不显示</strong><strong class="c"></strong></span>
+	   </li>
+	</ul>
+    <ul class="set1">
+      <li>操作说明</li>
+      <li><span class="webname">
+        <textarea name="evaluate_admin_info" cols="40" rows="6" id="evaluate_admin_info">$!obj.evaluate_admin_info</textarea>
+      </span></span></li>
+    </ul>
+    #else
+    <ul class="set1">
+      <li>评价状态</li>
+          #if($!obj.evaluate_status==0)
+            #set($status="正常显示")
+          #end
+          #if($!obj.evaluate_status==1)
+            #set($status="禁止显示")
+          #end
+          #if($!obj.evaluate_status==2)
+            #set($status="取消评价")
+          #end                         
+      <li><span class="webname">
+      <input name="evaluate_status" type="hidden" id="evaluate_status" value="$!obj.evaluate_status" />
+      $!status </span></li>
+    </ul> 
+    <ul class="set1">
+      <li>操作说明</li>
+      <li><span class="webname">
+      <input name="evaluate_admin_info" type="hidden" id="evaluate_admin_info" value="$!obj.evaluate_admin_info" />
+      $!obj.evaluate_admin_info </span></li>
+    </ul> 
+    #end
+  </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

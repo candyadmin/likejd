@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery(".floorul li").attr("cursor","pointer").click(function(){
+	var gc_id=jQuery(this).attr("gc_id");
+	jQuery(".floorul li").removeClass("this");
+	jQuery(this).addClass("this");
+    jQuery(".ftab").hide();
+	jQuery("#gc_"+gc_id).show();
+  });
+  #if($!tab)
+	jQuery(".floorul li").removeClass("this");
+	jQuery(".floorul li[gc_id=$!tab]").addClass("this");
+    jQuery(".ftab").hide();
+	jQuery("#gc_$!{tab}").show();
+  #end
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">首页楼层</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/goods_floor_list.htm">管理</a> | <a href="$!webPath/admin/goods_floor_add.htm">新增</a> | <a href="$!webPath/admin/goods_floor_template.htm?id=$!obj.id" class="this">楼层模板</a> </span> <span class="tab-two"></span></div>
+  <div class="floor_editor">
+  <!--楼层样式0-->
+     <div class="floor_m">经典楼层</div>
+    <div class="floor_rel">
+      <div class="floor">
+        <div class="floor_box">
+          <div class="floor_menu">
+            <h3>$!{obj.gf_name}<a href="javascript:void(0);"  dialog_uri="$!webPath/admin/goods_floor_class.htm?id=$!{obj.id}" dialog_title="编辑分类" dialog_width="700" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="edfloor">编辑+</a></h3>
+            <div class="flr_m_details">
+              <ul class="flr_m_du">
+              
+                #foreach($gc in $gf_tools.generic_gf_gc("$!obj.gf_gc_list"))
+                <li>
+                  <h4><a href="$!webPath/store_goods_list_$!{gc.id}.htm" target="_blank">$!gc.className</a></h4>
+                  <p>
+                  #foreach($c_gc in $gc.childs) 
+                  <span><a href="$!webPath/store_goods_list_$!{c_gc.id}.htm" target="_blank">$!c_gc.className</a></span>
+					#end
+                  </p>
+                </li>
+                #end
+              </ul>
+              
+              
+              <div class="flr_advertisment"> $!gf_tools.generic_adv("$!url","$!obj.gf_left_adv")<a href="javascript:void(0);"  dialog_uri="$!webPath/admin/goods_floor_left_adv.htm?id=$!obj.id" dialog_title="编辑193*193广告信息" dialog_width="700" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_left_adv" class="edafloor">编辑+</a></div>
+            </div>
+          </div>
+          <div class="floorclass">
+            <ul class="floorul">
+               #foreach($info in $obj.childs)
+              <li #if($!{velocityCount}==1)class="this"#end style="cursor:pointer;" gc_id="$!info.id">$!{info.gf_name}<a href="javascript:void(0);"  dialog_uri="$!webPath/admin/goods_floor_gc_goods.htm?id=$!{info.id}" dialog_title="编辑【$!{info.gf_name}】楼层商品" dialog_width="750" dialog_height="100" dialog_top="80"  dialog_id="goods_floor_cat" class="edfloor">编辑+</a></li>
+                #end
+            </ul>
+            
+              #foreach($info in $obj.childs)
+            <div id="gc_$!{info.id}" class="ftab" #if($!{velocityCount}>1)style="display:none;"#end>
+              <div class="ftabone">
+                <div class="classpro">
+                 #foreach($goods in $gf_tools.generic_goods("$!info.gf_gc_goods"))
+                     #if($!goods.goods_main_photo)               #set($img="$!webPath/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+                  #else
+                  #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                  #end
+                  <div class="productone">
+                    <ul>
+                      <li><span class="center_span">
+                        <p><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank"><img src="$!img" width="147" height="147" /></a></p>
+                      </span></li>
+                      <li class="pronames"><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!goods.goods_name</a></li>
+                      <li><span class="hui2">市场价：</span><span class="through hui">￥$!{goods.goods_price}</span></li>
+                      <li><span class="hui2">商城价：</span><strong class="red">￥$!{goods.store_price}</strong></li>
+                    </ul>
+                  </div>
+              #end
+                  
+                </div>
+              </div>
+            </div>
+              #end
+ 
+          </div>
+          
+          
+          
+          
+          <div class="ranking">
+           #set($map=$!gf_tools.generic_goods_list("$!obj.gf_list_goods"))
+            <h1>$!map.get("list_title")<a href="javascript:void(0);"  dialog_uri="$!webPath/admin/goods_floor_list_goods.htm?id=$!obj.id" dialog_title="编辑列表信息" dialog_width="750" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat"  class="edfloor">编辑+</a></h1>
+             #if($!map.get("goods1"))
+            #set($goods=$!map.get("goods1"))
+            #if($!goods.goods_main_photo)                   #set($img="$!webPath/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+            #else
+             #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+            #end
+            <ul class="rankul">
+              <li class="rankimg"> <i class="center_ph">
+                <p><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank"><img src="$!img" width="73" height="55" /></a></p>
+              </i> <span class="rankno1"></span></li>
+              <li class="rankhui"><strong><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",12)</a></strong></li>
+              <li class="rankmoney">￥$!{goods.store_price}</li>
+            </ul >
+              #end
+             #if($!map.get("goods2"))
+            #set($goods=$!map.get("goods2"))
+            #if($!goods.goods_main_photo)                   #set($img="$!webPath/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+            #else
+             #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+            #end
+            <ul class="rankul">
+              <li class="rankimg"><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank"><img src="$!img" width="73" height="55" /></a><span class="rankno2"></span></li>
+              <li class="rankhui"><strong><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",12)</a></strong></li>
+              <li class="rankmoney">￥$!{goods.store_price}</li>
+            </ul>
+            #end
+             #if($!map.get("goods3"))
+            #set($goods=$!map.get("goods3"))
+            #if($!goods.goods_main_photo)                   #set($img="$!webPath/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+            #else
+             #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+            #end
+            <ul class="rankul">
+              <li class="rankimg"><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank"><img src="$!img" width="73" height="55" /></a><span class="rankno3"></span></li>
+              <li class="rankhui"><strong><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",12)</a></strong></li>
+              <li class="rankmoney">￥$!{goods.store_price}</li>
+            </ul>
+            #end
+            <ul class="rankul2">
+            #if($!map.get("goods4"))
+            #set($goods=$!map.get("goods4"))
+              <li><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",12)</a></li>
+            #end
+            #if($!map.get("goods5"))
+            #set($goods=$!map.get("goods5"))
+              <li><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",12)</a></li>
+            #end
+            #if($!map.get("goods6"))
+            #set($goods=$!map.get("goods6"))
+              <li><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",12)</a></li>
+            #end
+            </ul>
+            
+            
+            <div class="rank_advertisment">$!gf_tools.generic_adv("$!url","$!obj.gf_right_adv")<a href="javascript:void(0);"  dialog_uri="$!webPath/admin/goods_floor_right_adv.htm?id=$!obj.id" dialog_title="编辑199*199广告信息" dialog_width="700" dialog_height="100" dialog_top="100" dialog_id="goods_floor_right_adv" class="afloor">编辑+</a></div>
+            
+            
+            
+          </div>
+        </div>
+        <div class="floor_brand"><span class="fl_brand_sp"><b></b><a href="javascript:void(0);"  dialog_uri="$!webPath/admin/goods_floor_brand.htm?id=$!obj.id" dialog_title="编辑品牌信息" dialog_width="750" dialog_top="100" dialog_height="100"  dialog_id="goods_floor_brand">编辑</a></span>
+        <span class="flr_sp_brand">
+        #foreach($brand in $gf_tools.generic_brand("$!obj.gf_brand_list"))
+        <a href="$!webPath/brand_goods_$!{brand.id}.htm" target="_blank"><img src="$!webPath/$!brand.brandLogo.path/$!brand.brandLogo.name" width="98" height="35" /></a>
+        #end
+        </span>
+        </div>
+            
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+//设置推荐的默认装态
+	function recommendState(){
+	var state = jQuery("#recommend").val();
+	if(state=="true"){
+		jQuery("#recommend").val("false");
+		jQuery("#stateOff").show();
+		jQuery("#stateOn").hide();
+	}else{
+		jQuery("#recommend").val("true");
+		jQuery("#stateOff").hide();
+		jQuery("#stateOn").show();
+	}
+}
+});
+//网站logo file样式
+jQuery(function(){
+    var textButton="<input type='text' name='textfield' id='textfield1' class='size13' /><input type='button' name='button' id='button1' value='' class='filebtn' />"
+	jQuery(textButton).insertBefore("#brandLogo");
+	jQuery("#brandLogo").change(function(){
+	jQuery("#textfield1").val(jQuery("#brandLogo").val());
+	})
+});	
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">品牌管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> 
+  <a href="$!webPath/admin/goods_brand_list.htm">管理</a> | 
+  <a href="$!webPath/admin/goods_brand_add.htm">新增</a> |
+  <a href="$!webPath/admin/goods_brand_audit.htm" class="this">申请列表</a> </span> <span class="tab-two"></span></div>
+<form name="queryForm" id="queryForm" action="" method="post">
+  <div class="allmem_search">
+    <ul>
+      <li> <span>品牌名称</span> <span class="allmen size4">
+        <input  id="name" name="name" type="text" />
+        </span> <span>类别</span> <span class="allmen size4">
+        <input   name="category"  id="category" type="text" />
+        </span> <span class="btn_search">
+        <input name="" type="submit"  style="cursor:pointer;" value="搜索"/>
+        </span> </li>
+    </ul>
+  </div>
+</form>
+  <form name="ListForm" id="ListForm" action="$!webPath/admin/goods_brand_audit.htm" method="post">
+  <div class="brandtable">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="brand_table">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="45">&nbsp;</td>
+        <td width="40">首字母</td>
+        <td width="50">品牌名称</td>
+        <td width="80">申请人</td>
+        <td width="133">品牌图片标识</td>
+        <td width="130">申请备注</td>
+         <td width="50">审核状态</td>
+        <td width="155" align="center">操作</td>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td align="center"><input type="checkbox" name="checkbox" id="checkbox" /></td>
+        <td>$!obj.first_word</td>
+        <td>$!obj.name</td>
+        <td>$!obj.user.userName</td>
+        <td><img src="$!webPath/$!obj.brandLogo.path/$!obj.brandLogo.name" width="88px" height="44px" /></td>
+         <td><a href="javascript:void(0);" title="$!obj.remark">$!CommUtil.substring("$!obj.remark",50)</a></td>
+         #if($!obj.audit==0)
+         #set($status ="待审核")
+         #end
+           <td>$!status</td>
+        <td class="ac8" align="center"><a href="$!webPath/admin/goods_brands_pass.htm?id=$!obj.id">通过</a>| 
+        <a href="$!webPath/admin/goods_brands_refuse.htm?id=$!obj.id">拒绝</a>|
+        <a href="$!webPath/admin/goods_brand_del.htm?mulitId=$!obj.id&audit=true&currentPage=$!currentPage">删除</a></td>
+      </tr>
+	  #end
+      <tr>
+        <td align="center"><input type="checkbox" name="checkbox2" id="checkbox2" />
+        </td>
+        <td colspan="2" class="bdel"><span class="sp1">全部</span><span class="sp2">
+          <div class="shop_btn_del shopbtn">
+           <input name="" type="button" style="cursor:pointer;" value="删除" onclick="cmd('$!webPath/admin/goods_brand_del.htm?currentPage=$!currentPage&audit=true');"/>
+          </div>
+          </span></td>
+        <td colspan="4"></td>
+      </tr>
+    </table>
+    <div class="fenye" style="margin-left:1000px;">$!gotoPageHTML</div>
+  </div>
+   <input name="category" type="hidden" id="category" value="$!category" />
+   <input name="name" type="hidden" id="name" value="$!name" />
+   <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  </form>
+</div>
+</body>
+</html>

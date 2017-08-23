@@ -1,0 +1,46 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+function switch_reason(){
+  var ck=jQuery("#radio3").attr("checked");
+  if(ck=="checked"){
+    jQuery("#other_reason").show();
+  }else{
+	jQuery("#other_reason").hide();  
+  }
+}
+</script>
+<form action="$!webPath/seller/order_cancel_save.htm" method="post" id="theForm">
+  <table style="float:left;" width="390" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td colspan="2" align="left" valign="top" >您确定要取消下面的订单吗?</td>
+    </tr>
+    <tr>
+      <td width="100" align="right" valign="top">订单号：
+        <input name="id" type="hidden" id="id" value="$!obj.id" />
+      </td>
+      <td align="left">$!obj.order_id</td>
+    </tr>
+    <tr>
+      <td rowspan="4" align="right" valign="top">取消原因：</td>
+      <td align="left"><input name="state_info" type="radio" id="radio1" value="改买其他商品" checked="checked"  onclick="switch_reason();"/>
+      <label for="radio1">买家要求取消</label></td>
+    </tr>
+    <tr>
+      <td align="left"><input name="state_info" type="radio" id="radio2" value="从其他店铺购买"  onclick="switch_reason();"/>
+      <label for="radio2">商品缺货</label></td>
+    </tr>
+    <tr>
+      <td align="left"><input name="state_info" type="radio" id="radio3" value="其他原因" onclick="switch_reason();" />
+      <label for="radio3">其他原因</label></td>
+    </tr>
+    <tr>
+      <td align="left" id="other_reason" style="display:none;"><textarea name="other_state_info" id="other_state_info" cols="30" rows="5"></textarea></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+        <input name="" type="submit" value="提交" style="cursor:pointer;"/>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      </span></td>
+    </tr>
+  </table>
+</form>

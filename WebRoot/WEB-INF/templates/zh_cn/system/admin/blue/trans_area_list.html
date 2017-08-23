@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.base.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+function load_area(obj){
+ var pid=jQuery(obj).val();
+ if(pid!=""){
+   jQuery.ajax({type:'POST',url:'$!webPath/admin/trans_area_list.htm',data:{"pid":pid},success:function(data){
+      jQuery("body").empty();
+      jQuery("body").append(data);
+   }});
+ }else{
+   window.location.reload();
+   var index=jQuery(obj).attr("id").substring(3);
+   for(var i=2;i>index;i--){
+     var s="#tid"+i+" option[index!='0']";
+     jQuery(s).remove();
+   }
+ }
+}
+
+var count=0; 
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+   if(val==""){
+     alert("值不能为空！");
+	 return;
+   }
+    jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/trans_area_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+function remove_area(id,obj){
+if(confirm('删除区域将会同步删除所有下级区域，是否继续?')){
+  jQuery.ajax({type:'POST',url:'$!webPath/admin/trans_area_del.htm',data:{"mulitId":id,"currentPage":"$!currentPage","pid":"$!parent.id"},
+  beforeSend:function(){jQuery(obj).replaceWith("<img src='$!webPath/resources/style/common/images/wait.gif' />")},
+  success:function(data){
+    jQuery("body").empty();
+    jQuery("body").append(data);
+  }})
+}
+}
+
+function area_add(){
+    count+=1;
+	jQuery("#add_tr").append('<tr><td><div class="editul "><ul class="set3"> <li style="margin-left:0px;"><span class="pxnum"><input type="text" name="new_sequence_'+count+'" id="new_sequence_'+count+'" size="5"/></span></li></ul></div></td><td><div class="editul "><ul class="set3"> <li style="margin-left:0px;"><span class="pxnum"><input type="text" name="new_areaName_'+count+'" id="new_areaName_'+count+'" size="40"/></span></li></ul></div></td><td></td></tr>');    
+}
+
+function save_form(){
+   jQuery("#count").val(count);
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body style="overflow:scroll;overflow-x:hidden;">
+<div class="cont">
+  <h1 class="seth1">运费区域</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="javascript:void(0);"  class="this">管理</a></span> <span class="tab-two"></span></div>
+  <form action="$!webPath/admin/trans_area_save.htm" method="post" id="theForm" name="theForm">
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/trans_area_list.htm" />
+    <input name="pid" type="hidden" id="pid" value="$!parent.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="count" type="hidden" id="count" />
+    <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li>运费区域是管理运费模板中的配送区域</li>
+    </ul>
+  </div>
+    <div class="sear_ads">
+      <ul>
+        <li> <span>查看下一级地区</span> <span>
+          <select name="tid0" id="tid0" onchange="load_area(this)" >
+            <option value="">区域</option>
+            
+     		#foreach($area in $areas)
+                
+            <option value="$!area.id" #if($!{area.id}==$!{first.id}) selected="selected"#end>$!area.areaName</option>
+            
+			#end
+          
+          </select>
+          </span> <span>
+          <select size="1" id="tid1" name="tid1" onchange="load_area(this)">
+            <option value="">省份</option>
+            
+		#foreach($area in $seconds)
+            
+            <option value="$!area.id"  #if($!{area.id}==$!{second.id}) selected="selected"#end>$!area.areaName</option>
+            
+		#end
+          
+          </select>
+          </span> <span>
+          <select size="1" id="tid2" name="tid2" onchange="load_area(this)">
+            <option value="">市</option>
+            
+		#foreach($area in $thirds)
+            
+            <option value="$!area.id" #if($!{area.id}==$!{third.id}) selected="selected"#end>$!area.areaName</option>
+            
+		#end
+          
+          </select>
+          </span></li>
+      </ul>
+    </div>
+    <div class="add_ad_table2">
+      <table id="add_tr" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="118">排序</td>
+          <td width="840">地区名称</td>
+          <td width="215">操作</td>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+          <td ><div class="editul ">
+              <ul class="set3">
+                <li style="margin-left:0px;"><span class="pxnum">
+                  <input name="sequence_$!velocityCount" type="text" id="sequence_$!velocityCount" value="$!obj.sequence" size="5" onblur="ajax_update('$!obj.id','sequence',this)"/>
+                  <input name="id_$!velocityCount" type="hidden" id="id_$!velocityCount" value="$!obj.id" />
+                  <input name="areaId" type="hidden" id="areaId" value="$!obj.id"/>
+                  </span></li>
+              </ul>
+            </div></td>
+          <td><div class="editul ">
+              <ul class="set3">
+                <li style="margin-left:0px;"><span class="pxnum">
+                  <input name="areaName_$!velocityCount" type="text" id="areaName_$!velocityCount" value="$!obj.areaName" size="40" onblur="ajax_update('$!obj.id','areaName',this)"/>
+                  </span></li>
+              </ul>
+            </div></td>
+          <td id="$!area.id" class="ac8"><a href="javascript:void(0);" onclick="remove_area('$!obj.id',this);">删除</a></td>
+        </tr>
+        #end
+      </table>
+    </div>
+    <div class="submit">
+      <input id="add_area" name="add_area" type="button" size="40" onclick="area_add();" value="新增区域" style="cursor:pointer;" />
+      <input id="save_area" name="save_area" type="button" size="40" onclick="save_form()" value="保存" style="cursor:pointer;">
+    </div>
+    <div class="fenye" align="right"> $!gotoPageHTML </div>
+  </form>
+</div>
+</body>
+</html>

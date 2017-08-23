@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>提现申请列表-  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){	
+   //
+});
+
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/buyer/account_nav.htm?op=buyer_cash")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">我的账户</a> > <span>提现申请列表</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li><a href='$!webPath/buyer/buyer_cash.htm' >提现申请</a></li>
+                <li class="this"><a href='$!webPath/buyer/buyer_cash_list.htm'>申请列表</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="operation">
+                <table width="1009" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                  <tr id="opertitle">
+                    <td width="100">编号</td>
+                    <td width="130">申请时间</td>
+                    <td  width="60">提现金额</td>
+                    <td width="80">支付方式</td>
+                    <td width="88">提现状态</td>
+                    <td width="80" align="left">支付状态</td>
+                    <td align="left">操作</td>
+                  </tr>
+                  #foreach($obj in $objs)
+                  <tr class="opertr">
+                    <td>$!obj.cash_sn</td>
+                    <td>$!CommUtil.formatLongDate($!obj.addTime)</td>
+                    <td>$!obj.cash_amount </td>
+                    #if($!obj.cash_payment=="alipay")
+                      #set($cash_payment="支付宝")
+                    #end
+                    #if($!obj.cash_payment=="bill")
+                      #set($cash_payment="快钱")
+                    #end
+                    #if($!obj.cash_payment=="chinabank")
+                      #set($cash_payment="网银在线")
+                    #end
+                    #if($!obj.cash_payment=="tenpay")
+                      #set($cash_payment="财付通")
+                    #end
+                    #if($!obj.cash_payment=="outline")
+                      #set($cash_payment="线下支付")
+                    #end
+                    <td>$!cash_payment</td>
+                    #if($!obj.cash_status==0)
+                      #set($cash_status="等待支付")
+                    #end
+                    #if($!obj.cash_status==1)
+                      #set($cash_status="支付完成")
+                    #end
+                    <td>$!cash_status</td>
+                    #if($!obj.cash_pay_status==0)
+                      #set($cash_pay_status="等待支付")
+                    #end
+                    #if($!obj.cash_pay_status==1)
+                      #set($cash_pay_status="等待审核")
+                    #end
+                    #if($!obj.cash_pay_status==2)
+                      #set($cash_pay_status="支付完成")
+                    #end
+                    <td>$!cash_pay_status</td>
+                    <td align="left"><a href="$!webPath/buyer/buyer_cash_view.htm?id=$!obj.id">查看</a></td>
+                  </tr>
+                  #end
+                </table>
+              </div>
+              <div class="alldel">
+                <div  class="userfenye">$!gotoPageFormHTML</div>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

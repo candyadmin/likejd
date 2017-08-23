@@ -1,0 +1,72 @@
+<script>
+jQuery(document).ready(function(){
+	//
+	jQuery(".sellul>li>a").click(function(){
+	  var child_show=jQuery(this).attr("child_show");
+	  if(child_show=="true"){
+	    jQuery(this).parent().find("img").attr("src","$!webPath/resources/style/system/front/default/images/usercenter/menucontract.jpg");
+	    jQuery(this).parent().find("ul").slideUp('normal');
+	    jQuery(this).attr("child_show","false");
+	  }else{
+	    jQuery(this).parent().find("img").attr("src","$!webPath/resources/style/system/front/default/images/usercenter/menuspread.jpg");
+	    jQuery(this).parent().find("ul").slideDown('normal');
+	    jQuery(this).attr("child_show","true");
+	  }
+	});
+	//
+	jQuery(".sellul>ul>li").removeClass("this");
+	jQuery("li[op=$!op]").addClass("this");
+
+	
+});
+
+
+</script>
+
+<td width="177" id="userbg" valign="top">
+
+  <div class="seller">
+    <!--店铺设置-->
+    <div class="product_manage2">
+      <div class="protitle_seller">我是买家</div>
+      <div class="user_photo">
+    <dl>
+      #if($!user.photo)
+      #set($img="$!webPath/$!user.photo.path/$!user.photo.name")
+      #else 
+      #set($img="$!webPath/resources/style/system/front/default/images/usercenter/headimg.jpg")
+      #end
+      <dt><img src="$!img" width="120" height="120" /></dt>
+      <dd><b></b><span><a href="$!webPath/buyer/account.htm">编辑资料</a></span></dd>
+    </dl>
+  </div>
+     
+      <ul class="sellul">
+        <li><a href="javascript:void(0);" child_show="true"><b><img src="$!webPath/resources/style/system/front/default/images/usercenter/menuspread.jpg" width="10" height="10" /></b>我的购物</a>
+          <ul>
+            <li op="order"><a href="$!webPath/buyer/order.htm">订单管理</a></li>
+            <li op="integral"><a href="$!webPath/buyer/integral_order_list.htm">积分兑换</a></li>
+             <li op="coupon"><a href='$!webPath/buyer/coupon.htm' class="other">我的优惠券</a></li></ul>
+        </li>
+        
+        <li><a href="javascript:void(0);" child_show="true"><b><img src="$!webPath/resources/style/system/front/default/images/usercenter/menuspread.jpg" width="10" height="10" /></b>退款维权</a>
+          <ul>
+            <li op="report"><a href="$!webPath/buyer/report.htm">举报管理</a></li>
+            <li op="consult"><a href="$!webPath/buyer/consult.htm">咨询管理</a></li>
+            <li op="complaint"><a href="$!webPath/buyer/complaint.htm">投诉管理</a></li>
+          </ul>
+        </li>
+        
+        <li><a href="javascript:void(0);" child_show="true"><b><img src="$!webPath/resources/style/system/front/default/images/usercenter/menuspread.jpg" width="10" height="10" /></b>收藏管理</a>
+          <ul>
+            <li op="favorite_store"><a href="$!webPath/buyer/favorite_store.htm">店铺收藏</a></li>
+            <li op="favorite_goods"><a href="$!webPath/buyer/favorite_goods.htm">商品收藏</a></li>
+          </ul>
+        </li>
+        
+      </ul>
+    </div>
+    <!--店铺设置-->
+  </div>
+  $!httpInclude.include("/chatting.htm") 
+  </td>

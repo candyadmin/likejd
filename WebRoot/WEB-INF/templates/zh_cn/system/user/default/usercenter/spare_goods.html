@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>闲置商品 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=spare_goods")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>闲置商品</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li #if($!type==0 ||!$!type) class="this" #end><a href="$!webPath/seller/spare_goods.htm?type=0">闲置列表</a></li>
+                <li #if($!type==-1) class="this" #end><a href="$!webPath/seller/spare_goods.htm?type=-1">下架闲置</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <form method="post" name="ListForm" id="ListForm" action="$!webPath/seller/spare_goods.htm">
+                <div class="operation">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                    <tr id="opertitle">
+                      <td width="350">闲置商品标题</td>
+                      <td width="100">违规状态</td>
+                      <td width="100">商品状态</td>
+                      <td width="150" align="center">操作</td>
+                    </tr>
+                    #foreach($obj in $objs)
+                    #if($!obj.status==-1)
+                    #set($status = "违规")
+                    #end
+                    #if($!obj.status==0)
+                    #set($status = "正常")
+                    #end
+                    
+                    #if($!obj.down==-1)
+                    #set($down = "下架")
+                    #end
+                    #if($!obj.down==0)
+                    #set($down = "上架")
+                    #end
+                    <tr >
+                      <td><a href="$!webPath/sparegoods_$!{obj.id}.htm" target="_blank">$!CommUtil.substring($!obj.title,40)</a></td>
+                      <td>$!status</td>
+                       <td>$!down</td>
+                      <td align="center">
+                      #if($!type==-1)
+                      <a href="$!webPath/seller/spare_goods_updown.htm?id=$!obj.id&type=0">上架</a> |
+                      #end
+                      #if($!type==0 ||!$!type)
+                      <a href="$!webPath/seller/spare_goods_updown.htm?id=$!obj.id&type=-1">下架</a> |
+                      #end
+                      <a href="$!webPath/sparegoods_$!{obj.id}.htm" target="_blank">详细</a> |
+                     <a href="$!webPath/seller/spare_goods_edit.htm?id=$!obj.id">编辑</a> | <a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/seller/spare_goods_dele.htm?id=$!obj.id&currentPage=$!currentPage'">删除</a>
+                     </td>
+                    </tr>
+                    #end
+                  </table>
+                </div>
+                <input id="currentPage" name="currentPage" type="hidden" value="$!currentPage"/>
+                 <input id="type" name="type" type="hidden" value="$!type"/>
+    			 <div class="alldel">
+                <div  class="userfenye">
+                  $!gotoPageFormHTML</div>
+              </div>
+                
+              </form>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

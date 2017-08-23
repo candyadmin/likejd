@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>广告列表-  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+  <form method="post" id="ListForm">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>  $!httpInclude.include("/seller/nav.htm?op=advert")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>广告列表</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href='$!webPath/seller/advert_list.htm' >广告列表</a></li>
+                <li><a href='$!webPath/seller/advert_my.htm' >我的广告</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="operation">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                  <tr id="opertitle">
+                    <td width="200">广告标题</td>
+                    <td width="80">广告类型</td>
+                    <td  width="60">广告宽度</td>
+                    <td width="80">广告高度</td>
+                    <td width="120">广告价格</td>
+                    <td width="80" align="left">显示类型</td>
+                    <td align="left">操作</td>
+                  </tr>
+                  #foreach($obj in $objs)
+                  <tr class="opertr">
+                    <td>$!obj.ap_title</td>
+                    #if($!obj.ap_type=="img")
+                      #set($type="图片")
+                    #end
+                   #if($!obj.ap_type=="scroll")
+                      #set($type="滚动")
+                   #end
+                   #if($!obj.ap_type=="slide")
+                     #set($type="幻灯")
+                  #end
+                  #if($!obj.ap_type=="wapslide")
+                     #set($type="wap幻灯")
+                  #end
+                  #if($!obj.ap_type=="indexslide")
+                     #set($type="首页幻灯")
+                  #end
+                  #if($!obj.ap_type=="text")
+                     #set($type="文字")
+                  #end
+                    <td>$!type</td>
+                    <td>$!obj.ap_width </td>
+                    <td>$!obj.ap_height</td> 
+                    <td>$!{obj.ap_price} 金币/月</td>
+                    #if($!obj.ap_show_type==0)
+                      #set($ap_show_type="固定广告")
+                    #end
+                    #if($!obj.ap_show_type==1)
+                      #set($ap_show_type="随机广告")
+                    #end
+                    <td>$!ap_show_type</td>
+                    <td align="left"><a href="$!webPath/seller/advert_apply.htm?id=$!obj.id">购买广告</a></td>
+                  </tr>
+                  #end
+                </table>
+              </div>
+              <div class="alldel">
+                <div  class="userfenye"><input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />$!gotoPageFormHTML</div>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+    </form>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#beginTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  //
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">店铺管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/ztc_set.htm">直通车设置</a> | <a href="$!webPath/admin/ztc_apply.htm">直通车申请</a> | <a href="$!webPath/admin/ztc_goods.htm">直通车商品</a> | <a href="$!webPath/admin/ztc_gold_log.htm" class="this">金币日志</a> </span> <span class="tab-two"></span></div>
+  <form method="post" id="queryForm">
+  <div class="orders">
+    <ul>
+      <li><span>商品名称</span> <span class="allmen size6">
+        <input name="goods_name" type="text" id="goods_name" />
+        </span> <span>店铺名称</span> <span class="allmen size2">
+        <input name="store_name" type="text" id="store_name" />
+        </span> <span>提交时间</span> <span class="allmen size2">
+        <input name="beginTime" type="text" id="beginTime" />
+        </span><span>—</span><span class="allmen size2">
+        <input name="endTime" type="text" id="endTime" />
+        </span><span class="btn_search">
+        <input name="" type="submit"  value="搜索" style="cursor:pointer;"/>
+        </span> </li>
+    </ul>
+  </div>
+  </form>
+  <form method="post" id="ListForm">
+  <div class="allshop_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="120">商品名称</td>
+        <td width="100">店铺名称</td>
+        <td width="80">会员名称</td>
+        <td align="center" width="60">金币数量</td>
+        <td  align="center" width="80">提交时间</td>
+        <td width="60" align="center">类型</td>
+        <td width="350">描述</td>
+      </tr>
+      #foreach($obj in $objs)
+      <tr>
+        <td>$!obj.zgl_goods.goods_name</td>
+        <td>$!obj.zgl_goods.goods_store.store_name</td>
+        <td >$!obj.zgl_goods.goods_store.user.userName</td>
+        <td align="center">$!obj.zgl_gold</td>
+        <td align="center">$!CommUtil.formatShortDate($!obj.addTime)</td>
+        #set($zgl_type="增加")
+        #if($!obj.zgl_type==1)
+          #set($zgl_type="减少")
+        #end
+        <td align="center">$!zgl_type</td>
+        <td>$!obj.zgl_content</td>
+      </tr>
+      #end
+    </table>
+  </div>
+  <div class="fenye">
+    <input name="endTime" type="hidden" id="endTime" value="$!endTime" />
+    <input name="beginTime" type="hidden" id="beginTime" value="$!beginTime" />
+    <input name="store_name" type="hidden" id="store_name" value="$!store_name" />
+    <input name="goods_name" type="hidden" id="goods_name" value="$!goods_name" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    $!gotoPageFormHTML</div>
+  </form>
+</div>
+</body>
+</html>

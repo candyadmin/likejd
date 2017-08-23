@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运费模板 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">$!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=transport")
+        <td id="centerbg" valign="top"><div class="buyer_position">
+            <div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>运费模板</span></div>
+          </div>
+          <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><span class="position">运费模板列表</span></li>
+              </ul>
+            </div>
+            <form action="$!webPath/seller/transport_list.htm" method="post" id="ListForm">
+              <div class="ordercon">
+                <div class="addnewclass">
+                  <div class="addnew"><a href="$!webPath/seller/transport_add.htm" class="button_common">新增运费模板</a></div>
+                </div>
+                <div class="operation"> #foreach($obj in $objs)
+                  <table width="98%" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                    <tr>
+                      <td >$!{obj.trans_name} <span style="float:right;">最后编辑时间:$!CommUtil.formatLongDate($!obj.addTime) <a href="$!webPath/seller/transport_copy.htm?id=$!obj.id">复制模板</a>|<a href="$!webPath/seller/transport_edit.htm?id=$!obj.id">编辑</a>|<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/seller/transport_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'">删除</a></span></td>
+                    </tr>
+                  </table>
+                  <table width="98%" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                    #if($!obj.trans_type==0)
+                    <tr id="opertitle">
+                      <td width="12%" >配送方式</td>
+                      <td>配送区域</td>
+                      <td width="8%">首件(件)</td>
+                      <td width="8%">运费(¥)</td>
+                      <td width="8%" align="center">续件(件)</td>
+                      <td width="8%" align="center">运费(¥)</td>
+                    </tr>
+                    #end
+                    #if($!obj.trans_type==1)
+                    <tr id="opertitle">
+                      <td width="12%" >配送方式</td>
+                      <td>配送区域</td>
+                      <td width="8%">首重(kg)</td>
+                      <td width="8%">运费(¥)</td>
+                      <td width="8%" align="center">续重(kg)</td>
+                      <td width="8%" align="center">运费(¥)</td>
+                    </tr>
+                    #end
+                    #if($!obj.trans_type==2)
+                    <tr id="opertitle">
+                      <td width="12%" >配送方式</td>
+                      <td>配送区域</td>
+                      <td width="8%">首体积(m³)</td>
+                      <td width="8%">运费(¥)</td>
+                      <td width="8%" align="center">续体积(m³)</td>
+                      <td width="8%" align="center">运费(¥)</td>
+                    </tr>
+                    #end
+                    #foreach($info in $transportTools.query_all_transprot("$!obj.trans_mail_info",0))
+                    <tr class="opertr">
+                      <td>平邮</td>
+                      <td>$!info.value("city_name")</td>
+                      <td>$!info.value("trans_weight")</td>
+                      <td>$!info.value("trans_fee")</td>
+                      <td>$!info.value("trans_add_weight")</td>
+                      <td>$!info.value("trans_add_fee")</td>
+                    </tr>
+                    #end
+                    #foreach($info in $transportTools.query_all_transprot("$!obj.trans_express_info",0))
+                    <tr class="opertr">
+                      <td>快递</td>
+                      <td>$!info.value("city_name")</td>
+                      <td>$!info.value("trans_weight")</td>
+                      <td>$!info.value("trans_fee")</td>
+                      <td>$!info.value("trans_add_weight")</td>
+                      <td>$!info.value("trans_add_fee")</td>
+                    </tr>
+                    #end
+                    #foreach($info in $transportTools.query_all_transprot("$!obj.trans_ems_info",0))
+                    <tr class="opertr">
+                      <td>EMS</td>
+                      <td>$!info.value("city_name")</td>
+                      <td>$!info.value("trans_weight")</td>
+                      <td>$!info.value("trans_fee")</td>
+                      <td>$!info.value("trans_add_weight")</td>
+                      <td>$!info.value("trans_add_fee")</td>
+                    </tr>
+                    #end
+                  </table>
+                  #end </div>
+                <div class="alldel">
+                  <div  class="userfenye"> $!gotoPageFormHTML </div>
+                </div>
+              </div>
+            </form>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

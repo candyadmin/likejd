@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商品分类列表 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> 
+$!httpInclude.include("/seller/nav_head.htm")  
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=usergoodsclass")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>商品分类</span></div></div>
+          <div class="productmain">
+            <div class="pdctitle blue2">商品分类</div>
+            <div class="addnewclass">
+            <div class="alldel">
+              <div class="alldel_l"> 
+              <span class="alldel_la">
+                <input name="all" type="checkbox" id="all" value="" onclick="selectAll(this);"/>
+                </span><span class="alldel_lb"><label for="all">全选</label></span> <span  class="alldel_lc"><a href="javascript:void(0);" onclick="cmd('$!webPath/seller/usergoodsclass_del.htm','')" class="button_common">删除</a></span>
+                 </div>
+                               <div class="addnew">
+                <a class="button_common" href="javascript:void(0);" dialog_uri="$!webPath/seller/usergoodsclass_add.htm?currentPage=$!currentPage" dialog_title="新增分类" dialog_width="480" dialog_height="100" dialog_id="cart_address">新增分类</a>
+              </div>
+            </div>
+            </div>
+            <form action="" method="post" name="ListForm" id="ListForm">
+              <div class="operation">
+                <table width="790" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                  <tr id="opertitle">
+                    <td class="classname">分类名称
+                      <input name="mulitId" type="hidden" id="mulitId" /></td>
+                    <td  class="sort" align="center">排序</td>
+                    <td  class="show">显示</td>
+                    <td align="center">操作</td>
+                  </tr>
+                  #foreach($obj in $objs)
+                  <tr class="opertr">
+                    <td class="classname" ><span>
+                      <input name="id" type="checkbox" id="id" value="$!obj.id" />
+                      </span><span class="classname2">#if($!obj.childs.size()>0)<img src="$!webPath/resources/style/system/front/default/images/usercenter/jian.jpg" width="14" height="14" />#else <img src="$!webPath/resources/style/system/front/default/images/usercenter/xiaji.jpg" /> #end</span><span class="classname3">$!obj.className</span><span class="classname4"><a href="javascript:void(0);" dialog_uri="$!webPath/seller/usergoodsclass_add.htm?pid=$!obj.id&currentPage=$!currentPage" dialog_title="新增分类" dialog_width="480" dialog_height="100" dialog_id="cart_address">新增下级</a></span></td>
+                    <td class="sort" align="center">$!obj.sequence</td>
+                    <td class="show"><img src="$!webPath/resources/style/system/front/default/images/usercenter/$!{obj.display}.jpg" width="16" height="14" /></td>
+                    <td class="operajt"><span class="edit"><a href="javascript:void(0);" dialog_uri="$!webPath/seller/usergoodsclass_edit.htm?id=$!obj.id&currentPage=$!currentPage" dialog_title="编辑地址" dialog_width="480" dialog_height="100" dialog_id="cart_address">编辑</a></span>
+                    #if($!obj.audit!=1)
+                    <span class="del"><a href="javascript:void(0);" onclick="if(confirm('是否确定删除商品分类?'))window.location.href='$!webPath/seller/usergoodsclass_del.htm?mulitId=$!obj.id'">删除</a></span>
+                    #end
+                    </td>
+                  </tr>
+                  #foreach($child in $obj.childs)
+                  <tr class="opertr">
+                    <td class="classname" ><span>
+                      <input name="id" type="checkbox" id="id" value="$!child.id" />
+                      </span><span class="classname2">&nbsp;</span><span class="classname5">$!child.className</span></td>
+                    <td class="sort" align="center">$!{child.sequence}</td>
+                    <td class="show"><img src="$!webPath/resources/style/system/front/default/images/usercenter/$!{child.display}.jpg" width="16" height="14" /></td>
+                    <td class="operajt"><span class="edit"><a href="javascript:void(0);" dialog_uri="$!webPath/seller/usergoodsclass_edit.htm?id=$!child.id&currentPage=$!currentPage" dialog_title="编辑地址" dialog_width="480" dialog_height="100" dialog_id="cart_address">编辑</a></span><span class="del"><a onclick="if(confirm('是否确定删除商品分类?'))window.location.href='$!webPath/seller/usergoodsclass_del.htm?mulitId=$!child.id'" href="javascript:void(0);">删除</a></span></td>
+                  </tr>
+                  #end
+                  #end
+                </table>
+              </div>
+            </form>
+            <div class="alldel">
+              <div class="alldel_l"> <span class="alldel_la">
+                <input name="all1" type="checkbox" id="all1" value="" onclick="selectAll(this);"/>
+                </span><span class="alldel_lb"><label for="all">全选</label></span> <span  class="alldel_lc"><a href="javascript:void(0);" onclick="cmd('$!webPath/seller/usergoodsclass_del.htm','')" class="button_common">删除</a></span> </div>
+              <div  class="userfenye">$!gotoPageHTML</div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

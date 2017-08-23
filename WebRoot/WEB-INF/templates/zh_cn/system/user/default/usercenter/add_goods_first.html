@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>选择商品分类 -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+function selClass(obj){
+  var pid=jQuery(obj).attr("id");
+  var level=jQuery(obj).attr("level");
+  var next=parseInt(jQuery(obj).attr("next"));
+  jQuery("#gc_class_"+level+" li").removeClass("this");
+  jQuery.ajax({type:'POST',url:'$!webPath/seller/load_goods_class.htm',data:{"pid":pid,"level":level,"session":true},dataType:"json",
+               beforeSend:function(){
+			     jQuery("#load_dialog").show();
+				 jQuery("#staple_deal").hide();
+				 for(var i=3;i>=next;i--){
+				   jQuery("#gc_class_"+i).empty();
+				   jQuery("#class_"+i).hide();
+				 }
+			   },
+			   success:function(data){
+			    jQuery.each(data, function(index,item){
+				   var count=next+1;
+				   var s="<li onclick='selClass(this)' id='"+item.id+"' name='"+item.className+"' level='"+next+"' next='"+count+"'><a href='javascript:void(0);'><span class='point'>"+item.className+"</span></a></li>";
+				   jQuery("#gc_class_"+next).append(s);
+				   jQuery("#class_"+next).show();
+				});
+			    jQuery("#load_dialog").hide();
+				jQuery(obj).addClass("this");
+				var first_class=jQuery("#gc_class_1 li[class='this']").attr("name");
+			    var second_class=jQuery("#gc_class_2 li[class='this']").attr("name");
+				var third_class=jQuery("#gc_class_3 li[class='this']").attr("name");
+				if(second_class==undefined||second_class==""){
+				  jQuery("#goods_second").attr("disabled","disabled");
+				  second_class="";
+				  third_class="";
+				}else{
+				  second_class=">"+second_class;
+				  jQuery("#goods_second").removeAttr("disabled");
+				}
+				if(third_class==undefined||third_class==""){
+				  third_class="";
+				}else{
+				  third_class=">"+third_class;
+				  jQuery("#staple_deal").show();
+				}
+				jQuery("#staple_info").html(first_class+second_class+third_class);
+			   }
+			 });
+}
+function cgc_show(){
+  var css=jQuery(".hidden_class").css("display");
+  if(css=="none"){
+    jQuery(".hidden_class").show();
+  }else jQuery(".hidden_class").hide();
+}
+function add_staple(){
+  jQuery.post("$!webPath/seller/add_goods_class_staple.htm","",function(data){
+     if(data!="error"){
+	     jQuery(".hidden_class ul").prepend("<li><a href='javascript:void(0);' onclick='load_staple(\""+data.id+"\")'>"+data.name+"</a><span><img src='$!webPath/resources/style/system/front/default/images/usercenter/dele.gif' width='9' height='9' onclick='del_staple(this,\""+data.id+"\");' style='cursor:pointer;' /></span> </li>");
+	    jQuery("#tip_dialog").show();
+		jQuery("#tip_dialog").fadeOut(3000);
+	 }
+  },"json");
+}
+function del_staple(obj,id){
+  jQuery.post("$!webPath/seller/del_goods_class_staple.htm",{"id":id},function(data){
+     if(data=="true"){
+	     jQuery(obj).parent().parent().remove();
+	 }
+  },"text");
+}
+function load_staple(id,name){
+  jQuery.getJSON("$!webPath/seller/load_goods_class_staple.htm",{"id":id,"name":name},function(data){
+      jQuery("#gc_class_2").empty();
+	  jQuery("#gc_class_3").empty();
+      jQuery.each(data, function(index,item){
+	    if(index<2){
+		  var div_id="#class_"+(index+2);
+	      var ul_id="#gc_class_"+(index+2);
+		  jQuery(div_id).show();
+          jQuery.each(item, function(cindex,citem){
+		      var s="<li onclick='selClass(this)' id='"+citem.id+"' name='"+citem.className+"' level='"+(index+2)+"' next='"+(index+3)+"'><a href='javascript:void(0);'><span class='point'>"+citem.className+"</span></a></li>";
+			  jQuery(ul_id).append(s);
+		  });
+		}
+		if(index==2){
+		  var staple=item[0].staple_info;
+		  var list=staple.split(">");
+		  jQuery("#gc_class_1 li").removeClass();
+		  jQuery("#gc_class_1 li[name='"+list[0]+"']").addClass("this");
+		  jQuery("#gc_class_2 li[name='"+list[1]+"']").addClass("this");
+		  jQuery("#gc_class_3 li[name='"+list[2]+"']").addClass("this");
+		  jQuery("#staple_info").html(staple);
+		}
+	  });
+	  jQuery(".hidden_class").hide();
+	  jQuery("#goods_second").removeAttr("disabled");
+  });
+}
+function search_staple(){
+  var name=jQuery("#className").val();
+  if(name!=""){
+    load_staple("",name);
+  }
+}
+jQuery(document).ready(function(){
+  jQuery(".hidden_class").mouseleave(function(){
+      jQuery(this).hide();
+   });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  <div class="navadda"> <span class="navadd1 white">选择商品所在分类</span> <span class="navadd2 addcolor">填写商品详细信息</span> <span class="navadd3 addcolor">商品发布成功</span> </div>
+  <div class="class_search"> <span class="searchname">分类搜索</span><span class="searchtxt">
+    <input name="className" type="text" id="className" />
+    </span><span class="searchbtn">
+    <input name="" type="button"  value="搜索" onclick="search_staple();" style="cursor:pointer;"/>
+    </span></div>
+  <div class="proclass"> <span class="proc1">您常用的商品分类:</span> <span class="proselect">
+    <div class="class_sel">
+      <input name="cgc" type="text" id="cgc" value="" readonly="true" onclick="cgc_show();" style="cursor:pointer;"/>
+    </div>
+    <div class="hidden_class" style="display:none;">
+      <ul>
+	    #foreach($staple in $staples)
+        <li ><a href="javascript:void(0);" onclick="load_staple('$!staple.id','')">$!staple.name</a><span><img src="$!webPath/resources/style/system/front/default/images/usercenter/dele.gif" width="9" height="9" onclick="del_staple(this,'$!staple.id');" style="cursor:pointer;" /></span> </li>
+        #end
+      </ul>
+    </div>
+    </span> </div>
+  <div class="selectclass" style="position:relative;">
+    <div id="load_dialog" style=" display:none;width:120px; height:50px;border:#CCCCCC 1px solid; background:#FFFFCC;position:absolute; top:100px; left:450px; text-align:center; vertical-align:middle; padding-top:10px;"><img src="$!webPath/resources/style/common/images/loading.gif"/>加载分类..</div>
+	<div id="tip_dialog" style=" display:none;width:150px; height:50px;border:#CCCCCC 1px solid; background:#FFFFCC;position:absolute; top:100px; left:450px; text-align:center; vertical-align:middle; padding-top:10px;"><img src="$!webPath/resources/style/common/images/ok.gif"/>添加到常用分类成功</div>
+    <div class="selectbig">
+      <div class="selectsmall">
+        <ul id="gc_class_1">
+          #foreach($gc in $gcs)
+          <li onclick="selClass(this)" id="$!gc.id" level="1" next="2" name="$!gc.className"><a href="javascript:void(0);"><span class="point">$!gc.className</span></a></li>
+          #end
+        </ul>
+      </div>
+    </div>
+    <div class="selectbig" id="class_2" style="display:none;">
+      <div class="selectsmall">
+        <ul id="gc_class_2">
+        </ul>
+      </div>
+    </div>
+    <div class="selectbig" id="class_3" style="display:none;">
+      <div class="selectsmall">
+        <ul id="gc_class_3">
+        </ul>
+      </div>
+    </div>
+    <div class="selectbig" style="display:none;">
+      <div class="selectsmall">
+        <ul id="gc_class_4">
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="nowclass">您当前选择的商品类别是：<strong><span id="staple_info"></span></strong><a href="javascript:void(0);" onclick="add_staple();" id="staple_deal" style="display:none;">【添加到常用分类】</a></div>
+  <div class="nextbtn">
+    #set($url="$!webPath/seller/add_goods_second.htm")
+    #if($!{id}!="")
+      #set($url="$!webPath/seller/goods_edit.htm?id=$!id")
+    #end
+    <input name="goods_second" type="button"   id="goods_second" style="cursor:pointer;" onclick="window.location.href='$!url'" value="下一步"/>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

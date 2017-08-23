@@ -1,0 +1,41 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+	   rules:{
+		   shipCode:{required:true}
+		   },
+	   messages:{
+	       shipCode:{required:"不能为空"}
+	   }
+	});
+});
+</script>
+<form action="$!webPath/seller/order_shipping_save.htm" method="post" id="theForm">
+<table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="box_table">
+  <tr>
+    <td width="100" align="right" valign="top">退款编号：
+      <input name="id" type="hidden" id="id" value="$!obj.id" /></td>
+    <td align="left">$!obj.refund_id</td>
+  </tr>
+  <tr>
+    <td align="right" valign="top">退款时间：</td>
+    <td align="left">$!CommUtil.formatLongDate($!obj.addTime)</td>
+  </tr>
+  <tr>
+    <td align="right" valign="top">买家会员名：</td>
+    <td align="left">$!obj.of.user.userName</td>
+  </tr>
+  <tr>
+    <td align="right" valign="top">退款金额：</td>
+    <td align="left">$!obj.refund</td>
+  </tr>
+  <tr>
+    <td align="right" valign="top">支付方式：</td>
+    <td align="left">$!obj.refund_type</td>
+  </tr>
+  <tr>
+    <td align="right" valign="top">备注信息：</td>
+    <td align="left">$!obj.refund_log</td>
+  </tr>
+</table>

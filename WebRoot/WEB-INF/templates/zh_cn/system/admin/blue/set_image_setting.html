@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+jQuery("#theForm").validate({
+    rules:{
+	   goodsImage:{
+	    accept:"$!config.imageSuffix"
+	  },
+	   storeImage:{
+	    accept:"$!config.imageSuffix"
+	  },
+	   memberIcon:{
+	    accept:"$!config.imageSuffix"
+	  }
+	 },
+	messages:{
+	  goodsImage:{accept:"系统不允许上传该文件类型"},
+	  storeImage:{accept:"系统不允许上传该文件类型"},
+	  memberIcon:{accept:"系统不允许上传该文件类型"},
+	}
+  });						
+								
+	jQuery("a[id^=image_]").click(function(){
+	var id = jQuery(this).attr("id");
+	var css = jQuery(this).attr("class");
+	if(css=="this") return false;
+	jQuery.each(jQuery("a[id^=image_]"),function(){
+		if(jQuery(this).attr("id")==id){
+			jQuery(this).addClass("this");
+			var tid = "#"+jQuery(this).attr("id").substring(6);
+			jQuery(tid).show();
+			}else{
+			jQuery(this).removeClass("this");
+		   var tid="#"+jQuery(this).attr("id").substring(6);
+		   jQuery(tid).hide();
+		   }
+		})
+	})
+  //改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+	//图片存放类型默认值
+	if("$!config.imageSaveType"=="sidImg"){
+		jQuery("#sid").val("$!config.imageSaveType").attr("checked",true);
+	}else if("$!config.imageSaveType"=="sidYearImg"){
+		jQuery("#year").val("$!config.imageSaveType").attr("checked",true);
+	}else if("$!config.imageSaveType"=="sidYearMonthImg"){
+		jQuery("#yearMonth").val("$!config.imageSaveType").attr("checked",true);
+	}else if("$!config.imageSaveType"=="sidYearMonthDayImg"){
+		jQuery("#yearMonthDay").val("$!config.imageSaveType").attr("checked",true);
+	}
+	//鼠标经过默认商品图片显示
+	jQuery("#goodsImgShow").mouseover(function(){
+	jQuery("#goodsImg").css('display','block');
+	});
+	jQuery("#goodsImgShow").mouseout(function(){
+		jQuery("#goodsImg").css('display','none');
+	});
+	//鼠标经过店铺默认标识图片显示
+	jQuery("#storeImgShow").mouseover(function(){
+	jQuery("#storeImg").css('display','block');
+	});
+	jQuery("#storeImgShow").mouseout(function(){
+		jQuery("#storeImg").css('display','none');
+	});
+	//鼠标经过会员默认头像显示
+	jQuery("#memberImgShow").mouseover(function(){
+	jQuery("#memberImg").css('display','block');
+	});
+	jQuery("#memberImgShow").mouseout(function(){
+		jQuery("#memberImg").css('display','none');
+	});
+//jQuery(document).ready();结束
+});
+//form提交
+function imageSave(){
+	jQuery("#theForm").submit();
+	}
+	//默认商品图片
+jQuery(function(){
+    var textButton="<input type='text' name='textfield' id='textfield1' class='size13' /><input type='button' name='button' id='button1' value='' class='filebtn' />"
+	jQuery(textButton).insertBefore("#goodsImage");
+	jQuery("#goodsImage").change(function(){
+	jQuery("#textfield1").val(jQuery("#goodsImage").val());
+	})
+//默认店铺标识	
+	var si="<input type='text' name='textfield' id='textfield2' class='size13' /><input type='button' name='button' id='button2' value='' class='filebtn' />"
+	jQuery(si).insertBefore("#storeImage");
+	jQuery("#storeImage").change(function(){
+	jQuery("#textfield2").val(jQuery("#storeImage").val());
+	})
+//默认会员标识	
+	var mi="<input type='text' name='textfield' id='textfield3' class='size13' /><input type='button' name='button' id='button3' value='' class='filebtn' />"
+	jQuery(mi).insertBefore("#memberIcon");
+	jQuery("#memberIcon").change(function(){
+	jQuery("#textfield3").val(jQuery("#memberIcon").val());
+	})
+});	
+</script>
+<body>
+<form action="$!webPath/admin/sys_config_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+<input name="id" id="id" type="hidden" value="$!config.id"/>
+<input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/set_image.htm" />
+<input name="op_title" type="hidden" id="op_title" value="图片上传设置成功" />
+<div class="cont">
+  <h1 class="seth1">图片上传</h1>
+  <div class="settab">
+  <span class="tab-one"></span> 
+  	<span class="tabs"> 
+  		<a href="javascript:void(0);" class="this" id="image_set">图片设置</a> | 
+  		<a href="javascript:void(0);" id="image_base">基本设置</a> 
+  	</span> 
+  <span class="tab-two"></span>
+  </div>
+  <div class="setimg" id="set">
+    <ul class="imgtype">
+      <li class="img_t1">图片存放类型</li>
+      <li>
+       <label>
+        <input name="imageSaveType" id="sid" type="radio" value="sidImg" />
+        按照文件名存放(例:/店铺id/图片)
+        </label>
+        </li>
+      <li>
+      <label>
+        <input name="imageSaveType" id="year" type="radio" value="sidYearImg" />
+        按照年份存放(例:/店铺id/年/图片)
+       </label> 
+        </li>
+      <li>
+      <label>
+        <input name="imageSaveType" id="yearMonth" type="radio" value="sidYearMonthImg" />
+        按照年月存放(例:/店铺id/年/月/图片)
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="imageSaveType" id="yearMonthDay" type="radio" value="sidYearMonthDayImg" />
+        按照年月日存放(例:/店铺id/年/月/日/图片)
+      </label>
+      </li>
+    </ul>
+    <div class="setimage">
+      <h2>设置图片</h2>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	    <tr>
+	      <td align="right">图片服务器：</td>
+	      <td><span class="imgex">
+	        <input name="imageWebServer" type="text" id="imageWebServer" value="$!config.imageWebServer"/>
+	      </span></td>
+	      <td class="orange">使用图片服务器后能够有效缓解商城服务器压力，可以使用ftp等服务器实现</td>
+	      </tr>
+	    <tr>
+          <td width="95" align="right">图片上传路径：</td>
+          <td width="300"><span class="imgsize">
+            <input name="uploadFilePath" type="text" id="uploadFilePath" value="$!config.uploadFilePath"/>
+            </span></td>
+          <td class="orange">图片上传路径，填写文件夹名，默认为upload，改变名称可以有效保护图片资源</td>
+        </tr>
+        <tr>
+          <td width="95" align="right">图片文件大小：</td>
+          <td width="300"><span class="imgsize">
+            <input name="imageFilesize" type="text" id="imageFilesize" value="$!config.imageFilesize"/>
+            </span>KB &nbsp;&nbsp;&nbsp;&nbsp;(1024KB=1MB)</td>
+          <td class="orange">当前最大允许上传10MB 的文件，您的设置请勿超过该值。</td>
+        </tr>
+        <tr>
+          <td align="right">图片的扩展名：</td>
+          <td><span class="imgex">
+            <input type="text" name="imageSuffix" id="imageSuffix" value="$!config.imageSuffix"/>
+            </span></td>
+          <td class="orange">图片扩展名，用于判断上传图片是否为后台允许，多个后缀名间请用 &quot;|&quot;间隔 <br />
+            隔开。</td>
+        </tr>
+        <tr>
+          <td align="right">商品小图尺寸：</td>
+          <td class="setsmall">
+		  <span class="imgba">
+       <input name="smallWidth" type="text" id="smallWidth" value="$!config.smallWidth"/>
+            </span>px<strong>*</strong>
+		  <span class="imgba">
+       <input name="smallHeight" type="text" id="smallHeight" value="$!config.smallHeight"/>
+            </span>px
+		</td>
+          <td class="orange">设定生成商品小图的尺寸，单位为像素。（宽*高）</td>
+        </tr>
+        <tr>
+          <td align="right">商品中图尺寸：</td>
+          <td class="setsmall"><span class="imgba">
+            <input name="middleWidth" type="text" id="middleWidth" value="$!config.middleWidth"/>
+            </span>px<strong>*</strong><span class="imgba">
+            <input name="middleHeight" type="text" id="middleHeight" value="$!config.middleHeight"/>
+            </span>px</td>
+          <td><span class="orange">设定生成商品中图图的尺寸，单位为像素。（宽*高）</span></td>
+        </tr>
+        <tr>
+          <td align="right">商品大图尺寸：</td>
+          <td class="setsmall"><span class="imgba">
+            <input name="bigWidth" type="text" id="bigWidth" value="$!config.bigWidth"/>
+            </span>px<strong>*</strong><span class="imgba">
+            <input name="bigHeight" type="text" id="bigHeight" value="$!config.bigHeight"/>
+            </span>px</td>
+          <td><span class="orange">设定生成商品大图的尺寸，单位为像素。（宽*高）</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="basicset" id="base" style="display:none;">
+    <ul>
+      <li><strong>默认商品图片</strong></li>
+      <li class="borderset">
+	  <span class="size13" >
+	  <input name="textfield" type="text" id="textfield1" />
+      </span>
+	  <span class="filebtn">
+	  <input name="button" type="button" id="button1" value=""/>
+	  </span>
+	  <span style="float:left;" class="file" >
+	  <input name="goodsImage" type="file" id="goodsImage" size="30"/>
+	  </span>
+	  <span class="preview"><img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="goodsImgShow" style="cursor:help;"/></span>
+	  <span class="sizeimg">300px&nbsp;*&nbsp;300px</span>
+	  <div class="bigimgpre" id="goodsImg" style="display:none;"><img src="$!webPath/$!config.goodsImage.path/$!config.goodsImage.name" width="300px" height="300px"/>
+	  </div>
+		</li>
+      <li><strong>默认店铺标志</strong></li>
+      <li class="borderset">
+	  <span class="size13" >
+	  <input name="textfield" type="text" id="textfield2" />
+      </span>
+	  <span class="filebtn">
+	  <input name="button" type="button" id="button2" value=""/>
+	  </span>
+	   <span style="float:left;" class="file" >
+	  <input name="storeImage" type="file" id="storeImage" size="30"/>
+	  </span>
+	  <span class="preview">
+	  <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="storeImgShow" style="cursor:help;"/>
+	  </span>
+	  <span class="sizeimg">100px&nbsp;*&nbsp;100px</span>
+	  <div class="bigimgpre" id="storeImg" style="display:none;"><img src="$!webPath/$!config.storeImage.path/$!config.storeImage.name" width="100px" height="100px"/>
+	  </div>
+		</li>
+      <li><strong>默认会员头像</strong></li>
+      <li class="borderset">
+	  <span class="size13" >
+	  <input name="textfield" type="text" id="textfield3" />
+      </span>
+	  <span class="filebtn">
+	  <input name="button" type="button" id="button3" value=""/>
+	  </span>
+	   <span style="float:left;" class="file" >
+	  <input name="memberIcon" type="file" id="memberIcon" size="30"/>
+	  </span>
+	  <span class="preview"><img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="memberImgShow" style="cursor:help;"/></span>
+		<span class="sizeimg">128px&nbsp;*&nbsp;128px</span>
+		<div class="bigimgpre" id="memberImg" style="display:none;"><img src="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name" width="128px" height="128px"/>
+	  </div>
+		</li>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="提交" style="cursor:pointer;" onclick="imageSave();"/>
+  </div>
+</div>
+</form>
+</body>
+</html>

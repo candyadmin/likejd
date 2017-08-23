@@ -1,0 +1,152 @@
+<!-- #set ($i=0)
+#foreach($floor in $floors)
+    <div class="floor $!floor.gf_css">
+      #set($i=$i+1)
+      <div class="floor_box" id="floor_$i">
+        <div class="floor_menu">
+          <div class="title">
+      	  	<div class="txt-type">
+            	<span>$i</span>
+            	<h2 title="$!{floor.gf_name}">$!{floor.gf_name}</h2>
+            </div>
+      	  </div>
+          <div class="flr_m_details">
+            <ul class="flr_m_du">
+               #foreach($gc in $gf_tools.generic_gf_gc("$!floor.gf_gc_list"))
+              <li>
+                <h4><a href="$!webPath/store_goods_list_$!{gc.id}.htm">$!gc.className</a></h4>
+                <p>
+                #foreach($c_gc in $gc.childs) 
+                <span><a href="$!webPath/store_goods_list_$!{c_gc.id}.htm" target="_blank">$!c_gc.className</a></span> 
+                #end
+                </p>
+              </li>
+              #end
+            </ul>
+            <div class="flr_advertisment">
+             $!gf_tools.generic_adv("$!url","$!floor.gf_left_adv")
+            </div>
+          </div>
+        </div>
+        <div class="floorclass">
+          <ul class="floorul">
+            #foreach($info in $floor.childs)
+            <li #if($!{velocityCount}==1)class="this"#end style="cursor:pointer;" id="$!{info.id}" store_gc="$!floor.id">$!{info.gf_name}<s></s></li>
+            #end
+          </ul>
+          #foreach($info in $floor.childs)
+          <div id="$!info.id" store_gc="$!floor.id" class="ftab" #if($!{velocityCount}>1)style="display:none;"#end>
+              <div class="ftabone">
+                <div class="classpro"> 
+                #foreach($goods in $gf_tools.generic_goods("$!info.gf_gc_goods"))
+                 #if($!goods)
+                  #if($!goods.goods_main_photo)               
+                  #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+                  #else
+                  #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                  #end
+                  <div class="productone">
+                    <ul class="this">
+                      <li><span class="center_span">
+                   #set($goods_url="$!webPath/goods_$!{goods.id}.htm")
+                   #if($!config.second_domain_open)
+                      #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/goods_$!{goods.id}.htm")
+                   #end 
+                        <p><a href="$!goods_url" target="_blank"><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28"/></a></p>
+                        </span></li>
+                      <li class="pronames"><a href="$!goods_url" target="_blank">$!{goods.goods_name}</a></li>
+                      <li><span class="hui2">市场价：</span><span class="through hui">¥$!{goods.goods_price}</span></li>
+                      <li><span class="hui2">商城价：</span><strong class="red">¥$!{goods.goods_current_price}</strong></li>
+                    </ul>
+                  </div>
+                  #end 
+                #end  
+                  </div>
+              </div>
+            </div>
+          #end
+        </div>
+        <div class="ranking"> 
+          #set($map=$!gf_tools.generic_goods_list("$!floor.gf_list_goods"))
+            <h1>$!map.get("list_title")</h1>
+            
+           #if($!map.get("goods1"))
+            #set($goods=$!map.get("goods1"))
+            #if($!goods.goods_main_photo)                   
+            	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+            #else
+             	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+            #end
+            <ul class="rankul">
+              <li class="rankimg"><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">
+              <img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28" />
+              </a><span class="rankno1"></span></li>
+              <li class="rankhui"><strong><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",12)</a></strong></li>
+              <li class="rankmoney">¥$!{goods.goods_current_price}</li>
+            </ul>
+           #end
+           
+           #if($!map.get("goods2"))
+            #set($goods=$!map.get("goods2"))
+            #if($!goods.goods_main_photo)                   
+             #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+            #else
+             #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+            #end
+            <ul class="rankul">
+              <li class="rankimg"><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank"><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="73" height="55" /></a><span class="rankno2"></span></li>
+              <li class="rankhui"><strong><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",12)</a></strong></li>
+              <li class="rankmoney">¥$!{goods.goods_current_price}</li>
+            </ul>
+           #end
+           
+           #if($!map.get("goods3"))
+            #set($goods=$!map.get("goods3"))
+            #if($!goods.goods_main_photo)                   
+             #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+            #else
+             #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+            #end
+            <ul class="rankul">
+              <li class="rankimg"><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank"><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="73" height="55" /></a><span class="rankno3"></span></li>
+              <li class="rankhui"><strong><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",12)</a></strong></li>
+              <li class="rankmoney">¥$!{goods.goods_current_price}</li>
+            </ul>
+           #end
+           
+            <ul class="rankul2">
+            #if($!map.get("goods4"))
+            #set($goods=$!map.get("goods4"))
+              <li><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",14)</a></li>
+            #end
+            #if($!map.get("goods5"))
+            #set($goods=$!map.get("goods5"))
+              <li><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",14)</a></li>
+            #end
+            #if($!map.get("goods6"))
+            #set($goods=$!map.get("goods6"))
+              <li><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",14)</a></li>
+            #end
+            </ul>
+            <div class="rank_advertisment">
+            $!gf_tools.generic_adv("$!url","$!floor.gf_right_adv")
+           </div>
+          </div>
+      </div>
+      <div class="floor_brand"><span class="fl_brand_sp"></span>
+        <span class="flr_sp_brand">
+        #foreach($brand in $gf_tools.generic_brand("$!floor.gf_brand_list"))
+        <a href="$!webPath/brand_goods_$!{brand.id}.htm" target="_blank"><img src="$!imageWebServer/$!brand.brandLogo.path/$!brand.brandLogo.name" width="98" height="35" /></a>
+        #end
+        </span>
+        </div>
+    </div>
+#end -->
+
+#set ($i=0)
+<div id="floors">
+	#foreach($floor in $floors)
+	#set($i=$i+1)
+	<div load_url="floor_ajax.htm" id="$!floor.id" count="$i" class="floor_main"></div>
+	#end
+</div>

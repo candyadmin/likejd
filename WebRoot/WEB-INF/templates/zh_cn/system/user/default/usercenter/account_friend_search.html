@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>好友管理 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+//获取下级地区信息
+	  jQuery("select[id^=areas_]").change(function(){									   
+			var areaMark = jQuery(this).attr("areaMark");
+			var parent_id = jQuery("#areas_"+areaMark).val();									   
+			jQuery.post("$!webPath/buyer/account_getAreaChilds.htm",{
+						"parent_id":parent_id,
+						"areaMark":areaMark
+						},function(data){
+							if(areaMark=="province"){
+							jQuery("#area_id").html("<option value=''>县（区）</option>");	
+							jQuery("#areas_city").html(data);
+								}
+							if(areaMark=="city"){
+							jQuery("#area_id").html(data);
+								}	
+							},"text");
+			});
+	 	    #if($!area)
+			 jQuery("#area_id").html("<option value='$!area.id'>$!area.areaName</option>");
+			 jQuery("#areas_city").html("<option value='$!area.parent.id'>$!area.parent.areaName</option>");
+			 jQuery("#areas_province").val("$!area.parent.parent.id");
+			 #end   
+	  	 	jQuery("#userName").val("$!userName");
+		 	 jQuery("#years").val("$!years");
+		     jQuery("#sex").val("$!sex");
+			jQuery("#area_id").val("$!area.id");
+			//加好友事件
+			jQuery("a[id^=add_friend_]").click(function(){
+					var uid = jQuery("#uid").val();
+					var user_id = jQuery(this).attr("obj_id");
+					if(uid==user_id){
+						  showDialog("adderror","系统提示","自己不能添加自己为好友！",0,"warning",3);
+						}else{
+					jQuery.post("$!webPath/buyer/friend_add_save.htm",
+							{
+							"user_id":user_id
+							},function(data){
+								if(data=="true"){
+									  showDialog("addFriend","系统提示","添加成功，TA已经成为你的好友！",0,"succeed",3);
+									}else{
+									  showDialog("addFriend","系统提示","添加失败，TA已经是您的好友！",0,"error",3);
+										}
+								},"text");
+					}
+				});
+			//关注事件
+			jQuery("a[id^=add_attention_]").click(function(){										   
+				jQuery.post("$!webPath/buyer/homepage_add_attention.htm",
+						{
+						"user_id":jQuery(this).attr("obj_id")
+						},function(data){
+							if(data=="true"){
+								  showDialog("addAttention","系统提示","关注成功！",0,"succeed",3);
+								}else{
+								  showDialog("addAttention","系统提示","关注失败，您已经关注过TA了！",0,"error",3);
+									}
+							},"text");
+				 });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/buyer/account_nav.htm?op=friend")
+        <td id="centerbg" valign="top"><div class="buyer_position">
+            <div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">我的账户</a> > <span>添加好友</span></div>
+          </div>
+          <div class="productmain">
+            <div class="friends_box">
+              <div class="friends_search">
+                <form action="$!webPath/buyer/account_friend_search.htm" id="theForm" name="theForm" method="post">
+                  <div class="friends_search_n"> <span>
+                    <input type="text" id="userName" placeholder="请输入会员名字" name="userName" class="sr" />
+                    <input type="submit" value="搜索"  id="search" name="search" class="sc" />
+                    </span> <span>
+                    <select id="areas_province" areaMark="province">
+                      <option>省份</option>
+                                            
+                      #foreach($area in $areas)
+                      
+                      <option value="$!area.id">$!area.areaName</option>
+                                            
+                      #end                    
+                    
+                    </select>
+                    <select id="areas_city" areaMark="city">
+                      <option value="">城市</option>
+                    </select>
+                    <select id="area_id" name="area_id">
+                      <option value="">县(区)</option>
+                    </select>
+                    <select id="years" name="years">
+                      <option value="">年龄</option>
+                      <option value="18">18岁以下</option>
+                      <option value="18~25">18~25岁</option>
+                      <option value="26~30">26~30岁</option>
+                      <option value="31~35">31~35岁</option>
+                      <option value="36~40">36~40岁</option>
+                      <option value="41~45">41~45岁</option>
+                      <option value="50">50岁以上</option>
+                    </select>
+                    <select id="sex" name="sex">
+                      <option value="">性别</option>
+                      <option value="1">男</option>
+                      <option value="0">女</option>
+                      <option value="-1">保密</option>
+                    </select>
+                    </span> </div>
+                </form>
+              </div>
+              <div id="friends_list">
+                
+                #if($!objs)
+                <form method="post" id="ListForm" name="ListForm" action="$!webPath/buyer/account_friend_search.htm">
+                  <div class="friends_list" >
+                    <ul>
+                      #foreach($obj in $objs)
+                      #set($userImg = "$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+                      #if($!obj.photo)
+                      #set($userImg = "$!webPath/$!obj.photo.path/$!obj.photo.name")
+                      #end
+                      <li> <span class="img_left"> <a href="$!webPath/buyer/homepage.htm?uid=$!obj.id" target="_blank"> <img src="$!userImg" width="60" height="60" /> </a> </span> <span class="font_right"><strong>$!obj.userName#if($!obj.trueName!="")($!obj.trueName)#end | $!obj.years岁</strong> <i>#if($!obj.area)$!obj.area.parent.parent.areaName $!obj.area.parent.areaName $!obj.area.areaName #else暂无#end</i> <a href="javascript:void(0);" id="add_attention_$!obj.id" obj_id="$!obj.id"><b>♥ </b>关注TA</a> <a href="javascript:void(0);" id="add_friend_$!obj.id" obj_id="$!obj.id"><b>+</b> 加为好友</a> </span> </li>
+                      #end
+                    </ul>
+                  </div>
+                  <div class="alldel">
+                    <div  class="userfenye">
+                      <input name="currentPage" id="currentPage" type="hidden"  value="$!currentPage" />
+                      <input name="userName" type="hidden"  value="$!userName" />
+                      <input name="sex2" type="hidden"  value="$!sex" />
+                      <input name="area_id" type="hidden"  value="$!area.id" />
+                      <input name="years" type="hidden"  value="$!years" />
+                      $!gotoPageFormHTML</div>
+                  </div>
+                </form>
+                #else
+                <div class="friends_war">
+                	<div class="friends_war_m">
+                       <i><img src="$!webPath/resources/style/common/images/warning.gif"/></i><span>没有您要查找的数据！</span>
+                    </div>
+                </div>
+                #end
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+</div>
+     $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

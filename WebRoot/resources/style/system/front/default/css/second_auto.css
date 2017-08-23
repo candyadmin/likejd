@@ -1,0 +1,83 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+/*头部响应式布局*/
+@media screen and (min-widht:800px) and (max-width:1024px){
+.main{ width:1002px;}	
+.page{ width:1002px;}
+.head{ width:1002px;}
+.Idle_menu{ width:1002px;}	
+}
+@media screen and (min-width:1024px) {
+.main{ width:1202px;}
+.page{ width:1202px;}
+.head{ width:1202px;}
+.bigsearch{ float:left; width:670px; margin-top:30px;}
+.search_box{ width:100%;}
+.search_box_sp{ width:485px; display:block; height:28px; border:3px solid #e6e6e6; float:left; border-right:0px;} 
+.search_box_sp input{ width:485px; height:28px; line-height:28px; border:0px;}
+.Idle_menu{ width:1202px;}	
+}
+
+/*幻灯右边图片*/
+.banner_img_hidden{ display:none;}
+@media screen and (min-widht:800px) and (max-width:1024px){
+	.banner_img_hidden{ display:none;}
+}
+@media screen and (min-width:1024px) {
+.banner_img_hidden{ display:block;}
+.index_slider { width:580px; height:264px; border-bottom:1px solid #e6e6e6; margin:0px 0px 0px 10px; position:relative; overflow:hidden; float:left;}
+.banner_img_hidden{ width:200px; margin-right:10px; height:264px; float:left;}
+.Banner_line{ width:992px; }
+.banner_img_hidden a{ width:200px; height:132px; overflow:hidden; display:block; float:left; border:1px solid #e7e7e7; border-left:0px; margin-top:-1px;}
+}
+
+
+/*楼层*/
+@media screen and (min-widht:800px) and (max-width:1024px){
+.index_floor { width:1002px;}
+.index_floor h1{ width:985px;}
+.index_floor .list { width:1002px; }
+.index_floor .mid_list { width:750px;}
+}
+@media screen and (min-width:1024px) {
+.index_floor{ width:1202px; }	
+.index_floor h1{ width:1185px;}
+.index_floor .list { width:1202px; }
+.index_floor .mid_list { width:950px;}
+.index_floor .mid_list li {margin-left:13px;}
+
+
+}
+
+/*闲置宝贝列表*/
+@media screen and (min-widht:800px) and (max-width:1024px){
+	.index_floor{ width:1002px;}
+	.index_floor h1 { width:985px;}
+	.index_floor .list { width:1002px; }
+	.all_list { width:230px;}
+	.all_list h1 { width:215px; }
+	.list_ul { width:230px;}
+}
+@media screen and (min-width:1024px) {
+	.index_floor{ width:1202px;}
+	.index_floor h1 { width:1185px;}
+	.index_floor .list { width:1202px;} 
+	.all_list { width:280px;}
+	.all_list h1 { width:265px; }
+	.list_ul { width:280px;}
+}
+
+/*二手列表页*/
+@media screen and (min-widht:800px) and (max-width:1024px){
+	.Idle_lists li { width:990px;}
+	.li_left { width:800px; }
+	.li_left .middle { width:656px;}
+}
+@media screen and (min-width:1024px) {
+	.Idle_lists li { width:1190px;}
+	.li_left { width:1000px;}
+	.li_left .middle { width:856px;}
+}

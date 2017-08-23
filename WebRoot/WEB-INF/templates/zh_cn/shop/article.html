@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!obj.title - $!config.title - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="position">当前位置：<a href="$!webPath/index.htm" >首页</a>><span><a href="$!webPath/articlelist_$!{obj.articleClass.id}.htm">$!obj.articleClass.className</a></span>>$!obj.title</div>
+    <div class="index2">
+      <div class="articlesleft">
+        <div class="art1">
+          <h1>文章分类</h1>
+          <ul class="artul">
+            #foreach($ac in $acs)
+			<li><a href="$!webPath/articlelist_$!{ac.id}.htm">$!ac.className</a></li>
+            #end
+          </ul>
+        </div>
+        <div class="art2">
+          <h1>最新文章</h1>
+          <ul class="artul2">
+            #foreach($article in $articles)
+			  #if($!article.url!="")
+		         #set($url="$!article.url")
+		      #else
+		      #set($url="$!webPath/article_$!{article.id}.htm")
+		      #end
+			<li><a href="$!url" target="_blank">$!article.title</a></li>
+            #end
+          </ul>
+        </div>
+      </div>
+      <div class="articlesright">
+        <div class="artilist">
+          <h2><span class="artih1">$!obj.title</span><span class="artidate">$!CommUtil.formatLongDate($!obj.addTime)
+            </span></h2>
+          <div class="artip">$!obj.content</div>
+          <div class="artis">
+            <ul>
+			  #set($article=$!articleTools.queryArticle($!obj.id,-1))
+			  #if($!article.url!="")
+		        #set($url="$!article.url")
+		      #else
+		        #set($url="$!webPath/article_$!{article.id}.htm")
+		      #end
+              <li>上一篇：#if($!article.id!="")<a href="$!url" target="_blank">$!article.title</a>#else $!article.title #end</li>
+			  #set($article=$!articleTools.queryArticle($!obj.id,1))
+			  #if($!article.url!="")
+		        #set($url="$!article.url")
+		      #else
+		        #set($url="$!webPath/article_$!{article.id}.htm")
+		      #end			  
+              <li>下一篇：#if($!article.id!="")<a href="$!url" target="_blank">$!article.title</a>#else $!article.title #end</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

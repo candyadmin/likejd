@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>投诉管理 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+   jQuery("#theForm").validate({
+	   rules:{
+			 img1:{accept:"$!config.imageSuffix"},
+			 img2:{accept:"$!config.imageSuffix"},
+			 img3:{accept:"$!config.imageSuffix"},
+			 from_user_content:{required:true}
+		   },
+	   messages:{
+			 img1:{accept:"不允许的图片类型"},
+			 img2:{accept:"不允许的图片类型"},
+			 img3:{accept:"不允许的图片类型"},
+			 from_user_content:{required:"投诉内容不能为空"}
+		   }
+	});
+   //
+});
+function save_form(){
+  var goods_ids="";
+  if(jQuery(":checkbox:checked").length==0){
+     alert("至少选择一件商品！");
+  }else{
+     jQuery(":checkbox:checked").each(function(){
+	    goods_ids=jQuery(this).val()+","+goods_ids;
+	 });
+  }
+  jQuery("#goods_ids").val(goods_ids);
+  jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <form action="$!webPath/buyer/complaint_save.htm" method="post" enctype="multipart/form-data" id="theForm">
+      <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+        <tr> $!httpInclude.include("/buyer/nav.htm?op=complaint")
+          <td id="centerbg" valign="top"><div class="productmain">
+           <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href="$!webPath/buyer/complaint.htm">发起投诉</a></li>
+              </ul>
+            </div>
+              <div class="ordercon">
+                <div class="complaint_one">
+                  <h1 class="complaint_h">投诉进程</h1>
+                  <div class="comp_poces">
+                    <ul>
+                      <li><b class="this">新投诉</b><em></em></li>
+                      <li><b>待申诉</b><em></em></li>
+                      <li><b>对话中</b><em></em></li>
+                      <li><b>待仲裁</b><em></em></li>
+                      <li><b>已完成</b></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="complaint_one">
+                  <h1 class="complaint_h">订单详情</h1>
+                  <div class="comp_goodetails">
+                    <dl class="comp_goodl">
+                      <dt>订单信息</dt>
+                      <dd>
+                        <ul class="comp_gdul">
+                          #if($!obj.of.order_status==0)
+                          #set($status="已取消")
+                          #end
+                          #if($!obj.of.order_status==10)
+                          #set($status="待付款")
+                          #end
+                          #if($!obj.of.order_status==15)
+                          #set($status="线下支付待审核")
+                          #end
+                          #if($!obj.of.order_status==20)
+                          #set($status="已付款")
+                          #end
+                          #if($!obj.of.order_status==30)
+                          #set($status="已发货")        
+                          #end                
+                          #if($!obj.of.order_status==40)
+                          #set($status="已收货")
+                          #end
+                          #if($!obj.of.order_status==50)
+                          #set($status="已完成,已评价")                                              
+                          #end
+                          #if($!obj.of.order_status==60)
+                          #set($status="已结束")                                              
+                          #end
+                          <li> 订单状态：<strong>$!status</strong></li>
+                          <li> 订单号：<b> $!obj.of.order_id</b> </li>
+                          <li> 下单时间：$!CommUtil.formatLongDate($!obj.of.addTime)</li>
+                          <li> 订单总额：¥$!{obj.of.totalPrice}</li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl class="comp_goodl">
+                      <dt>卖家信息</dt>
+                      <dd>
+                        <ul class="comp_gdul">
+                          <li> 卖家店铺：<b><a href="$!webPath/store_$!{obj.of.store.id}.htm" target="_blank">$!{obj.of.store.store_name}</a></b></li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl class="comp_goodl">
+                      <dt>买家信息</dt>
+                      <dd>
+                        <ul class="comp_gdul">
+                          <li> 买家名称：$!{obj.of.user.userName}</li>
+                        </ul>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="complaint_one">
+                  <h1 class="complaint_h">投诉详情</h1>
+                  <div class="comp_goodetails">
+                    <dl class="comp_goodl">
+                      <dt>投诉信息</dt>
+                      <dd>
+                        <ul class="comp_gdul">
+                          <li> 投诉状态：<strong>新投诉</strong></li>
+                          #if($!obj.type=="buyer")
+                          #set($type="买家投诉")
+                          #else
+                          #set($type="卖家投诉")
+                          #end
+                          <li> 投诉类别：$!type</li>
+                          <li> 投诉人：$!obj.from_user.userName</li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl class="comp_goodl">
+                      <dt>选择投诉主题</dt>
+                      <dd>
+                        <table width="715" border="0" cellspacing="0" cellpadding="0" class="comp_table">
+                          #foreach($cs in $css)
+                          <tr>
+                            <td bgcolor="#EEEEEE" width="200" class="comp_table_n"><input type="radio" name="cs_id" id="radio" value="$!cs.id" #if($!velocityCount==1) checked="checked"#end/>
+                              $!cs.title </td>
+                            <td>$!cs.content</td>
+                          </tr>
+                          #end
+                        </table>
+                      </dd>
+                    </dl>
+                    <dl class="comp_goodl">
+                      <dt>选择要投诉的商品</dt>
+                      <dd>
+                        <table width="715" border="0" cellspacing="0" cellpadding="0" class="compgoods_table">
+                          <tr class="compgoods_th">
+                            <td width="240">&nbsp;</td>
+                            <td width="180">商品信息</td>
+                            <td width="100" align="center">数量</td>
+                            <td align="center">价格</td>
+                          </tr>
+                          #foreach($gc in $obj.of.gcs)
+                          <tr>
+                            <td><b class="comp_tab_b">
+                              <input gc_id="$!gc.id" name="goods_$!{gc.id}" type="checkbox" id="goods_$!{gc.id}" value="$!gc.goods.id" />
+                              </b><em class="comp_tab_em"><span class="compimg_span tab_span">
+                              <p><img width="50" height="50" src="$!webPath/$!{gc.goods.goods_main_photo.path}/$!{gc.goods.goods_main_photo.name}_small.$!{gc.goods.goods_main_photo.ext}" /></p>
+                              </span></em><span class="comp_tab_sp"><a href="">$!{gc.goods.goods_name}</a></span></td>
+                            <td>$!{gc.spec_info}</td>
+                            <td align="center">$!{gc.count}</td>
+                            <td align="center"><b class="red">¥$!{gc.goods.store_price}</b></td>
+                          </tr>
+                          <tr class="comp_noneb">
+                            <td colspan="4"><div class="comp_question"><em class="question_desp"><span>问题描述：</span><span>
+                                <input name="content_$!{gc.goods.id}" type="text" id="content_$!{gc.goods.id}" />
+                            </span></em></div></td>
+                          </tr>
+                          #end
+                        </table>
+                      </dd>
+                    </dl>
+                    <dl class="comp_goodl">
+                      <dt>投诉内容:</dt>
+                      <dd>
+                        <div class="comp_text">
+                          <textarea name="from_user_content" cols="" rows="" id="from_user_content"></textarea>
+                        </div>
+                      </dd>
+                    </dl>
+                    <dl class="comp_goodl">
+                      <dt>投诉图片<b class="orange fsize12">(图片必须是jpg/jpeg/gif/png格式)</b></dt>
+                      <dd>
+                        <div class="comp_uploadimg">
+                          <ul>
+                            <li>
+                              <input name="img1" type="file" id="img1" />
+                            </li>
+                            <li>
+                              <input name="img2" type="file" id="img2" />
+                            </li>
+                            <li>
+                              <input name="img3" type="file" id="img3" />
+                            </li>
+                          </ul>
+                        </div>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="comp_btn"> <span class="setsub">
+                  <input type="button"  value="提交" onclick="save_form();" style="cursor:pointer;"/>
+                  </span>
+                  <input name="order_id" type="hidden" id="order_id" value="$!obj.of.id" />
+                  <input type="hidden" name="goods_ids" id="goods_ids" />
+                  <input name="to_user_id" type="hidden" id="to_user_id" value="$!obj.to_user.id" />
+                  <input name="type" type="hidden" id="type" value="$!obj.type" />
+                </div>
+              </div>
+            </div></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

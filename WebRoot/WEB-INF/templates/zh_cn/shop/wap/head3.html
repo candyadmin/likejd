@@ -1,0 +1,205 @@
+﻿<div id="head_unbomb"> 
+<script src="http://js.365hele.com/resources/js/jquery.cookie.js"></script>
+<script>
+jQuery(document).ready(function(){
+	search_history_data();
+	var head_h=jQuery("#head_h").height();
+		
+	jQuery("div[id^='head_search_history']").mouseover(function(){
+		jQuery(this).show();
+	});
+	
+	jQuery("div[id^='head_search_history']").mouseout(function(){
+		jQuery(this).hide();
+	});
+
+	jQuery(window).scroll(function(){
+		var top = jQuery(document).scrollTop();
+		if(top>head_h){
+			if(jQuery("#head_search_history").is(":visible")){
+				jQuery("#head_search_history").hide();
+				jQuery("#head_search_history_up").show();  
+		    };
+			if(jQuery("#head_search_goodslist").is(":visible")){  
+						jQuery("#head_search_goodslist").hide();
+						jQuery("#head_search_goodslist_up").show(); 
+			};
+	  	}else{
+		   if(jQuery("#head_search_history_up").is(":visible")){
+				jQuery("#head_search_history_up").hide();
+				jQuery("#head_search_history").show();
+		   };
+		   if(jQuery("#head_search_goodslist_up").is(":visible")){  
+				jQuery("#head_search_goodslist_up").hide();
+				jQuery("#head_search_goodslist").show(); 
+		   };
+	  	}
+		
+	});
+	//选定某一搜索历史
+	jQuery("#head_search_history").find("dl>dt>ul>li>span").click(function(){
+		jQuery("#keyword").val(jQuery(this).attr("data"));
+		jQuery("#searchForm").submit();
+	});
+   jQuery("#top_user").mouseleave(function(){
+    jQuery("#top_user_hid").hide();
+	jQuery("#top_user_sp").removeClass("top_user_sp_this");
+  });
+   
+
+		   jQuery("#goodscar").mouseleave(function(){
+			jQuery("#goodscar_con_box").attr("mark","none");
+			  jQuery("#goodscar_con_box").hide();
+			  jQuery("#goodscar_sp").removeClass("goodscar_sp_this");
+		   });
+});
+//初始化分类搜索提示模块
+function search_goodsclass_initialize(){
+	jQuery("div[class^='head_search_goodslist']").each(function(index,obj) {
+        jQuery(obj).remove();
+    });
+	var str = "<div class='head_search_goodslist' id='head_search_goodslist' style='display:none'><dl><dt><ul></ul></dt></dl></div>";
+	jQuery("#head_search").append(str);
+	str = "<div class='head_search_goodslist_up' id='head_search_goodslist_up' style='display:none'><dl><dt><ul></ul></dt></dl></div>";
+	jQuery("#head_search").append(str);
+}
+function search_gc_close(){
+	jQuery("div[id^='head_search_goodslist']").hide();
+}
+//加载搜索历史记录
+function search_history_data(){
+	var data = jQuery.cookie("search_history");
+	if(data==null){
+		jQuery("div[id^='head_search_history']").remove();
+	}else{
+		jQuery.each(data.split(","),function(index,item){
+			if(index<10){
+				jQuery("#head_search_history_up").find("dl>dt>ul").append("<li><span data='"+item+"'><a href='javascript:void(0)'>"+item+"</a></span><i onclick='search_data_del(this)'><a href='javascript:void(0)'>删除</a></i></li>");
+				jQuery("#head_search_history").find("dl>dt>ul").append("<li><span data='"+item+"'><a href='javascript:void(0)'>"+item+"</a></span><i onclick='search_data_del(this)'><a href='javascript:void(0)'>删除</a></i></li>");
+			}
+		});
+	}
+}
+//删除某一历史记录
+function search_data_del(obj){
+	var item = jQuery(obj).parent().find("span").attr("data");
+	var data = "";
+	var temp = jQuery.cookie("search_history");	
+	jQuery.each(temp.split(","),function(index,value){
+		if(item!=value){
+			if(data!=""){
+				data =data +","+value;
+			}else{
+				data = value;
+			}
+		}
+	});
+	
+	if(data!=""){
+		jQuery.cookie("search_history",data);
+	}else{
+		jQuery.cookie("search_history",null);
+	}
+	search_html_restore();
+	search_history_data();
+}
+//删除全部历史记录
+function search_data_del_all(){
+	jQuery.cookie("search_history",null);
+	search_html_restore();
+	search_history_data();
+}
+//清空搜索历史下拉数据
+function search_html_restore(){
+	jQuery("#head_search_history_up").find("dl>dt>ul>li").each(function(index, element) {
+       if(index!=0){
+		   jQuery(this).remove();
+	   } 
+    });
+	jQuery("#head_search_history").find("dl>dt>ul>li").each(function(index, element) {
+       if(index!=0){
+		   jQuery(this).remove();
+	   } 
+    });
+}
+function search_form(){
+  var keyword=arguments[0];
+  var type=arguments[1];
+  if(keyword!=""&&keyword!=undefined){
+   jQuery("#keyword").val(keyword);
+  }
+  if(type!=""&&type!=undefined){
+    jQuery("#type").val(type);
+  }
+  jQuery("#searchForm").submit();
+  jQuery("#keyword").val("");
+}
+		 var total_price=0;
+		 
+
+		
+		
+</script>
+
+<div class="head_width" id="head_h">
+
+  <div class="head clearFix"> 
+          <h1 class="logo"><span>
+      <p>
+      #if($!config.websiteLogo) 
+      	<a href="$!webPath/wap/index.htm"> 
+      		<img src="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name" border="0"> 
+      	</a>
+	#else 
+      	<a href="$!webPath/wap/index.htm"> 
+      		<img src="$!imageWebServer/resources/style/system/front/default/images/logo.png" border="0"> 
+      	</a>
+    #end 
+      </p>
+      </span>
+    </h1>
+    
+    <form action="$!webPath/search.htm" method="post" target="_blank" id="searchForm" autocomplete="off">
+      <input name="type" id="type" value="goods" type="hidden">
+      <div class="head_search" id="head_search" style="width:705px; margin-left:0px;"> 
+      <span class="head_seartxt">
+        <div class="headSbox">
+        <input name="keyword" value="试试搜索，更加方便！" id="keyword" class="h_sear_txt" onfocus="this.value=''" onblur="if(this.value==''){this.value='试试搜索，更加方便！'}" type="text">
+        </div>
+        <input name="" class="h_sear_btn" value="搜索" type="submit">
+        </span>
+        <span class="head_searstr">
+        	热门搜索： 
+        	#foreach($info in $CommUtil.splitByChar("$!config.hotSearch",","))
+        		<a href="javascript:void(0);" onclick="search_form('$!info','goods');">$!info</a>
+        	#end   
+        </span>
+      	<!--搜索历史 -->
+    	  
+        <!--搜索历史 -->
+            	
+      </div>
+    </form>
+    <!--用户中心开始-->
+    <div class="top_user" id="top_user">
+      <span class="top_user_sp" id="top_user_sp"><span><a href="$!webPath/buyer/index.htm">用户中心</a><s></s></span></span>
+      
+    </div>
+    <div class="goodscar" id="goodscar">
+    
+    
+      <span class="goodscar_sp" id="goodscar_sp">
+      <span>
+      <i class="goodscar_img"></i>
+     <a href="$!webPath/goods_cart1.htm">去购物车结算</a>
+      </span>
+      </span>
+      
+
+      
+    </div>
+    <!--购物车结束-->
+  </div>
+</div>
+
+ </div>

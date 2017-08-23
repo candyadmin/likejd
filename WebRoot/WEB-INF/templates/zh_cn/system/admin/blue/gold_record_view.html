@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">金币管理</h1>
+  <div class="settab"> <span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/gold_record.htm">购买记录</a> | <a href="$!webPath/admin/gold_log.htm">购买日志</a>|<a href="javascript:void(0);" class="this">记录详情</a> </span> <span class="tab-two"></span> </div>
+    <div class="setcont">
+    <ul class="set1">
+        <li>编号</li>
+        <li><span class="webname"> $!obj.gold_sn</span></li>
+      </ul>
+      <ul class="set1">
+        <li>会员名</li>
+        <li><span class="webname"> $!obj.gold_user.userName </span></li>
+      </ul>
+      <ul class="set1">
+        <li>现有金币数</li>
+        <li><span class="webname"> $!obj.gold_user.gold</span></li>
+      </ul>
+      <ul class="set1">
+        <li>付款金额</li>
+        <li><span class="webname"> $!obj.gold_money </span></li>
+      </ul>
+      <ul class="set1">
+        <li>兑换金币数</li>
+        <li><span class="webname"> $!obj.gold_count</span></li>
+      </ul>
+      <ul class="set1">
+        <li>收款状态 </li>
+        <li><span class="webname">
+          #if($!obj.gold_pay_status==2)
+          收款完成
+          #end
+          #if($!obj.gold_pay_status==1)
+          等待审核
+          #end
+          #if($!obj.gold_pay_status==0)
+          等待支付
+          #end
+        </span> </li>
+      </ul>
+      <ul class="set1">
+        <li>操作说明</li>
+        <li><span class="webname">
+        $!obj.gold_admin_info
+        </span></li>
+      </ul>
+    </div>
+  <div class="submit">
+    <input type="button" value="返回列表" onclick="window.location.href='$!webPath/admin/gold_record.htm?currentPage=$!currentPage'" />
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("a[id^=pay_]").click(function(){
+	  	var id = jQuery(this).attr("id");
+		var css = jQuery(this).attr("class");
+		if(css=="this") return false;
+	jQuery.each(jQuery("a[id^=pay_]"), function(){
+		if(jQuery(this).attr("id")==id){
+			jQuery(this).addClass("this");
+			var pid = "#"+jQuery(this).attr("id").substring(4);
+			jQuery(pid).show();
+		}else{
+			jQuery(this).removeClass("this");
+			var pid = "#"+jQuery(this).attr("id").substring(4);
+			jQuery(pid).hide();
+		}
+		})
+	})
+	#if($!op)
+	  jQuery.each(jQuery("a[id^=pay_]"), function(){
+	    var pid = "#"+jQuery(this).attr("id").substring(4);
+	    jQuery(pid).hide();
+	  })
+	  jQuery("a[id^=pay_]").removeClass("this");
+	  jQuery("#pay_$!op").addClass("this");
+	  jQuery("#$!op").show();
+	#end
+		
+  jQuery("img[id='config_payment_type']").click(function(){
+     var type = jQuery("#config_payment_type").val();	
+	 if(type=="0"){
+		jQuery("#config_payment_type").val("1");
+		jQuery("img[id='config_payment_type']").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	}else{
+		jQuery("#config_payment_type").val("0");
+		jQuery("img[id='config_payment_type']").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	}
+  });  
+  #if($!config.config_payment_type=="0")
+  jQuery("#config_payment_type").val("0");
+  jQuery("img[id='config_payment_type']").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+  #else
+  jQuery("#config_payment_type").val("1");
+  jQuery("img[id='config_payment_type']").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+  #end
+  //
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+
+});
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">支付方式</h1>
+  <div class="settab"> <span class="tab-one"></span>
+   <span class="tabs"> 
+   <a href="javascript:void(0);"  class="this" id="pay_platform">平台</a> |
+   #if($!config.config_payment_type==0) 
+   <a href="javascript:void(0);" id="pay_store">店铺</a>| 
+   #end
+   <a href="javascript:void(0);" id="pay_set">支付设置</a> 
+   </span> <span class="tab-two"></span> </div>
+  <div class="paytable" id="platform">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pay_table">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="155">支付方式名称</td>
+        <td width="589" align="center">支付方式描述</td>
+        <td width="191" align="center">启用</td>
+        <td width="238" align="center">操作</td>
+      </tr>
+      <tr>
+        <td>线下支付</td>
+        <td align="left">线下支付，通过银行汇款、电子汇款等方式</td>
+        #set($pay=$!paymentTools.queryPayment("outline","admin"))
+        <td align="center">#if($!pay)是#else 否#end</td>
+        <td align="center" class="ac8">#if($!pay)<a href="$!webPath/admin/payment_set.htm?mark=outline&type=admin&pay=$!pay">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=outline&type=admin&pay=$!{pay}">启用</a>#end|<a href="$!webPath/admin/payment_edit.htm?mark=outline&type=admin">编辑</a></td>
+      </tr>
+      <tr>
+        <td>预存款支付</td>
+        <td align="left">预存款支付，使用商城预存款支付，需要商城开启预存款功能</td>
+        #set($pay=$!paymentTools.queryPayment("balance","admin"))
+        <td align="center">#if($!pay)是#else 否#end</td>
+        <td align="center" class="ac8">#if($!pay)<a href="$!webPath/admin/payment_set.htm?mark=balance&type=admin&pay=$!pay">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=balance&type=admin&pay=$!{pay}">启用</a>#end|<a href="$!webPath/admin/payment_edit.htm?mark=balance&type=admin">编辑</a></td>
+      </tr>
+      <tr>
+        <td>支付宝</td>
+        <td align="left">支付宝网站(<a href="http://www.alipay.com" target="_blank">www.alipay.com</a>) 是国内先进的网上支付平台<br /></td>
+        #set($pay=$!paymentTools.queryPayment("alipay","admin"))
+        <td align="center">#if($!pay)是#else 否#end</td>
+        <td align="center" class="ac8">#if($!pay)<a href="$!webPath/admin/payment_set.htm?mark=alipay&type=admin&pay=$!pay">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=alipay&type=admin&pay=$!{pay}">启用</a>#end|<a href="$!webPath/admin/payment_edit.htm?mark=alipay&type=admin">编辑</a></td>
+      </tr>
+      <tr>
+        <td>支付宝手机网页支付</td>
+        <td align="left">支付宝网站(<a href="http://www.alipay.com" target="_blank">www.alipay.com</a>) 是国内先进的网上支付平台<br /></td>
+        #set($pay=$!paymentTools.queryPayment("alipay_wap","admin"))
+        <td align="center">#if($!pay)是#else 否 #end</td>
+        <td align="center" class="ac8">#if($!pay)<a href="$!webPath/admin/payment_set.htm?mark=alipay_wap&type=admin&pay=$!pay">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=alipay_wap&type=admin&pay=$!{pay}">启用</a>#end|<a href="$!webPath/admin/payment_edit.htm?mark=alipay_wap&type=admin">编辑</a></td>
+      </tr>
+      <tr>
+        <td>微信公众号支付</td>
+        <td align="left">微信网站(<a href="http://weixin.qq.com" target="_blank">http://weixin.qq.com</a>) 微信，是一个生活方式，也是一个领先的支付平台<br /></td>
+        #set($pay=$!paymentTools.queryPayment("weixin_wap","admin"))
+        <td align="center">#if($!pay)是#else 否 #end</td>
+        <td align="center" class="ac8">#if($!pay)<a href="$!webPath/admin/payment_set.htm?mark=weixin_wap&type=admin&pay=$!pay">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=weixin_wap&type=admin&pay=$!{pay}">启用</a>#end|<a href="$!webPath/admin/payment_edit.htm?mark=weixin_wap&type=admin">编辑</a></td>
+      </tr>
+      
+      <tr>
+        <td>微信扫码支付</td>
+        <td align="left">微信网站(<a href="http://weixin.qq.com" target="_blank">http://weixin.qq.com</a>) 微信，是一个生活方式，也是一个领先的支付平台<br /></td>
+        #set($pay=$!paymentTools.queryPayment("wxcodepay","admin"))
+        <td align="center">#if($!pay)是#else 否 #end</td>
+        <td align="center" class="ac8">#if($!pay)<a href="$!webPath/admin/payment_set.htm?mark=wxcodepay&type=admin&pay=$!pay">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=wxcodepay&type=admin&pay=$!{pay}">启用</a>#end|<a href="$!webPath/admin/payment_edit.htm?mark=wxcodepay&type=admin">编辑</a></td>
+      </tr>
+      
+      <tr>
+        <td>财付通</td>
+        <td align="left">财付通(<a href="http://www.tenpay.com" target="_blank">www.tenpay.com</a>) - 本即时到账接口无需预付费，任何订单金额均即时到达您的账户，只收单笔 1% 手续费。</td>
+        #set($pay=$!paymentTools.queryPayment("tenpay","admin"))
+        <td align="center">#if($!pay)是#else 否#end</td>
+        <td align="center" class="ac8">#if($!pay)<a href="$!webPath/admin/payment_set.htm?mark=tenpay&type=admin&pay=$!pay">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=tenpay&type=admin&pay=$!{pay}">启用</a>#end|<a href="$!webPath/admin/payment_edit.htm?mark=tenpay&type=admin">编辑</a></td>
+      </tr>
+      <tr>
+        <td>快钱支付</td>
+        <td align="left">快钱(<a href="http://www.99bill.com" target="_blank">www.99bill.com</a>) - 本即时到账接口无需预付费，任何订单金额均即时到达您的账户，只收单笔 1% 手续费。</td>
+        #set($pay=$!paymentTools.queryPayment("bill","admin"))
+        <td align="center">#if($!pay)是#else 否#end</td>
+        <td align="center" class="ac8">#if($!pay)<a href="$!webPath/admin/payment_set.htm?mark=bill&type=admin&pay=$!pay">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=bill&type=admin&pay=$!{pay}">启用</a>#end|<a href="$!webPath/admin/payment_edit.htm?mark=bill&type=admin">编辑</a></td>
+      </tr>
+      <tr>
+        <td>网银支付</td>
+        <td align="left">网银在线(<a href="http://www.chinabank.com.cn" target="_blank">www.chinabank.com.cn</a>)以网上转账方式将相应交易款划转到商户指定银行账号中。</td>
+        #set($pay=$!paymentTools.queryPayment("chinabank","admin"))
+        <td align="center">#if($!pay)是#else 否#end</td>
+        <td align="center" class="ac8">#if($!pay)<a href="$!webPath/admin/payment_set.htm?mark=chinabank&type=admin&pay=$!pay">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=chinabank&type=admin&pay=$!{pay}">启用</a>#end|<a href="$!webPath/admin/payment_edit.htm?mark=chinabank&type=admin">编辑</a></td>
+      </tr>
+      <tr>
+        <td>Paypal</td>
+        <td align="left">Paypal(<a href="https://www.paypal.com" target="_blank">www.paypal.com</a>)全球信用卡快捷安全支付。</td>
+        #set($pay=$!paymentTools.queryPayment("paypal","admin"))
+        <td align="center">#if($!pay)是#else 否#end</td>
+        <td align="center" class="ac8">#if($!pay)<a href="$!webPath/admin/payment_set.htm?mark=paypal&type=admin&pay=$!pay">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=paypal&type=admin&pay=$!{pay}">启用</a>#end|<a href="$!webPath/admin/payment_edit.htm?mark=paypal&type=admin">编辑</a></td>
+      </tr>
+    </table>
+  </div>
+  #if($!config.config_payment_type==0)
+  <div class="paytable" id="store" style="display:block;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pay_table">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="106">支付方式名称</td>
+        <td width="543">支付方式描述</td>
+        <td width="156" align="center">启用</td>
+        <td width="140" align="center">支持的货币</td>
+        <td width="211" align="center">操作</td>
+      </tr>
+      <tr>
+        <td>货到付款</td>
+        <td>货到付款</td>
+        <td align="center">#if($!payafter==true)是 #else 否#end</td>
+        <td align="center">人民币</td>
+        <td align="center" class="ac8">#if($!payafter==true)<a href="$!webPath/admin/payment_set.htm?mark=payafter&type=user&pay=$!payafter&config_id=$!config.id">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=payafter&type=user&pay=$!payafter&config_id=$!config.id">启用</a>#end</td>
+      </tr>
+      <tr>
+        <td>线下支付</td>
+        <td>线下支付，通过银行汇款、电子汇款等方式</td>
+        <td align="center">#if($!outline==true)是 #else 否#end</td>
+        <td align="center">人民币</td>
+        <td align="center" class="ac8">#if($!outline==true)<a href="$!webPath/admin/payment_set.htm?mark=outline&type=user&pay=$!outline&config_id=$!config.id">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=outline&type=user&pay=$!outline&config_id=$!config.id">启用</a>#end</td>
+      </tr>
+      <tr>
+        <td>预存款支付</td>
+        <td>预存款支付，使用商城预存款支付，需要商城开启预存款功能</td>
+        <td align="center">#if($!balance==true)是 #else 否#end</td>
+        <td align="center">人民币</td>
+        <td align="center" class="ac8">#if($!balance==true)<a href="$!webPath/admin/payment_set.htm?mark=balance&type=user&pay=$!balance&config_id=$!config.id">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=balance&type=user&pay=$!balance&config_id=$!config.id">启用</a>#end</td>
+      </tr>
+      <tr>
+        <td>支付宝</td>
+        <td>支付宝网站<a href="http://www.alipay.com" target="_blank">(www.alipay.com</a>) 是国内先进的网上支付平台<br /></td>
+        <td align="center">#if($!alipay==true)是 #else 否#end</td>
+        <td align="center">人民币</td>
+        <td align="center" class="ac8">#if($!alipay==true)<a href="$!webPath/admin/payment_set.htm?mark=alipay&type=user&pay=$!alipay&config_id=$!config.id">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=alipay&type=user&pay=$!alipay&config_id=$!config.id">启用</a>#end</td>
+      </tr>
+      <tr>
+        <td>支付宝手机网页支付</td>
+        <td>支付宝网站<a href="http://www.alipay.com" target="_blank">(www.alipay.com</a>) 是国内先进的网上支付平台<br /></td>
+        <td align="center">#if($!alipay_wap==true)是 #else 否#end</td>
+        <td align="center">人民币</td>
+        <td align="center" class="ac8">#if($!alipay_wap==true)<a href="$!webPath/admin/payment_set.htm?mark=alipay_wap&type=user&pay=$!alipay_wap&config_id=$!config.id">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=alipay_wap&type=user&pay=$!alipay_wap&config_id=$!config.id">启用</a>#end</td>
+      </tr>
+      
+      <tr>
+        <td>网银在线即时到帐</td>
+        <td>网银在线(<a href="http://www.chinabank.com.cn" target="_blank">www.chinabank.com.cn</a>)以网上转账方式将相应交易款划转到商户指定银行账号中。</td>
+        <td align="center">#if($!chinabank==true)是 #else 否#end</td>
+        <td align="center">人民币</td>
+        <td align="center" class="ac8">#if($!chinabank==true)<a href="$!webPath/admin/payment_set.htm?mark=chinabank&type=user&pay=$!chinabank&config_id=$!config.id">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=chinabank&type=user&pay=$!chinabank&config_id=$!config.id">启用</a>#end</td>
+      </tr>
+      <tr>
+        <td>财付通即时到账</td>
+        <td>财付通(<a href="http://www.tenpay.com" target="_blank">www.tenpay.com</a>) - 本即时到账接口无需预付费，任何订单金额均即时到达您的账户，只收单笔 1% 手续费。</td>
+        <td align="center">#if($!tenpay==true)是 #else 否#end</td>
+        <td align="center">人民币</td>
+        <td align="center" class="ac8">#if($!tenpay==true)<a href="$!webPath/admin/payment_set.htm?mark=tenpay&type=user&pay=$!tenpay&config_id=$!config.id">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=tenpay&type=user&pay=$!tenpay&config_id=$!config.id">启用</a>#end</td>
+      </tr>
+      <tr>
+        <td>快钱支付</td>
+        <td>快钱(<a href="http://www.99bill.com" target="_blank">www.99bill.com</a>) - 本即时到账接口无需预付费，任何订单金额均即时到达您的账户，只收单笔 1% 手续费。</td>
+        <td align="center">#if($!bill==true)是 #else 否#end</td>
+        <td align="center">人民币</td>
+        <td align="center" class="ac8">#if($!bill==true)<a href="$!webPath/admin/payment_set.htm?mark=bill&type=user&pay=$!bill&config_id=$!config.id">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=bill&type=user&pay=$!bill&config_id=$!config.id">启用</a>#end</td>
+      </tr>
+      <tr>
+        <td>Paypal</td>
+        <td>Paypal(<a href="https://www.paypal.com" target="_blank">www.paypal.com</a>)全球信用卡快捷安全支付。</td>
+        <td align="center">#if($!paypal==true)是 #else 否#end</td>
+        <td align="center">人民币</td>
+        <td align="center" class="ac8">#if($!paypal==true)<a href="$!webPath/admin/payment_set.htm?mark=paypal&type=user&pay=$!paypal&config_id=$!config.id">禁用</a>#else<a href="$!webPath/admin/payment_set.htm?mark=paypal&type=user&pay=$!paypal&config_id=$!config.id">启用</a>#end</td>
+      </tr>
+    </table>
+  </div>
+  #end
+  <form id="theForm" name="theForm" action="$!webPath/admin/payment_config_set.htm" method="post">
+    <div class="setcont" id="set" style="display:none">
+      <ul class="set1">
+        <li>平台支付</li>
+        <li> <span class="webSwitch">
+          <input name="id" id="id" type="hidden" value="$!config.id" />
+          <input name="config_payment_type" id="config_payment_type" type="hidden" value="$!config.config_payment_type" />
+          <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="config_payment_type" style="cursor:pointer" /></span> <span id="nothis"><strong class="q"></strong><strong class="w">开启平台支付后，所有交易直接向运营商支付，付款成功后卖家增加预存款，货币交易采取卖家运营商申请提现完成</strong><strong class="c"></strong></span> </li>
+      </ul>
+      <div class="submit">
+        <input name="" type="submit" value="保存" style="cursor:pointer;"/>
+      </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

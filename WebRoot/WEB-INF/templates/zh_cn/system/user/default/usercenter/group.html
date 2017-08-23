@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>团购活动 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=group")
+       <td id="centerbg" valign="top">
+           <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>团购商品</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this">团购商品列表</li>
+                <li><a href="$!webPath/seller/group_add.htm">新增团购商品</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+           <form action="$!webPath/seller/group.htm" method="post" id="queryForm">
+            <div class="ordersear" style="float:right;"> <span>商品名称：</span> <span class="ordersp1 size3">
+                <input name="gg_name" type="text" id="gg_name" />
+                </span><span class="orderbtn">
+                <input name="" type="submit" value="搜索" style="cursor:pointer;"/>
+                </span>
+            </div>
+            </form>
+            <form action="$!webPath/seller/group.htm" method="post" id="ListForm">
+              <div class="operation">
+              <table width="790" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                <tr id="opertitle">
+                  <td width="264" >商品名称</td>
+                  <td width="244">团购活动</td>
+                  <td width="81">团购状态</td>
+                  <td width="109" align="center">操作</td>
+                </tr>
+                #foreach($obj in $objs)
+                <tr class="opertr">
+                  <td><a href="$!webPath/group_view.htm?id=$!obj.id" target="_blank">$!obj.gg_name</a></td>
+                  <td>$!obj.group.group_name</td>
+                  #if($!obj.gg_status==0)
+                    #set($status="待审核")
+                  #end
+                  #if($!obj.gg_status==1)
+                    #set($status="审核通过")
+                  #end
+                  #if($!obj.gg_status==-1)
+                    #set($status="审核拒绝")
+                  #end
+                  <td>$!status</td>
+                  <td class="operajt">#if($!obj.gg_status==0)<span class="edit"><a href="$!webPath/seller/group_edit.htm?id=$!obj.id&currentPage=$!currentPage">编辑</a></span><span class="del"><a href="$!webPath/seller/group_del.htm?mulitId=$!obj.id&currentPage=$!currentPage">删除</a></span>#end</td>
+                </tr>
+                #end
+              </table>
+            </div>
+            <div class="alldel">
+              <div  class="userfenye"> 
+                <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                <input name="gg_name" type="hidden" id="gg_name" value="$!gg_name" />
+                $!gotoPageFormHTML </div>
+            </div>
+            </form>            
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

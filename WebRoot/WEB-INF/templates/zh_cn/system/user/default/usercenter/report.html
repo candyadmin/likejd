@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>我的举报 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">$!httpInclude.include("/buyer/head.htm")
+    <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/buyer/nav.htm?op=report")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/index.htm">买家中心</a> > <span>举报列表</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href="$!webPath/buyer/report.htm">举报列表</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <form method="post" name="ListForm" id="ListForm">
+                <div class="operation">
+                  <table width="1039" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                    <tr id="opertitle">
+                      <td width="120">商品名称
+                        <input name="type" type="hidden" id="type" value="$!type" /></td>
+                      <td width="97">举报类型</td>
+                      <td width="60">举报状态</td>
+                      <td width="100">举报时间</td>
+                      <td width="100">处理结果</td>
+                      <td width="241" align="left" style="padding-left:30px;">操作</td>
+                    </tr>
+                    #foreach($obj in $objs)
+                    <tr >
+                      <td ><a href="$!webPath/goods_$!{obj.goods.id}.htm" target="_blank">$!obj.goods.goods_name</a></td>
+                      <td>$!obj.subject.type.name</td>
+                      #if($!obj.status==0)#set($status="未处理")#end
+                      #if($!obj.status==1)#set($status="已处理")#end
+                      #if($!obj.status==-1)#set($status="已取消")#end
+                      <td>$!status</td>
+                      #set($time=$!CommUtil.formatShortDate($!obj.addTime))
+                      <td>$!time</td>
+                      #set($result="等待处理")
+                      #if($!obj.result==1)
+                        #set($result="有效举报")
+                      #end
+                      #if($!obj.result==-1)
+                        #set($result="无效举报")
+                      #end
+                      #if($!obj.result==-2)
+                        #set($result="恶意举报")
+                      #end
+                      <td align="">$!result</td>
+                      <td align=""><span ><a href="$!webPath/buyer/report_view.htm?id=$!obj.id">查看</a></span>#if($!{obj.status}==0)<span class="del"><a href="javascript:void(0);" onclick="if(confirm('是否确定取消举报?'))window.location.href='$!webPath/buyer/report_cancel.htm?id=$!obj.id&currentPage=$!currentPage'">取消</a></span>#end</td>
+                    </tr>
+                    #end
+                  </table>
+                </div>
+                <div class="alldel">
+                  <div  class="userfenye">
+                    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                  $!gotoPageFormHTML</div>
+                </div>
+              </form>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

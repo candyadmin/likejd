@@ -1,0 +1,27 @@
+<script>
+jQuery(document).ready(function(){
+	jQuery("a[id^=order_a_]").click(function(){
+		  var obj_id =jQuery(this).attr("obj_id");
+		  var goods_id =jQuery(this).attr("goods_id");
+		  jQuery("#goods_id").val(goods_id);
+		  jQuery("li[id^=order_li_]").removeClass("this");
+		  jQuery("#order_li_"+obj_id).addClass("this");
+		 
+	});
+	});
+</script>
+<ul id="order_ul">
+        #set($order_count= 0 )
+        #foreach($order in $orders)
+        #foreach($gc in $order.gcs)
+        #set($order_count = $!order_count + 1) 
+         #if($!order_count<=7)         #set($o_img="$!webPath/$!{gc.goods.goods_main_photo.path}/$!{gc.goods.goods_main_photo.name}_small.$!{gc.goods.goods_main_photo.ext}")
+          <li #if($!order_count==1)class="this"#end  id="order_li_$!gc.id" goods_id="$!gc.goods.id">
+          <a href="javascript:void(0);" id="order_a_$!gc.id" obj_id="$!gc.id" goods_id="$!gc.goods.id">
+          <img src="$!o_img" width="60" height="60" />
+          </a></li>
+          #end
+         #end 
+         #end
+          <input id="ocurrentCount" name="ocurrentCount" type="hidden" value="$!ocurrentCount"/>
+        </ul>

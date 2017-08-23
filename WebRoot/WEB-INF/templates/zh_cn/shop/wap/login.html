@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>$!config.title</title>
+<link
+	href="$!webPath/resources/style/system/front/wap/css/style.css"
+	rel="stylesheet" type="text/css">
+	<script
+		src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+	<script
+		src="$!webPath/resources/style/system/front/wap/js/jquery.validate.min.js"></script>
+	<script>
+		jQuery(document).ready(function() {
+			jQuery("#theForm").validate({
+				errorPlacement : function(error, element) {
+					element.parent().addClass("bd_red");
+					error.appendTo(element.parent().next());
+				},
+				success : function(label) {
+					label.parent().prev().removeClass("bd_red");
+				},
+				rules : {
+					username : {
+						required : true
+					},
+					password : {
+						required : true
+					},
+					code : {
+						required : true,
+						remote : {
+							url : "$!webPath/verify_code.htm", //后台处理程序
+							type : "post", //数据发送方式
+							dataType : "json", //接受数据格式   
+							data : { //要传递的数据
+								"code" : function() {
+									return jQuery("#code").val();
+								}
+							}
+						}
+					}
+				},
+				messages : {
+					username : {
+						required : "用户名不能为空"
+					},
+					password : {
+						required : "密码不能为空"
+					},
+					code : {
+						required : "验证码不能为空",
+						remote : "验证码不正确"
+					}
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="phone_hd">
+		<a class="back" href="javascript:history.go(-1);">
+			<img src="$!webPath/resources/style/system/front/wap/images/back.png" width="25" height="25">
+		</a>登录<a class="menu home"
+			href="$!webPath/wap/index.htm"><img src="$!webPath/resources/style/system/front/wap/images/home.png" width="25" height="25"></a>
+	</div>
+	<div class="phone_main">
+		<!--登录页-->
+		<form action="$!webPath/shopping_login.htm"
+			method="post" name="theForm" id="theForm" novalidate="novalidate">
+			<input name="login_role" type="hidden" id="login_role" value="user">
+			<input name="shopping_view_type" type="hidden" id="shopping_view_type" value="wap">
+				<div class="phone_login">
+					<ul>
+						<li class="ip"><input name="username" id="username" type="text" placeholder="请输入用户名/邮箱/已验证手机"></li>
+						<li class="yz"></li>
+						<li class="ip"><input name="password" id="password" type="password" placeholder="请输入密码"></li>
+						<li class="yz"></li>
+						<script>
+							function refreshCode() {
+								jQuery("#code_img").attr("src", "$!webPath/verify.htm?d" + new Date().getTime());
+							}
+						</script>
+						<li class="yzm">
+							<input name="code" type="text" id="code" placeholder="请输入验证码"> 
+								<img id="code_img" src="$!webPath/verify.htm" width="73" height="27">
+								<a href="javascript:void(0);" onclick="refreshCode();">
+								<img src="$!webPath/resources/style/system/front/wap/images/refresh.png"
+										width="32" height="32"></a></li>
+						<li class="yz"></li>
+						<li class="ip_btn"><input type="submit" value="登录"></li>
+						<li><span class="fl"><a href="$!webPath/register.htm">免费注册</a></span><!-- <span class="fr"><a href="$!webPath/forget.htm">找回密码</a></span> --></li>
+					</ul>
+				</div>
+		</form>
+		<!--底部-->
+		<div class="phone_foot">
+			<div class="foot_top">
+				<span class="fl"><span><a
+						href="$!webPath/user/login.htm">登录</a></span><b>|</b><span><a
+						href="$!webPath/register.htm">注册</a></span></span>
+						<span class="fr"><a href="#">TOP</a></span>
+			</div>
+			<div class="foot_nav">
+				<a class="this" href="$!webPath/wap/index.htm">触屏版</a>
+				<a href="javascript:void(0);">电脑版</a> 
+				<a href="javascript:void(0);">客户端</a>
+			</div>
+			<div class="foot_nav">$!webPath</div>
+		</div>
+
+		<!--按钮-->
+
+	</div>
+
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>站内信 - Powered by shoppingl</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+     rules: {
+			 content:{
+			    required:true
+			 }
+			},
+     messages: {
+			content:{
+			    required:"回复内容不能为空"
+				}
+		  }
+  }); 
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> 
+$!httpInclude.include("/head.htm")
+  <div class="position">当前位置：<a href="$!webPath/index.htm">首页</a> > <a href="$!webPath/buyer/account.htm">用户中心</a> > 查看站内信</div>
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/buyer/account_nav.htm?op=message")
+        <td id="centerbg" valign="top"><div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li><a href="$!webPath/buyer/message.htm">收到消息（<strong class="red">$!{user_msgs.size()}</strong>）</a></li>
+                <li><a href='$!webPath/buyer/message.htm?from_user_id=$!user.id' class="other">已发送消息</a><a href='$!webPath/buyer/sended_message.htm' class="other"></a></li>
+                <li><a href="$!webPath/buyer/message.htm?type=0">系统消息（<strong class="red">$!{sys_msgs.size()}</strong>）</a></li>
+                <li class="this">查看站内信</li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+			  <form action="$!webPath/buyer/message_reply.htm" method="post" name="theForm" id="theForm">
+                <table width="705" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                  <tr>
+                    <td width="100" align="right" valign="top">$!{obj.fromUser.userName}说：</td>
+                    <td class="px10 message"><span class="hui2">$!obj.content</span><span class="mes">$!CommUtil.formatLongDate($!obj.addTime)</span></td>
+                  </tr>
+                  #foreach($reply in $obj.replys)
+				   <tr>
+                    <td width="100" align="right" valign="top">$!{reply.fromUser.userName}说：</td>
+                    <td class="px10 message"><span class="hui2">$!reply.content</span><span class="mes">$!CommUtil.formatLongDate($!reply.addTime)</span></td>
+                  </tr>
+				  #end
+                  <tr>
+                    <td align="right" valign="top">回复短信：</td>
+                    <td class="px10">
+                      <textarea name="content" id="content" cols="45" rows="6" style="width:350px;"></textarea>
+                     </td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td class="px10"><span class="setsub">
+                      <input name="提交" type="submit"  value="回复" style="cursor:pointer;"/>
+                      <input name="pid" type="hidden" id="pid" value="$!obj.id" />
+                      <input name="type" type="hidden" id="type" value="$!type" />
+                    </span></td>
+                  </tr>
+                </table>
+			</form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+   $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>图片空间 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user_photo.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.ad-gallery.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery(".photo_page_top_mid li img").click(function(){
+    jQuery("#slide_img").attr("src","").hide();
+	jQuery("#slide_img").attr("src",jQuery(this).attr("src")).show('normal');
+  });								
+   //
+  jQuery('.ad-gallery').adGallery({
+    splitTitle:'slide-vert',								  
+	slideshow:{							  
+     enable: true,//是否启用开始和暂停功能
+     autostart: true,//是否自动播放
+     speed: 5000,//切换时间
+     start_label: '播放',//开始按钮显示的内容，可以为图片按钮
+     stop_label: '停止'//停止按钮显示的内容，可以为图片按钮 
+    }
+  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=album")
+        <td id="centerbg" valign="top"><div class="buyer_position">
+            <div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>图片详情</span></div>
+          </div>
+          <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li><a href="$!webPath/seller/album.htm">相册列表</a></li>
+                <li class="this">图片详情</li>
+                <li><a href="$!webPath/seller/watermark.htm">水印管理</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="photo_manage">
+                <div class="default_photo">
+                  <dl>
+                    #if($!album.album_cover)
+                    #set($cover_img="$!webPath/$!{album.album_cover.path}/$!{album.album_cover.name}") 
+                    #else
+                    #set($cover_img="$!webPath/resources/style/system/front/default/images/user_photo/smph.jpg")
+                    #end
+                    <dt><span><img src="$!cover_img" width="60" height="60"/></span></dt>
+                    <dd>
+                      <h1>$!album.album_name</h1>
+                      <p></p>
+                    </dd>
+                  </dl>
+                </div>
+                <div id="gallery" class="ad-gallery">
+                  <div class="ad-image-wrapper"> </div>
+                  <div class="ad-controls"></div>
+                  <div class="ad-nav">
+                    <div class="ad-thumbs">
+                      <ul class="ad-thumb-list">
+                        #foreach($photo in $album.photos)
+                        <li><a href="$!webPath/$!{photo.path}/$!{photo.name}"> <img src="$!webPath/$!{photo.path}/$!{photo.name}_small.$!{photo.ext}" width="50" height="50" img_width="$!{photo.width}" img_height="$!{photo.height}" 
+            img_ext="$!{photo.ext}"  img_small="$!webPath/$!{photo.path}/$!{photo.name}_small.$!{photo.ext}" 
+            img_big="$!webPath/$!{photo.path}/$!{photo.name}"/> </a> </li>
+                        #end
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="ad-gallery_right" id="information_right">
+                  <p>图片信息</p>
+                  <p>原图宽度：<span id="img_width"></span></p>
+                  <p>原图高度：<span id="img_height"></span></p>
+                  <p>图片格式：<span id="img_ext"></span></p>
+                  <p>查看大图：<a href="javascript:void(0);" id="img_big"  target="_blank">点击查看</a></p>
+                  <p>查看小图：<a href="javascript:void(0);" id="img_small" target="_blank">点击查看</a></p>
+                </div>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

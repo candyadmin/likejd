@@ -1,0 +1,62 @@
+<script>
+jQuery(document).ready(function(){
+  jQuery(".bgsear li").click(function(){
+     jQuery(".bgsear li").removeClass("this");
+	 jQuery(this).addClass("this");
+	 jQuery("#type").val(jQuery(this).attr("type"));
+  }).mouseover(function(){
+     jQuery(this).css("cursor","pointer");
+  });
+  #if($!type)
+  jQuery(".bgsear li").removeClass("this");
+  jQuery(".bgsear li[type=$!type]").addClass("this");
+  #end
+});
+</script>
+<form action="$!webPath/search.htm" method="post" id="SearchForm"><input name="type" type="hidden" id="type" value="goods" />
+<div class="head">
+<div class="logo">
+
+#if($!config.websiteLogo) <a href="$!webPath/index.htm"><img src="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name" border="0" /></a>#else<a href="$!webPath/index.htm"><img src="$!imageWebServer/resources/style/system/front/default/images/logo.png"  border="0" /></a>#end
+
+</div>
+<div class="head_sellercenter">卖家中心</div>   
+   <div class="bigsearch">
+      <ul class="bgsear">
+        <li class="this" type="goods">商品</li>
+        <li type="store">店铺</li>
+      </ul>
+      <div class="sear"><span class="sear_txt">
+        <input name="keyword" type="text" id="keyword" x-webkit-speech lang="zh-CN" onwebkitspeechchange="jQuery('#SearchForm').submit()" />
+      </span><span class="sear_btn">
+        <input name="input" type="submit" value="" style="cursor:pointer;"/>
+        </span></div>
+      <div class="keyword">
+      #foreach($info in $CommUtil.splitByChar("$!config.hotSearch",","))
+      #set($keyword=$!CommUtil.encode("$!info"))
+      <a href="$!webPath/search.htm?keyword=$!keyword" target="_blank">$!info</a>
+      #end</div>
+    </div>
+  </div>
+</form>
+<div class="seller_nav" #if(!$!user.store) style="height:auto;"#end> <i class="seller_navr"></i> <i class="seller_navl"></i>
+  <ul>
+    <li class="this"><span><a href="$!webPath/seller/index.htm">卖家中心</a></span>
+     #if($!user.store)
+     #set($menus=$!menuTools.generic_seller_quick_menu("$!user.store_quick_menu"))
+     #if($!menus.size()>0)
+      <div class="seller_his" id="store_quick_menu_info">
+      #foreach($map in $menus)
+      <a href='$!map.get("menu_url")'>$!map.get("menu_name")</a>
+      #end
+      </div>
+      #end
+     #end
+    </li>
+    <li><span><a href="$!webPath/buyer/index.htm">买家中心</a></span></li>
+    <li><span><a href="$!webPath/buyer/account.htm">我的账户</a></span></li>
+  </ul>
+  #if($!user.store)
+  <span class="seller_nav_a"><a href="javascript:void(0);" dialog_uri="$!webPath/seller/store_quick_menu.htm" dialog_title="设置快捷操作" dialog_width="730" dialog_height="100" dialog_id="store_quick_menu">设置快捷操作</a></span> 
+  #end
+  </div>

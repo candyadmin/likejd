@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>店铺设置  -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){							
+ jQuery("#theForm").validate({
+    rules:{
+	  card_img:{
+	    accept :"$!config.imageSuffix"
+	  },
+	  license_img:{
+	    accept:"$!config.imageSuffix"
+	  }
+	 },
+	messages:{
+	  card_img:{accept:"身份证只能为jpg、jpeg、png、bmp格式"},
+	  license_img:{accept:"营业执照只能为jpg、jpeg、png、bmp格式"}
+	}
+  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+         $!httpInclude.include("/seller/nav.htm?op=store_set")
+        <td id="centerbg" valign="top">
+<div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>店铺认证</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li><a href="$!webPath/seller/store_set.htm">店铺设置</a></li>
+                 <li><a href="$!webPath/seller/store_slide.htm">店铺幻灯</a></li>
+                 <li><a href="$!webPath/seller/store_map.htm">店铺地图</a></li>
+                <li class="this"><a href="$!webPath/seller/store_approve.htm">店铺认证</a></li>
+              </ul>
+            </div>
+            <form action="$!webPath/seller/store_approve_save.htm" method="post" enctype="multipart/form-data" id="theForm">
+            <div class="ordercon">
+              <div class="setshop">
+                <table width="705" border="0" cellspacing="0" cellpadding="0" class="setshoptable">
+                  <tr>
+                    <td width="98" align="right" valign="top">身份证：</td>
+                    <td width="607" style="padding-left:30px;">
+                      <ul class="setlogo">
+                        <li class="shoplogo"> #if($!store.card) #if($!store.card_approve)<img src="$!webPath/$!store.card.path/$!store.card.name" width="200" height="140" />#else 认证审核中[<a href="$!webPath/$!store.card.path/$!store.card.name" target="_blank">查看认证文件</a>] #end #else 尚未认证 #end</li>
+                        <li>
+                        #if($!store.card_approve)
+                          审核通过
+                        #else
+                           <input name="card_img" type="file" id="card_img" size="30" />
+                        #end
+                        </li>
+                        <li class="setinfo">上传个人第二代身份扫描件或者数码件<strong></strong></li>
+                      </ul>
+                      </td>
+                  </tr>
+                  <tr>
+                    <td width="98" align="right" valign="top">营业执照：</td>
+                    <td style="padding-left:30px;">
+                      <ul class="setbanner">
+                        <li class="shopbanner"> #if($!store.store_license) #if($!store.realstore_approve)<img src="$!banner" width="400" height="300" />#else 认证审核中[<a href="$!webPath/$!store.store_license.path/$!store.store_license.name" target="_blank">查看认证文件</a>]   #end #else 尚未认证 #end</li>
+                        <li>
+                        #if($!store.realstore_approve)
+                          审核通过
+                        #else
+                          <input name="license_img" type="file" id="license_img" size="30" />
+                        #end
+                        </li>
+                        <li class="setinfo">上传实体店铺营业执照，获取更多的卖家信任</li>
+                      </ul>
+                      </td>
+                  </tr>
+                  <tr>
+                    <td width="98" align="right">&nbsp;</td>
+                    <td style="padding-left:30px;"><span class="setsub">
+                      <input name="" type="submit"  value="提交" style="cursor:pointer;"/>
+                      </span></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            </form>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+$!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(e) {
+    
+	var status = '$!{order_status}';
+    
+    if(status==""){
+		status = 0;
+    }
+    jQuery(" li[id^=order_status]").each(function(index, element) {
+    	jQuery(element).removeClass("this");
+	});
+   
+	jQuery("#order_status_"+status).addClass("this");
+	jQuery("#url").val(status);
+	
+   var begin_count=2;
+   var ret = 1;
+   jQuery(window).scroll(function(){								  
+	 if (jQuery(document).scrollTop() >= jQuery(document).height() - jQuery(window).height()&&ret==1) {
+		 
+		 jQuery.ajax({
+		 		  type:'POST',
+	              url:'$!webPath/buyer/ajaxorder.htm',
+				  data:{"currentPage":begin_count,
+		  				"order_status":"$!{order_status}",
+						"orderBy":jQuery("#orderBy").val(),
+						"orderType":jQuery("#orderType").val()
+			},
+			beforeSend:function(){
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				  ret = 0;
+			},
+			success:function(data){
+				
+				var result=eval("("+data+")");  
+				var currentPage = result.currentPage;
+				var totalPage = result.totalPage;
+				
+				jQuery("#loading").hide();
+				
+				if(begin_count <= totalPage){
+					begin_count = begin_count +1;
+					//最后一页
+					if(currentPage >= totalPage){
+						ret = 0;
+						jQuery("#loading_none").show();
+					}
+					if(currentPage < totalPage){
+						ret = 1;
+					}
+					else {
+						ret = 0;
+						jQuery("#loading_none").show();
+					}
+					jQuery("#orderBy").val(result.orderBy);
+	     			jQuery("#orderType").val(result.orderType);
+	     			jQuery("#currentPage").val(result.currentPage);
+	     			jQuery("#totalPage").val(result.totalPage);
+	     			jQuery(".order_page").find(".order_page_box").last().after(result.ajaxLoadHtml);
+				  	jQuery(".order_page img").lazyload({effect:"fadeIn",width:50,height:50});
+	            	
+				} else {
+					ret = 0;
+					jQuery("#loading_none").show();
+				}
+            	  
+            }
+	    });
+	 }
+	});	
+	
+	
+});
+function order_pay(id){
+	window.location.href="$!webPath/order_pay_view.htm?id="+id;
+}
+function order_cofirm(id){
+	if(confirm("确定要确认收货？")){
+		window.location.href="$!webPath/buyer/order_cofirm.htm?id="+id;
+	}
+}
+
+</script>
+</head>
+
+<body class="user_bg">
+
+	<div class="user_bar">
+		<a class="back" href="$!webPath/buyer/index.htm">
+			<img src="$!webPath/resources/style/system/front/wap/images/back_black.png" width="30" height="30">
+		</a>
+		<span class="fl">我的订单</span>
+	</div>
+
+	<div class="order_page">
+	
+		<div class="order_hd">
+			<ul>
+				<li id="order_status_0" class="this"><a href="$!webPath/buyer/order.htm">全部</a></li>
+				<li id="order_status_order_submit"><a href="$!webPath/buyer/order.htm?order_status=order_submit&status=10">待付款</a></li>
+			    <li id="order_status_order_pay"><a href="$!webPath/buyer/order.htm?order_status=order_pay&status=20">待发货</a></li>
+			    <li id="order_status_order_shipping"><a href="$!webPath/buyer/order.htm?order_status=order_shipping&status=30">待收货</a></li>
+			    <li id="order_status_order_receive"><a href="$!webPath/buyer/order.htm?order_status=order_receive&status=40">已收货</a></li>
+			</ul>
+			<input type="hidden" name="url" id="url">
+		</div>
+		
+		#foreach($obj in $objs)
+		
+		<div class="order_page_box">
+			
+			<h1>
+				<span class="fl">订单号：$!{obj.order_id}</span> 
+				<span class="fr">
+				#if($!obj.order_status==10)
+				待发货
+				#elseif($!obj.order_status==20)
+				待发货
+				#elseif($!obj.order_status==30)
+				待收货
+				#elseif($!obj.order_status==40)
+				已收货
+				#else
+				&nbsp;
+				#end
+				</span>
+			</h1>
+			
+            #foreach($gc in $obj.gcs)
+            
+	            #if($!gc.goods.goods_main_photo)
+	              	#set($img="$!webPath/$!{gc.goods.goods_main_photo.path}/$!{gc.goods.goods_main_photo.name}_small.$!{gc.goods.goods_main_photo.ext}")
+	            #else
+	              	#set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	            #end
+              	
+				<div class="order_goods">
+					<div class="dt">
+						<a href="$!webPath/goods_$!{gc.goods.id}.htm">
+							<img src="$!img" width="50" height="50">
+						</a>
+					</div>
+					<div style="float: left;">
+						<a href="$!webPath/goods_$!{gc.goods.id}.htm">
+							<span style="line-height: 24px">$!{gc.goods.goods_name}</span>
+						</a><br>
+					</div>
+				</div>
+				
+				<div class="order_total"> 实付：<b>¥$!{obj.totalPrice} &nbsp;<i style="color:#59cfff">(含运费:¥$!CommUtil.null2Float($!{obj.ship_price}))</i></b></div>
+				
+				<div class="order_box_bt">
+		
+                      #if($!obj.order_status==0)
+                      <a style="color:#ff4f19; text-decoration:underline;" href="javascript:void(0);" 
+                      onclick="if(confirm('删除订单，删除后不可恢复，是否继续?'))window.location.href='$!webPath/buyer/order_delete.htm?id=$!obj.id&currentPage=$!currentPage'" >删除订单</a>
+                      #end
+                      
+                      #if($!obj.order_status==10)
+                      <a style="color:#ff4f19; text-decoration:underline;" href="javascript:void(0);" 
+                      onclick="if(confirm('取消订单，是否继续?'))window.location.href='$!webPath/buyer/order_cancel.htm?id=$!obj.id&currentPage=$!currentPage'" >取消订单</a>
+                      #end
+                      
+                      <!-- #if($!obj.order_status==45)
+                      <a style="color:#ff4f19; text-decoration:underline;" href="javascript:void(0);" dialog_uri="$!webPath/buyer/order_return_apply.htm?id=$!obj.id&view='true'" dialog_title="申请详情" dialog_width="400" dialog_height="100" dialog_id="order_cancel">申请退货中</a>
+                      #end -->
+
+                      <!-- #if($!obj.order_status==40)
+                        #set($flag=0)
+                        #foreach($gc in $obj.gcs)
+                          #if($gc.goods.goods_choice_type==1)
+                            #set($flag=1)
+                          #end
+                        #end
+                        #if($!flag!=1)
+                       	<a dialog_id="order_cancel" dialog_height="100" dialog_width="500" dialog_title="申请退货" dialog_uri="$!webPath/buyer/order_return_apply.htm?id=$!obj.id&currentPage=1" href="javascript:void(0);">申请退货</a>
+                        #end
+                      #end -->
+
+                      <!-- #if($!obj.order_status==46)
+                      <li><a style="color:#ff4f19; text-decoration:underline;" href="javascript:void(0);" dialog_uri="$!webPath/buyer/order_return_ship.htm?id=$!obj.id&currentPage=$!currentPage" dialog_title="退货物流" dialog_width="400" dialog_height="100" dialog_id="order_cancel">退货物流</a></li>
+                      #end -->
+                      
+                      #if($!obj.order_status==47)
+                       	退货完成,已结束
+                      #end
+                      
+                      #if($!obj.order_status==48)
+                      	卖家拒绝退货申请
+                      #end
+                      
+                      #if($!obj.order_status==49)
+                      	退货失败
+                      #end
+
+  		  			  #if($!obj.order_status==65)
+                      	已结束,不可评价
+                      #end
+                      
+                      #if($!obj.order_status==10)
+                      <a href="$!webPath/order_pay_view.htm?id=$!obj.id" target="_blank" class="bg_orange">付款</a>
+                      #end
+                      
+                      <!-- #if($!obj.order_status>=20)
+                      <a href="$!webPath/buyer/complaint_handle.htm?order_id=$!obj.id">投诉</a>
+                      #end -->
+                      
+                      #if($!obj.order_status==30)
+                      <a href="javascript:void(0);" 
+                      onclick="if(confirm('订单确认收货，是否继续?'))window.location.href='$!webPath/buyer/order_cofirm_save.htm?id=$!obj.id&currentPage=$!currentPage'" >确认收货</a>
+                      #end
+	                        
+				</div>
+			#end
+			
+			
+		</div>
+		#end
+
+	</div>
+	
+	<div class="loading" id="loading" style="display: none;">
+	    <ul>
+	      <li><img src="$!webPath/resources/style/system/front/wap/images/loading.gif" height="16" width="16"></li>
+	      <li>正在加载....</li>
+	    </ul>
+	</div>
+	<div class="loading" id="loading_none" style="display: block;">
+	    <ul>
+	      <li>没有更多了....</li>
+	    </ul>
+	</div>
+	
+	<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	<input name="totalPage" type="hidden" id="totalPage" value="$!totalPage" />
+    <input name="order_status" type="hidden" id="order_status" value="$!{order_status}" />
+    <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+    <input name="orderType" type="hidden" id="orderType" value="$!orderType" /> 
+		
+	$!httpInclude.include("/footer.htm")
+	 
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>支付方式 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+    <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=payment")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>支付方式</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this">支付方式</li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="operation">
+                <table width="800" border="0" cellspacing="0" cellpadding="0" class="paymtable" >
+                <tr>
+                  <td width="160" style="padding-left:15px;">名称</td>
+                  <td align="center" width="180">插件说明</td>
+                  <td align="center" width="40">启用</td>
+                  <td align="center" width="150">操作</td>
+                </tr>
+                #if($!map.get("alipay")==true)
+                <tr>
+                  <td style="padding-left:15px;">支付宝</td>
+                  <td>支付宝网站(www.alipay.com) 是国内先进的网上支付平台，<br /></td>
+                  #set($ret=$!paymentTools.queryPayment("alipay"))
+                  #set($install=$!ret.get("install"))
+                  #set($already=$!ret.get("already"))
+                  #if($install)
+                    #set($alipay_install="是")
+                  #else
+                    #set($alipay_install="否")
+                  #end
+                  <td align="center">$!alipay_install</td>
+                  <td align="center" >#if($!already)<span class="configure"><a href="$!webPath/seller/payment_edit.htm?mark=alipay">配置</a></span><span class="unloading"><a href="$!webPath/seller/payment_uninstall.htm?mark=alipay">卸载</a></span>#else<span class="installation"><a  href="$!webPath/seller/payment_install.htm?mark=alipay">安装</a>#end</td>
+                </tr>
+                #end
+                #if($!map.get("alipay_wap")==true)
+                <tr>
+                  <td style="padding-left:15px;">支付宝手机网页支付</td>
+                  <td>支付宝网站(www.alipay.com) 是国内先进的网上支付平台，<br /></td>
+                  #set($ret=$!paymentTools.queryPayment("alipay_wap"))
+                  #set($install=$!ret.get("install"))
+                  #set($already=$!ret.get("already"))
+                  #if($install)
+                    #set($alipay_install="是")
+                  #else
+                    #set($alipay_install="否")
+                  #end
+                  <td align="center">$!alipay_install</td>
+                  <td align="center" >#if($!already)<span class="configure"><a href="$!webPath/seller/payment_edit.htm?mark=alipay_wap">配置</a></span><span class="unloading"><a href="$!webPath/seller/payment_uninstall.htm?mark=alipay_wap">卸载</a></span>#else<span class="installation"><a  href="$!webPath/seller/payment_install.htm?mark=alipay_wap">安装</a>#end</td>
+                </tr>
+                #end
+                #if($!map.get("chinabank")==true)
+                <tr>
+                  <td style="padding-left:15px;">网银在线</td>
+                  <td>网银在线(www.chinabank.com.cn)以网上转账方式将相应交易款划转到商户<br />
+                    指定银行账号中。</td>
+                  #set($ret=$!paymentTools.queryPayment("chinabank"))
+                  #set($install=$!ret.get("install"))
+                  #set($already=$!ret.get("already"))  
+                  #if($!install)
+                    #set($chinabank_install="是")
+                  #else
+                    #set($chinabank_install="否")
+                  #end                    
+                  <td align="center">$!chinabank_install</td>
+                  <td align="center">#if($!already)<span class="configure"><a href="$!webPath/seller/payment_edit.htm?mark=chinabank">配置</a></span><span class="unloading"><a href="$!webPath/seller/payment_uninstall.htm?mark=chinabank">卸载</a></span>#else<span class="installation"><a  href="$!webPath/seller/payment_install.htm?mark=chinabank">安装</a>#end</td>
+                </tr>
+                #end
+              #if($!map.get("tenpay")==true)
+                <tr>
+                  <td style="padding-left:15px;">财付通</td>
+                  <td>财付通(www.tenpay.com) - 本即时到账接口无需预付费，任何订单金额均<br />
+                    即时到达您的账户，只收单笔 1% 手续费。</td>
+                  #set($ret=$!paymentTools.queryPayment("tenpay"))
+                  #set($install=$!ret.get("install"))
+                  #set($already=$!ret.get("already"))  
+                  #if($!install)
+                    #set($tenpay_install="是")
+                  #else
+                    #set($tenpay_install="否")
+                  #end                     
+                  <td align="center">$!tenpay_install</td>
+                  <td align="center">#if($!paymentTools.queryPayment("tenpay").get("install")==true)<span class="configure"><a href="$!webPath/seller/payment_edit.htm?mark=tenpay">配置</a></span><span class="unloading"><a href="$!webPath/seller/payment_uninstall.htm?mark=tenpay">卸载</a></span>#else<span class="installation"><a  href="$!webPath/seller/payment_install.htm?mark=tenpay">安装</a>#end</td>
+                </tr>
+                #end
+                #if($!map.get("bill")==true)
+                <tr>
+                  <td style="padding-left:15px;">快钱支付</td>
+                  <td>快钱是国内领先的独立第三方支付企业，旨在为各类企业及个人提供安全、便捷和保密的支付清算与账务服务，其推出的支付产品包括但不限于人民币支付，外卡支  付，神州行卡支付，联通充值卡支付，VPOS支付等众多支付产品, 支持互联网、手机、电话和POS等多种终端,   以满足各类企业和个人的不同支付需求。</td>
+                  #if($!paymentTools.queryPayment("bill").get("install")==true)
+                    #set($bill_install="是")
+                  #else
+                    #set($bill_install="否")
+                  #end                   
+                  <td align="center">$!bill_install</td>
+                  <td align="center">#if($!paymentTools.queryPayment("bill").get("install")==true)<span class="configure"><a href="$!webPath/seller/payment_edit.htm?mark=bill">配置</a></span><span class="unloading"><a href="$!webPath/seller/payment_uninstall.htm?mark=bill">卸载</a></span>#else<span class="installation"><a  href="$!webPath/seller/payment_install.htm?mark=bill">安装</a>#end</td>
+                </tr>
+                #end
+                 #if($!map.get("paypal")==true)
+                 #set($ret=$!paymentTools.queryPayment("paypal"))
+                  #set($install=$!ret.get("install"))
+                  #set($already=$!ret.get("already"))  
+                  #if($!install)
+                    #set($paypal_install="是")
+                  #else
+                    #set($paypal_install="否")
+                  #end   
+                <tr>
+                  <td style="padding-left:15px;">Paypal</td>
+                  <td>www.paypal.com</td>
+                  <td align="center">$!paypal_install</td>
+                  <td align="center">#if($!already)<span class="configure"><a href="$!webPath/seller/payment_edit.htm?mark=paypal">配置</a></span><span class="unloading"><a href="$!webPath/seller/payment_uninstall.htm?mark=paypal">卸载</a></span>#else<span class="installation"><a  href="$!webPath/seller/payment_install.htm?mark=paypal">安装</a></span>#end</td>
+                </tr>
+                #end
+                #if($!map.get("payafter")==true)
+                <tr>
+                  <td style="padding-left:15px;">货到付款</td>
+                  <td>货到付款</td>
+                  #if($!paymentTools.queryPayment("payafter").get("install")==true)
+                    #set($payafter_install="是")
+                  #else
+                    #set($payafter_install="否")
+                  #end                   
+                  <td align="center">$!payafter_install</td>
+                  <td align="center">#if($!paymentTools.queryPayment("payafter").get("install")==true)<span class="configure"><a href="$!webPath/seller/payment_edit.htm?mark=payafter">配置</a></span><span class="unloading"><a href="$!webPath/seller/payment_uninstall.htm?mark=payafter">卸载</a></span>#else<span class="installation"><a  href="$!webPath/seller/payment_install.htm?mark=payafter">安装</a>#end</td>
+                </tr>
+                #end
+                #if($!map.get("outline")==true)
+                <tr>
+                  <td style="padding-left:15px;">线下支付</td>
+                  <td>线下支付</td>
+                  #if($!paymentTools.queryPayment("outline").get("install")==true)
+                    #set($outline_install="是")
+                  #else
+                    #set($outline_install="否")
+                  #end                   
+                  <td align="center">$!outline_install</td>
+                  <td align="center">#if($!paymentTools.queryPayment("outline").get("install")==true)<span class="configure"><a href="$!webPath/seller/payment_edit.htm?mark=outline">配置</a></span><span class="unloading"><a href="$!webPath/seller/payment_uninstall.htm?mark=outline">卸载</a></span>#else<span class="installation"><a  href="$!webPath/seller/payment_install.htm?mark=outline">安装</a>#end</td>
+                </tr>
+                #end
+                #if($!map.get("balance")==true)
+                <tr>
+                  <td style="padding-left:15px;">预存款支付</td>
+                  <td>预存款支付</td>
+                  #if($!paymentTools.queryPayment("balance").get("install")==true)
+                    #set($balance_install="是")
+                  #else
+                    #set($balance_install="否")
+                  #end 
+                  <td align="center">$!balance_install</td>
+                  <td align="center">#if($!paymentTools.queryPayment("balance").get("install")==true)<span class="configure"><a href="$!webPath/seller/payment_edit.htm?mark=balance">配置</a></span><span class="unloading"><a href="$!webPath/seller/payment_uninstall.htm?mark=balance">卸载</a></span>#else<span class="installation"><a  href="$!webPath/seller/payment_install.htm?mark=balance">安装</a>#end</td>
+                </tr>
+                #end
+              </table>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+
+</body>
+</html>

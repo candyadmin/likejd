@@ -1,0 +1,71 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+jQuery(document).ready(function(){
+  //								
+ jQuery("#theForm").validate({
+	ignore: "",
+    rules:{
+	  trueName:{required :true},
+	  area_id:{required :true},
+	  area_info:{required :true},
+	  telephone:{required :true},
+	  mobile:{required :true}
+	 },
+	messages:{
+	  trueName:{required :"收货人不能为空"},
+	  area_id:{required :"请选择详细区域"},
+	  area_info:{required :"详细地址不能为空"},
+	  telephone:{required :"联系电话不能为空"},
+	  mobile:{required :"手机号码不能为空"}	  
+	}
+  });
+    //
+ jQuery("select").change(function(){
+     var level=jQuery(this).attr("level");
+	 var id=jQuery(this).val();
+	 if(id!=""){
+	  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	     jQuery("#area"+level).empty();
+		  jQuery("#area"+level).append("<option value=''>请选择</option>");
+	    jQuery.each(data, function(index,item){
+		  jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+		  jQuery("#area"+level).show();
+		});
+	  },"json");
+	 }else{
+	   for(var i=level;i<=3;i++){
+	    jQuery("#area"+i).empty();
+	    jQuery("#area"+i).hide();
+	   }
+	 }
+  });
+  //
+ jQuery("#area3").change(function(){
+   var id=jQuery(this).val();
+   jQuery("#area_id").val(id);
+ });
+});
+</script>
+<form action="$!webPath/seller/album_transfer_save.htm" method="post" id="theForm">
+  <table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    
+    <tr>
+      <td width="100" align="right" valign="top"><span class="hui_table">转移到:</span></td>
+      <td align="left"><span class="dia_txt">
+        <select name="to_album_id" id="to_album_id">
+              #foreach($obj in $objs)
+                    <option value="$!obj.id">$!obj.album_name</option>
+              #end 
+              </select>
+      </span></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+        <input type="submit" value="转移相册" style="cursor:pointer;"/>
+        <span class="batch_op">
+        <input name="album_id" type="hidden" id="album_id" value="$!album_id" />
+        <input name="mulitId" type="hidden" id="mulitId" value="$!mulitId" />
+        </span></span></td>
+    </tr>
+  </table>
+</form>

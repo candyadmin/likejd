@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+	errorPlacement: function(error, element) {  
+       error.appendTo(element.parent());  
+    },						  
+    rules:{
+	 gpr_name:{required:true},	
+	 gpr_begin:{required:true,digits:true},
+	 gpr_end:{required:true,digits:true}
+	 },
+    messages:{
+	 gpr_name:{required:"价格区间标题不能为空"},		
+	 gpr_begin:{required:"价格下限不能为空",digits:"只能为整数"},
+	 gpr_end:{required:"价格上限不能为空",digits:"只能为整数"}
+	}
+  });
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+});
+
+function saveForm(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/group_price_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <div class="cont">
+    <h1 class="seth1">活动管理</h1>
+    <div class="settab"><span class="tab-one"></span> <span class="tabs"><a href="$!webPath/admin/group_list.htm">团购列表</a> | <a href="$!webPath/admin/group_add.htm">新增团购</a>|<a href="$!webPath/admin/group_class_list.htm" >团购分类</a> |<a href="$!webPath/admin/group_class_add.htm" >新增分类</a>|<a href="$!webPath/admin/group_area_list.htm" >团购区域</a>|<a href="$!webPath/admin/group_area_add.htm" >新增区域</a>|<a href="$!webPath/admin/group_price_list.htm" >价格区间</a>|<a href="$!webPath/admin/group_price_add.htm" #if(!$!edit)class="this"#end>添加区间</a> #if($!edit)<a href="javascript:void(0);" class="this">编辑</a> #end</span> <span class="tab-two"></span></div>
+    <div class="setcont" id="base">
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>区间标题
+          <input name="id" type="hidden" id="id" value="$!obj.id" />
+        </li>
+        <li><span class="webname">
+          <input name="gpr_name" type="text" id="gpr_name" value="$!obj.gpr_name" />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>区间下限</li>
+        <li> <span class="webname">
+          <input name="gpr_begin" type="text" id="gpr_begin" value="$!obj.gpr_begin" size="25" />
+        </span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>区间上限</li>
+        <li><span class="webname">
+          <input name="gpr_end" type="text" id="gpr_end" value="$!obj.gpr_end" size="25" />
+        </span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/>
+  </div>
+</form>
+</body>
+</html>

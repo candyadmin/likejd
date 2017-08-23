@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>我的购物车 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+  function goods_count_adjust(cart_id,store_id,count){
+   	  jQuery.post("$!webPath/goods_count_adjust.htm",{"cart_id":cart_id,"store_id":store_id,"count":count},function(data){
+		 if(data.error=="100"){																										
+	       jQuery("#goods_count_"+cart_id).val(count);
+		   jQuery("#goods_count_"+cart_id).attr("goods_count",count)
+		   jQuery("#goods_total_price_"+cart_id).html("¥"+data.goods_total_price);
+		   jQuery("#total_price_"+store_id).html(data.sc_total_price);
+		   jQuery("#top_total_price_"+store_id).html(data.sc_total_price);
+		 }
+		 if(data.error=="200"){
+		   alert("库存不足，请重新选择数量！");
+		   jQuery("#goods_count_"+cart_id).val(jQuery("#goods_count_"+cart_id).attr("goods_count"));
+		 }
+		 if(data.error=="300"){
+		   alert("团购库存不足，请重新选择数量！");
+		   jQuery("#goods_count_"+cart_id).val(jQuery("#goods_count_"+cart_id).attr("goods_count"));
+		 }
+	   },"json");
+  }
+  function confirm_cart(sc_id){
+    jQuery("#cart_"+sc_id).hide();
+	jQuery("#cart_"+sc_id).attr("status","submit");
+	if(jQuery("form[id^=cart_][status=no_submit]").length==0){
+	   jQuery("#cart_"+sc_id).attr("target","_self");
+	}
+	jQuery("#cart_"+sc_id).submit();
+  }  
+jQuery(document).ready(function(){
+  jQuery("a[id^=favorite_]").click(function(){
+  #if($!user)
+    #if($!user.id==$!obj.goods_store.user.id)
+	  alert("不能收藏自己的商品");
+	#else
+	  var id=jQuery(this).attr("id").substring(9);
+	  jQuery.post("$!webPath/add_goods_favorite.htm",{"id":id},function(data){
+		 if(data==0){
+		    alert("收藏成功!");
+		 }
+		 if(data==1){
+		    alert("您已经收藏过该商品!");
+		 }
+	  },"text");
+	#end
+  #else
+   if(confirm("登录后才可收藏商品，现在登录？"))
+     window.location.href="$!webPath/user/login.htm?url=$!webPath/goods_cart1.htm"
+  #end
+  });
+  jQuery("a[id^=count_down]").click(function(){
+	var cart_id=jQuery(this).attr("cart_id");
+	var count=jQuery("#goods_count_"+cart_id).val();
+	var store_id=jQuery(this).attr("store_id");
+	if(count>1){
+	  count--;
+      goods_count_adjust(cart_id,store_id,count)
+	}
+  });
+  jQuery("a[id^=count_up]").click(function(){
+	var cart_id=jQuery(this).attr("cart_id");
+	var count=jQuery("#goods_count_"+cart_id).val();
+	var store_id=jQuery(this).attr("store_id");
+	if(count>0){
+	  count++;
+	  goods_count_adjust(cart_id,store_id,count);
+	}									 
+  });
+  jQuery("input[id^=goods_count_]").keyup(function(){
+  	var cart_id=jQuery(this).attr("cart_id");
+	var count=jQuery("#goods_count_"+cart_id).val().replace(/\D/g,'');
+	if(count==""){
+       count=1;
+	}
+	var store_id=jQuery(this).attr("store_id");
+	if(count>0){
+	  goods_count_adjust(cart_id,store_id,count);
+	}	
+  });
+  //
+  jQuery(".baby_gp>a").mouseover(function(){
+	jQuery(this).parent().find(".arrow").show();									  
+    jQuery(this).parent().find(".baby_group").show();
+  });
+  jQuery(".baby_gp").mouseleave(function(){
+    jQuery(this).parent().find(".arrow").hide();									  
+    jQuery(this).parent().find(".baby_group").hide();
+  });
+  //
+});
+</script>
+<head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  <div class="Steps_box">
+    <div class="Steps">
+      <ul>
+        <li class="this">1.查看购物车</li>
+        <li>2.确认订单信息</li>
+        <li>3.付款到卖家</li>
+        <li>4.确认收货</li>
+        <li class="last">5.评价</li>
+      </ul>
+    </div>
+    #foreach($sc in $cart)
+    <form status="no_submit" method="post" name="cart_$!{sc.store.id}" target="_blank" id="cart_$!{sc.store.id}" action="$!webPath/goods_cart2.htm">
+      <div class="h1"> <span class="h1_l">店铺名称：<a href="$!webPath/store_$!{sc.store.id}.htm" target="_blank">$!sc.store.store_name</a></span> <span class="h1_r">商品总价(不含运费)：<b>¥<span id="top_total_price_$!{sc.store.id}">$!{sc.total_price}</span></b><a href="javascript:void(0);"  onclick="confirm_cart('$!sc.store.id');">结算</a></span> </div>
+      <div class="table">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td width="55%" align="center" class="title">店铺商品</td>
+            <td width="8%" align="center" class="title">单价</td>
+            <td width="14%" align="center" class="title">数量</td>
+            <td width="8%" align="center" class="title">小计（元）</td>
+            <td  align="center" class="title">操作</td>
+          </tr>
+          #foreach($obj in $sc.gcs)
+          <tr goods_list="goods_info_$!obj.id" id="$!obj.id">
+            <td class="baby"> 
+            #if($!obj.goods.goods_main_photo)               
+              #set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")
+              #else
+              #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+              #end <img src="$!img" width="65" height="65" />
+              <p><a href="$!webPath/goods_$!{obj.goods.id}.htm" target="_blank">$!CommUtil.substring("$!obj.goods.goods_name",42)</a> #if($!{obj.goods.group_buy}==2) <span style="color:#F00">(团购)</span> #end
+                #if($!{obj.goods.bargain_status}==2) <span style="color:#F00">(特价)</span> #end
+                #if($!{obj.cart_type}=="combin")
+              <div class="baby_gp"> 
+                <a href="javascript:void(0);" style="color:#F00;">【组合商品】</a>
+                <div class="baby_group" style="display:none;">
+                  <div class="baby_group_box">
+                    <ul class="group_ul">
+                      #foreach($info in $goodsViewTools.query_combin_goods("$!obj.goods.id"))
+                      <li><a href="$!webPath/goods_$!{info.id}.htm" target="_blank"> #if($!info.goods_main_photo) #set($img="$!imageWebServer/$!{info.goods_main_photo.path}/$!{info.goods_main_photo.name}_small.$!{info.goods_main_photo.ext}")
+                        #else
+                        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                        #end <img src="$!img" /></a><span> <a href="$!webPath/goods_$!{info.id}.htm" target="_blank">$!CommUtil.substring("$!info.goods_name",18)</a></span></li>
+                      #end
+                    </ul>
+                  </div>
+                </div>
+                <span class="arrow" style="display:none;"></span> </div>
+              #end
+              #if($!{obj.goods.delivery_status}==2) <span style="color:#F00">[买就送]</span> #end <br />
+              #foreach($gsp in $obj.gsps)
+              #if($!gsp.spec) <span class="color">$!gsp.spec.name: $!gsp.value</span><br />
+              #end
+              #end
+              </p></td>
+            <td align="center">¥$!obj.price</td>
+            <td class="input" align="center"><span><a href="javascript:void(0);" id="count_down_$!obj.id" cart_id="$!obj.id" store_id="$!sc.store.id"><img src="$!imageWebServer/resources/style/system/front/default/images/jian.jpg" width="12" height="12" /></a></span>
+              <input name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}" value="$!obj.count" cart_id="$!obj.id" store_id="$!sc.store.id" goods_count="$!obj.count" />
+              <span><a href="javascript:void(0);" id="count_up_$!obj.id" cart_id="$!obj.id" store_id="$!sc.store.id"><img src="$!imageWebServer/resources/style/system/front/default/images/add.jpg" width="12" height="12" /></a></span></td>
+            #set($total_price=$!obj.count * $!obj.price)
+            <td align="center"><strong class="orange" id="goods_total_price_$!{obj.id}">¥$!total_price</strong></td>
+            <td align="center"><a href="javascript:void(0);" class="cart_common" id="favorite_$!{obj.goods.id}">收藏</a> <a href="javascript:void(0);" dialog_uri="$!webPath/goods_share.htm?goods_id=$!{obj.goods.id}" dialog_title="分享商品" dialog_width="450" dialog_height="400" dialog_id="goods_share" class="cart_common">分享</a> <a href="javascript:void(0);" onclick="cart_remove('$!obj.id','$!sc.store.id');" class="cart_common">删除</a></td>
+          </tr>
+          #end
+        </table>
+      </div>
+      <div class="h2"> <span class="h2_r"><em>商品总价(不含运费)：</em><b>¥<strong class="orange" id="total_price_$!{sc.store.id}">$!{sc.total_price}</strong></b>
+        <input name="store_id" type="hidden" id="store_id" value="$!sc.store.id" />
+        <a href="javascript:void(0);"  onclick="confirm_cart('$!sc.store.id');">结算</a></span> </div>
+    </form>
+    #end
+    <div class="car_nogoods" #if($!cart.size()>0) style="display:none;"#end >
+      <div class="shopcar">
+        <dl>
+          <dt><img src="$!imageWebServer/resources/style/system/front/default/images/shopping_cart.jpg" width="130" height="118" /></dt>
+          <dd>
+            <h1>您的购物车还没有商品</h1>
+            <span><a href="$!webPath/index.htm">马上去购物>></a></span><span><a href="$!webPath/buyer/order.htm">查看自己的订单>></a></span> </dd>
+        </dl>
+      </div>
+    </div>
+    
+    
+    <div class="tm_hot">
+<h1><span class="tm_h1_left">商家热卖</span><span class="tm_h1_right"><a href="$!webPath/ztc_goods_list.htm" target="_blank">更多>></a></span></h1>
+<ul>
+#foreach($ztc in $ztc_goods)
+#set($ztc_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+#if($!ztc.goods_main_photo)                             #set($ztc_img="$!imageWebServer/$!{ztc.goods_main_photo.path}/$!{ztc.goods_main_photo.name}_small.$!{ztc.goods_main_photo.ext}")
+#end 
+<li><a href="$!webPath/goods_$!{ztc.id}.htm" target="_blank">
+<img src="$!ztc_img" width="160" height="160" />
+</a>
+<strong>¥ $!{ztc.store_price}</strong>
+<span><a href="$!webPath/goods_$!{ztc.id}.htm" target="_blank">$!ztc.goods_name</a></span>
+</li>
+#end
+</ul>
+</div> 
+
+
+  
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

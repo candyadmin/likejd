@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>积分订单支付结果 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 1.3" />
+<meta name="author" content="www.shopping.com">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="position">当前位置：<a href="$!webPath/index.htm" >首页</a> > <span>支付结果</span></div>
+    <div class="index2">
+      <div class="paystep_info">
+        <span class="payinfotop"><i>积分订单编号：</i>$!{obj.igo_order_sn}</span>
+       <span class="payinfotop"> <i>支付金额：</i><em>¥$!{obj.igo_trans_fee}</em></span>
+                #if($!obj.igo_status==-1)
+                  #set($status="已取消")
+                #end
+                #if($!obj.igo_status==0)
+                  #set($status="待付款")
+                #end
+                #if($!obj.igo_status==10)
+                  #set($status="线下支付待审核")
+                #end
+                #if($!obj.igo_status==20)
+                  #set($status="付款成功")
+                #end
+                #if($!obj.igo_status==30)
+                  #set($status="已发货")        
+                #end                
+                #if($!obj.igo_status==40)
+                #set($status="已收货")
+                #end
+                #if($!obj.igo_status==50)
+                #set($status="已完成")                                              
+                #end      
+        <span class="paymode"><i>支付状态：</i><b style="color:#F00;">$!status</b></span>
+        <span class="paymodebtn">#if($!obj.igo_status==0)<i class="paym_btn"><a href="$!webPath/integral_order_pay_view.htm?id=$!obj.id">返回重新支付</a></i>#end<i class="paym_btn"><a href="$!webPath/buyer/integral_order_view.htm?id=$!obj.id">查看订单信息</a></i></span>
+        </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

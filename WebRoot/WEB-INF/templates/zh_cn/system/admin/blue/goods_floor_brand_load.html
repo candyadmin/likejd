@@ -1,0 +1,6 @@
+﻿<ul class="fl_sear_brand">
+  #foreach($obj in $objs)
+  <li> <a href="javascript:void(0);" onclick="goods_floor_brand_set(this)" brand_id="$!obj.id" brand_img="$!webPath/$!obj.brandLogo.path/$!obj.brandLogo.name" brand_name="$!obj.name" class="fl_searbrand_a"> <span  class="fl_sear_brandimg"> <img src="$!webPath/$!obj.brandLogo.path/$!obj.brandLogo.name" width="98" height="35" /> </span> <span class="fl_sear_brandname">$!obj.name</span></a> </li>
+  #end
+</ul>
+<div class="floor_page"><span>$!gotoPageAjaxHTML</span></div>

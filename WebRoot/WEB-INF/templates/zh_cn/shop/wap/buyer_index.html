@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+	<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+	<script src="$!webPath/resources/style/system/front/wap/js/jquery.validate.min.js"></script>
+</head>
+
+<body>
+<div class="phone_main">
+    	<!--头部-->
+            	<div class="user_hd">
+        	<dl>
+            	<dt>
+            		<img src="$!webPath/resources/style/system/front/wap/images/01.jpg">
+            	</dt>
+                <dd><p class="name">$!{user.userName}</p>
+                <p>待付款：$!orderViewTools.query_user_order("order_submit")
+                </p>
+                <p>待收货：$!orderViewTools.query_user_order("order_shipping")
+                </p>
+                </dd>
+            </dl>
+       		 </div>
+        <!--导航-->
+        <div class="user_nav">
+        	<ul>
+            	<li class="color_01">
+	            	<a href="$!webPath/buyer/order.htm?order_status=order_submit">
+		            	<img src="$!webPath/resources/style/system/front/wap/images/user_icon_01.png">
+		            	<p>待付款</p>
+	            	</a>
+	            	<b>$!orderViewTools.query_user_order("order_submit")</b>
+            	</li>
+                <li class="color_02">
+	                <a href="$!webPath/buyer/order.htm?order_status=order_pay">
+		                <img src="$!webPath/resources/style/system/front/wap/images/user_icon_02.png">
+		                <p>待发货</p>
+	                </a>
+	                <b>$!orderViewTools.query_user_order("order_receive")</b>
+                </li>
+                <li class="color_03">
+	                <a href="$!webPath/buyer/order.htm?order_status=order_shipping">
+		                <img src="$!webPath/resources/style/system/front/wap/images/user_icon_03.png">
+		                <p>待收货</p>
+	                </a>
+	                <b>$!orderViewTools.query_user_order("order_shipping")</b>
+                </li>
+                <!-- 
+                <li class="color_04"><a href="$!webPath/buyer/order.htm"><img src="$!webPath/resources/style/system/front/wap/images/user_icon_04.png"><p>退货记录</p></a></li>
+                <li class="color_05"><a href="$!webPath/buyer/order.htm"><img src="$!webPath/resources/style/system/front/wap/images/user_icon_05.png"><p>团购码</p></a></li>
+                <li class="color_06"><a href="$!webPath/buyer/order.htm"><img src="$!webPath/resources/style/system/front/wap/images/user_icon_06.png"><p>优惠劵</p></a></li>
+                <li class="color_07"><a href="$!webPath/buyer/order.htm"><img src="$!webPath/resources/style/system/front/wap/images/user_icon_07.png"><p>积分兑换</p></a></li>
+                 -->
+                <li class="color_08"><a href="$!webPath/buyer/service_center.htm"><img src="$!webPath/resources/style/system/front/wap/images/user_icon_08.png"><p>服务中心</p></a></li>
+            </ul>
+        </div>
+        <!--收藏商品-->
+        <div class="collect">
+            <script>
+            	function shouchang(id,obj){
+					jQuery(".tab ul li").each(function(index, element) {
+                        jQuery(element).removeClass("this");
+                    });
+					jQuery(obj).parent().addClass("this");
+					jQuery(".collect_list ul").each(function(index, element) {
+                        jQuery(element).hide();
+                    });
+					jQuery("#"+id).show();
+				}
+				
+				jQuery(function(){
+					jQuery("#cai").click();
+				});
+					
+            </script>
+             <!-- 我的商品-->
+            <div class="collect_list">
+            	<ul id="favorite_goods" class="collect_ul">
+                </ul>
+                <!-- 我的店铺 -->
+                <ul class="collect_store" id="favorite_store" style="display:none;">
+               	</ul>
+$!httpInclude.include("/footer.htm")
+</body></html>

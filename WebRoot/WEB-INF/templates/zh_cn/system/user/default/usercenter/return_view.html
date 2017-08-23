@@ -1,0 +1,54 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+	   rules:{
+		   shipCode:{required:true}
+		   },
+	   messages:{
+	       shipCode:{required:"不能为空"}
+	   }
+	});
+});
+</script>
+  <table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td width="100" align="right" valign="top">退货编号：
+        <input name="id" type="hidden" id="id" value="$!obj.id" />
+      </td>
+      <td align="left">$!obj.return_id</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">退货时间：</td>
+      <td align="left">$!CommUtil.formatLongDate($!obj.addTime)</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">买家会员名：</td>
+      <td align="left">$!obj.of.user.userName</td>
+    </tr>
+    #set($count=0)
+   #foreach($item in $obj.items)
+    #set($count=$count+$item.count)
+   #end
+    <tr>
+      <td align="right" valign="top">退货数量：</td>
+      <td align="left">$!count</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">备注信息：</td>
+      <td align="left">$!obj.return_info</td>
+    </tr>
+    
+  </table>
+  <table style="float:left;" width="98%" border="0" cellspacing="0" cellpadding="0" class="table_tuih">
+    <tr valign="middle" style="background:#f1f1f1">
+      <td align="center" valign="top" width="200">商品名称</td>
+      <td align="center" width="100">退货数量</td>
+    </tr>
+    #foreach($item in $obj.items)
+    <tr valign="middle">
+      <td width="100" align="left"><span style="color:#999; font-weight:normal;">$!item.goods.goods_name</span></td>
+      <td align="center">$!item.count</td>
+    </tr>
+    #end
+  </table>

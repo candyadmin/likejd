@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+	  name:{
+	    required :true,
+	     remote:{
+		    url: "$!webPath/admin/goods_spec_verify.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "name": function(){return jQuery("#name").val();},
+				  "id":function(){return jQuery("#id").val()}
+		     }
+			}
+	  }
+	 },
+	messages:{
+	  name:{required:"规格名称不能为空",remote:"该规格已经存在"}
+	}
+  });
+  #if($!obj)
+   var type="$!obj.type";
+   if(type=="text"){
+     jQuery("#type1").attr("checked",true);
+   }else{
+     jQuery("#type2").attr("checked",true);
+   }
+  #end
+});
+function saveForm(){
+	jQuery("#count").val(count);
+	jQuery("#theForm").submit();
+}
+function change_img(obj){
+  var sequence=jQuery(obj).attr("id").substring(10);
+  var path=jQuery(obj).val();
+  var src=getFullPath(jQuery(obj)[0]);
+  jQuery("#image_"+sequence).attr("src",src);
+  jQuery("#textfield_"+sequence).val(path);
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/goods_spec_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <input name="id" id="id" type="hidden" value="$!obj.id"/>
+  <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/goods_spec_add.htm"/>
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/goods_spec_list.htm" />
+  <input name="count" type="hidden" id="count" />
+  <div class="cont">
+    <h1 class="seth1">规格管理</h1>
+    <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/goods_spec_list.htm">管理</a> | <a href="$!webPath/admin/goods_spec_add.htm" #if(!$!edit)class="this"#end>新增</a> #if($!edit)
+	   <a href="javascript:void(0);" class="this">编辑</a>
+	   #end</span> <span class="tab-two"></span></div>
+    <div class="edit">
+      <div class="editul ">
+        <ul class="set3">
+          <li><strong class="sred">*</strong>规格名称</li>
+          <li><span class="pxnum">
+            <input name="name" type="text" id="name" value="$!obj.name"/>
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">请填写常用的商品规格的名称；例如：颜色；尺寸等。</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set3">
+          <li>排序</li>
+          <li><span class="pxnum">
+         <input name="sequence" type="text" id="sequence" value="$!obj.sequence"/>
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">请填写整数。类型列表将会根据排序进行由小到大排列显示。</strong><strong class="c"></strong></span></li>
+        </ul>
+      </div>
+      <div class="spec_type">
+        <h3>规格类型</h3>
+        <ul class="set3">
+         <li>
+		  <span class="ssp1">
+            <input name="type" type="radio" id="type1" value="text" checked="checked"  onclick="img_spec('0')"/>
+            文字</span><span class="ssp2">
+            <input name="type" id="type2" type="radio" value="img" onclick="img_spec('1')"/>
+            图片</span><span id="nothis"><strong class="q"></strong><strong class="w">图片类型的规格值用于直观表现某些特殊规格类型，例如颜色规格，可用对应的色彩图片来表现其各种颜色值。</strong><strong class="c"></strong>
+			</span>
+		</li>
+       </ul>
+      </div>
+<script>
+#if($!obj&&$!obj.properties.size()>1)
+var count=$!obj.properties.size();
+#else
+var count=1;
+#end
+function img_spec(status){
+  if(status=="1"){
+    jQuery("span[id^=goods_spec_property_img_]").show();
+  }
+  if(status=="0"){
+    jQuery("span[id^=goods_spec_property_img_]").hide();
+  }
+}
+function remove_goods_spec_property(obj,id){
+   jQuery.post("$!webPath/admin/goods_property_delete.htm",{"id":id},function(data){
+     if(data=="true"){
+	    jQuery(obj).remove();
+        count--;
+	 }else alert("规格值删除失败！");
+   },"text");
+}
+function add_goods_spec_property(){
+count++;
+ var goods_spec_property_img="<tr id='goods_spec_'><td width='82'><span class='pxnum size5'><input name='sequence_count' id='sequence_count' value='' type='text'></span></td><td width='271'><span class='pxnum size7'><input name='value_count' id='value_count' value='' type='text'></span></td><td class='liul' width='558'><span id='goods_spec_property_img_' class='size13'><input name='textfield_count' id='textfield_count' type='text'></span> <span class='filebtn' id='goods_spec_property_img_'><input name='button' id='button1' value='' type='button'></span> <span id='goods_spec_property_img_' style='float:left;' class='file'><input name='specImage_count' id='specImage_count' size='30' type='file' onchange='change_img(this);'></span><span id='goods_spec_property_img_' class='pic_spe'><img id='image_count' name='image_count' src='/shopping/resources/style/common/images/transparent.gif' height='16' width='16'></span></td><td class='ac8' align='center' width='116'><a href='javascript:void(0);' onclick='remove_goods_spec_property(this.parentNode.parentNode,\"\")'>删除</a></td></tr>";
+  var goods_spec_property_text="<tr id='goods_spec_'><td width='82'><span class='pxnum size5'><input name='sequence_count' id='sequence_count' value='' type='text'></span></td><td width='271'><span class='pxnum size7'><input name='value_count' id='value_count' value='' type='text'></span></td><td class='liul' width='558'><span id='goods_spec_property_img_' style='display:none;' class='size13'><input name='textfield_count' id='textfield_count' type='text'></span> <span class='filebtn' id='goods_spec_property_img_'  style='display:none;'><input name='button' id='button1' value='' type='button'></span> <span id='goods_spec_property_img_'  style='float:left;display:none;' class='file'><input name='specImage_count' id='specImage_count' size='30' type='file'  onchange='change_img(this);'></span><span id='goods_spec_property_img_'  style='display:none;' class='pic_spe'><img   id='image_count' name='image_count' src='/shopping/resources/style/common/images/transparent.gif' height='16' width='16'></span></td><td class='ac8' align='center' width='116'><a href='javascript:void(0);' onclick='remove_goods_spec_property(this.parentNode.parentNode,\"\")'>删除</a></td></tr>";
+  var type=jQuery(":radio:checked").val();
+  if(type=="img"){
+    jQuery(".addsx_table tr[id^=goods_spec_]").last().after(goods_spec_property_img.replace(/count/g,count));
+  }else{
+    jQuery(".addsx_table tr[id^=goods_spec_]").last().after(goods_spec_property_text.replace(/count/g,count));
+  }
+}
+</script>
+      <div class="specification">
+        <h2>新增规格值</h2>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="addsx_table">
+          <tr id="goods_spec_">
+            <td width="82"><strong>排序</strong></td>
+            <td width="271"><strong>规格值</strong></td>
+            <td width="558"><strong><span id="goods_spec_property_img_" #if(!$!obj||$!obj.type=="text")style="display:none;"#end>规格图片</span></strong></td>
+            <td  align="center">操作</td>
+          </tr>
+		  #if($!obj)
+		  #foreach($info in $obj.properties)
+		   <tr id="goods_spec_property">
+            <td width="82"><span class="pxnum size5">
+            <input name="sequence_$!velocityCount" type="text" id="sequence_$!velocityCount" value="$!info.sequence"/>
+              <input name="id_$!velocityCount" type="hidden" id="id_$!velocityCount" value="$!info.id" />
+            </span></td>
+            <td ><span class="pxnum size7">
+              <input name="value_$!velocityCount" type="text" id="value_$!velocityCount" value="$!info.value"/>
+            </span></td>
+            <td width="558" class="liul"><span class="size13" id="goods_spec_property_img_" #if(!$!obj||$!obj.type=="text")style="display:none;"#end  >
+              <input name="textfield_$!velocityCount" type="text" id="textfield_$!velocityCount" />
+            </span><span class="filebtn" id="goods_spec_property_img_"  #if(!$!obj||$!obj.type=="text")style="display:none;"#end >
+              <input name="button" type="button" id="button1" value=""/>
+              </span> <span id="goods_spec_property_img_" style="float:left;" class="file" >
+              <input  name="specImage_$!velocityCount" type="file" id="specImage_$!velocityCount" onchange="change_img(this);" size="30"/>
+              </span> 
+			  <span id="goods_spec_property_img_" class="pic_spe"  #if(!$!obj||$!obj.type=="text")style="display:none;"#end ><img id="image_$!velocityCount" name="image_$!velocityCount" src="$!webPath/$!info.specImage.path/$!info.specImage.name" width="16" height="16"/></span>		    </td>
+            <td width="116" align="center" class="ac8"><a href="javascript:void(0);" onclick="remove_goods_spec_property(this.parentNode.parentNode,'$!info.id')">删除</a></td>
+          </tr>
+		  #end
+		  #else
+          <tr id="goods_spec_property">
+            <td width="82"><span class="pxnum size5">
+            <input name="sequence_1" type="text" id="sequence_1" value=""/>
+              </span></td>
+            <td width="271"><span class="pxnum size7">
+              <input name="value_1" type="text" id="value_1" value=""/>
+              </span></td>
+            <td width="558" class="liul" ><span class="size13" id="goods_spec_property_img_"  style="display:none;">
+              <input name="textfield_1" type="text" id="textfield_1" />
+              </span> <span class="filebtn" id="goods_spec_property_img_"  style="display:none;">
+              <input name="button" type="button" id="button1" value=""/>
+              </span> <span style="float:left;" class="file" >
+              <input name="specImage_1" type="file" id="specImage_1" size="30"  onchange="change_img(this);"/>
+              </span> 
+			  <span class="pic_spe" id="goods_spec_property_img_"  style="display:none;"><img id="image_1" name="image_1" src="$!webPath/resources/style/common/images/transparent.gif" width="16" height="16"/></span>		    </td>
+            <td width="116" align="center" class="ac8"><a href="javascript:void(0);" onclick="remove_goods_spec_property(this.parentNode.parentNode,'')">删除</a></td>
+          </tr>
+		  #end
+          <tr>
+            <td colspan="3"><span class="newclass"><a href="javascript:void(0);" onclick="add_goods_spec_property();">新增规格值</a></span></td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+      </div>
+
+	</div>
+    <div class="submit">
+      <input name="" type="button" value="提交" onclick="saveForm();"/>
+    </div>
+  </div>
+</form>
+</body>
+</html>

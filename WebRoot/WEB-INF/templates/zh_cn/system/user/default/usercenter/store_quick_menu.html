@@ -1,0 +1,194 @@
+<script>
+function ajax_form(){
+  var menus="";
+  jQuery(".pop_up_main :checkbox[checked=true]").each(function(){
+     menus=menus+","+jQuery(this).val();
+  });
+  jQuery.post("$!webPath/seller/store_quick_menu_save.htm",{"menus":menus},function(ret){
+      jQuery("#store_quick_menu").remove();
+	  jQuery("#store_quick_menu_info").empty().html(ret);
+      showDialog("quick_menu","系统提示","快捷菜单设置成功！",0,"succeed",3);
+  },"html");
+}
+</script>
+<div class="pop_up_box">
+  <div class="pop_up_main">
+    <ul class="pop_up_ul">
+      <li class="blue">商品管理</li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox"  id="checkbox" value="$!webPath/seller/add_goods_first.htm|商品发布" />
+      商品发布
+      </label>
+      </li>
+      <li>
+      <label>
+       <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/goods.htm|出售中的商品" />
+        出售中的商品
+        </label>
+        </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/goods_storage.htm|仓库中的商品" />
+      仓库中的商品
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/goods_out.htm|违规下架商品" />
+      违规下架商品
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/usergoodsclass_list.htm|商品分类" />
+      商品分类
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/goods_report.htm|被举报禁售" />
+      被举报禁售
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/taobao.htm|淘宝导入" />
+      淘宝导入
+      </label>
+      </li>
+    </ul>
+    <ul class="pop_up_ul">
+      <li class="blue">交易管理</li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/order.htm|订单管理" />
+      订单管理
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/payment.htm|支付方式" />
+      支付方式
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/transport_list.htm|物流工具" />
+      物流工具
+      </label>
+      </li>
+    </ul>
+    <ul class="pop_up_ul">
+      <li class="blue">店铺设置</li>
+      <li>
+      <label>
+        <input type="checkbox" name="checkbox" id="checkbox" value="$!webPath/seller/store_set.htm|店铺设置" />
+      店铺设置
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/sub_account_list.htm|子账户管理" />
+      子账户管理
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/store_theme.htm|主题设置" />
+      主题设置
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/store_nav.htm|导航管理" />
+      导航管理
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/store_partner.htm|友情链接" />
+      友情链接
+      </label>
+      </li>
+    </ul>
+    <ul class="pop_up_ul">
+      <li class="blue">客户服务</li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/refund.htm|退款记录" />
+      退款记录
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/goods_return.htm|退货记录" />
+      退货记录
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/consult.htm|咨询管理" />
+      咨询管理
+      </label>
+      </li>
+    </ul>
+    <ul class="pop_up_ul">
+      <li class="blue">促销管理</li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/ztc_apply.htm|竞价直通车" />
+      竞价直通车
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/activity.htm|活动管理" />
+      活动管理
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/group.htm|团购管理" />
+      团购管理
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/bargain.htm|天天特价" />
+      天天特价
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/delivery.htm|买就送" />
+      买就送
+      </label>
+      </li>
+    </ul>
+    <ul class="pop_up_ul">
+      <li class="blue">其他管理</li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/gold_record.htm|金币管理" />
+      金币管理
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/advert_list.htm|广告管理" />
+      广告管理
+      </label>
+      </li>
+      <li>
+      <label>
+        <input name="checkbox" type="checkbox" id="checkbox" value="$!webPath/seller/album.htm|图片空间" />
+      图片空间
+      </label>
+      </li>
+    </ul>
+  </div>
+  <div class="pop_up_bottom">
+    <input type="button" value="保存" onclick="ajax_form();" />
+  </div>
+</div>

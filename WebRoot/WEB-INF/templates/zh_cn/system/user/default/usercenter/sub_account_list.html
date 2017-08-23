@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>子账户管理-Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+ $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+         $!httpInclude.include("/seller/nav.htm?op=sub_account")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position">
+          <div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">卖家中心</a> > <span>子账户管理</span></div></div>
+        <div class="productmain">
+            <div class="pdctitle blue2">子账户列表[当期店铺等级允许${store.grade.acount_num}个子账户]</div>
+            <div class="alldel">
+              <div class="right">
+               <a href="$!webPath/seller/sub_account_add.htm" class="button_common">新增子账户</a>
+              </div>
+            </div>
+            <form action="$!webPath/seller/sub_account_list.htm" method="post" id="ListForm">
+            <div class="operation">
+              <table width="942" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                <tr id="opertitle">
+                  <td width="115">用户名</td>
+                  <td width="115">真实姓名</td>
+                  <td width="162">最后一次登录</td>
+                  <td width="111">联系电话</td>
+                  <td width="88">手机号码</td>
+                  <td width="211" align="left">操作</td>
+                </tr>
+                #foreach($obj in $objs)
+                <tr class="opertr" id="$!obj.id">
+                  <td width="115">$!obj.userName</td>
+                  <td width="115">$!obj.trueName</td>
+                  #set($address="$!obj.area.parent.parent.areaName $!obj.area.parent.areaName $!obj.area.areaName")
+                  <td width="162" area_info_id="$!obj.id">#if($!obj.lastLoginDate)$!CommUtil.formatLongDate($!obj.lastLoginDate)#else 暂无登录记录#end</td>
+                  <td  width="111">$!obj.telephone</td>
+                  <td width="88">$!obj.mobile</td>
+                  <td align="left"><span class="edit"><a href="$!webPath/seller/sub_account_edit.htm?id=$!obj.id&currentPage=$!currentPage">编辑</a></span><span class="del"><a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/seller/sub_account_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'">删除</a></span></td>
+                </tr>
+                #end
+              </table>
+            </div>
+            <div class="alldel">
+              <div  class="userfenye">$!gotoFormPageHTML</div>
+            </div>
+            </form>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

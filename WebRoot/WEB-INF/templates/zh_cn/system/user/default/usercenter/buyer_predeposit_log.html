@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>充值列表-  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/buyer/account_nav.htm?op=predeposit_log")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">我的账户</a> > <span>收支明细</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href='$!webPath/buyer/predeposit_log.htm' >收支明细</a></li>
+              </ul>
+            </div>
+            <form action="$!webPath/buyer/predeposit_log.htm" method="post" id="ListForm">
+            <div class="ordercon">
+              <div class="operation">
+              <h1 style="padding:10px;">当前账户余额：¥#if($!{user.availableBalance})$!{user.availableBalance}#else 0 #end</h1>
+                <table width="1009" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                  <tr id="opertitle">
+                    <td width="80">编号</td>
+                    <td width="80">金额(元)</td>
+                    <td  width="140">提交时间</td>
+                    <td width="80">类型</td>
+                    <td>描述</td>
+                  </tr>
+                  #foreach($obj in $objs)
+                  <tr class="opertr">
+                    <td>$!obj.id</td>
+                    <td>$!obj.pd_log_amount</td>
+                    <td>$!CommUtil.formatLongDate($!obj.addTime) </td>
+                    #if($!obj.pd_payment=="alipay")
+                      #set($pd_payment="支付宝")
+                    #end
+                    #if($!obj.pd_payment=="bill")
+                      #set($pd_payment="快钱")
+                    #end
+                    #if($!obj.pd_payment=="chinabank")
+                      #set($pd_payment="网银在线")
+                    #end
+                    #if($!obj.pd_payment=="tenpay")
+                      #set($pd_payment="财付通")
+                    #end
+                    #if($!obj.pd_payment=="outline")
+                      #set($pd_payment="线下支付")
+                    #end
+                    <td>$!obj.pd_op_type</td>
+                    #if($!obj.pd_status==0)
+                      #set($pd_status="等待支付")
+                    #end
+                    #if($!obj.pd_status==1)
+                      #set($pd_status="支付完成")
+                    #end
+                    <td>$!obj.pd_log_info</td>
+                    #if($!obj.pd_pay_status==0)
+                      #set($pd_pay_status="等待支付")
+                    #end
+                    #if($!obj.pd_pay_status==1)
+                      #set($pd_pay_status="等待审核")
+                    #end
+                    #if($!obj.pd_pay_status==2)
+                      #set($pd_pay_status="支付完成")
+                  #end                  </tr>
+                  #end
+                </table>
+              </div>
+              <div class="alldel">
+                <div  class="userfenye">
+                  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                  $!gotoPageFormHTML</div>
+              </div>
+            </div>
+            </form>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

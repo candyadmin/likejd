@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+</head>
+<body>
+
+<div class="main">
+
+    <div class="phone_hd">
+	<a class="back" href="javascript:history.go(-1);"><img src="$!webPath/resources/style/system/front/wap/images/back.png" width="25" height="25"></a>
+	成交记录
+	<a class="menu home" href="$!webPath/wap/index.htm"><img src="$!webPath/resources/style/system/front/wap/images/home.png" width="25" height="25"></a>
+	</div>
+
+    <div class="main">
+    
+    <div class="mt50"></div>
+
+
+
+#if($!rows==0)
+ <div class="error_page1">
+   <span class="error_img"><img src="$!webPath/resources/style/system/front/wap/images/nothing.png"></span>
+   <p>暂无成交记录！</p>
+ </div>
+#else
+<div class="okcode" id="strike_tab" style="margin-top:10px;">
+  <ul>
+     <li>
+      <table width="797" border="0" cellspacing="0" cellpadding="0" class="okcodetable">
+        <tr style=" background:#EEEDED; font-weight:bold">
+          <td width="130">买家</td>
+          <td width="80">商品价格</td>
+          <td width="100">商品规格</td>
+          <td width="80">购买数量</td>
+          <td width="100">成交时间</td>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+             #set($credit=$!storeViewTools.generic_user_credit("$!obj.of.user.id"))
+              #set($img="$!imageWebServer/resources/style/common/images/level_0.gif")
+              #if($credit<10 && $credit>0)
+              #set($credit=${credit} / 2)
+              #set($credit=$credit+1)
+              #end
+              #if($credit>=20)
+              #set($img="$!imageWebServer/resources/style/common/images/level_2.gif") 
+              #set($credit=($credit - 20)/2) 
+              #set($credit=$credit+1)
+              #end
+              #if($credit>=10)
+              #set($img="$!imageWebServer/resources/style/common/images/level_1.gif") 
+              #set($credit=($credit - 10)/2)
+              #set($credit=$credit+1)
+              #end
+              #if($credit>5)#set($credit=5)#end  
+          <td class="blue" valign="middle" width="130">$!{obj.of.user.userName} #if($!credit==0) <img src="$!imageWebServer/resources/style/common/images/level_-1.gif"/> #else #foreach($count in [1..$!credit])<img style="margin-left:1px;" src="$!img" />#end #end</td>
+          <td><strong class="orange">¥$!{obj.goods.store_price}</strong></td>
+          <td>$!obj.spec_info</td>
+          <td>$!obj.count</td>
+          <td>$!CommUtil.formatLongDate($!obj.of.payTime)</td>
+        </tr>
+        #end
+      </table>
+    </li>
+  </ul>
+</div>
+
+<!-- <div class="fenye">
+  <div class="fenyes">$!gotoPageAjaxHTML</div>
+</div> -->
+
+#end
+
+
+		<div class="loading" id="loading" style="display: none;">
+		    <ul>
+		      <li><img src="$!webPath/resources/style/system/front/wap/images/loading.gif" height="16" width="16"></li>
+		      <li>正在加载....</li>
+		    </ul>
+		</div>
+		<div class="loading" id="loading_none" style="display: block;">
+		    <ul>
+		      <li>没有更多了....</li>
+		    </ul>
+		</div>
+		
+		<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+		<input name="totalPage" type="hidden" id="totalPage" value="$!totalPage" />
+        <input name="goods_view" type="hidden" id="goods_view" value="$!goods_view" />
+        <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+        <input name="orderType" type="hidden" id="orderType" value="$!orderType" /> 
+        
+    </div>
+  
+  
+  </div>
+</body>
+</html>

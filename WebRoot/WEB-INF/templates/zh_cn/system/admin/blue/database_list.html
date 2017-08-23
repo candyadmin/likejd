@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+</head>
+<body>
+<form name="ListForm" id="ListForm" method="post" action="$!webPath/admin/user/admin_list.htm">
+<div class="cont">
+  <h1 class="seth1">管理员列表</h1>
+  <div class="settab"> <span class="tab-one" style="margin-left:25px;"></span> <span class="tabs"> <a href="$!webPath/admin/database_add.htm">备份</a> | <a href="$!webPath/admin/database_list.htm" class="this">恢复</a> </span> <span class="tab-two"></span> </div>
+  <div class="paytable">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pay_table">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="57">&nbsp;</td>
+        <td width="344">备份名</td>
+        <td width="473" align="center">备份时间</td>
+        <td width="154" align="center">数据大小</td>
+        <td width="157" align="center">分卷数</td>
+        <td  align="center" width="209">操作</td>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td width="57"><input name="name" type="checkbox" id="name" value="$!obj.name" /></td>
+        <td width="344">$!obj.name</td>
+        <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+        <td align="center">$!{obj.size}KB</td>
+        <td align="center">$!obj.boundSize</td>
+        <td align="center"><a href="javascript:void(0);" onclick="if(confirm('数据备份删除后不可恢复，是否继续？'))window.location.href='$!webPath/admin/database_del.htm?names=$!obj.name'" class="blue">删除</a>|<a href="javascript:void(0);" onclick="if(confirm('导入数据时请关闭商城，确保商城无外部数据交互，同时导入数据将会覆盖当前所有数据，是否继续?'))window.location.href='$!webPath/admin/database_store.htm?name=$!obj.name'" class="blue">导入</a></td>
+      </tr>
+	  #end
+    </table>
+  </div>
+  <script>
+  function selectData(){
+    var v=jQuery("#all").attr("checked");
+	if(v=="checked"){
+	  jQuery(":checkbox[id!=all]").attr("checked",true);
+	}else{
+	  jQuery(":checkbox[id!=all]").attr("checked",false);
+	}
+  }
+  function delete_data(){
+     var names="";
+	jQuery(":checkbox:checked[id!=all]").each(function(){
+	   names=jQuery(this).val()+","+names;
+	})
+	window.location.href="$!webPath/admin/database_del.htm?names="+names;
+  }
+</script>
+  <div class="delconsul2"><span>
+    <input name="all" type="checkbox" id="all" onclick="selectData();" value="" />
+    全选</span><span class="shop_btn_del shopbtn">
+    <input name="" type="button"  value="删除" onclick="delete_data();" style="cursor:pointer;"/>
+    </span></div>
+  <div class="fenye2"><input name="userRole" type="hidden" id="userRole" value="ADMIN" />
+      <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+      <input name="mulitId" type="hidden" id="mulitId" />$!gotoPageHTML</div>
+</div>
+</form>
+</body>
+</html>

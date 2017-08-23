@@ -1,0 +1,13 @@
+﻿<ul id="navul">
+    #set($navs=$!navTools.queryNav(0,-1))
+    #foreach($nav in $navs)
+    #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+      #set($url="$!nav.url")
+    #else
+      #set($url="$!webPath/$!{nav.url}")
+    #end
+    
+    <li><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url" ><span>$!{nav.title}</span></a></li>
+                              
+    #end          
+</ul>

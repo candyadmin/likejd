@@ -1,0 +1,23 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+          http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+	<persistence-unit name="shopping2.0" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<!-- <jar-file>WEB-INF/lib/shopping-base.jar</jar-file> -->
+		<properties>
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<!--Ehcache二级缓存配置-->
+			<property name="hibernate.cache.provider_class"
+				value="org.hibernate.cache.SingletonEhCacheProvider" />
+			<property name="hibernate.cache.provider_configuration"
+				value="/ehcache.xml" />
+			<property name="hibernate.cache.use_second_level_cache"
+				value="true" />
+			<property name="hibernate.cache.use_query_cache"
+				value="true" />
+		</properties>
+	</persistence-unit>
+</persistence>

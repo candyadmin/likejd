@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+<meta content="yes" name="apple-wap-web-app-capable">
+<meta content="black-translucent" name="apple-wap-web-app-status-bar-style">
+<title>$!config.title</title>
+
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+	<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+	<script src="$!webPath/resources/style/system/front/wap/js/TouchSlide.1.1.js"></script>
+	<script src="$!webPath/resources/style/system/front/wap/js/jquery.SuperSlide.2.1.1.js"></script>
+	<script>
+		function timeCount(remain_id) {
+			function _fresh() {
+				var nowDate = new Date(), //当前时间
+				endDate = new Date($('#' + remain_id).attr('endtime')), //截止时间
+				totalS = parseInt((endDate.getTime() - nowDate.getTime()) / 1000); //总秒数
+				_day = parseInt(totalS / 3600 / 24) + "";
+				_hour = parseInt(totalS / 3600 % 24) + "";
+				_minute = parseInt((totalS / 60) % 60) + "";
+				_second = parseInt(totalS % 60) + "";
+				d_html = "";
+				if (_day.length < 2) {
+					d_html = "<b>0</b>";
+				}
+				for (var n = 0; n < _day.length; n++) {
+					var q = _day.substring(n, n + 1);
+					d_html = d_html + '<b>' + q + '</b>';
+				}
+				d_html = d_html + "<b>天</b>"
+				h_html = "";
+				if (_hour.length < 2) {
+					h_html = "<b>0</b>";
+				}
+				for (var n = 0; n < _hour.length; n++) {
+					var q = _hour.substring(n, n + 1);
+					h_html = h_html + '<b>' + q + '</b>';
+				}
+				m_html = "";
+				if (_minute.length < 2) {
+					m_html = "<b>0</b>";
+				}
+				for (var n = 0; n < _minute.length; n++) {
+					var q = _minute.substring(n, n + 1);
+					m_html = m_html + '<b>' + q + '</b>'
+				}
+				s_html = "";
+				if (_second.length < 2) {
+					s_html = "<b>0</b>";
+				}
+				for (var n = 0; n < _second.length; n++) {
+					var q = _second.substring(n, n + 1);
+					s_html = s_html + '<b>' + q + '</b>'
+				}
+				jQuery('#' + remain_id).html(
+						d_html + '<strong>:</strong>' + h_html
+								+ '<strong>:</strong>' + m_html
+								+ '<strong>:</strong>' + s_html);
+				if (totalS <= 0) {
+					jQuery('#' + remain_id).html('该0元试用已结束');
+					clearInterval(sh);
+				}
+			}
+			_fresh();
+			var sh = setInterval(_fresh, 1000);
+		}
+		
+		jQuery(document).ready(function() {
+			jQuery("li[id=gc_]").each(function(index, element) {
+				if (jQuery(this).find(".fl").html().length > 5) {
+					var a = jQuery(this).find(".fl").html().substring(0, 5);
+					jQuery(this).find(".fl").html(a);
+				}
+			});
+
+			timeCount("time_down_info");
+			if (isWeiXin()) {
+				jQuery(".phone_top").hide();
+			} else {
+				jQuery(".phone_top").show();
+			}
+		});
+		function search_form() {
+			jQuery("#theForm").submit();
+		}
+		function isWeiXin() {
+			var ua = window.navigator.userAgent.toLowerCase();
+			if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	</script>
+</head>
+<body class="index_bg">
+
+	<div class="phone_main">
+		<!--顶部-->
+		<div class="phone_top">
+			<a href="$!webPath/wap/index.htm"> <img
+				src="$!webPath/resources/style/system/front/wap/images/download.jpg"></a>
+			<a class="close" href="javascript:void(0);"
+				onclick="jQuery('.phone_top').remove();"> <img
+				src="$!webPath/resources/style/system/front/wap/images/close.png"
+				width="30" height="30"></a>
+		</div>
+
+		<div class="logo_line">
+			<img src="$!webPath/resources/style/system/front/wap/images/wap_logo.png" > 
+				#if($!{user})
+					<span class="log"><a href="$!webPath/shopping_logout.htm">退出</a> </span>
+					<span class="log"><a href="javascript:void(0);">$!CommUtil.substring("$!{user.userName}",5)您好</a></span>
+				#else 
+					<span class="log"><a href="$!webPath/user/login.htm">登录</a> </span>
+					<span class="log"><a href="$!webPath/register.htm">注册</a> </span>
+				#end
+		</div>
+
+		<form name="theForm" id="theForm" action="$!webPath/search.htm" method="post">
+			<div class="search_line">
+				<span> 
+				<input type="hidden" name="type" value="goods" /> 
+				<input type="text" placeholder="搜索商品" name="keyword" id="keyword">
+				</span>
+				<b><img src="$!webPath/resources/style/system/front/wap/images/search_icon.png" width="25" height="25" onclick="search_form();"></b>
+			</div>
+		</form>
+
+		<!--幻灯-->
+		<div class="focusBox" id="focusBox">
+			<script src="$!webPath/advert_invoke.htm?id=262157"></script> 
+		</div>
+
+		<!--导航菜单-->
+		<div class="nav">
+			<ul>
+				<li><a href="$!webPath/goodsclass.htm"><img
+						src="$!webPath/resources/style/system/front/wap/images/nav_fl.png">
+							<p>分类</p></a></li>
+				<li><a href="$!webPath/brand.htm"><img
+						src="$!webPath/resources/style/system/front/wap/images/nav_pp.png">
+							<p>品牌街</p></a></li>
+				<li><a href="$!webPath/goods_cart1.htm"><img
+						src="$!webPath/resources/style/system/front/wap/images/nav_gwc.png">
+							<p>购物车</p></a></li>
+				<li><a href="$!webPath/buyer/index.htm"><img
+						src="$!webPath/resources/style/system/front/wap/images/nav_yhzx.png">
+							<p>用户中心</p></a></li>
+			</ul>
+		</div>
+		
+		<!--精品推荐-->
+		<div class="phone_floor">
+			<h1>
+				<span class="fl">精品推荐</span>
+			</h1>
+			<div class="recom">
+				<div class="ohbox">
+					<ul class="piclist">
+					#foreach($!store_reommend_good in $store_reommend_goods)
+		              #if($!store_reommend_good.goods_main_photo)
+		              	#set($img="$!imageWebServer/$!{store_reommend_good.goods_main_photo.path}/$!{store_reommend_good.goods_main_photo.name}_middle.$!{store_reommend_good.goods_main_photo.ext}")
+		              #else
+		              	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+		              #end
+		              
+		              #set($goods_url="$!webPath/goods_$!{store_reommend_good.id}.htm")
+		              #if($!config.second_domain_open)
+		              	#set($goods_url="http://$!{store_reommend_good.goods_store.store_second_domain}.$!{domainPath}/goods_$!{store_reommend_good.id}.htm")
+		              #end
+						<li>
+							<a href="$!goods_url">
+								<img src="$!img" >
+								<span class="re_name">$!CommUtil.substring("$!store_reommend_good.goods_name",10)</span>
+								<span class="bg"></span>
+							</a>
+						</li>
+					  #end
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<div id="phone_floor" class="phone_floor">
+		    <h1><span class="fl">品牌街</span><span class="fr"><a href="$!webPath/brand.htm">更多</a></span></h1>
+		    <div class="phone_brand">
+		      <ul id="banners">
+		      	#foreach($gb in $gbs)
+	            <li #if($!velocityCount>4)style="display:none;"#end>
+	            <a href="$!webPath/brand_goods_$!{gb.id}.htm" target="_blank"><img src="$!imageWebServer/$!gb.brandLogo.path/$!gb.brandLogo.name" width="88" height="44" /></a></li>
+	            #end
+              </ul>
+		    </div>
+		</div>
+		
+		<div class="phone_floor">
+		    <div class="phone_activity">
+		      <h1><span class="fl">促销商品</span><span class="fr"></span></h1>
+		      <ul>
+		      	#foreach($obj in $dgs)
+	              #set($goods_url="$!webPath/goods_$!{obj.d_goods.id}.htm")
+	              #if($!config.second_domain_open)
+	              	#set($goods_url="http://$!{obj.d_goods.goods_store.store_second_domain}.$!{domainPath}/goods_$!{obj.d_goods.id}.htm")
+	              #end
+		          <li>
+		          <a href="$!goods_url">
+		          #if($!obj.d_goods.goods_main_photo)               
+                	#set($img="$!imageWebServer/$!{obj.d_goods.goods_main_photo.path}/$!{obj.d_goods.goods_main_photo.name}_small.$!{obj.d_goods.goods_main_photo.ext}")
+                  #else
+                    #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                  #end
+		          <img src="$!img">
+		          <p class="price">现价:¥<b>$!{obj.d_goods.goods_current_price}</b></p>
+		          </a>
+		          </li>
+		          #end
+		        </ul>
+		    </div>
+		</div>
+		
+		
+ $!httpInclude.include("/footer.htm")
+
+
+
+</body>
+</html>

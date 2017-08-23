@@ -1,0 +1,411 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!store.store_name - Powered by shopping</title>
+<meta name="keywords" content="$!store.store_seo_keywords" />
+<meta name="description" content="$!store.store_seo_description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/shop/$!{store.template}/css/default.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery.rating.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.metadata.js"></script>
+<script src="$!webPath/resources/js/jquery.rating.pack.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery(".evlua li").click(function(){
+    jQuery(".evlua li").removeClass("this");
+    jQuery(this).addClass("this");
+	var uri=jQuery(this).attr("uri");
+	jQuery.post(uri,"",function(data){
+		jQuery(".evalubot").empty();						
+        jQuery(".evalubot").append(data);
+	 },"text");
+    	
+}).mouseover(function(){
+  jQuery(this).css("cursor","pointer");	
+});
+  //
+ jQuery(".eval_tab li").mouseover(function(){
+    jQuery(".eval_tab li").removeClass("this");
+	jQuery(this).css("cursor","pointer").addClass("this");
+	jQuery(".eval_tab_right").hide();
+	var eva_type=jQuery(this).attr("eva_type");
+	jQuery("#"+eva_type).show();
+ });
+ //
+  #if($!{store.point.description_evaluate_halfyear}>0)
+  jQuery(":radio.description_evaluate_halfyear").each(function(){
+    var description_evaluate=$!{store.point.description_evaluate_halfyear};
+	if(jQuery(this).val()>=description_evaluate){
+		jQuery(this).attr("checked","checked");
+		return false;
+	}
+  });
+  #end				
+  jQuery("input.description_evaluate_halfyear").rating();
+  #if($!{store.point.service_evaluate_halfyear}>0)
+  jQuery(":radio.service_evaluate_halfyear").each(function(){
+    var service_evaluate=$!{store.point.service_evaluate_halfyear};
+	if(jQuery(this).val()>=service_evaluate){
+		jQuery(this).attr("checked","checked");
+		return false;
+	}
+  });
+  #end				
+  jQuery("input.service_evaluate_halfyear").rating();
+  #if($!{store.point.ship_evaluate_halfyear}>0)
+  jQuery(":radio.ship_evaluate_halfyear").each(function(){
+    var ship_evaluate=$!{store.point.ship_evaluate_halfyear};
+	if(jQuery(this).val()>=ship_evaluate){
+		jQuery(this).attr("checked","checked");
+		return false;
+	}
+  });
+  #end				
+  jQuery("input.ship_evaluate_halfyear").rating();  
+});
+function ajaxPage(url,currentPage,obj){
+  jQuery.ajax({type:'POST',url:url,data:{"currentPage":currentPage,"id":"$!store.id"},
+			  beforeSend:function(){
+			   },
+			  success:function(data){
+                 jQuery(".evalubot").empty();						
+                 jQuery(".evalubot").append(data);																									                }
+		})
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm") 
+$!httpInclude.include("/store_head.htm?store_id=$!{store.id}")
+  #set($banner="$!webPath/resources/style/shop/$!{store.template}/images/banner.jpg")
+  #if($!store.store_banner)
+    #set($banner="$!webPath/$!store.store_banner.path/$!store.store_banner.name")
+  #end
+<div class="banner_width">
+  <div class="shopbanner"><img src="$!banner" width="1002"/></div>
+</div>
+<div class="nav_width">
+  <div class="main">
+  <div class="nav_bg">
+    <div class="shopnav"> $!httpInclude.include("/store_nav.htm?id=$!store.id")
+      <script>
+     jQuery(".shopnavul li").each(function(){
+	     var nav_id=jQuery(this).attr("id");
+         if(nav_id=="$!{nav_id}"){
+		   jQuery(this).addClass("this");
+		 }else jQuery(this).removeClass("this");
+	 });
+    </script>
+      <div class="shopnavs"></div>
+    </div>
+    </div>
+  </div>
+  <div class="navbotm"></div>
+</div>
+<div class="main">
+  <div class="shop">
+    <div class="shop_index"> $!httpInclude.include("/store_left2.htm?id=$!store.id")
+      <div class="shopindex_right">
+        <div class="evaluation"> #set($rate=$!CommUtil.null2Double($!{store.point.store_evaluate1})*100)
+          <div class="goodevalu">好评率:（$!{rate}%）</div>
+          <div class="goodevt">
+            <table width="797" border="0" cellspacing="0" cellpadding="0" class="goodevtable">
+              <tr>
+                <td width="90">&nbsp;</td>
+                <td align="center" width="150">最近一周</td>
+                <td align="center" width="150">最近一个月</td>
+                <td align="center" width="150">最近6个月</td>
+                <td align="center" width="150">6个月前</td>
+                <td align="center" width="150">总计</td>
+              </tr>
+              <tr>
+                <td align="center"><strong class="red"><i class="flower"><img src="$!imageWebServer/resources/style/shop/$!{store.template}/images/flower3.gif" width="16" height="16"></i>
+好评</strong></td>
+                #set($eva_week_0=$!storeViewTools.query_evaluate("$!store.id",1,"week","after",-1))
+                <td align="center">$!eva_week_0</td>
+                #set($eva_month_0=$!storeViewTools.query_evaluate("$!store.id",1,"month","after",-1))
+                <td align="center">$!eva_month_0</td>
+                #set($eva_month6_0=$!storeViewTools.query_evaluate("$!store.id",1,"month","after",-6))
+                <td align="center">$!eva_month6_0</td>
+                #set($eva_month6_before0=$!storeViewTools.query_evaluate("$!store.id",1,"month","before",-6))
+                <td align="center">$!eva_month6_before0</td>
+                #set($eva_all_total0=$!eva_month6_0+$!eva_month6_before0)
+                <td align="center">$!eva_all_total0</td>
+              </tr>
+              <tr>
+                <td align="center"><strong class="green"><i class="flower"><img src="$!imageWebServer/resources/style/shop/$!{store.template}/images/flower2.gif" width="16" height="16"></i>中评</strong></td>
+                #set($eva_week_1=$!storeViewTools.query_evaluate("$!store.id",0,"week","after",-1))
+                <td align="center">$!eva_week_1</td>
+                #set($eva_month_1=$!storeViewTools.query_evaluate("$!store.id",0,"month","after",-1))
+                <td align="center">$!eva_month_1</td>
+                #set($eva_month6_1=$!storeViewTools.query_evaluate("$!store.id",0,"month","after",-6))
+                <td align="center">$!eva_month6_1</td>
+                #set($eva_month6_before1=$!storeViewTools.query_evaluate("$!store.id",0,"month","before",-6))
+                <td align="center">$!eva_month6_before1</td>
+                #set($eva_all_total1=$!eva_month6_1+$!eva_month6_before1)
+                <td align="center">$!eva_all_total1</td>
+              </tr>
+              <tr>
+                <td align="center"><strong><i class="flower"><img src="$!imageWebServer/resources/style/shop/$!{store.template}/images/flower1.gif" width="16" height="16"></i>差评</strong></td>
+                #set($eva_week_2=$!storeViewTools.query_evaluate("$!store.id",-1,"week","after",-1))
+                <td align="center">$!eva_week_2</td>
+                #set($eva_month_2=$!storeViewTools.query_evaluate("$!store.id",-1,"month","after",-1))
+                <td align="center">$!eva_month_2</td>
+                #set($eva_month6_2=$!storeViewTools.query_evaluate("$!store.id",-1,"month","after",-6))
+                <td align="center">$!eva_month6_2</td>
+                #set($eva_month6_before2=$!storeViewTools.query_evaluate("$!store.id",-1,"month","before",-6))
+                <td align="center">$!eva_month6_before2</td>
+                #set($eva_all_total2=$!eva_month6_2+$!eva_month6_before2)
+                <td align="center">$!eva_all_total2</td>
+              </tr>
+              <tr>
+                <td align="center"><strong class="blue2">总计</strong></td>
+                #set($eva_week_total=$!eva_week_0+$!eva_week_1+$!eva_week_2)
+                <td align="center">$!eva_week_total</td>
+                #set($eva_month_total=$!eva_month_0+$!eva_month_1+$!eva_month_2)
+                <td align="center">$!eva_month_total</td>
+                #set($eva_month6_total=$!eva_month6_0+$!eva_month6_1+$!eva_month6_2)
+                <td align="center">$!eva_month6_total</td>
+                #set($eva_month6_before_total=$!eva_month6_before0+$!eva_month6_before1+$!eva_month6_before2)
+                <td align="center">$!eva_month6_before_total</td>
+                #set($eva_total=$!eva_all_total0+$!eva_all_total1+$!eva_all_total2)
+                <td align="center">$!eva_total</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="eval_service">
+          <div class="eval_service_box">
+            <h3>店铺半年内动态评分</h3>
+            <div class="eval_service_bt">
+              <div class="eval_tab">
+                <ul>
+                  <li eva_type="description_evaluate"><b>宝贝与描述相符：</b><i>$!CommUtil.null2Double($!{store.point.description_evaluate_halfyear})</i><em>分</em></li>
+                  <li eva_type="service_evaluate"><b>卖家的服务态度：</b><i>$!CommUtil.null2Double($!{store.point.service_evaluate_halfyear})</i><em>分</em></li>
+                  <li eva_type="ship_evaluate" class="this"><b>卖家的发货速度：</b><i>$!CommUtil.null2Double($!{store.point.ship_evaluate_halfyear})</i><em>分</em></li>
+                </ul>
+              </div>
+              <div class="eval_tab_right" id="description_evaluate" style="display:block;">
+                <div class="eval_tab_con">
+                  <ul class="eval_con_ul">
+                    <li class="eval_tit">
+                    <span>
+                     #foreach($i in [1..25])
+                      #set($val=$i * 0.2)
+                      #set($val=$!CommUtil.formatDouble($val,1))
+                        <input name="description_evaluate_halfyear" class="description_evaluate_halfyear {split:5}" type="radio" value="$!val"  disabled="disabled" />
+                     #end
+                    </span>                   #set($description_total=$!{store.point.description_evaluate_halfyear_count5}+$!{store.point.description_evaluate_halfyear_count4}+$!{store.point.description_evaluate_halfyear_count3}+$!{store.point.description_evaluate_halfyear_count2}+$!{store.point.description_evaluate_halfyear_count1})
+                    <span><b>$!CommUtil.null2Double($!{store.point.description_evaluate_halfyear})</b>分</span><span>共$!{description_total}人</span></li>
+                    #set($description_total5=$!CommUtil.div($!{store.point.description_evaluate_halfyear_count5},$!{description_total})*100)
+                    <li><span class="smstart_5"></span><span>4-5分</span><span>
+                      <div class="eval_bar" style="width:$!{description_total5}px;"></div>
+                      </span><span><b>$!{description_total5}%</b></span>
+                     </li>
+                    #set($description_total4=$!CommUtil.div($!{store.point.description_evaluate_halfyear_count4},$!{description_total})*100)
+                    <li>
+                    <span class="smstart_4"></span><span>3-4分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{description_total4}px;"></div>
+                    </span>
+                    <span><b>$!{description_total4}%</b></span>
+                    </li>
+                    #set($description_total3=$!CommUtil.div($!{store.point.description_evaluate_halfyear_count3},$!{description_total})*100)
+                   <li>
+                    <span class="smstart_3"></span><span>2-3分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{description_total3}px;"></div>
+                    </span>
+                    <span><b>$!{description_total3}%</b></span>
+                    </li>
+                    #set($description_total2=$!CommUtil.div($!{store.point.description_evaluate_halfyear_count2},$!{description_total})*100)
+                   <li>
+                    <span class="smstart_2"></span><span>1-2分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{description_total2}px;"></div>
+                    </span>
+                    <span><b>$!{description_total2}%</b></span>
+                    </li>
+                    #set($description_total1=$!CommUtil.div($!{store.point.description_evaluate_halfyear_count1},$!{description_total})*100)
+                   <li>
+                    <span class="smstart_1"></span><span>0-1分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{description_total1}px;"></div>
+                    </span>
+                    <span><b>$!{description_total1}%</b></span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="eval_rbg"></div>
+              </div>
+              <div class="eval_tab_right" id="service_evaluate" style="display:none;">
+                <div class="eval_tab_con">
+                  <ul class="eval_con_ul">
+                    <li class="eval_tit">
+                    <span>
+                     #foreach($i in [1..25])
+                      #set($val=$i * 0.2)
+                      #set($val=$!CommUtil.formatDouble($val,1))
+                        <input name="service_evaluate_halfyear" class="service_evaluate_halfyear {split:5}" type="radio" value="$!val"  disabled="disabled" />
+                     #end
+                    </span>                   #set($service_total=$!{store.point.service_evaluate_halfyear_count5}+$!{store.point.service_evaluate_halfyear_count4}+$!{store.point.service_evaluate_halfyear_count3}+$!{store.point.service_evaluate_halfyear_count2}+$!{store.point.service_evaluate_halfyear_count1})
+                    <span><b>$!CommUtil.null2Double($!{store.point.service_evaluate_halfyear})</b>分</span><span>共$!{service_total}人</span></li>
+                    #set($service_total5=$!CommUtil.div($!{store.point.service_evaluate_halfyear_count5},$!{service_total})*100)
+                    <li><span class="smstart_5"></span><span>4-5分</span><span>
+                      <div class="eval_bar" style="width:$!{service_total5}px;"></div>
+                      </span><span><b>$!{service_total5}%</b></span>
+                     </li>
+                    #set($service_total4=$!CommUtil.div($!{store.point.service_evaluate_halfyear_count4},$!{service_total})*100)
+                    <li>
+                    <span class="smstart_4"></span><span>3-4分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{service_total4}px;"></div>
+                    </span>
+                    <span><b>$!{service_total4}%</b></span>
+                    </li>
+                    #set($service_total3=$!CommUtil.div($!{store.point.service_evaluate_halfyear_count3},$!{service_total})*100)
+                   <li>
+                    <span class="smstart_3"></span><span>2-3分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{service_total3}px;"></div>
+                    </span>
+                    <span><b>$!{service_total3}%</b></span>
+                    </li>
+                    #set($service_total2=$!CommUtil.div($!{store.point.service_evaluate_halfyear_count2},$!{service_total})*100)
+                   <li>
+                    <span class="smstart_2"></span><span>1-2分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{service_total2}px;"></div>
+                    </span>
+                    <span><b>$!{service_total2}%</b></span>
+                    </li>
+                    #set($service_total1=$!CommUtil.div($!{store.point.service_evaluate_halfyear_count1},$!{service_total})*100)
+                   <li>
+                    <span class="smstart_1"></span><span>0-1分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{service_total1}px;"></div>
+                    </span>
+                    <span><b>$!{service_total1}%</b></span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="eval_rbg"></div>
+              </div>
+              <div class="eval_tab_right" id="ship_evaluate" style="display:none;">
+                <div class="eval_tab_con">
+                  <ul class="eval_con_ul">
+                    <li class="eval_tit">
+                    <span>
+                     #foreach($i in [1..25])
+                      #set($val=$i * 0.2)
+                      #set($val=$!CommUtil.formatDouble($val,1))
+                        <input name="ship_evaluate_halfyear" class="ship_evaluate_halfyear {split:5}" type="radio" value="$!val"  disabled="disabled" />
+                     #end
+                    </span>                   #set($ship_total=$!{store.point.ship_evaluate_halfyear_count5}+$!{store.point.ship_evaluate_halfyear_count4}+$!{store.point.ship_evaluate_halfyear_count3}+$!{store.point.ship_evaluate_halfyear_count2}+$!{store.point.ship_evaluate_halfyear_count1})
+                    <span><b>$!CommUtil.null2Double($!{store.point.ship_evaluate_halfyear})</b>分</span><span>共$!{ship_total}人</span></li>
+                    #set($ship_total5=$!CommUtil.div($!{store.point.ship_evaluate_halfyear_count5},$!{ship_total})*100)
+                    <li><span class="smstart_5"></span><span>4-5分</span><span>
+                      <div class="eval_bar" style="width:$!{ship_total5}px;"></div>
+                      </span><span><b>$!{ship_total5}%</b></span>
+                     </li>
+                    #set($ship_total4=$!CommUtil.div($!{store.point.ship_evaluate_halfyear_count4},$!{ship_total})*100)
+                    <li>
+                    <span class="smstart_4"></span><span>3-4分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{ship_total4}px;"></div>
+                    </span>
+                    <span><b>$!{ship_total4}%</b></span>
+                    </li>
+                    #set($ship_total3=$!CommUtil.div($!{store.point.ship_evaluate_halfyear_count3},$!{ship_total})*100)
+                   <li>
+                    <span class="smstart_3"></span><span>2-3分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{ship_total3}px;"></div>
+                    </span>
+                    <span><b>$!{ship_total3}%</b></span>
+                    </li>
+                    #set($ship_total2=$!CommUtil.div($!{store.point.ship_evaluate_halfyear_count2},$!{ship_total})*100)
+                   <li>
+                    <span class="smstart_2"></span><span>1-2分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{ship_total2}px;"></div>
+                    </span>
+                    <span><b>$!{ship_total2}%</b></span>
+                    </li>
+                    #set($ship_total1=$!CommUtil.div($!{store.point.ship_evaluate_halfyear_count1},$!{ship_total})*100)
+                   <li>
+                    <span class="smstart_1"></span><span>0-1分</span>
+                    <span>
+                     <div class="eval_bar" style="width:$!{ship_total1}px;"></div>
+                    </span>
+                    <span><b>$!{ship_total1}%</b></span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="eval_rbg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="shop_index">
+    <div class="evaludetail">
+          <div class="evlua">
+            <ul>
+              <li class="this" uri="$!webPath/store_eva.htm?id=$!store.id"><strong><a href="javascript:void(0);">全部评价</a></strong></li>
+              <li uri="$!webPath/store_eva.htm?id=$!store.id&eva_val=1"><strong class="red">好评</strong></li>
+              <li uri="$!webPath/store_eva.htm?id=$!store.id&eva_val=0"><strong class="green">中评</strong></li>
+              <li uri="$!webPath/store_eva.htm?id=$!store.id&eva_val=-1"><strong>差评</strong></li>
+            </ul>
+          </div>
+          <div class="evalubot">
+            <div class="evaluone">
+              <table width="797" border="0" cellspacing="0" cellpadding="0" class="evaluonetable">
+                <tr>
+                  <td width="80">评价</td>
+                  <td width="140">内容</td>
+                  <td width="100" align="center">商品</td>
+                  <td width="60" align="center">金额</td>
+                  <td width="100" align="center">买家</td>
+                  <td width="100" align="center">时间</td>
+                </tr>
+                #foreach($obj in $objs)
+                <tr> #if($!obj.evaluate_buyer_val==1)
+                  #set($evaluate_buyer_val="好评")
+                  #end
+                  #if($!obj.evaluate_buyer_val==0)
+                  #set($evaluate_buyer_val="中评")
+                  #end
+                  #if($!obj.evaluate_buyer_val==-1)
+                  #set($evaluate_buyer_val="差评")
+                  #end
+                  <td>$!evaluate_buyer_val</td>
+                  <td>#if($!{obj.evaluate_info}!="")$!{obj.evaluate_info} #else 这家伙什么都没说 #end</td>
+                  <td class="goodsevalu"><span class="nameevalu"><a href="$!webPath/goods_$!{obj.evaluate_goods.id}.htm" target="_blank">$!obj.evaluate_goods.goods_name</a></span></td>
+                  <td align="center"><strong class="orange">¥$!{obj.of.totalPrice}</strong></td>
+                  <td align="center">$!obj.evaluate_user.userName</td>
+                  <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+                </tr>
+                #end
+              </table>
+            </div>
+            <div class="fenye">
+              <div class="fenyes">$!gotoPageAjaxHTML</div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

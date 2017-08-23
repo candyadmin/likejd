@@ -1,0 +1,88 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+	 timeCount("time_down_info");							
+  jQuery("#theForm").validate({
+	   rules:{
+		   return_shipCode:{required:true},
+		   ec_id:{required:true}
+		   },
+	   messages:{
+	       return_shipCode:{required:"物流单号不能为空"},
+		   ec_id:{required:"物流公司不能为空"}
+	   }
+	});
+});
+function timeCount(remain_id){
+   function _fresh(){
+      var nowDate = new Date(),                                    //当前时间
+      endDate = new Date($('#'+remain_id).attr('endtime')),    //截止时间
+      totalS  = parseInt((endDate.getTime() - nowDate.getTime()) / 1000);     //总秒数
+      _day    = parseInt(totalS / 3600 / 24);
+      _hour   = parseInt((totalS / 3600) % 24);
+      _minute = parseInt((totalS / 60) % 60);
+      _second = parseInt(totalS % 60);
+     jQuery('#'+remain_id).html('您还有<b>' + _day +'</b><i>天</i><b>' + _hour + '</b><i>小时</i><b>' + _minute + '</b><i>分</i><b>' + _second + '</b><i>秒</i>，超过该时间系统将判定该退货失败！');
+     if( totalS <= 0){
+       jQuery('#'+remain_id).html('退货失败');
+	   jQuery("tr[id^=tr_]").hide();
+       clearInterval(sh);
+     }
+  }
+  _fresh();
+  var sh = setInterval(_fresh,1000);
+}
+</script>
+<form action="$!webPath/buyer/order_return_ship_save.htm" method="post" id="theForm">
+  <table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td colspan="2" align="left" valign="top"></td>
+    </tr>
+    
+	#if($!physicalGoods=="true")
+    #if($!obj.return_shipCode!="" && $!obj.return_ec!="")
+   <tr id="tr_1">
+      <td align="left" valign="top">&nbsp;&nbsp;物流公司：$!obj.return_ec.company_name</td>
+      <td align="left"></td>
+    </tr>
+    <tr id="tr_2">
+      <td align="left" valign="top">&nbsp;&nbsp;物流单号：$!obj.return_shipCode</td>
+      <td align="left"></td>
+    </tr>
+        <tr>
+  		已经提交退货物流信息，等待卖家确认
+
+    </tr>
+    #else
+    <tr id="tr_1">
+      <td align="right" valign="top">物流公司:</td>
+      <td align="left">
+      <select name="ec_id" id="ec_id">
+      #foreach($expressCompany in $expressCompanys)
+      <option value="$!expressCompany.id">$!expressCompany.company_name</option>
+      #end
+      </select></td>
+    </tr>
+    <tr id="tr_2">
+      <td align="right" valign="top">物流单号：</td>
+      <td align="left"><input name="return_shipCode" type="text" id="return_shipCode" size="30" /></td>
+    </tr>
+        <tr>
+     请输入正确退货物流信息
+      <div class="tuanlitime" id="time_down_info" endTime="$!CommUtil.formatTime('MM/dd/yyyy HH:mm:ss',$!{obj.return_shipTime})">您还有 <b>14</b><i>天</i><b>05</b><i>小时</i><b>43</b><i>分</i><b>46</b><i>秒</i> ，超过该时间系统将判定该退货失败！</div>
+
+    </tr>
+     <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+       <input name="id" type="hidden" id="id" value="$!obj.id" />
+        <input name="" type="submit" value="提交" style="cursor:pointer;"/>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      </span></td>
+    </tr>
+    #end
+	#end
+
+   
+  </table>
+</form>

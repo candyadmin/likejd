@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>微信商城  -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" href="$!webPath/resources/editor/themes/default/default.css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script>
+//options为编辑配置属性
+var options = {
+        cssPath : '$!webPath/resources/editor/themes/default/default.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '550px',
+		height:'400px',
+		resizeType : 1,
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source','link', 'unlink','clearhtml']
+};
+
+
+jQuery(document).ready(function(){
+//
+jQuery("#theForm").validate({
+    rules:{
+	  qr_img:{#if(!$!store)required :true,#end accept:'.jpe?g'},
+	  weixin_token:{required :true},
+	  weixin_appId:{required :true},
+	  weixin_appSecret:{required :true},
+	  weixin_welecome_content:{required :true}
+	 },
+	messages:{
+		     qr_img:{#if(!$!store)required :"二维码图片不能为空",#end accept:"二维码格式不对"},
+	  weixin_token:{required:"微信Token不能为空"},
+	  weixin_appId:{required :"微信AppId不能为空"},
+	  weixin_appSecret:{required :"微信appSecret不能为空"},
+	  weixin_welecome_content:{required :"微信关注欢迎词不能为空"}
+	}
+  });				
+ //
+  editor = KindEditor.create('#weixin_welecome_content',options); 
+});
+function save_form(){
+	   editor.sync();
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=weixin_store")
+        <td id="centerbg" valign="top"><div class="buyer_position">
+            <div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>微信商城</span></div>
+          </div>
+          <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href="$!webPath/seller/weixin_store.htm">微信商城</a></li>
+                <li><a href="$!webPath/seller/weixin_store_log.htm">购买日志</a></li>
+                #if($!store.weixin_status==1)
+                <li><a href="$!webPath/seller/weixin_store_menu.htm">微信菜单</a></li>
+                #end
+              </ul>
+              <div class="addnew"><a class="button_common" href="$!webPath/seller/weixin_store_buy.htm">立即购买</a></div>
+            </div>
+            <form action="$!webPath/seller/weixin_store_save.htm" method="post" enctype="multipart/form-data" id="theForm">
+              <div class="ordercon">
+                <div class="setshop">
+                  <table width="705" border="0" cellspacing="0" cellpadding="0" class="setshoptable">
+                    <tr>
+                      <td width="21%" align="right" >微信商城状态：</td>
+                      <td width="79%" style="padding-left:10px; color:#666"> #if($!store.weixin_status==0) <span style="color:#F00; line-height:30px;">尚未开通</span> #end
+                        #if($!store.weixin_status==1)
+                        有效期：$!CommUtil.formatShortDate($!{store.weixin_begin_time}) 至 $!CommUtil.formatShortDate($!{store.weixin_end_time})
+                        #end
+                        #if($!store.weixin_status==2) <span style="color:#F00; line-height:30px;">已经过期|有效期：$!{store.weixin_begin_time} 至 $!{store.weixin_end_time}</span> #end
+                        #if($!store.weixin_status==3) <span style="color:#F00; line-height:30px;">违规关闭|有效期：$!{store.weixin_begin_time} 至 $!{store.weixin_end_time}</span> #end </td>
+                    </tr>
+                    #if($!store.weixin_status==1)
+                    <tr>
+                      <td width="21%" align="right" valign="top">微信二维码：</td>
+                      <td style="padding-left:10px;"><ul class="setbanner">
+                          <li class="shopbanner"> #if($!store.weixin_qr_img) <img src="$!webPath/$!store.weixin_qr_img.path/$!store.weixin_qr_img.name" width="200" height="200" /> #end </li>
+                          <li>
+                            <input name="qr_img" type="file" id="qr_img" size="30" />
+                          </li>
+                          <li class="setinfo">这里上传微信二维码图片，可以在“公众平台管理”-“设置”-“账号信息”，下载二维码图片，只有点击"提交"后才能生效</li>
+                        </ul></td>
+                    </tr>
+                    <tr>
+                      <td width="21%" align="right" valign="top">微信店铺Logo：</td>
+                      <td style="padding-left:10px;"><ul class="setbanner">
+                          #if($!store.store_weixin_logo)
+                          <li class="shopbanner"> <img src="$!webPath/$!store.store_weixin_logo.path/$!store.store_weixin_logo.name" width="117" height="27" /></li>
+                          #end
+                          <li>
+                            <input name="store_weixin_logo" type="file" id="store_weixin_logo" size="30" />
+                          </li>
+                          <li class="setinfo">微信店铺Logo上传之后在微信店铺底部菜单显示，如下图所示中红色区域，Logo图片最佳尺寸为：117X27，格式为png、gif效果最佳。</li>
+                          <li class="setinfo"><img src="$!webPath/resources/style/weixin/default/images/store_weixin_logo.png"/ width="300" height="38"></li>
+                        </ul></td>
+                    </tr>
+                    <tr>
+                      <td width="21%" align="right">微信开发URL：</td>
+                      <td style="padding-left:10px; color:#666">$!{developer_url}</td>
+                    </tr>
+                    <tr>
+                      <td align="right">微信账号名称： </td>
+                      <td style="padding-left:10px;"><span class="setinput">
+                        <input name="weixin_account" type="text" id="weixin_account" value="$!store.weixin_account" />
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td width="21%" align="right">微信Token： </td>
+                      <td style="padding-left:10px;"><span class="setinput">
+                        <input name="weixin_token" type="text" id="weixin_token" value="$!store.weixin_token" />
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td width="21%" align="right">微信AppId：</td>
+                      <td style="padding-left:10px;"><span class="setinput">
+                        <input name="weixin_appId" type="text" id="weixin_appId" value="$!store.weixin_appId" />
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td width="21%" align="right">微信AppSecret：</td>
+                      <td style="padding-left:10px;"><span class="setinput">
+                        <input name="weixin_appSecret" type="text" id="weixin_appSecret" value="$!store.weixin_appSecret" />
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td width="21%" align="right" valign="top">微信关注欢迎词：</td>
+                      <td style="padding-left:10px;"><ul class="setseo">
+                          <li><span class="setinput">
+                            <textarea name="weixin_welecome_content" cols="45" rows="5" id="weixin_welecome_content">$!store.weixin_welecome_content
+                            </textarea>
+                            </span></li>
+                          <li style="color:#666">用户关注微信账号时，微信平台自动发送的欢迎词</li>
+                        </ul></td>
+                    </tr>
+                    <tr>
+                      <td width="21%" align="right">&nbsp;</td>
+                      <td style="padding-left:10px;"><span class="setsub">
+                        <input type="button"  value="保 存" style="cursor:pointer;" onclick="save_form();"/>
+                        </span></td>
+                    </tr>
+                    #end
+                  </table>
+                </div>
+              </div>
+            </form>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>积分商城 -$!config.title - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/integral.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/integral_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script src="$!webPath/resources/js/jquery.KinSlideshow.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#rank_ul").find("li").mouseover(function(){
+		jQuery(this).parent().find("li").removeClass("this");
+		jQuery(this).addClass("this");
+		});
+   jQuery(".goods_img img").lazyload({effect:"fadeIn",width:160,height:160});
+});
+</script>
+</head>
+
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="integral_right">
+      <div class="inte_top">
+        <div class="inte_silder"> 
+          <script src="$!webPath/advert_invoke.htm?id=229376"></script> 
+        </div>
+     <div class="inte_top_adv"><img src="$!imageWebServer/upload/advert/022a57de-dbc6-49eb-a972-23cf529d61b8.jpg"></div> 
+      </div>
+      #if($!recommend_igs.size()>0 || $!new_igs.size()>0)
+      #if($!recommend_igs.size()>0)
+      <div class="exchange_goods">
+        <h3><b></b><span>推荐兑换商品<s>---</s><a href="$!webPath/integral_list.htm">更多</a></span><em></em></h3>
+        <div class="exchange_ul"> 
+        #foreach($obj in $recommend_igs)
+          #if($!obj.ig_goods_img)
+          #set($img="$!imageWebServer/$!{obj.ig_goods_img.path}/$!{obj.ig_goods_img.name}_small.$!{obj.ig_goods_img.ext}")
+          #else
+          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+          #end
+          <ul class="goods_one">
+            <li class="goods_img"><span class="imgcenter_span gimg_sp">
+              <p><a href="$!webPath/integral_view_$!{obj.id}.htm"><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28"/></a></p>
+              </span></li>
+            <li class="goods_name"><a href="$!webPath/integral_view_$!{obj.id}.htm">$!obj.ig_goods_name</a></li>
+            <li class="goods_market">市场价格:¥$!{obj.ig_goods_price}</li>
+            <li class="goods_want"><a href="$!webPath/integral_exchange1.htm?id=$!{obj.id}">我要兑换</a><strong>$!{obj.ig_goods_integral}分</strong></li>
+          </ul>
+          #end </div>
+      </div>
+      #end
+      #if($!new_igs.size()>0)
+      <div class="exchange_goods">
+        <h3><b></b><span>最新兑换商品<s>---</s><a href="$!webPath/integral_list.htm">更多</a></span><em></em></h3>
+        <div class="exchange_ul"> 
+        #foreach($obj in $new_igs)
+          #if($!obj.ig_goods_img)
+          #set($img="$!imageWebServer/$!{obj.ig_goods_img.path}/$!{obj.ig_goods_img.name}_small.$!{obj.ig_goods_img.ext}")
+          #else
+          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+          #end
+          <ul class="goods_one">
+            <li class="goods_img"><span class="imgcenter_span gimg_sp">
+              <p><a href="$!webPath/integral_view_$!{obj.id}.htm"><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28"/></a></p>
+              </span></li>
+            <li class="goods_name"><a href="$!webPath/integral_view_$!{obj.id}.htm">$!obj.ig_goods_name</a></li>
+            <li class="goods_market">市场价格:¥$!{obj.ig_goods_price}</li>
+            <li class="goods_want"><a href="$!webPath/integral_exchange1.htm?id=$!{obj.id}">我要兑换</a><strong>$!{obj.ig_goods_integral}分</strong></li>
+          </ul>
+          #end </div>
+      </div>
+      #end
+      #else
+      <div class="starshop_list">
+              <div class="sigh" style="clear:both; margin:60px auto;"> <span><img src="$!imageWebServer/resources/style/system/front/default/images/sigh.png" width="120" height="109" /></span> <b>对不起，没有对应的数据!</b> </div>
+            </div>
+      #end
+    </div>
+    <div class="integral_left">
+      <div class="inte_login">
+        <div class="inte_in_login">
+          <div class="inte_bg">
+            <h3>商城积分信息</h3>
+            <ul class="intlogul">
+              <li class="inthui">登录显示积分情况</li>
+              #if(!$!user)
+              <li class="intlogin"> <a href="javascript:void(0);" dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="450" dialog_height="100" dialog_id="user_login">会员登录</a> </li>
+              #else
+              <li class="intlogined"><span>您的积分是<strong>$!user.integral</strong>分</span> <span><a href="$!webPath/integral_exchange1.htm"> 已选择兑换礼品<i>$!CommUtil.null2Int($!{integral_cart.size()})</i>个</a></span></li>
+              #end
+            </ul>
+            <ul class="explainul">
+              <li><a href="$!webPath/article_integralrule.htm" target="_blank">积分细则</a></li>
+              <li><a href="$!webPath/article_exchange.htm" target="_blank">积分兑换说明</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="classified">
+        <h3>积分选择区</h3>
+        <ul>
+          <li><a href="$!webPath/integral.htm?begin=0&end=1999">1999分以下</a></li>
+          <li><a href="$!webPath/integral.htm?begin=2000&end=3999">2000分~3999分</a></li>
+          <li><a href="$!webPath/integral.htm?begin=4000&end=5999">4000分~5999分</a></li>
+          <li><a href="$!webPath/integral.htm?begin=6000&end=9999">6000分~9999分</a></li>
+          <li><a href="$!webPath/integral.htm?begin=10000&end=0">10000分以上</a></li>
+        </ul>
+      </div>
+      <div class="exchange">
+        <h3>兑换排行榜</h3>
+        <ul id="rank_ul">
+          #foreach($obj in $exchange_igs)
+          #if($!{velocityCount}<=3)
+          <li id="$!obj.id"> <i> <strong class="imgcenter_span "> #if($!obj.ig_goods_img)
+            #set($img="$!imageWebServer/$!{obj.ig_goods_img.path}/$!{obj.ig_goods_img.name}_small.$!{obj.ig_goods_img.ext}")
+            #else
+            #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+            #end
+            <p><a href="$!webPath/integral_view_$!{obj.id}.htm" target="_blank"><img src="$!img" width="103" height="103" /></a></p>
+            </strong> <b>$!velocityCount</b> </i>
+            <h2><a href="$!webPath/integral_view_$!{obj.id}.htm" target="_blank">$!obj.ig_goods_name</a></h2>
+            <span class="market ">市场价格:¥$!{obj.ig_goods_price}</span> <span class="integral">兑换积分: <strong>$!{obj.ig_goods_integral}</strong> 分</span> <span class="integral">兑换数量: <strong>$!obj.ig_exchange_count</strong> 个</span> </li>
+          #else
+          <li><ahref="$!webPath/integral_view_$!{obj.id}.htm"><var><strong>$!{obj.ig_goods_integral}</strong>分</var><em><a href="$!webPath/integral_view_$!{obj.id}.htm" target="_blank">$!CommUtil.substring("$!obj.ig_goods_name",14)</em></a></li>
+          #end
+          #end
+        </ul>
+      </div>
+      <div class="integ_enjoy">
+        <h3></h3>
+        <script src="$!webPath/advert_invoke.htm?id=262156"></script>
+        </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

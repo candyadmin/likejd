@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>#if($!gc)$!{gc.className}#else搜索商品#end - Powered by shopping</title>
+<meta name="keywords" content="$!gc.seo_keywords" />
+<meta name="description" content="$!gc.seo_description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goodshidden.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery(".brandsort_show a").click(function(){								 
+     var goods_view=jQuery(this).attr("goods_view");
+	 if(goods_view=="list"){
+	   jQuery(".goodstyletwo").show();
+	   jQuery(".smallgoods").hide();
+	   jQuery(this).addClass("brandsort_show_list2");
+	   jQuery("#thumb_view").removeClass().addClass("brandsort_show_big");
+	 }
+	 if(goods_view=="thumb"){
+	   jQuery(".smallgoods").show();
+	   jQuery(".goodstyletwo").hide();
+	   jQuery(this).addClass("brandsort_show_big2");
+	   jQuery("#list_view").removeClass().addClass("brandsort_show_list");	  
+	 }
+	 jQuery("#goods_view").val(goods_view);
+  });
+  #if("$!goods_view"=="list")
+	 jQuery(".goodstyletwo").show();
+	 jQuery(".smallgoods").hide();
+	 jQuery("#list_view").addClass("brandsort_show_list2");
+	 jQuery("#thumb_view").removeClass().addClass("brandsort_show_big");    
+  #end
+  #if("$!goods_view"=="thumb")
+	 jQuery(".smallgoods").show();
+	 jQuery(".goodstyletwo").hide();
+	 jQuery("#thumb_view").addClass("brandsort_show_big2");
+	 jQuery("#list_view").removeClass().addClass("brandsort_show_list");	 
+  #end
+//排序
+ jQuery(".brandsort_price_bottom a").click(function(){
+	 	var mark = jQuery(this).attr("mark");
+	    if(mark=="clear"){
+		jQuery(".brandsort_price_top input").val("");	
+			}
+		jQuery("#ListForm").submit();						   
+		});	
+   jQuery(".brandsort_sc_area").hover(function(){
+		jQuery(".area_detail").css("display","block");
+		},function(){
+		jQuery(".area_detail").css("display","none");	
+			});
+  jQuery(".brandsort_fineprice").hover(function(){
+		jQuery(".brandsort_price_bottom").css("display","block");	
+		},function(){
+		jQuery(".brandsort_price_bottom").css("display","none");	
+			});			
+  jQuery(".brandsort_sort a").click(function(){
+	   var orderBy = jQuery(this).attr("orderBy");
+	   var orderType = jQuery(this).attr("orderType");
+	   jQuery("#orderBy").val(orderBy);
+	   jQuery("#orderType").val(orderType);
+	   jQuery("#ListForm").submit();
+	});
+	#if($!orderBy)
+	jQuery(".brandsort_sort a").removeClass("this");
+	jQuery(".brandsort_sort a[orderBy='$!orderBy']").addClass("this");
+	#end
+
+  jQuery(".smallgoods ul").hover(function(){
+	  jQuery(this).addClass("this");
+	  jQuery("li[class='goodshidden']").hide();
+	  jQuery(this).find("li[class='goodshidden']").show();
+	  },function(){
+	  jQuery(this).removeClass("this").find("li[class='goodshidden']").hide(); 
+	  });
+      //
+  var search_bar_top=jQuery("#search_bar").offset().top;
+  jQuery(window).scroll(function(){
+      var top= jQuery("#search_bar").offset().top;
+	  var scrolla=jQuery(window).scrollTop();
+	  var i=top-scrolla;
+	 if(i<=0){
+	   jQuery("#search_bar").addClass("brandsort_screen_top");	  
+	 }
+	 if(scrolla<search_bar_top){
+	   jQuery("#search_bar").removeClass("brandsort_screen_top");
+	 }
+  });
+ jQuery(".goodsimgs img").lazyload({effect:"fadeIn",width:178,height:178});
+  jQuery(".goodstwo img").lazyload({effect:"fadeIn",width:86,height:86});
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm?type=$!type")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="position">当前位置：<a href="$!webPath/index.htm" >首页</a> > 搜索结果</div>
+    <div class="index2">
+      <form action="$!webPath/search.htm"  method="post" id="ListForm">
+        <div class="index2_list">
+          <!--商品列表开始-->
+          <div class="allgoods">
+            <div class="brandsort_screen" id="search_bar">
+              <div class="brandsort_show">
+               <a href="javascript:void(0);" goods_view="thumb" id="thumb_view" class="brandsort_show_big"><i class="big_hide"></i>大图</a>
+                <a href="javascript:void(0);"  goods_view="list" id="list_view" class="brandsort_show_list"><i class="list_hide"></i>列表</a> 
+                </div>
+              <div class="brandsort_sort">
+               <a href="javascript:void(0);" class="sort_a this" orderBy="addTime"  orderType="asc">默认排序</a>
+               <a href="javascript:void(0);" class="sort_a" orderBy="goods_salenum" orderType="desc"><i class="sort_a1">销量</i></a>
+               <a href="javascript:void(0);" class="sort_a" orderBy="goods_collect" orderType="desc"><i class="sort_a1">人气</i></a> 
+               <a href="javascript:void(0);" class="sort_a" orderBy="store_price"   orderType="asc" ><i class="sort_a1">价格</i></a>
+               </div>
+              <div class="brandsort_fineprice">
+                <div class="brandsort_price_top">
+                  <input placeholder="¥" name="store_price_begin" value="$!store_price_begin" type="text" title="按照价格区间筛选 最低价" class="brandsort_price_input" />
+                  <i>-</i>
+                  <input placeholder="¥" name="store_price_end" value="$!store_price_end" type="text" title="按照价格区间筛选 高价" class="brandsort_price_input" />
+                </div>
+                <div class="brandsort_price_bottom" style="display:none"> <a href="javascript:void(0);" mark="clear" class="brandsort_btn_clear">清空</a> <a href="javascript:void(0);" class="brandsort_btn_com">确定</a> </div>
+              </div>
+              <div class="brandsort_input">
+                <input  class="brandsort_input_txt"  type="text" id="keyword" name="keyword" value="$!keyword" placeholder="搜索关键字" />
+                <input type="submit" style="cursor:pointer;" value="确定" class="brandsort_input_btn" />
+              </div>
+            </div>
+            #if($!objs.size()>0)
+            <div class="smallgoods" > #foreach($obj in $objs)
+              <ul class="this">
+                #if($!obj.goods_main_photo)
+                #set($img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}")
+                #else
+                #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                #end
+                #set($goods_url="$!webPath/goods_$!{obj.id}.htm")
+                #if($!config.second_domain_open)
+                #set($goods_url="http://$!{obj.goods_store.store_second_domain}.$!{domainPath}/goods_$!{obj.id}.htm")
+                #end
+                <li class="goodsimgs"><span class="goods_sp_span">
+                  <p><a href="$!goods_url" target="_blank"><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28"/></a></p>
+                  </span></li>
+                <li class="goodslook"><strong>商城价：¥$!{obj.goods_current_price}</strong></li>
+                <li class="goodslook"><span class="marketprice">市场价：¥$!{obj.goods_price}</span></li>
+                <li class="goodsnames"><a href="$!goods_url" target="_blank"> #if($!obj.group_buy==2) <span style="color:#F00;">[团购]</span> #end
+                  #if($!obj.activity_status==2) <span style="color:#F00;">[活动]</span> #end
+                  #if($!obj.combin_status==2)<span style="color:#F00;">[组合]</span>#end
+                  #if($!obj.bargain_status==2)<span style="color:#F00;">[特价]</span>#end
+                  #if($!obj.delivery_status==2)<span style="color:#F00;">[买就送]</span>#end
+                  $!CommUtil.substring("$!obj.goods_name",25)</a></li>
+                <li class="recentgoodsok">最近成交<strong>$!{obj.goods_salenum}</strong>笔</li>
+                <li class="goodshidden" style="display:none"> <span class="goods_description">与描述相符: <b style="color:#F00">$!CommUtil.null2Double($!{obj.description_evaluate})</b> 分 </span> <span class="goodshshop_name">店铺名称：<a href="$!webPath/store_$!{obj.goods_store.id}.htm" target="_blank"><i>$!obj.goods_store.store_name</i></a></span> <span class="goods_eva"><i><em>累计评价</em>
+                  <p>$!{obj.evaluates.size()}</p>
+                  </i><i><em>店铺等级</em>
+                  <p>$!obj.goods_store.grade.gradeName</p>
+                  </i></span></li>
+              </ul>
+              #end </div>
+            <div class="goodstyletwo" style="display:none"> #foreach($obj in $objs)
+              #if($!obj.goods_main_photo)
+              #set($img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+              #else
+              #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+              #end
+              #set($goods_url="$!webPath/goods_$!{obj.id}.htm")
+              #if($!config.second_domain_open)
+              #set($goods_url="http://$!{obj.goods_store.store_second_domain}.$!{domainPath}/goods_$!{obj.id}.htm")
+              #end
+              <div class="goodstwo"> <span class="goodtwoimg"> <span class="goodtwoimg_span">
+                <p> <a href="$!goods_url" target="_blank"><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28"/></a> </p>
+                </span> </span>
+                <ul class="goodsul">
+                  <li class="goodsli1"><span class="goods2name"> #if($!obj.group_buy==2) <span style="color:#F00;">[团购]</span> #end
+                    #if($!obj.activity_status==2) <span style="color:#F00;">[活动]</span> #end
+                    #if($!obj.combin_status==2)<span style="color:#F00;">[组合]</span>#end
+                    #if($!obj.bargain_status==2)<span style="color:#F00;">[特价]</span>#end
+                    #if($!obj.delivery_status==2)<span style="color:#F00;">[买就送]</span>#end <a href="$!goods_url" target="_blank">$!CommUtil.substring("$!obj.goods_name",25)</a> </span><span class="goods2market">市场价：¥$!{obj.goods_price}</span> <span class="goods2shop">商城价：<strong>¥$!{obj.store_price}</strong></span><span class="recent">累计售出<strong class="orange">$!{obj.goods_salenum}</strong>笔</span></li>
+                  <li class="goodsli2">
+                    <p class="goodsli2_p2"><span class="goodshopname">店铺名称：<a href="$!webPath/store_$!{obj.goods_store.id}.htm">$!obj.goods_store.store_name</a></span><span class="goods2send">店铺等级：$!obj.goods_store.grade.gradeName</span></p>
+                    <p class="goodsli2_p"><span class="goodsli2_p_sp">与描述相符：<b style="color:#F00">$!CommUtil.null2Double($!{obj.description_evaluate})</b> 分</span><span class="goodsli2_p_eva">累计评价：<i>$!{obj.evaluates.size()}</i></span></p>
+                  </li>
+                </ul>
+              </div>
+              #end </div>
+            #else
+            <div class="starshop_list">
+              <div class="sigh"> <span><img src="$!imageWebServer/resources/style/system/front/default/images/sigh.png" width="120" height="109" /></span> <b>对不起，没有对应的数据!</b> </div>
+            </div>
+            #end </div>
+          <div class="fenye">
+            <div class="fenyes">
+              <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+              <input type="hidden" name="goods_view" id="goods_view" value="$!goods_view" />
+              <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+              <input name="orderType" type="hidden" id="orderType" value="$!orderType" /> 
+              $!gotoPageFormHTML </div>
+          </div>
+        </div>
+      </form>
+      <!--直通车热卖商品-->
+      <div class="index2_left">
+        <h1>热卖商品 <a href="$!webPath/ztc_goods_list.htm" target="_blank" style="float:right; font-size:12px;">更多>></a></h1>
+        #foreach($ztc_good in $ztc_goods)
+        #if($!ztc_good.goods_main_photo)
+        #set($img="$!imageWebServer/$!{ztc_good.goods_main_photo.path}/$!{ztc_good.goods_main_photo.name}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        #set($goods_url="$!webPath/goods_$!{ztc_good.id}.htm")
+        #if($!config.second_domain_open)
+        #set($goods_url="http://$!{ztc_good.goods_store.store_second_domain}.$!{domainPath}/goods_$!{ztc_good.id}.htm")
+        #end
+        <div class="hotgoods">
+          <ul>
+            <li><a href="$!goods_url" target="_blank"><img src="$!img" width="160" height="160" /></a></li>
+            <li class="center"><strong class="orange">￥$!{ztc_good.store_price}</strong></li>
+            <li class="blue2"><a href="$!goods_url" target="_blank">$!CommUtil.substring("$!ztc_good.goods_name",25)</a></li>
+            <li class="center">最近成交$!{ztc_good.goods_salenum}件</li>
+          </ul>
+        </div>
+        #end </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

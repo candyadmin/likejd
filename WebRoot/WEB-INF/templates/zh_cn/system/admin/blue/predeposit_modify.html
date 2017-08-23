@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+	  userName:{
+	    required :true
+	  },
+	  amount:{
+	    required :true,number:true,digits:true
+	  }
+	 },
+	messages:{
+	  userName:{required:"用户名不能为空"},
+	  amount:{required:"金额不能为空",number:"只能为数字",digits:"金额只能为正整数"}
+	}
+  });
+  //
+  jQuery("#userName").blur(function(){
+	 var userName=jQuery(this).val();								
+     jQuery.post("$!webPath/admin/predeposit_user.htm",{"userName":userName},function(data){
+		  if(data.status=="success"){																			  
+	        jQuery("#user_balance_info").text("可用余额："+data.availableBalance+",冻结余额："+data.freezeBlance);
+			jQuery("#user_id").val(data.id);
+			jQuery("#user_balance_info_parent").show();
+		  }else{
+		     jQuery("#userName").val(""); 
+			 jQuery("#user_balance_info").text("不存在该会员");
+			 jQuery("#user_balance_info_parent").show();
+			 jQuery("#user_balance_info_parent").fadeOut(3000);
+		  }
+	 },"json");
+  });
+  //
+});
+
+function saveForm(){
+   jQuery("#theForm").submit();
+}
+
+
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">预存款管理</h1>
+  <div class="settab"><span class="tab-one"></span>
+      <span class="tabs">
+       <a href="$!webPath/admin/predeposit_list.htm">充值管理</a>|<a href="$!webPath/admin/predeposit_cash.htm">提现管理</a>|<a href="$!webPath/admin/predeposit_modify.htm" class="this">人工操作</a></span>
+      
+      <span class="tab-two"></span></div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/predeposit_modify_save.htm" method="post">
+ <input name="user_id" type="hidden" id="user_id" value="" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/predeposit_list.htm" />
+  <div class="setcont">
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>会员名</li>
+      <li><span class="webname"><input name="userName" type="text" id="userName" size="40" />
+      </span></li>
+      <li style="width:100%; float:left;display:none;" id="user_balance_info_parent"><span class="webname" id="user_balance_info" style="color:#F00;">
+      </span></li>
+    </ul>
+      <ul class="set1">
+      <li>预存款类型</li>
+      <li><span class="webname">
+          <select name="type" id="type">
+            <option value="available">可用金额</option>
+            <option value="free">冻结金额</option>
+          </select>
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>金额</li>
+      <li><span class="webname">
+        <input name="amount" type="text" id="amount" size="40" />
+      </span></li>
+    </ul>
+	<ul class="set1">
+      <li>备注</li>
+      <li><span class="webname">
+        <textarea name="info" cols="40" rows="6" id="info">
+</textarea>
+      </span></li>
+	</ul>
+  </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

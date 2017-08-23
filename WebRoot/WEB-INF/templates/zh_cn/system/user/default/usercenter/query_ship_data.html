@@ -1,0 +1,12 @@
+#if($!transInfo.status==0)
+<li style="text-align:center; margin-top:50px;"><a href="javascript:void(0);" style="font-size:16px; color:#F90">暂无物流信息！</a></li>
+#end
+#if($!transInfo.status==1)
+#foreach($info in $transInfo.data)
+<li><a href="javascript:void(0);">$!info.time $!CommUtil.substring($!info.context,18)</a></li>
+#end
+#end
+#if($!transInfo.status==2)
+<li style="text-align:center; margin-top:50px;"><a href="javascript:void(0);" style="font-size:16px; color:#F90">快递公司网络异常，请稍后查询...</a></li>
+#end
+

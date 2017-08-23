@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>投诉图片查看 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>  $!httpInclude.include("/seller/nav.htm")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/index.htm">买家中心</a> > <span>举报图片</span></div></div>
+        <div class="productmain">            
+            <div class="ordercon">
+              <div class="complaint_one">
+                <h1 class="complaint_h">图片列表</h1>
+                <div class="comp_goodetails">
+                  <ul class="comp_tousul">
+                  #if($!obj.acc1)
+                    <li><span><div style="width:100%; height:400px;overflow:scroll;"><img src="$!webPath/$!obj.acc1.path/$!obj.acc1.name" height="$!obj.acc1.height" width="$!obj.acc1.width" /></div><i class="comp_delall">图片一</i></span></li>
+                  #end
+                  #if($!obj.acc2)
+                    <li><span><div style="width:100%; height:400px;overflow:scroll;"><img src="$!webPath/$!obj.acc2.path/$!obj.acc2.name" height="$!obj.acc2.height" width="$!obj.acc2.width" /></div><i class="comp_delall">图片二</i></span></li>
+                  #end
+                  #if($!obj.acc3)
+                    <li><span><div style="width:100%; height:400px;overflow:scroll;"><img src="$!webPath/$!obj.acc3.path/$!obj.acc3.name" height="$!obj.acc3.height" width="$!obj.acc3.width" /></div><i class="comp_delall">图片三</i></span></li>
+                  #end
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

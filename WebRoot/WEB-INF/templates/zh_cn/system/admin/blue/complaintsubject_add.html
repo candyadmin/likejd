@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+	  title:{
+	    required :true
+	  }
+	 },
+	messages:{
+	  title:{required:"投诉主题不能为空"}
+	}
+  });	
+
+  jQuery(":radio[id=type][value=$!obj.type]").attr("checked",true);
+});
+
+function saveForm(){
+   jQuery("#theForm").submit();
+}
+
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">投诉管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"><a href="$!webPath/admin/complaint_list.htm">新投诉</a> | <a href="#">待申诉</a>|<a href="#">对话中</a>|<a href="#">等仲裁</a>|<a href="#">已关闭</a>|<a href="$!webPath/admin/complaintsubject_list.htm">投诉主题</a>|<a href="$!webPath/admin/complaintsubject_add.htm" class="this">新增投诉主题</a>|<a href="$!webPath/admin/complaint_set.htm">投诉设置</a></span> <span class="tab-two"></span></div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/complaintsubject_save.htm" method="post">
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/complaintsubject_list.htm" />
+  <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/complaintsubject_add.htm" />
+  <div class="setcont">
+    <!--鼠标经过样式-->
+    <ul class="set1">
+      <li>主题类别</li>
+	   <li><span class="webname">
+      <input style="border:none; height:16px; width:16px;" name="type" id="type"  type="radio" value="seller" />
+      卖家
+	  <input name="type"type="radio" id="type" style="border:none; height:16px; width:16px;" value="buyer" checked="checked" />
+	  买家</span>
+	   </li>
+	</ul>
+    <ul class="set1">
+      <li>主题</li>
+      <li><span class="webname">
+        <input name="title" type="text" id="title" value="$!obj.title" />
+      </span></span></li>
+    </ul>
+	  <ul class="set1">
+      <li>主题描述</li>
+      <li><span class="webname">
+        <textarea name="content" cols="40" rows="6" id="content">$!obj.content</textarea>
+      </span></span></li>
+    </ul>
+  </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

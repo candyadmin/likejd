@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  users:{required:true},
+	  grades:{required:true},
+	  content:{
+	    required :true
+	  }
+	 },
+	messages:{
+	   users:{required:"至少填写一个会员"},
+	  grades:{required:"至少选择一个店铺等级"},
+	  content:{required:"通知内容不能为空"}
+	}
+  }); 	  
+  //
+  jQuery(":radio[id='type']").click(function(){
+      jQuery("#the_user_list").hide();
+	  jQuery("#the_store_list").hide();
+      var type=jQuery(":radio[id='type'][checked=true]").val();
+      jQuery("#"+type+"_list").show();
+  });
+  //
+});
+function saveForm(){
+ jQuery("#theForm").submit();
+}
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">页面导航</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/user_msg.htm">发送通知</a></span> <span class="tab-two"></span></div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/user_msg_send.htm" method=post>
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/user_msg.htm" />
+    <div class="setcont">
+      <ul class="set1">
+        <li>发送对象        </li>
+        <li>
+          <input name="type" type="radio" id="type" style="border:none;width:16px;height:16px;" value="all_user" checked="checked"/>
+          所有会员
+        </li>
+        <li>
+          <input name="type" id="type" type="radio" value="the_user" style="border:none;width:16px;height:16px;"/>
+          指定会员
+        </li>
+        <li>
+          <input name="type" id="type" type="radio" style="border:none;width:16px;height:16px;" value="all_store"/>
+          所有店铺
+        </li>
+        <li>
+          <input name="type" id="type" type="radio" style="border:none;width:16px;height:16px;" value="the_store"/>
+          指定店铺等级
+        </li>
+      </ul>
+	   <ul class="set1" id="the_store_list" style="display:none;">
+        <li><strong class="orange fontsize20">*</strong>指定店铺等级</li>
+        <li><span class="webname">
+          <select name="grades" size="6" multiple="multiple" id="grades" style="width:270px;">
+		   #foreach($grade in $grades)
+            <option value="$!grade.id">$!grade.gradeName</option>
+           #end		  
+          </select>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">可以按住ctrl进行多选</strong><strong class="c"></strong></span>
+		</li>
+      </ul>
+      <ul class="set1" id="the_user_list" style="display:none;">
+        <li><strong class="orange fontsize20">*</strong>会员列表</li>
+        <li><span class="webname">
+          <textarea name="users" cols="40" rows="6" id="users"></textarea>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">输入会员名，每行一个</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>通知内容</li>
+        <li><span class="webname">
+          <textarea name="content" cols="40" rows="6" id="content"></textarea>
+          </span></li>
+      </ul>
+    </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

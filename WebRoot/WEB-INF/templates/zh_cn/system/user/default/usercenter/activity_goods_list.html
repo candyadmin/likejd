@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>活动管理 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script> 
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=activity")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>活动商品</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="other"><a href="$!webPath/seller/activity.htm">活动列表</a></li>
+                 <li class="this"><a href="javascript:void(0);">活动商品</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <form method="post" name="ListForm" id="ListForm">
+                <div class="operation">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                    <tr id="opertitle">
+                      <td width="240">商品名称</td>
+                      <td width="100">活动名称</td>
+                      <td width="100">开始时间</td>
+                      <td width="100">结束时间</td>
+                      <td width="100" align="left" style="padding-left:30px;">状态</td>
+                    </tr>
+                    #foreach($obj in $objs)
+                    <tr >
+                      <td ><a href="$!webPath/goods_$!{obj.ag_goods.id}.htm" target="_blank">$!obj.ag_goods.goods_name</a></td>
+                      <td>$!obj.act.ac_title</td>
+                      #if($!obj.status==0)#set($status="未处理")#end
+                      #if($!obj.status==1)#set($status="已处理")#end
+                      #if($!obj.status==-1)#set($status="已取消")#end
+                      <td>$!obj.act.ac_begin_time</td>
+                      #set($time=$!CommUtil.formatShortDate($!obj.addTime))
+                      <td>$!obj.act.ac_end_time</td>
+                       #set($ag_status="等待审核")
+                      #if($!obj.ag_status==1)
+                        #set($ag_status="审核通过")
+                      #end
+                      #if($!obj.ag_status==-1)
+                        #set($ag_status="拒绝通过")
+                      #end
+                      <td align="">$!ag_status</td>
+                    </tr>
+                    #end
+                  </table>
+                </div>
+                <div class="alldel">
+                  <div  class="userfenye">
+                    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                  $!gotoPageFormHTML</div>
+                </div>
+              </form>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

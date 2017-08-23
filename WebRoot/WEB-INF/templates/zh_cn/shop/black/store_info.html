@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>店铺信息 - $!config.title</title>
+<meta name="keywords" content="$!store.store_seo_keywords" />
+<meta name="description" content="$!store.store_seo_description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/shop/$!{store.template}/css/default.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+#if($!store.map_type=="baidu")
+<script src="http://api.map.baidu.com/api?v=1.4" type="text/javascript"></script>
+#end
+#if($!store.map_type=="google")
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&libraries=places"></script>
+#end
+</head>
+<body>
+$!httpInclude.include("/top.htm") 
+$!httpInclude.include("/store_head.htm?store_id=$!{store.id}")
+  #set($banner="$!webPath/resources/style/shop/$!{store.template}/images/banner.jpg")
+  #if($!store.store_banner)
+    #set($banner="$!webPath/$!store.store_banner.path/$!store.store_banner.name")
+  #end
+<div class="banner_width">
+  <div class="shopbanner"><img src="$!banner"  width="1002" /></div>
+</div>
+<div class="nav_width">
+  <div class="main">
+  <div class="nav_bg">
+    <div class="shopnav"> $!httpInclude.include("/store_nav.htm?id=$!store.id")
+      <script>
+     jQuery(".shopnavul li").each(function(){
+	     var nav_id=jQuery(this).attr("id");
+         if(nav_id=="$!{nav_id}"){
+		   jQuery(this).addClass("this");
+		 }else jQuery(this).removeClass("this");
+	 });
+    </script>
+      <div class="shopnavs"></div>
+    </div>
+    </div>
+  </div>
+  <div class="navbotm"></div>
+</div>
+<div class="main">
+  <div class="shop">
+    <div class="shop_index">
+      <div class="shopindex_center">
+      #if($!{store.store_info}&&$!{store.store_info}!="")
+        <div class="shop_introduct">
+          <div class="shop_introt"></div>
+          <div class="shop_intromid">
+            <h1>店铺介绍</h1>
+            <div class="shop_introp">
+            $!{store.store_info}
+            </div>
+          </div>
+          <div class="shop_introb"></div>
+        </div>
+       #end
+        <div class="shopinfo_box">
+          <div class="shopinfo_top">
+          #if($!store.logo)
+           #set($store_logo="$!webPath/$!{store.logo.path}/$!{store.logo.name}")
+          #else
+          #set($store_logo="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+          #end
+            <div class="shopinfo_topbox"> <span class="code_2d"><i><img src="$!imageWebServer/$!config.uploadFilePath/store/$!{store.id}/code.png" width="85" height="85" /></i><b>二维码收藏店铺</b></span>
+              <dl class="shopcode_left">
+                <dt><img src="$!store_logo" width="90" height="90" /></dt>
+                <dd><em>店铺名称：$!{store.store_name}</em>
+                <em>店铺等级：
+                $!store.grade.gradeName
+                </em><em>认证信息：
+               <i><img  src="$!webPath/resources/style/common/images/card_approve_$!{store.card_approve}.gif" /></i><i><img src="$!imageWebServer/resources/style/common/images/realstore_approve_$!{store.realstore_approve}.gif" /></i>
+                </em></dd>
+              </dl>
+            </div>
+            <div class="shopinfo_center"></div>
+          </div>
+          <h6 class="shopinfo_h6">基本信息</h6>
+          <ul class="shop_info">
+            <li>创店时间：$!CommUtil.formatShortDate($!store.addTime)</li>
+            <li>所在地区：$!areaViewTools.generic_area_info("$!store.area.id")</li>
+            <li>详细地址：$!{store.store_address}</li>
+            #set($goods_count=0)
+              #foreach($!goods_info in $!store.goods_list)
+                #if($!goods_info.goods_status==0)
+                 #set($goods_count=$goods_count+1)
+                #end
+              #end
+              <li>商品数量：<strong class="blue">$!{goods_count}</strong>件商品</li>
+            <li>店铺收藏：<strong class="blue">$!{store.favorite_count}</strong>人收藏</li>
+            <li>联系电话：$!{store.store_telephone}</li>
+            <li>店铺QQ：$!{store.store_qq}</li>
+            <li>店铺MSN：$!{store.store_msn}</li>
+          </ul>
+          <div class="shopinfo_bottom"></div>
+        </div>
+        <div class="shop_map">
+          <div class="shop_add_map" id="map" style="height:500px;">
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    $!httpInclude.include("/footer.htm")
+  </div>
+</div>
+
+</body>
+</html>
+#if($!store.map_type=="baidu")
+ <script type="text/javascript">
+    #set($store_logo="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+    #if($!store.store_logo)
+       #set($store_logo="$!webPath/$!store.store_logo.path/$!store.store_logo.name")
+    #end
+   var map = new BMap.Map("map");
+   #if($!{store.store_lng}&&$!{store.store_lat})
+   map.centerAndZoom(new BMap.Point($!{store.store_lng},$!{store.store_lat}), 16);
+   var sContent ="<h4 style='margin:0 0 5px 0;padding:0.2em 0'>$!{store.store_name}</h4>" + 
+"<img style='float:right;margin:4px' id='imgDemo' src='$!store_logo' width='100' height='100' title='$!{store.store_name}'/></div>";
+    var point = new BMap.Point($!{store.store_lng},$!{store.store_lat});
+    var marker = new BMap.Marker(point);
+    var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+    map.centerAndZoom(point, 15);
+    map.addOverlay(marker);
+	marker.enableDragging();
+	marker.setAnimation(BMAP_ANIMATION_BOUNCE); 
+	marker.openInfoWindow(infoWindow);
+	marker.addEventListener("click", function(){          
+      this.openInfoWindow(infoWindow);
+    });
+	//
+   #else
+   map.centerAndZoom(new BMap.Point(123.425329,41.792454), 11);
+   #end
+   map.enableScrollWheelZoom(); 
+   map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+ </script>
+ #end
+#if($!store.map_type=="google")
+<script>
+var map;
+var marker;
+function initialize() {
+#if($!{store.store_lng}&&$!{store.store_lat})
+   var pyrmont = new google.maps.LatLng($!{store.store_lat},$!{store.store_lng});
+#else
+   var pyrmont = new google.maps.LatLng(39.92,116.46);
+#end
+  map = new google.maps.Map(document.getElementById('map'), {
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      center: pyrmont,
+      zoom: 15
+    });
+    marker = new google.maps.Marker({
+      position: pyrmont,
+      title:"$!{store.store_name}"
+    });
+// To add the marker to the map, call setMap();
+marker.setMap(map);
+var infowindow = new google.maps.InfoWindow({
+    content:"<h4 style='margin:0 0 5px 0;padding:0.2em 0'>$!{store.store_name}</h4><img style='float:right;margin:4px' id='imgDemo' src='$!store_logo' width='100' height='100' title='$!{store.store_name}'/>"
+});
+google.maps.event.addListener(marker, 'click', function() {
+    infowindow.open(marker.get('map'), marker);
+});
+//
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+ #end

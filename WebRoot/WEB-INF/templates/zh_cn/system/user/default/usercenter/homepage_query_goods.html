@@ -1,0 +1,284 @@
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+	addVelue();							
+  jQuery(".black_overlay").css("height",jQuery(document).height());
+  jQuery("#close").click(function(){
+		jQuery("#homepage_query_goods").remove();						  
+	});
+  //切换菜单
+  	jQuery("#order").click(function(){	
+		jQuery(this).addClass("this");
+		jQuery("div.addition_page_ul").hide();
+		jQuery("#order_div").show();
+		jQuery("#address_div").hide();
+		jQuery("#favorite").removeClass("this");
+		jQuery("#address").removeClass("this");
+		addVelue();
+	});
+	jQuery("#favorite").click(function(){							   
+		jQuery(this).addClass("this");
+		jQuery("div.addition_page_ul").hide();
+		jQuery("#favorite_div").show();
+		jQuery("#address_div").hide();
+		jQuery("#order").removeClass("this");
+		jQuery("#address").removeClass("this");
+		addVelue();
+	});
+	jQuery("#address").click(function(){
+		jQuery("#goods_id").val("");							  
+		jQuery(this).addClass("this");
+		jQuery("div.addition_page_ul").hide();
+		jQuery("#address_div").show();
+		jQuery("#order").removeClass("this");
+		jQuery("#favorite").removeClass("this");
+	});
+	
+	//切换商品
+	jQuery("a[id^=favorite_a_]").click(function(){
+		 var obj_id =jQuery(this).attr("obj_id");
+		 var goods_id =jQuery(this).attr("goods_id");
+		 jQuery("#goods_id").val(goods_id);
+		 jQuery("li[id^=favorite_li_]").removeClass("this");
+		 jQuery("#favorite_li_"+obj_id).addClass("this");
+												
+	});
+	
+	jQuery("a[id^=order_a_]").click(function(){
+		  var obj_id =jQuery(this).attr("obj_id");
+		  var goods_id =jQuery(this).attr("goods_id");
+		  jQuery("#goods_id").val(goods_id);
+		  jQuery("li[id^=order_li_]").removeClass("this");
+		  jQuery("#order_li_"+obj_id).addClass("this");
+		 
+	});
+	//提交点击事件
+	jQuery("#share_goods").click(function(){			
+	var goods_id = jQuery("#goods_id").val();
+	if(goods_id=="")
+	{
+		alert("请选择宝贝！");
+		}
+	else{	
+	var content =jQuery("#share_content").val();
+		if(content.length==0){
+			jQuery("#showError").html("请输入内容！");
+			}else{
+				if(content.length>140){
+					jQuery("#showError").html("输入字数不能多于140个字！");
+					}else{
+				jQuery.post("$!webPath/buyer/dynamic_save.htm",
+						   {
+							"content":content,
+							"goods_id":goods_id
+						   },
+						   function(data){
+							   if(data){
+								 jQuery("#homepage_query_goods").hide();  
+								 showDialog("share_sus","系统提示","发布成功！",0,"succeed",3);
+								 window.location.href="$!webPath/buyer/homepage.htm?uid=$!user.id"
+								   }else{
+									showDialog("share_sus","系统提示","发布失败！",0,"error",3);   
+									   }
+								},"text");	 
+				}
+				}
+	}
+	});
+	//收藏夹切换点击事件
+	jQuery("a[id^=favorite_switch_]").click(function(){
+			var fcurrentCount= jQuery("#fcurrentCount").val();
+					var mark = jQuery(this).attr("mark");
+					if(mark=="left"){//左切换
+						fcurrentCount--;
+						if(fcurrentCount<0){
+							fcurrentCount = 0;
+							}
+					}	
+				if(mark=="right"){//右切换
+					fcurrentCount++;
+					#if($!favorite_Allsize)
+					var allCount = $!favorite_Allsize;
+					#else
+					var allCount = 0;
+					#end
+					var jian = allCount-7;
+					if(fcurrentCount>jian)
+					{
+						fcurrentCount = jian;
+						}		
+				}
+			   jQuery.post("$!webPath/buyer/homepage_query_goods_favorite_ajax.htm",
+							   {
+								"fcurrentCount":fcurrentCount
+							   },
+							   function(data){
+								   if(data){
+									  jQuery("#favorite_replace").html(data); 
+									   }
+									},"text");						   
+						});
+	
+	//已购买商品点击切换事件
+	jQuery("a[id^=order_switch_]").click(function(){
+			var ocurrentCount= jQuery("#ocurrentCount").val();
+					var mark = jQuery(this).attr("mark");
+					if(mark=="left"){//左切换
+						ocurrentCount--;
+						if(ocurrentCount<0){
+							ocurrentCount = 0;
+							}
+					}
+				if(mark=="right"){//右切换
+					ocurrentCount++;
+					#if($!order_Allsize)
+					var allCount_o = $!order_Allsize;
+					#else
+					var allCount_o = 0;
+					#end
+					var jian_o = allCount_o-7;
+					if(ocurrentCount>jian_o)
+					{
+						ocurrentCount = jian_o;
+						}		
+				}
+			   jQuery.post("$!webPath/buyer/homepage_query_goods_order_ajax.htm",
+							   {
+								"ocurrentCount":ocurrentCount
+							   },
+							   function(data){
+								   if(data){
+									  jQuery("#order_replace").html(data); 
+									   }
+									},"text");						   
+						});
+	//宝贝地址确认点击事件
+	jQuery("#url_submit").click(function(){
+			var url = jQuery("#url").val();
+			if(url.length==0){
+				jQuery("div.addition_page_ul_ts").html("请输入宝贝连接！");
+				}else{
+				jQuery("div.addition_page_ul_ts").html("");
+				jQuery.post("$!webPath/buyer/homepage_goods_url_add.htm",
+							{"url":url								
+								},
+								function(data){
+									if(data=="null"){
+										jQuery("div.addition_page_ul_ts").html("请输入正确的宝贝连接！");
+									}else
+										{
+									var temps = data.split(",");
+								   jQuery("div.addition_page_ul_img").html("<img src="+temps[0]+" height='100px' width='100px'/>")
+								   jQuery("#goods_id").val(temps[1]);
+											}
+									
+									},"text");
+					}	
+										 
+		});
+	
+});
+//页面首次加载设置每个ul-li-中首个li商品id为goods_id
+function addVelue(){
+	 var fav_display =	jQuery("#favorite_div").css("display");	
+	 var order_display = jQuery("#order_div").css("display");	
+	if(order_display=="block"){
+		var temp_goods_id=jQuery("#order_div").find("ul").find("li").first().attr("goods_id");
+		}else{
+		var temp_goods_id=jQuery("#favorite_div").find("ul").find("li").first().attr("goods_id");
+		}
+	jQuery("#goods_id").val(temp_goods_id);
+	};
+
+</script>
+
+<div id="homepage_query_goods">
+  <div class="black_overlay"></div>
+  <div class="addition_page">
+    <div class="addition_page_title"><span class="addition_page_title_left">晒出你心中的宝贝</span><span class="addition_page_title_right"><a  href="javascript:void(0);" id="close">×</a></span></div>
+    <div class="addition_page_tab">
+      <ul>
+        <li style="cursor:pointer" id="order" class="this" ><a href="javascript:void(0);" >已购买</a></li>
+        <li style="cursor:pointer" id="favorite"><a href="javascript:void(0);" >收藏夹</a></li>
+        <li style="cursor:pointer" id="address"><a href="javascript:void(0);" >宝贝链接</a></li>
+      </ul>
+    </div>
+    <!--已购买ul-->
+    <div class="addition_page_ul" id="order_div">
+      <div class="addition_page_ul_left">
+      <a href="javascript:void(0);" id="order_switch_left" mark="left">&lt;</a>
+      </div>
+      <div class="addition_page_ul_pic" id="order_replace">
+        <ul id="order_ul">
+        #set($order_count= 0 )
+        #foreach($order in $orders)
+        #foreach($gc in $order.gcs)
+        #set($order_count = $!order_count + 1) 
+         #if($!order_count<=7)         #set($o_img="$!webPath/$!{gc.goods.goods_main_photo.path}/$!{gc.goods.goods_main_photo.name}_small.$!{gc.goods.goods_main_photo.ext}")
+          <li #if($!order_count==1)class="this"#end  id="order_li_$!gc.id" goods_id="$!gc.goods.id">
+          <a href="javascript:void(0);" id="order_a_$!gc.id" obj_id="$!gc.id" goods_id="$!gc.goods.id">
+          <img src="$!o_img" width="60" height="60" />
+          </a></li>
+          #end
+         #end 
+         #end
+          <input id="ocurrentCount" name="ocurrentCount" type="hidden" value="$!ocurrentCount"/>
+        </ul>
+      </div>
+      <div class="addition_page_ul_left">
+       <a href="javascript:void(0);" id="order_switch_right" mark="right">&gt;</a>
+      </div>
+    </div>
+    
+      <!--已收藏ul-->
+    <div class="addition_page_ul" style="display:none" id="favorite_div">
+      <div class="addition_page_ul_left">
+      <a href="javascript:void(0);" id="favorite_switch_left" mark="left">&lt;</a>
+      </div>
+      <div class="addition_page_ul_pic" id="favorite_replace">
+        <ul>
+        #foreach($fav in $favorites)             #set($f_img="$!webPath/$!{fav.goods.goods_main_photo.path}/$!{fav.goods.goods_main_photo.name}_small.$!{fav.goods.goods_main_photo.ext}")
+         <li #if($!velocityCount==1)class="this"#end  goods_id="$!fav.goods.id"  id="favorite_li_$!fav.id">
+         <a href="javascript:void(0);" id="favorite_a_$!fav.id" obj_id="$!fav.id" goods_id="$!fav.goods.id">
+         <img src="$!f_img" width="60" height="60" />
+         </a></li>
+         #end
+          <input id="fcurrentCount" name="fcurrentCount" type="hidden" value="$!fcurrentCount"/>
+        </ul>
+      </div>
+
+       <input id="ocurrentCount" name="ocurrentCount" type="hidden" value="$!ocurrentCount"/>
+      <div class="addition_page_ul_left">
+      <a href="javascript:void(0);" id="favorite_switch_right" mark="right">&gt;</a>
+      </div>
+    </div>
+    
+    <!--宝贝地址ul-->
+    <div class="addition_page_ul_add" id="address_div" style="display:none">
+    	<div class="addition_page_ul_img">
+        <img src="$!webPath/resources/style/common/images/good.jpg" height="100px" width="100px"/>
+        </div>
+    	<div class="addition_page_ul_input">
+        <input id="url" name="url" placeholder="请输入宝贝链接" type="text"  class="input_baby"/>
+        <input id="url_submit" name="url_submit" type="button" value="获取宝贝" class="input_add" style="cursor:pointer"/>
+        </div>
+        <div class="addition_page_ul_ts"></div>
+    </div>
+    
+    
+    
+    
+    
+    <div class="addition_page_bottom">
+      <textarea id="share_content" name="share_content" placeholder=" 生活每天都有新鲜事.每天都来聊一聊"></textarea>
+    </div>
+    <div class="addition_page_bottom">
+    	<input  type="hidden" id="goods_id" name="goods_id" value="" />
+        <div style="float:left; color:#F00;" id="showError"></div><input type="button" value="确定" id="share_goods" />
+    </div>
+  </div>
+
+</div>

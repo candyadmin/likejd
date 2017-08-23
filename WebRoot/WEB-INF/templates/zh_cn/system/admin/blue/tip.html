@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<body>
+<div class="cont">
+  <h1 class="seth1">系统消息</h1>
+  <div class="bigok">
+    <div class="bigokimg"><img src="$!webPath/resources/style/system/manage/blue/images/error.jpg" /></div>
+    <div class="bigleft">
+      <ul>
+        <li>$!{op_tip}！</li>
+		#if($!list_url)
+        <li class="hui">自动为您跳转到刚才的页面！</li>
+        <li class="successbtn"><a href="$!list_url">返回上一页</a>#if($!open_url)<a href="javascript:void(0);" onclick="window.parent.openURL('url','$!webPath/$!open_url','main_workspace','$!open_mark')">$!open_op</a>#end</li>
+		#end
+      </ul>
+    </div>
+	#if($!list_url)
+	<script>
+	  var count=3;
+	  window.setInterval(go,1000);
+	  function go(){
+	    count--;
+	    if(count==0) window.location.href="$!list_url";
+	  }
+	</script>
+	#end
+  </div>
+</div>
+</body>
+</html>

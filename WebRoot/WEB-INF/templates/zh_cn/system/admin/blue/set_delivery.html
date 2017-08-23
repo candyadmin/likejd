@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+	 delivery_title:{required:true},	
+	 delivery_amount:{required:true,digits:true,min:20,max:999999}
+	 },
+    messages:{
+	 delivery_title:{required:"买就送标题不能为空"},		
+	 delivery_amount:{required:"买就送月价格不能为空",digits:"只能输入整数",min:"最小为{0}",max:"最大为{0}"}
+	}
+  });
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  //
+  jQuery("#delivery_banner").change(function(){
+	 jQuery("#textfield1").val(jQuery("#delivery_banner").val());
+   })
+  //
+  jQuery("#ac_status_img").click(function(){
+     var delivery_status=jQuery("#delivery_status").val();
+	 if(delivery_status==0){
+	    jQuery("#ac_status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+		jQuery("#delivery_status").val("1");
+	 }
+	 if(delivery_status==1){
+	    jQuery("#ac_status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+		jQuery("#delivery_status").val("0");
+	 }	 
+  });
+  //
+  #if($!config.delivery_status==1)
+    jQuery("#ac_status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+  #end
+  #if($!config.delivery_status==0)
+    jQuery("#ac_status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+  #end
+});
+//向前count天 向后count天
+function before_set(count,date){
+   jQuery.post("$!webPath/admin/delivery_date_query.htm",{"count":count,"date":date},function(data){
+	 jQuery("#the_day").html(data);
+   });
+}
+function saveForm(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/set_delivery_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+<input name="id" type="hidden" id="id" value="$!config.id" />
+<div class="cont">
+    <h1 class="seth1">买就送</h1>
+    <div class="settab"><span class="tab-one"></span> 
+	<span class="tabs"> 
+	<a href="$!webPath/admin/set_delivery.htm" class="this">通用设置</a> | 
+    <a href="$!webPath/admin/delivery_goods_list.htm">买就送列表</a> 
+	</span>
+		
+	<span class="tab-two"></span></div>
+    <div class="setcont" id="base">
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>买就送标题</li>
+        <li><span class="webname">
+          <input name="delivery_title" type="text" id="delivery_title" value="$!config.delivery_title" />
+        </span></li>
+      </ul>
+	  <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>买就送价格</li>
+        <li> <span class="webname">
+          <input name="delivery_amount" type="text" id="delivery_amount" value="$!config.delivery_amount" />
+        金币/月 </span><span id="nothis"><strong class="q"></strong><strong class="w">卖家支付对应金币后才可以发布买就送商品</strong><strong class="c"></strong></span></li>
+      </ul>
+	  <ul class="set1">
+        <li>买就送导航</li>
+        <li> <span class="webSwitch">
+          <input name="delivery_status" id="delivery_status" type="hidden" value="$!CommUtil.null2Int($!config.delivery_status)" />
+          <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="ac_status_img" style="cursor:pointer;" /> </span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/>
+  </div>
+</form>
+</body>
+</html>

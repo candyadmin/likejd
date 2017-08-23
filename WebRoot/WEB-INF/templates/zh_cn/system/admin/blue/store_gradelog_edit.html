@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  
+});
+
+function saveForm(){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">店铺管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/store_list.htm" >管理</a> | <a href="$!webPath/admin/store_add.htm">新增</a>|<a href="$!webPath/admin/store_gradelog_list.htm" class="this">升级申请</a></span> <span class="tab-two"></span></div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/store_gradelog_save.htm" method="post">
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/store_gradelog_list.htm" />
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <div class="setcont">
+      <!--鼠标经过样式-->
+      <ul class="set1">
+        <li>店铺名称</li>
+        <li><span class="webname">
+          $!obj.store.store_name
+        </span></li>
+      </ul>
+      <ul class="set1">
+        <li>店主名</li>
+        <li><span class="webname">
+          $!obj.store.user.userName
+        </span></li>
+      </ul>
+      <ul class="set1">
+        <li>当前店铺等级</li>
+        <li><span class="webname">
+          $!obj.store.grade.gradeName
+        </span></li>
+      </ul>
+      <ul class="set1">
+        <li>申请店铺等级</li>
+        <li><span class="webname">
+          $!obj.store.update_grade.gradeName
+        </span></li>
+      </ul>
+   	  <ul class="set1">
+      <li>审核状态</li>
+	   <li><span class="webname">
+      <input name="store_grade_status"  type="radio" id="sex" style="border:none; height:16px; width:16px;" value="1" checked="checked" />
+      审核通过
+	  <input style="border:none; height:16px; width:16px;"type="radio" id="sex" name="store_grade_status" value="-1" />
+	  审核失败
+	  <input style="border:none; height:16px; width:16px;" type="radio" id="sex" name="store_grade_status" value="0" />
+	  等待审核
+	   </span>
+	   </li>
+	</ul>
+    <ul class="set1">
+      <li>审核信息</li>
+	   <li><span class="webname">
+      <textarea name="store_grade_info" cols="40" rows="6" id="store_grade_info"></textarea>
+	   </span>
+	   </li>
+	</ul>
+    </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

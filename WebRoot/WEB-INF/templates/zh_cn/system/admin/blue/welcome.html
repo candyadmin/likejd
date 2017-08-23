@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>shopping商城系统后台管理</title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<body>
+      <div class="cont">
+        <h1 class="seth1">欢迎页面</h1>
+        <div class="welcome"><strong>您好,<span style="color:#06F">$!user.userName</span>,欢迎使用<span style="color:#F60">Shopping</span>商城系统. 您上次登录的时间：$!CommUtil.formatLongDate($!user.lastLoginDate),登录IP:$!user.lastLoginIp</strong></div>
+
+          <div class="wela">
+            <h2>一周动态[本次统计时间：$!CommUtil.formatLongDate($!stat.addTime),下次统计时间：$!CommUtil.formatLongDate($!stat.next_time)]</h2>
+            <ul>
+              <li>新增会员数：    $!{stat.week_user}个</li>
+              <li>新增商品数：    $!{stat.week_goods}件</li>
+              <li>新增店铺数：    $!{stat.week_store}个</li>
+              <li>新增订单数：    $!{stat.week_order}单</li>
+              <li>待处理投诉： <a href="javascript:void(0);" onclick="window.parent.openURL('url','$!webPath/admin/complaint_list.htm?status=new','main_workspace','complaint_manage_op')" style="color:#fff; background-color:#FF6600; padding:2px 4px; border-radius:4px 4px 4px 4px;">$!{stat.week_complaint}起</a></li>
+              <li>待处理举报：  <a href="javascript:void(0);" onclick="window.parent.openURL('url','$!webPath/admin/report_list.htm','main_workspace','report_manage_op')" style="color:#fff; background-color:#FF6600; padding:2px 4px; border-radius:4px 4px 4px 4px;">  $!{stat.week_report}次</a></li>
+            </ul>
+          </div>
+              <div class="wela">
+            <h2>统计信息[本次统计时间：$!CommUtil.formatLongDate($!stat.addTime),下次统计时间：$!CommUtil.formatLongDate($!stat.next_time)]</h2>
+            <ul>
+              <li>会员总数： $!{stat.all_user}个</li>
+              <li>店铺总数/申请总数：  $!{stat.all_store}个/$!{stat.store_update}个</li>
+              <li>商品总数：$!{stat.all_goods}件</li>
+              <li>订单总金额：¥$!CommUtil.null2Double($!{stat.order_amount})元</li>
+            </ul>
+          </div>
+      
+
+
+          <div class="wela">
+            <h2>系统信息</h2>
+            <ul>
+              <li>服务器操作系统：$!os</li>
+              <li>JAVA版本：$!java_version</li>
+              <li>数据库版本信息：$!database_version</li>
+              <li>Web服务器：$!web_server_version</li>
+              <li>shopping版本号：$!shop_version</li>
+              <li>安装日期：$!CommUtil.formatLongDate($!config.addTime)</li>
+            </ul>
+          </div>
+
+      </div>
+
+</body>
+</html>

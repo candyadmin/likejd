@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>团购信息 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/groupbuy.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script type="text/javascript">
+function timeCount(remain_id){
+   function _fresh(){
+      var nowDate = new Date(),                                    //当前时间
+      endDate = new Date($('#'+remain_id).attr('endtime')),    //截止时间
+      totalS  = parseInt((endDate.getTime() - nowDate.getTime()) / 1000);     //总秒数
+      _day    = parseInt(totalS / 3600 / 24);
+      _hour   = parseInt((totalS / 3600) % 24);
+      _minute = parseInt((totalS / 60) % 60);
+      _second = parseInt(totalS % 60);
+     jQuery('#'+remain_id).html('<em>' + _day +'</em>天<em>' + _hour + '</em>小时<em>' + _minute + '</em>分<em>' + _second + '</em>秒');
+     if( totalS <= 0){
+       jQuery('#'+remain_id).html('该团购已结束');
+       clearInterval(sh);
+     }
+  }
+  _fresh();
+  var sh = setInterval(_fresh,1000);
+}
+function group_sel(field,val){
+  jQuery("#"+field).val(val);
+  jQuery("#ListForm").submit();
+}
+function group_order(field1,val1,field2,val2){
+  jQuery("#"+field1).val(val1);
+  jQuery("#"+field2).val(val2);
+  jQuery("#ListForm").submit();
+}
+jQuery(document).ready(function(){
+  timeCount("time_down_info");
+  jQuery(".gp_listimg img").lazyload({effect:"fadeIn",width:278,height:278});
+  jQuery(".gp_scort a").removeClass("this");
+  jQuery(".gp_scort a[id^=$!order_type]").addClass("this");
+  #if($!orderType=="desc")
+  jQuery(".gp_scort a[id^=$!order_type] i").addClass("scort_d");
+  #else
+  jQuery(".gp_scort a[id^=$!order_type] i").addClass("scort_c");
+  #end
+  jQuery(".gp_cm a").removeClass("this");
+  jQuery(".gp_cm a[id=price_$!{gpr_id}]").addClass("this");
+  jQuery(".gp_cm a[id=gc_$!{gc_id}]").addClass("this");
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/group_head.htm?id=$!ga_id")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="position">当前位置：<a href="$!webPath/index.htm" >首页</a> > <span><a href="$!webPath/group.htm">团购</a></span>#if($!group) > <span>$!group.group_name</span>#end</div>
+    <div class="index2">
+      <div class="gp_goodstop">
+        <div class="gp_topbar"> <span class="gp_topa"><a href="$!webPath/group_list.htm?time=soon">即将开始</a>|<a href="$!webPath/group_list.htm?time=history">往期团购</a></span>
+          <h2>商品团购</h2>
+          <b><strong>$!group.group_name</strong>$!CommUtil.formatTime("yyyy年MM月dd日 HH:mm",$!group.beginTime) 至 $!CommUtil.formatTime("yyyy年MM月dd日 HH:mm",$!group.endTime)</b> </div>
+        <div class="gp_class_money">
+          <div class="gp_cm">
+            <ul>
+              <li><span>分类：</span><strong> <a href="javascript:void(0);" onclick="group_sel('gc_id','')" id="gc_" class="this">不限</a> #foreach($gc in $gcs)
+                |<a href="javascript:void(0);" onclick="group_sel('gc_id','$!gc.id')" id="gc_$!{gc.id}">$!gc.gc_name</a> #end </strong></li>
+              <li><span>价格：</span><strong> <a href="javascript:void(0);" onclick="group_sel('gpr_id','')" class="this" id="price_">不限</a> #foreach($gpr in $gprs)
+                |<a href="javascript:void(0);" onclick="group_sel('gpr_id','$!gpr.id')" id="price_$!gpr.id">$!gpr.gpr_name</a> #end </strong></li>
+            </ul>
+          </div>
+          <div class="gp_time"><span><strong>距离本期结束</strong><i></i></span><b>
+            <div id="time_down_info" endTime="$!CommUtil.formatTime('MM/dd/yyyy HH:mm:ss',$!group.endTime)"><em>366</em>天<em>9</em>小时<em>50</em>分<em>46</em>秒</div>
+            </b></div>
+        </div>
+        #if($!orderType=="desc")
+        #set($c_orderType="asc")
+        #else
+        #set($c_orderType="desc")
+        #end
+        <div class="gp_scort"><b>排序：</b><em> <a href="javascript:void(0);" onclick="group_order('orderBy','addTime','orderType','$!c_orderType');"  class="this" id="addTime_$!orderType"> <span>默认</span><i></i></a> <a href="javascript:void(0);" onclick="group_order('orderBy','gg_price','orderType','$!c_orderType');" id="gg_price_$!orderType"> <span>价格</span><i></i></a> <a href="javascript:void(0);" onclick="group_order('orderBy','gg_rebate','orderType','$!c_orderType');"  id="gg_rebate_$!orderType"> <span>折扣</span><i></i></a> <a href="javascript:void(0);" onclick="group_order('orderBy','gg_def_count','orderType','$!c_orderType');"  id="gg_def_count_$!orderType"> <span>销量</span><i></i></a></em></div>
+      </div>
+      <form action="$!webPath/group.htm" method="post" id="ListForm">
+        #if($!objs.size()>0 && $!group)
+        <div class="gp_list_box">
+          <div class="gp_list"> #foreach($obj in $objs)
+            <ul class="gp_list_one">
+              <li class="gp_listimg"><span class="gp_img_cspan">
+                <p><a href="$!webPath/group_view_$!{obj.id}.htm" target="_blank"><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!webPath/$!obj.gg_img.path/$!obj.gg_img.name" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28" /></a></p>
+                </span></li>
+              <li class="gp_listname"> <span><a href="$!webPath/group_view_$!{obj.id}.htm">$!obj.gg_name </a></span> </li>
+              <li class="gp_listsee"> #if($!obj.gg_count>0) <span class="gp_look"> <i>￥$!{obj.gg_price}</i> <a href="$!webPath/group_view_$!{obj.id}.htm"></a> </span> #else <span class="gp_look_hui"> <i>￥$!{obj.gg_price}</i> <a href="$!webPath/group_view_$!{obj.id}.htm"></a> </span> #end <b>$!{obj.gg_rebate}折</b></li>
+              #set($save_money=$!obj.gg_goods.goods_price - $!obj.gg_price)
+              #set($buyer_count=$!obj.gg_def_count+$!obj.gg_vir_count)
+              <li class="gp_listorder"> <i><em>原价:</em><b class="gp_listorder_line">￥$!{obj.gg_goods.goods_price}</b></i> <i><em>节省:</em><b class="gp_listorder_red">￥$!{save_money}</b></i> <i><em>已购买:</em><b>$!buyer_count 人</b></i> </li>
+            </ul>
+            #end </div>
+        </div>
+        <div class="fenye">
+          <div class="fenyes"> $!gotoPageFormHTML</div>
+        </div>
+        #else
+        <div class="index_w">
+          <div class="tuan_empty"> <i><img src="$!imageWebServer/resources/style/system/front/default/images/group/empty.jpg" width="120" height="109" /></i> <span>没有正在进行中的团购活动</span> </div>
+        </div>
+        #end
+        <input name="ga_id" type="hidden" id="ga_id" value="$!ga_id" />
+        <input name="gpr_id" type="hidden" id="gpr_id" value="$!gpr_id" />
+        <input name="gc_id" type="hidden" id="gc_id" value="$!gc_id" />
+        <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+        <input name="orderType" type="hidden" id="orderType" value="$!orderType" />
+        <input type="hidden" name="currentPage" id="currentPage" />
+      </form>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>导航设置 - $!config.title</title>
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+         $!httpInclude.include("/seller/nav.htm?op=store_nav")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>导航列表</span></div></div>
+        <form action="$!webPath/seller/store_nav.htm" method="post" name="ListForm" id="ListForm">
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href='$!webPath/seller/store_nav.htm'>导航列表</a></li>
+                <li><a href='$!webPath/seller/store_nav_add.htm' class="other">新增导航</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="alldel">
+                <div class="alldel_l"> <span class="alldel_la">
+                   <input name="all" type="checkbox" id="all" value=""  onclick="selectAll(this)"/>
+                  </span><span class="alldel_lb"><label for="all">全选</label></span> <span  class="alldel_lc"><a href="javascript:void(0);" onclick="cmd('$!webPath/seller/store_nav_del.htm','')">删除</a></span> </div>
+              </div>
+              <div class="operation">
+                <table width="790" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                  <tr id="opertitle">
+                    <td width="470" >导航标题<input name="mulitId" type="hidden" id="mulitId" />
+                   </td>
+                    <td width="50">是否显示</td>
+                    <td width="60" align="center">序号</td>
+                    <td align="center">操作</td>
+                  </tr>
+                  #foreach($obj in $objs)
+                  <tr class="opertr">
+                    <td ><input name="id" type="checkbox" value="$!obj.id" id="id" /> 
+                      　$!{obj.title}</td>
+                    #set($display="是") 
+                    #if(!$!{obj.display})#set($display="否")#end 
+                    <td align="center">$!display</td>
+                    <td align="center">$!obj.sequence</td>
+                    <td class="operajt"><span class="edit"><a href="$!webPath/seller/store_nav_edit.htm?id=$!obj.id">编辑</a></span><span class="del"><a href="$!webPath/seller/store_nav_del.htm?mulitId=$!obj.id&currentPage=$!currentPage">删除</a></span></td>
+                  </tr>
+                  #end
+                </table>
+              </div>
+              <div class="alldel">
+                <div class="alldel_l"> <span class="alldel_la">
+                  <input name="all1" type="checkbox" id="all1" value=""  onclick="selectAll(this)"/>
+                  </span><span class="alldel_lb"><label for="all">全选</label></span> <span  class="alldel_lc"><a href="javascript:void(0);" onclick="cmd('$!webPath/seller/store_nav_del.htm','')">删除</a></span> </div>
+                  <div  class="userfenye">$!gotoPageHTML</div>
+              </div>
+            </div>
+          </div>
+          </form>
+          </td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

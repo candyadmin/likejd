@@ -1,0 +1,93 @@
+﻿<script>
+jQuery(document).ready(function(){
+  jQuery(".bgsear li").click(function(){
+     jQuery(".bgsear li").removeClass("this");
+	 jQuery(this).addClass("this");
+	 jQuery("#type").val(jQuery(this).attr("type"));
+  }).mouseover(function(){
+     jQuery(this).css("cursor","pointer");
+  });
+  #if($!type)
+  jQuery(".bgsear li").removeClass("this");
+  jQuery(".bgsear li[type=$!type]").addClass("this");
+  #end
+  jQuery("#group_area_switch").css("cursor","pointer").click(function(){
+      var show=jQuery("#group_area_info").css("display");
+	  if(show=="none"){
+	   jQuery("#group_area_info").show();
+	   jQuery("#group_area_switch").attr("class","tuan_active");
+	   jQuery("#group_area_img").attr("src","$!webPath/resources/style/system/front/default/images/group/tuansan.gif");
+	  }else{
+	   jQuery("#group_area_info").hide();  
+	   jQuery("#group_area_switch").attr("class","tuan_rs");
+	   jQuery("#group_area_img").attr("src","$!webPath/resources/style/system/front/default/images/group/tuansan2.gif");
+	  }
+  });
+  jQuery(".tuan_block_box a").click(function(){
+     jQuery("#group_area_info").hide();  
+	 jQuery("#group_area_switch").attr("class","tuan_rs");
+	 jQuery("#group_area_img").attr("src","$!webPath/resources/style/system/front/default/images/group/tuansan2.gif");
+  });
+   jQuery(".toph_bgsear li").mouseover(function(){
+      jQuery(".toph_bgsear>li").show();
+  }).mouseleave(function(){
+       jQuery(".toph_bgsear>li").last().hide();
+  }).click(function(){
+	 var index=jQuery(this).index();
+	 if(index==1){
+	   var f_text=jQuery(".toph_bgsear li").find("a").first().text();
+       jQuery(".toph_bgsear li").find("a").first().html(jQuery(this).find("a").text()+"<s></s>");
+	   jQuery(".toph_bgsear li").find("a").last().text(f_text);
+	   jQuery("#type").val(jQuery(this).attr("type"));
+	   jQuery(".toph_bgsear>li").last().hide();
+	 }
+  });
+});
+function search_form(){
+
+  var keyword=arguments[0];
+  var type=arguments[1];
+  if(keyword!=""&&keyword!=undefined){
+   jQuery("#keyword").val(keyword);
+  }
+  if(type!=""&&type!=undefined){
+    jQuery("#type").val(type);
+  }
+  jQuery("#searchForm").submit();	
+  jQuery("#keyword").val("");
+}
+</script>
+
+<div class="head">
+  <div class="logo"> 
+  #if($!config.websiteLogo) 
+  <a href="$!webPath/index.htm">  
+  <img src="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name" border="0" />  
+  </a> #else <a href="$!webPath/index.htm"><img src="$!imageWebServer/resources/style/system/front/default/images/logo.png"  border="0" /></a> #end </div>
+  <div class="tuang"> <span class="tuan_span"></span>
+    <div class="tuan_spr"> 
+      <!--替换样式tuan_rs替换成tuan_active--三角图片tuansan2.gif-->
+      <div class="tuan_rs" id="group_area_switch"><span><i class="tuantxt">$!ga</i><b class="tuanspan"><img src="$!imageWebServer/resources/style/system/front/default/images/group/tuansan2.gif" width="9" height="6" id="group_area_img" /></b></span></div>
+      <div class="tuan_block" id="group_area_info" style="display:none;">
+        <div class="tuan_block_box"><em><a href="javascript:void(0);"></a></em>
+          <div class="tuan_address"><i><a href="$!webPath/group.htm">全国</a></i> #foreach($ga in $gas) <i><a href="$!webPath/group.htm?ga_id=$!ga.id">$!ga.ga_name</a></i> #end </div>
+        </div>
+        <div class="tuan_blockb"></div>
+      </div>
+    </div>
+  </div>
+  <form action="$!webPath/search.htm" method="post" id="searchForm">
+    <input name="type" type="hidden" id="type" value="goods" />
+    <div class="toph_bigsearch">
+      <div class="toph_sear">
+        <ul class="toph_bgsear">
+          <li class="this" type="goods"><a href="javascript:void(0);">宝贝<s></s></a></li>
+          <li style="display:none" type="store"><a href="javascript:void(0);">店铺</a></li>
+        </ul>
+        <input name="keyword" type="text" id="keyword" placeholder="搜索其实真的很简单！" x-webkit-speech lang="zh-CN" onwebkitspeechchange="jQuery('#searchForm').submit()" class="toph_sear_txt"/>
+        <input name="input" type="button" value="搜索" style="cursor:pointer;" onclick="search_form();" class="toph_sear_btn" />
+      </div>
+      <div class="keyword"> #foreach($info in $CommUtil.splitByChar("$!config.hotSearch",",")) <a href="javascript:void(0);" onclick="search_form('$info','goods');">$!info</a> #end </div>
+    </div>
+  </form>
+</div>

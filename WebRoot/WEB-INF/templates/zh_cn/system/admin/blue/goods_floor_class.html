@@ -1,0 +1,83 @@
+<script>
+jQuery(document).ready(function(){
+  jQuery(".box_edit_class").sortable({containment:".box_edit_class",opacity:0.9,cursor:"move"});
+  jQuery(".box_edit_class").disableSelection();	
+  #foreach($c_gc in $gf_tools.generic_gf_gc("$!obj.gf_gc_list"))
+  jQuery(".box_edit_li span[id=child_$!{c_gc.id}]").sortable({containment:".box_edit_li span[id=child_$!{c_gc.id}]",opacity:0.9,cursor:"move"});
+  jQuery(".box_edit_li span[id=child_$!{c_gc.id}]").disableSelection();	  
+  #end
+  jQuery("#gc_id").change(function(){							   
+	var gc_id=jQuery(this).val();	
+	if(gc_id!=null){
+     jQuery.ajax({type:'POST',url:'$!webPath/admin/goods_floor_class_load.htm',data:{"gc_id":gc_id},success:function(data){
+	   if(jQuery(".box_edit_class .box_edit_li").length>0){
+	      jQuery(".box_edit_class .box_edit_li:last").after(data);
+	   }else{
+		  jQuery(".box_edit_class").append(data);
+	   }
+	 }});
+	}
+  });
+});
+function save_form(){
+  var ids="";
+   jQuery(".box_edit_li a").each(function(){									  
+     var pid=jQuery(this).attr("pid");
+	 var id=jQuery(this).attr("id");
+	 if(pid!=undefined){
+	  ids=ids+",pid:"+pid;
+	 }else{
+      ids=ids+",cid:"+id;
+	 }
+   });
+  jQuery("#ids").val(ids);
+  jQuery("#theForm").submit();
+}
+</script>
+<form action="$!webPath/admin/goods_floor_class_save.htm" method="post" id="theForm">
+  <div class="box_floor">
+    <!--分类开始-->
+    <div class="box_floor_class">
+      <input name="id" type="hidden" id="id" value="$!obj.id">
+      <input type="hidden" name="ids" id="ids">
+      <b>楼层标题：</b>
+      <input name="gf_name" type="text" id="gf_name" value="$!obj.gf_name" />
+    </div>
+    <h6 class="box_floor_h6">当前分类</h6>
+    <em class="floor_warning" style="margin-left:20px;margin-bottom:5px;">注释:双击删除已选分类，按下鼠标拖动分类次序</em>
+    <div class="box_edits">
+      <ul class="box_edit_class">
+      #foreach($c_gc in $gf_tools.generic_gf_gc("$!obj.gf_gc_list"))
+        <li class="box_edit_li">
+          <h6><a href="javascript:void(0);" ondblclick="javascript:jQuery(this.parentNode.parentNode).remove();" pid="$!c_gc.id">$!c_gc.className</a></h6>
+          <span id="child_$!{c_gc.id}">
+           #foreach($c_c_gc in $c_gc.childs) 
+           <a href="javascript:void(0);" ondblclick="javascript:jQuery(this).remove();" id="$!c_c_gc.id">$!c_c_gc.className</a> 
+           #end 
+           </span> 
+          </li>
+        #end
+      </ul>
+    </div>
+    <div class="box_floor_class"><b>选择商品分类：</b>
+      <select name="gc_id" id="gc_id">
+        <option value="">请选择商品分类...</option>
+        
+      #foreach($gc in $gcs)
+      
+        <option value="$!gc.id">$!gc.className</option>
+        
+       #foreach($c_gc in $gc.childs)
+       
+        <option value="$!c_gc.id">&nbsp;&nbsp;&nbsp;$!c_gc.className</option>
+        
+       #end
+      #end
+    
+      </select>
+    </div>
+    <div class="submit">
+      <input name="按钮" type="button" value="保存" onClick="save_form();" />
+    </div>
+  </div>
+</form>

@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">团购管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/group_list.htm">团购列表</a> | <a href="$!webPath/admin/group_add.htm" >新增团购</a>|<a href="$!webPath/admin/group_class_list.htm" >团购分类</a> |<a href="$!webPath/admin/group_class_add.htm" >新增分类</a>|<a href="$!webPath/admin/group_area_list.htm" >团购区域</a>|<a href="$!webPath/admin/group_area_add.htm" >新增区域</a>|<a href="$!webPath/admin/group_price_list.htm" class="this">价格区间</a>|<a href="$!webPath/admin/group_price_add.htm" >添加区间</a> </span> <span class="tab-two"></span></div>
+  <form method="post" id="ListForm" action="$!webPath/admin/group_price_list.htm">
+    <div class="allshop_table">
+    <table width="98%" border="0" cellspacing="0" cellpadding="0">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="53"></td>
+        <td width="415">价格区间名称</td>
+        <td width="296" align="center">价格区间上限</td>
+        <td align="center" width="225">价格区间下限</td>
+        <td width="138"  align="center">操作</td>
+      </tr>
+      #foreach($obj in $objs)
+      <tr id="column_$!{obj.id}">
+        <td><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+        <td>$!obj.gpr_name</td>
+        <td align="center">$!obj.gpr_end</td>
+        <td align="center">$!obj.gpr_begin</td>
+        #if($!obj.status==0)
+          #set($status="正常")
+        #end
+        #if($!obj.status==1)
+          #set($status="关闭")
+        #end
+        <td  align="center" class="aoprater"><a href="$!webPath/admin/group_price_edit.htm?id=$!obj.id" class="blue">编辑</a>|<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续？'))window.location.href='$!webPath/admin/group_price_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">删除</a></td>
+      </tr>
+      #end
+      <tr style="background:#F2F2F2; height:30px;">
+        <td colspan="5"><div class="fenye3">
+          <input name="endTime" type="hidden" id="endTime" value="$!endTime" />
+          <input name="beginTime" type="hidden" id="beginTime" value="$!beginTime" />
+          <input name="ac_status" type="hidden" id="ac_status" value="$!ac_status" />
+          <input name="q_ac_title" type="hidden" id="q_ac_title" value="$!q_ac_title" />
+          <input type="hidden" name="mulitId" id="mulitId" />
+          <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+          $!gotoPageFormHTML</div>
+          <div class="shopbtn shopfx">
+            <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+            &nbsp;&nbsp;全部</div>
+          <div class="shop_btn_del shopbtn">
+            <input name="" type="button" value="删除" onclick="cmd('$!webPath/admin/group_price_del.htm');"/>
+         </div></td>
+      </tr>
+    </table>
+  </div>
+  </form>
+</div>
+</body>
+</html>

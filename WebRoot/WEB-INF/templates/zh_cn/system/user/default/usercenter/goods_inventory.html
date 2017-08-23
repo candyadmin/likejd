@@ -1,0 +1,19 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="tabledetail" >
+  <tr style="background:#CCC"> #foreach($spec in $specs)
+    <td width="27%">$!spec.name</td>
+    #end
+    <td width="27%">库存</td>
+    <td width="46%">价格</td>
+  </tr>
+ #foreach($gsp in $gsps) 
+  <tr>
+    #set($id="")
+    #foreach($c_gsp in $gsp)
+    #set($id=$!{c_gsp.id}+"_"+$id)
+    <td>$!c_gsp.value</td>
+    #end
+    <td><input name="$!{id}" type="text" id="inventory_details_count_$!id" style="border:1px solid #A7A6AA; height:20px; line-height:20px; padding-left:5px;margin-bottom:5px;" value="0"></td>
+    <td><input name="$!{id}" type="text" id="inventory_details_price_$!id" style="border:1px solid #A7A6AA; height:20px; line-height:20px; padding-left:5px;margin-bottom:5px;" value="0"></td>
+  </tr>
+ #end
+</table>

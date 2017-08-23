@@ -1,0 +1,156 @@
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<script>
+jQuery(document).ready(function(){
+   jQuery("#floor_goods_info").sortable({containment:"#floor_goods_info",opacity:0.9,cursor:"crosshair"});
+   jQuery("#floor_goods_info").disableSelection();
+});
+function ajaxPage(url,page,obj){
+ jQuery.ajax({type:'POST',url:url,data:{"currentPage":page},
+			  success:function(data){
+					jQuery("#floor_goods_list").empty().append(data);																											               }																																		    });
+}
+function goods_floor_list_goods_load(){
+  var gc_id=jQuery("#gc_id").val();
+  var goods_name=jQuery("#goods_name").val();
+  jQuery.ajax({type:'POST',url:'$!webPath/admin/goods_floor_list_goods_load.htm',data:{"gc_id":gc_id,"goods_name":goods_name},
+			  success:function(data){
+					jQuery("#floor_goods_list").empty().append(data);																											               }																																		    });
+}
+function goods_list_set(obj){
+  var img=jQuery(obj).attr("img_uri");
+  var goods_id=jQuery(obj).attr("goods_id"); 
+  var goods_name=jQuery(obj).attr("goods_name");
+  var count=jQuery(".floor_box_pls ul").length;
+  var add=0; 
+  if(count>5){
+	  alert("最多只能添加6件商品！");
+	  add=1;
+  }
+  jQuery(".floor_box_pls ul").each(function(){
+     if(jQuery(this).attr("goods_id")==goods_id){
+	   alert("已经存在该商品");
+	   add=2;
+	 }
+  });
+  if(add==0){
+  var s="<ul ondblclick='jQuery(this).remove();' class='floor_pro' goods_id='"+goods_id+"'><li class='floor_pro_img'><img src='"+img+"' width='100' height='100' /></li><li class='floor_pro_name'>"+goods_name+"</li></ul>";
+  jQuery(".floor_box_pls").append(s);
+  }
+}
+function save_form(){
+ var ids="";
+ jQuery(".floor_box_pls ul").each(function(){
+   ids=ids+","+jQuery(this).attr("goods_id"); 
+ });
+ jQuery("#ids").val(ids);
+ jQuery("#theForm").submit();
+}
+</script>
+<form action="$!webPath/admin/goods_floor_list_goods_save.htm" method="post" id="theForm">
+<div class="box_floor">
+  <div class="box_floor_six">
+  #set($map=$!gf_tools.generic_goods_list("$!obj.gf_list_goods"))
+    <div class="box_floor_class">
+      <input name="id" type="hidden" id="id" value="$!obj.id">
+      <input type="hidden" name="ids" id="ids">
+      <b>楼层标题：</b>
+      <input name="list_title" type="text" id="list_title" value="$!map.get('list_title')" />
+    </div>
+    <span class="floor_choose">已选推荐商品：</span>
+    <div class="box_floor_prodel"> <em class="floor_warning">注释：最多选择6件商品，双击删除已选商品信息，按下鼠标拖动商品次序</em>
+      <div class="floor_box_pls" id="floor_goods_info">
+      #if($!map.get("goods1"))
+       #set($goods=$!map.get("goods1"))
+        #if($!goods.goods_main_photo)                #set($img="$!webPath/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+         #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <ul ondblclick="jQuery(this).remove();" goods_id="$!goods.id"  class="floor_pro">
+          <li class="floor_pro_img"><img src="$!img" width="100" height="100" /></li>
+          <li class="floor_pro_name">$!goods.goods_name</li>
+        </ul>
+       #end 
+       #if($!map.get("goods2"))
+       #set($goods=$!map.get("goods2"))
+        #if($!goods.goods_main_photo)                #set($img="$!webPath/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+         #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <ul ondblclick="jQuery(this).remove();" goods_id="$!goods.id"  class="floor_pro">
+          <li class="floor_pro_img"><img src="$!img" width="100" height="100" /></li>
+          <li class="floor_pro_name">$!goods.goods_name</li>
+        </ul>
+       #end 
+       #if($!map.get("goods3"))
+       #set($goods=$!map.get("goods3"))
+        #if($!goods.goods_main_photo)                #set($img="$!webPath/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+         #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <ul ondblclick="jQuery(this).remove();" goods_id="$!goods.id"  class="floor_pro">
+          <li class="floor_pro_img"><img src="$!img" width="100" height="100" /></li>
+          <li class="floor_pro_name">$!goods.goods_name</li>
+        </ul>
+       #end 
+       #if($!map.get("goods4"))
+       #set($goods=$!map.get("goods4"))
+        #if($!goods.goods_main_photo)                #set($img="$!webPath/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+         #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <ul ondblclick="jQuery(this).remove();" goods_id="$!goods.id"  class="floor_pro">
+          <li class="floor_pro_img"><img src="$!img" width="100" height="100" /></li>
+          <li class="floor_pro_name">$!goods.goods_name</li>
+        </ul>
+       #end 
+       #if($!map.get("goods5"))
+       #set($goods=$!map.get("goods5"))
+        #if($!goods.goods_main_photo)                #set($img="$!webPath/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+         #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <ul ondblclick="jQuery(this).remove();" goods_id="$!goods.id"  class="floor_pro">
+          <li class="floor_pro_img"><img src="$!img" width="100" height="100" /></li>
+          <li class="floor_pro_name">$!goods.goods_name</li>
+        </ul>
+       #end 
+       #if($!map.get("goods6"))
+       #set($goods=$!map.get("goods6"))
+        #if($!goods.goods_main_photo)                #set($img="$!webPath/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+         #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <ul ondblclick="jQuery(this).remove();" goods_id="$!goods.id"  class="floor_pro">
+          <li class="floor_pro_img"><img src="$!img" width="100" height="100" /></li>
+          <li class="floor_pro_name">$!goods.goods_name</li>
+        </ul> 
+       #end 
+        </div>
+    </div>
+    <span class="floor_choose">选择要展示的商品：</span>
+    <div class="floor_choose_box"> <span class="floor_choose_sp"><b>选择分类：</b>
+      <select name="gc_id" id="gc_id">
+        <option value="">请选择商品分类...</option>
+        #genericTree($!gcs) 
+      </select>
+      </span> <span class="floor_search_sp"><b>商品名称：</b>
+      <input name="goods_name" type="text" id="goods_name" />
+      <input type="button"  class="floor_sear_btn" value="搜索" onclick="goods_floor_list_goods_load();" style="cursor:pointer;" />
+      </span> <em class="floor_warning">注释：点击商品加入楼层</em>
+     <div id="floor_goods_list">
+     </div>
+    </div>
+  </div>
+  <!--图片开始-->
+  <div class="submit">
+    <input type="button" value="保存" onclick="save_form();" />
+  </div>
+</div>
+</form>

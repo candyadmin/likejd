@@ -1,0 +1,107 @@
+<style>
+.box_table {
+	border-collapse:collapse;
+	font-size:12px;
+	background-color:#FFF;
+}
+.box_table td {
+	padding-left:10px;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+.box_input input {
+	border:1px solid #666;
+	background:#fff;
+	padding-left:5px;
+	width:200px;
+	height:22px;
+	line-height:22px;
+}
+.pizhu {
+	display:block;
+	margin-top:3px;
+	color:#CCC;
+	font-style:normal;
+}
+.box_table strong {
+	color:#F00;
+	font-size:14px;
+	margin-left:5px;
+}
+.inputbtn input {
+	background:#CCC;
+	width:60px;
+}
+</style>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+       rules: {
+			username: "required",
+			password: "required"#if($!config.securityCodeLogin),
+			code:"required"#end},
+		messages: {
+			username: "用户名不能为空",
+			password: "密码不能为空"#if($!config.securityCodeLogin),
+			code:"验证码不能为空"#end
+					},
+	   submitHandler:function(){
+	      var username=jQuery("#username").val();
+          var password=jQuery("#password").val();
+		  var code=jQuery("#code").val();
+          jQuery.post("$!webPath/shopping_login.htm",{"username":username,"password":password,"code":code,"ajax_login":true},function(data){
+              if(data=="success"){
+	             window.location.reload();
+	          }else{
+	             alert("用户名、密码错误，登录失败！");
+	          }
+             },"text");
+	   },
+	   invalidHandler: function(form, validator) {  //不通过回调
+            return false;
+       } 
+  });
+});
+</script>
+<form action="$!webPath/shopping_login.htm" method="post" id="theForm">
+  <table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td width="100" align="right" valign="top"><span class="login_nameu">用户名：</span></td>
+      <td align="left"> <input name="username" type="text" id="username" size="30" autocomplete="off" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top"><span class="login_nameu">密　码：</span></td>
+      <td align="left"><input name="password" type="password" id="password" size="30"  autocomplete="off" /></td>
+    </tr>
+     #if($!config.securityCodeLogin)
+                  <tr align="right" valign="top">
+                    <td>验证码：</td>
+                    <td align="left"><input name="code" type="text" id="code" style="text-transform:uppercase;" size="30"  autocomplete="off"/></td>
+                  </tr>
+                  <tr align="left" valign="top">
+                    <td>&nbsp;</td>
+                    <td><script>
+                        function refreshCode(){
+	                        jQuery("#code_img").attr("src","$!webPath/verify.htm?d"+new Date().getTime());
+                        }
+                      </script>
+					  <span class="yzm" #if($!config.securityCodeType=='voice')style="display:none;"#end><img style="cursor:pointer;" src="$!webPath/verify.htm" id="code_img" onclick="refreshCode();" width="59" height="27" /></span><span class="nosee" #if($!config.securityCodeType=='voice')style="display:none;"#end><a href="javascript:void(0);" onclick="refreshCode();">看不清？换一张</a></span>
+					#if($!config.securityCodeType=="voice")
+					     <span class="yzm"><a href="javascript:void(0);" onclick="readCode('player')" title="朗读验证码">
+                   <img src="$!imageWebServer/resources/style/common/images/speaker.gif" border="0" /></a></span><span id="player"></span>
+				   <script>
+				   function readCode(id){
+                         var  s = "<embed id='sound_play' name='sound_play' src='$!webPath/resources/flash/soundPlayer.swf?" + (new Date().getTime()) + "' FlashVars='url=$!webPath"+ "' width='0'   height='0' allowScriptAccess='always' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>";
+                    jQuery("#"+id).html(s);
+                    }
+				   </script>
+					  #end					</td>
+                  </tr>
+				  #end
+    <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+        <input name="login" type="submit" style="cursor:pointer;" value="登录"/>
+      </span></td>
+    </tr>
+  </table>
+</form>

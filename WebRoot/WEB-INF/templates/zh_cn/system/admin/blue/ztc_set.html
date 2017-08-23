@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+ #if($!config.ztc_status==true)								
+  jQuery("#ztc_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+ #else
+  jQuery("#ztc_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");  
+ #end
+ jQuery("#ztc_img").click(function(){
+   var status=jQuery("#ztc_status").val();
+   if(status=="true"){
+	 jQuery("#ztc_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	 jQuery("#ztc_status").val("false");
+	}else{
+	 jQuery("#ztc_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	 jQuery("#ztc_status").val("true");    
+	}
+ });
+ //
+ jQuery("#theForm").validate({
+     rules:{
+		 ztc_price:{
+			  required:true,
+			  digits:true
+			 }
+		 },
+	messages:{
+	     ztc_price:{
+			  required:"直通车起价不能为空",
+			  digits:"直通车起价只能为整数"
+			 }
+	     }
+ });
+ //
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">竞价直通车</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/ztc_set.htm" class="this">直通车设置</a> | <a href="$!webPath/admin/ztc_apply.htm">直通车申请</a> | <a href="$!webPath/admin/ztc_goods.htm">直通车商品</a> | <a href="$!webPath/admin/ztc_gold_log.htm">金币日志</a> </span> <span class="tab-two"></span></div>
+  <form action="$!webPath/admin/ztc_set_save.htm" method="post" id="theForm">
+    <div class="setcont">
+      <ul class="set1">
+        <li>直通车状态</li>
+        <li><span class="webSwitch"><img id="ztc_img" src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" style="cursor:pointer;" /></span><span id="nothis"><strong class="q"></strong><strong class="w">开通直通车后，前台商品按照直通车就行排序</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li>直通车商品显示状态</li>
+        <li><span class="webSwitch">
+          <label>
+            <input type="radio" value="0" id="ztc_goods_view" name="ztc_goods_view" #if($!config.ztc_goods_view=='0') checked="checked" #end/>
+            没有任何限制 </label>
+          <label>
+            <input type="radio" value="1" id="ztc_goods_view" name="ztc_goods_view" #if($!config.ztc_goods_view=='1') checked="checked" #end/>
+            按商品分类显示 </label>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">直通车商品显示的同时是否按照相应的分类显示</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>直通车起价</li>
+        <li><span class="allmen size5">
+          <input name="ztc_price" type="text" id="ztc_price" value="$!config.ztc_price" />
+          </span><span style=" line-height:30px; padding-left:10px;">金币/天</span><span id="nothis"><strong class="q"></strong><strong class="w">卖家选择加入直通车，每天价格不能低于该数值，价格越高排序越靠前</strong><strong class="c"></strong></span></li>
+      </ul>
+    </div>
+    <div class="submit">
+      <input name="" type="submit" value="提交" />
+      <input name="id" type="hidden" id="id" value="$!config.id" />
+      <input name="ztc_status" type="hidden" id="ztc_status" value="$!config.ztc_status" />
+    </div>
+  </form>
+</div>
+</body>
+</html>

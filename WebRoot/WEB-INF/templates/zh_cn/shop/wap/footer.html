@@ -1,0 +1,63 @@
+<!--底部-->
+		<div class="phone_foot">
+			<div class="foot_top">
+				<span class="fl">
+				
+				#if($!user)
+				<span>
+					$!CommUtil.substring("$!{user.userName}",5)您好</span><b>|</b>
+					<span><a  href="$!webPath/shopping_logout.htm">退出</a> </span>
+				#else 
+					<span><a class="log" href="$!webPath/user/login.htm">登录</a></span> <b>|</b>
+					<span><a class="log"  href="$!webPath/register.htm">注册</a> </span>
+				#end
+				</span>
+						<span
+					class="fr"><a href="#">TOP</a></span>
+			</div>
+			<div class="foot_nav">
+				<a class="this" href="$!webPath/wap/index.htm">触屏版</a>
+				<a href="$!webPath/index.htm">电脑版</a> <a
+					href="javascript:void(0);">客户端</a>
+			</div>
+			<div class="foot_nav">$!webPath</div>
+		</div>
+
+		<!--按钮-->
+	</div>
+	<!--悬浮层-->
+	<script>
+		function click_layer() {
+			var ret = jQuery("#show").attr("mark");
+			if (ret == "show") {
+				jQuery("#show").hide();
+				jQuery("#show").attr("mark", "hide");
+			} else {
+				jQuery("#show").show();
+				jQuery("#show").attr("mark", "show");
+			}
+		}
+	</script>
+	<div class="layer">
+		<a class="layer_menu" href="javascript:void(0);"
+			onclick="click_layer();"><img
+			src="$!webPath/resources/style/system/front/wap/images/layer_05.png"
+			width="35" height="35"><span class="black_bg"></span></a>
+		<div class="layer_show" id="show" mark="hide" style="display: none">
+			<ul>
+				<li><a href="$!webPath/wap/index.htm"><img
+						src="$!webPath/resources/style/system/front/wap/images/layer_01.png"
+						width="20" height="20"><p>首页</p></a></li>
+				<li><a href="$!webPath/buyer/order.htm"><img
+						src="$!webPath/resources/style/system/front/wap/images/layer_02.png"
+						width="20" height="20"><p>订单</p></a></li>
+				<li><a href="$!webPath/goods_cart1.htm"><img
+						src="$!webPath/resources/style/system/front/wap/images/layer_03.png"
+						width="20" height="20"><p>购物车</p></a></li>
+				<li><a href="$!webPath/buyer/index.htm"><img
+						src="$!webPath/resources/style/system/front/wap/images/layer_04.png"
+						width="20" height="20"><p>用户中心</p></a></li>
+			</ul>
+			<div class="show_bg"></div>
+		</div>
+	</div>

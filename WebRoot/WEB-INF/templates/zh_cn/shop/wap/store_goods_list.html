@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+	<script
+		src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+</head>
+
+<body class="index_bg">
+	<div class="phone_hd">
+		<a class="back" href="javascript:history.go(-1);"><img
+			src="$!webPath/resources/style/system/front/wap/images/back.png"
+			width="25" height="25"></a>商品列表<a class="menu home"
+			href="$!webPath/wap/index.htm"><img
+			src="$!webPath/resources/style/system/front/wap/images/home.png"
+			width="25" height="25"></a>
+	</div>
+	<div class="main">
+		<div class="mt50"></div>
+		
+		<div class="group_list">
+			#foreach($obj in $objs)
+                #if($!obj.goods_main_photo)
+                	#set($img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}")
+                #else
+                	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                #end
+                
+                #set($goods_url="$!webPath/goods_$!{obj.id}.htm")
+                #if($!config.second_domain_open)
+                	#set($goods_url="http://$!{obj.goods_store.store_second_domain}.$!{domainPath}/goods_$!{obj.id}.htm")
+                #end
+			<a href="$!goods_url">
+				<dl>
+					<dt>
+						<img width="90" height="90"
+							src="$!img">
+					</dt>
+					<dd>
+						<h3>
+							<b>$!CommUtil.substring("$!obj.goods_name",25)</b>
+						</h3>
+						<span><strong>¥$!{obj.goods_current_price}</strong></span> <em>0$!{obj.evaluates.size()}人评价，$!{obj.goods_salenum}人已购买</em>
+					</dd>
+				</dl>
+			</a> 
+			#end
+		</div>
+		
+	</div>
+
+
+
+</body>
+</html>

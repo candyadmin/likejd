@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  jQuery("#second_domain_open_status").click(function(){
+     var status=jQuery("#second_domain_open").val();
+	 if(status=="true"){
+	   jQuery("#second_domain_open").val("false");
+	   jQuery("#second_domain_open_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	 }else{
+	   jQuery("#second_domain_open").val("true");
+	   jQuery("#second_domain_open_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	 }
+  });
+  //
+  #if($!config.second_domain_open=="true")
+  jQuery("#second_domain_open_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+  #else
+  jQuery("#second_domain_open_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+  #end
+});
+
+function formSave(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/set_second_domain_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+<input name="id" id="id" type="hidden" value="$!config.id"/>
+<input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/set_second_domain.htm" />
+<input name="op_title" type="hidden" id="op_title" value="二级域名设置成功" />
+<div class="cont">
+  <h1 class="seth1">二级域名设置</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="javascript:void(0);" class="this">二级域名设置</a> </span> <span class="tab-two"></span></div>
+  <div class="setcont">
+   <ul class="set1">
+      <li>是否开启二级域名</li>
+      <li>
+	  <span class="webSwitch"> 
+	  <input name="second_domain_open" id="second_domain_open" type="hidden" value="$!config.second_domain_open" />
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" name="second_domain_open_status" width="61" height="23" id="second_domain_open_status" style="cursor:pointer"/>  
+	  </span> 
+	  <span id="nothis"><strong class="q"></strong><strong class="w">设置是否启用二级域名</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>允许修改次数</li>
+      <li><span class="webname">
+        <input name="domain_allow_count" type="text" id="domain_allow_count" value="$!config.domain_allow_count" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">该数值限制卖家修改店铺二级域名次数</strong><strong class="c"></strong></span></li>
+    </ul>
+    <!--鼠标未经过样式-->
+    <ul class="set1">
+      <li>系统保留二级域名</li>
+      <li><span class="webname">
+        <textarea name="sys_domain" cols="40" rows="10" id="sys_domain" reg="^-?\d+$" tip="端口只能为整数">$!config.sys_domain</textarea>
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">系统保留二级域名，卖家不可使用，一行一个</strong><strong class="c"></strong></span></li>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="提交" onclick="formSave();" style="cursor:pointer;"/>
+  </div>
+</div>
+</form>
+</body>
+</html>

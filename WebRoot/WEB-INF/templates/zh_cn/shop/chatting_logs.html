@@ -1,0 +1,39 @@
+﻿#if($!logs)
+       #foreach($log in $logs)
+<li> #if($!log.user.photo)
+  #set($img="$!webPath/$!log.user.photo.path/$!log.user.photo.name")
+  #else 
+  #set($img="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+  #end
+  <div class="wx_dialog"> #if($!log.user.id!=$!user.id)
+    <div class="you_dialog"> <span><img src="$!img" width="50" height="50" /></span><b>$!log.user.userName&nbsp;&nbsp;&nbsp;&nbsp;$!CommUtil.formatLongDate($!log.addTime)</b>
+      <div class="you_dialog_con"><i></i>
+        <p>$!log.content</p>
+      </div>
+    </div>
+    #else
+    <div class="me_dialog"> <span><img src="$!img" width="50" height="50" /></span><b>$!log.user.userName</b>
+      <div class="me_dialog_con"><i></i>
+        <p>$!log.content</p>
+      </div>
+    </div>
+    #end </div>
+</li>
+#end
+#end
+
+
+
+
+
+#if($!historys)
+<div  class="chatting_history">
+  <ul>
+    #foreach($log in $historys)
+    <li class="me">$!log.user.userName  $!CommUtil.formatLongDate($!log.addTime)</li>
+    <li class="you"><i></i><span>$!log.content</span></li>
+    #end
+  </ul>
+</div>
+<div  class="history_fenye"> <span class="fenye_l">消息记录</span> <span class="fenye_r">$!gotoPageAjaxHTML</span> </div>
+#end 

@@ -1,0 +1,24 @@
+﻿<script>
+function ajaxPage(url,currentPage,obj){
+  var node_id=jQuery(obj).parent().attr("node_id");	
+  jQuery.post(url,{"currentPage":currentPage,"node_id":node_id},
+			      function(data){
+							  jQuery("#"+node_id).empty().append(data);
+							 },"text");
+}
+</script>
+<div class="Day_sp">
+  <ul>
+   #foreach($obj in $objs)
+    #if($!obj.goods_main_photo)               #set($img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+    #else
+       #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+    #end
+    <li class="item" onclick="select_goods(this);" goods_name="$!obj.goods_name"><span><img width="110" height="110" src="$!img" /></span>
+      <p goods_id="$!obj.id"></p>
+      <i>$!CommUtil.substring("$!{obj.goods_name}",15)</i>
+    </li>
+   #end
+  </ul>
+  <div class="Day_fy" node_id="$!node_id">$!gotoPageAjaxHTML</div>
+</div>

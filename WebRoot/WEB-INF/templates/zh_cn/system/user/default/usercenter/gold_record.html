@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>预存款充值  -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+       rules: {
+			gold_payment:{required:true},
+			gold_money:{required:true,digits:true,range:[1,100000]}
+		  },
+	   messages: {
+		    gold_payment:{required:"支付方式不能为空"},
+			gold_money:{required:"兑换金额不能为空",digits:"只接受整数兑换",range:"请输入大于{0}的金额数字"}
+	     }
+  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>  $!httpInclude.include("/seller/nav.htm?op=gold_record")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>金币兑换</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+               <li class="this"><a href='$!webPath/seller/gold_record.htm' >金币兑换</a></li>
+               <li><a href='$!webPath/seller/gold_record_list.htm' >兑换列表</a></li>
+                <li><a href='$!webPath/seller/gold_log.htm'>金币日志</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+                <form action="$!webPath/seller/gold_record_save.htm" method="post" name="theForm" id="theForm">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                    <tr>
+                      <td align="right" valign="top" class="modifysp">兑换比例：</td>
+                      <td  class="px10">1：$!{config.goldMarketValue}[1元兑换$!{config.goldMarketValue}金币]</td>
+                    </tr>
+                    <tr>
+                      <td width="122" align="right" valign="top" class="modifysp"><span>支付方式：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td width="686"  class="px10"><select name="gold_payment" id="gold_payment">
+                          <option value="" selected="selected">请选择支付方式</option>
+                          
+                      #foreach($payment in $payments)
+                      
+                          <option value="$!payment.mark">$!payment.name</option>
+                          
+                      #end
+                    
+                        </select></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>兑换人民币：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td  class="px10"><span class="setinput">
+                        <input name="gold_money" type="text" id="gold_money" />
+                      </span></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>兑换备注：</span></td>
+                      <td  class="px10"><span class="setinput">
+                        <textarea name="gold_exchange_info" cols="40" rows="6" id="gold_exchange_info"></textarea>
+                      请输入汇款信息及其他备注</span></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td class="px10"><span class="setsub">
+                        <input name="" type="submit"  value="提交" style="cursor:pointer;"/>
+                        <input name="gold_session" type="hidden" id="gold_session" value="$!gold_session" />
+                      </span></td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

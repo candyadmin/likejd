@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>组合销售 - $!{config.title} - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=combin")
+        <td id="centerbg" valign="top"><div class="buyer_position">
+            <div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>组合销售</span></div>
+          </div>
+          <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href="$!webPath/seller/combin.htm">组合销售</a></li>
+                <li><a href="$!webPath/seller/combin_buy.htm">套餐购买</a></li>
+                <li><a href="$!webPath/seller/combin_log.htm">套餐购买日志</a></li>
+              </ul>
+              <div class="addnew"> <a href="$!webPath/seller/combin_apply.htm" class="button_common">添加组合销售</a> </div>
+            </div>
+            <div class="ordercon">
+              <form method="post" name="ListForm" id="ListForm">
+                <div class="operation">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                    <tr id="opertitle">
+                      <td width="25%">主体商品</td>
+                      <td width="20%">组合商品</td>
+                      <td width="8%">组合价格</td>
+                      <td width="10%">开始时间</td>
+                      <td width="10%">结束时间</td>
+                      <td width="10%">状态</td>
+                      <td  >操作</td>
+                    </tr>
+                    #foreach($obj in $objs)
+                    <tr >
+                      <td><a href="$!webPath/goods_$!{obj.id}.htm" target="_blank">$!CommUtil.substring("$!obj.goods_name",15)</a></td>
+                      <td><div>
+                          <ul>
+                          #foreach($info in $obj.combin_goods)
+                            <li style="list-style:none;"><a href="$!webPath/goods_$!{info.id}.htm" target="_blank">$!{velocityCount}、$!CommUtil.substring("$!info.goods_name",10)</a></li>
+                           #end
+                          </ul>
+                        </div></td>
+                      <td align="">$!obj.combin_price</td>
+                      <td align="">$!CommUtil.formatShortDate($!obj.combin_begin_time)</td>
+                      <td align="">$!CommUtil.formatShortDate($!obj.combin_end_time)</td>
+                      #if($!obj.combin_status==1)
+                      #set($status="等待审核")
+                      #end
+                      #if($!obj.combin_status==2)
+                      #set($status="审核通过")
+                      #end
+                      #if($!obj.combin_status==-1)
+                      #set($status="审核拒绝")
+                      #end
+                      <td>$!status</td>
+                      <td> #if($!obj.combin_status==1) <a href="$!webPath/seller/combin_edit.htm?id=$!obj.id">编辑</a> #end
+                        #if($!obj.combin_status!=2) <a href="javascript:void(0);" onclick="if(confirm('删除后不可回复，是否继续?'))window.location.href='$!webPath/seller/combin_del.htm?mulitId=$!{obj.id}&currentPage=$!currentPage'">删除</a> #end </td>
+                    </tr>
+                    #end
+                  </table>
+                </div>
+                <div class="alldel">
+                  <div  class="userfenye">
+                    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                    $!gotoPageFormHTML</div>
+                </div>
+              </form>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

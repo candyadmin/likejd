@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>天天特价 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script type="text/javascript">
+//向前count天 向后count天
+function before_set(count,date){
+   jQuery.post("$!webPath/admin/date_query_set.htm",{"count":count,"date":date},function(data){
+	 jQuery("#the_day").html(data);
+   });
+}
+</script> 
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=bargain")
+        <td id="centerbg" valign="top">
+            <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>天天特价</span></div></div>
+           <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href="$!webPath/seller/bargain.htm">特价列表</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <form method="post" name="ListForm" id="ListForm">
+                <div class="operation">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                    <tr id="opertitle">
+                      <td width="139">特价时间</td>
+                      <td width="128">申请限制</td>
+                      <td width="128">通过审核数</td>
+                      <td width="128">商品折扣率</td>
+                      <td width="125" align="left" style="padding-left:30px;">操作</td>
+                    </tr>
+                    #foreach($date in $dates)
+                    <tr >
+                      <td>$!CommUtil.formatShortDate($!date)</td>
+                      <td>$!bargainSellerTools.query_bargain_maximum($!date)</td>
+                      <td>$!bargainSellerTools.query_bargain_audit($!date)</td>
+                      <td>$!bargainSellerTools.query_bargain_rebate($!date)折</td>
+                      <td align=""><a href="$!webPath/seller/bargain_apply.htm?bargain_time=$!CommUtil.formatShortDate($!date)">参加特价</a> <a href="$!webPath/seller/bargain_goods_list.htm?bargain_time=$!CommUtil.formatShortDate($!date)">特价商品</a></td>
+                    </tr>
+                    #end
+                  </table>
+                </div>
+              </form>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

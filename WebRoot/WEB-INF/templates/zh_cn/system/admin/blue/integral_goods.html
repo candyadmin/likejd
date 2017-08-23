@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">积分商城</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/integral_goods.htm"  class="this">礼品列表</a> | <a href="$!webPath/admin/integral_goods_add.htm">新增礼品</a> | <a href="$!webPath/admin/integral_order.htm">兑换列表</a> </span> <span class="tab-two"></span></div>
+  <form method="post" id="queryForm">
+  <div class="allpro_search">
+    <ul>
+      <li> <span>礼品名称</span><span class="allpro size3">
+        <input name="ig_goods_name" type="text" id="ig_goods_name" />
+        </span> <span>
+        <select name="ig_show" id="ig_show">
+          <option value="">状态</option>
+          <option value="true">上架</option>
+          <option value="false">下架</option>
+        </select>
+        </span> <span class="btn_search">
+        <input name="" type="submit"  value="搜索" style="cursor:pointer;" />
+        </span> </li>
+    </ul>
+  </div>
+  </form>
+  <form method="post" id="ListForm" name="ListForm">
+  <div class="allpro_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="5%">&nbsp;</td>
+        <td width="15%">礼品名称</td>
+        <td width="8%" align="center">礼品编号</td>
+        <td width="8%" align="center">兑换积分</td>
+        <td width="8%" align="center">礼品原价</td>
+        <td width="8%" align="center">库存</td>
+        <td width="8%" align="center">浏览</td>
+        <td width="8%" align="center">兑出</td>
+        <td width="8%" align="center">上架</td>
+        <td width="8%" align="center">推荐</td>
+        <td  align="center">操作</td>
+      </tr>
+      #foreach($obj in $objs)
+      <tr>
+        <td><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+        <td><a href="$!webPath/integral_view_$!{obj.id}.htm" target="_blank">$!{obj.ig_goods_name}</a></td>
+        <td align="center">$!{obj.ig_goods_sn}</td>
+        <td align="center">$!{obj.ig_goods_integral}</td>
+        <td align="center">$!{obj.ig_goods_price}</td>
+        <td align="center">$!{obj.ig_goods_count}</td>
+        <td align="center">$!{obj.ig_click_count}</td>
+        <td align="center">$!{obj.ig_exchange_count}</td>
+        <td align="center"><img src="$!webPath/resources/style/system/manage/blue/images/$!{obj.ig_show}.png" width="21" height="23" /></td>
+        <td align="center"><img src="$!webPath/resources/style/system/manage/blue/images/$!{obj.ig_recommend}.png" width="21" height="23" /></td>
+        <td align="center"  class="blue xiahua"><a href="$!webPath/admin/integral_goods_edit.htm?id=$!obj.id&currentPage=$!currentPage">编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="">删除</a></td>
+      </tr>
+      #end
+      <tr style="background:#F2F2F2; height:30px;">
+        <td colspan="11"><div class="shopbtn shopfx">
+            <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+            &nbsp;&nbsp;全部</div>
+          <div class="shop_btn_del shopbtn">
+            <input name="" type="button" value="删除" onclick="cmd('$!webPath/admin/integral_goods_del.htm');" style="cursor:pointer;"/>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  <div class="fenye">
+    <input name="ig_show" type="hidden" id="ig_show" value="$!ig_show" />
+    <input name="ig_goods_name" type="hidden" id="ig_goods_name" value="$!ig_goods_name" />
+<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input type="hidden" name="mulitId" id="mulitId" />
+    $!gotoPageFormHTML</div>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>广告申请  -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+       rules: {
+			month:{
+				   required:true,
+				   digits:true,
+			       remote:{
+                           url:"$!webPath/seller/advert_vefity.htm", 
+                           type:"post",
+                           dataType:"json",
+                           data: {month:function(){return jQuery("#month").val();},ap_id:"$!ap.id"}
+				          }
+				   }
+		  },
+	   messages: {
+			month:{required:"延时时间不能为空",digits:"延时时间只能为整数",remote:"您的金币不够,无法购买"}
+	     }
+  });
+  jQuery('#ad_begin_time').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true,
+	  minDate:0, maxDate: "+5D", 
+  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=advert")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>广告延时</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li><a href='$!webPath/seller/advert_list.htm' >广告列表</a></li>
+                <li><a href='$!webPath/seller/advert_my.htm' >我的广告</a></li>
+                <li class="this">广告延时</li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+                <form action="$!webPath/seller/advert_delay_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>广告名称：</span></td>
+                      <td  class="px10">$!obj.ad_title</td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>所属广告位：</span></td>
+                      <td  class="px10">$!ap.ap_title</td>
+                    </tr>
+                    <tr>
+                      <td width="122" align="right" valign="top" class="modifysp"><span>广告类型：</span></td>
+                      #if($!ap.ap_type=="img")
+                      #set($type="图片")
+                      #end
+                      #if($!ap.ap_type=="scroll")
+                      #set($type="滚动")
+                      #end
+                      #if($!ap.ap_type=="slide")
+                      #set($type="幻灯")
+                      #end
+                      #if($!ap.ap_type=="wapslide")
+                      #set($type="wap幻灯")
+                      #end
+                      #if($!ap.ap_type=="indexslide")
+                      #set($type="首页幻灯")
+                      #end
+                      #if($!ap.ap_type=="text")
+                      #set($type="文字")
+                      #end
+                      <td width="686"  class="px10">$!type</td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>广告价格：</span></td>
+                      <td  class="px10">$!{ap.ap_price}金币/月</td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>我的金币：</span></td>
+                      <td  class="px10"><span style="color:#F00;">$!{user.gold}金币</span></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>开始时间：</span></td>
+                      <td  class="px10"><span class="setinput"> $!obj.ad_begin_time </span></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>结束时间：</span></td>
+                      <td  class="px10"><span class="setinput"> $!obj.ad_end_time </span></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>延时月份：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td  class="px10"><span class="setinput">
+                        <input name="month" type="text" id="month" />
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td class="px10"><span class="setsub">
+                        <input name="" type="submit"  value="提交" style="cursor:pointer;"/>
+                        <input name="delay_session" type="hidden" id="delay_session" value="$!delay_session" />
+                        <input name="id" type="hidden" id="id" value="$!obj.id" />
+                        </span></td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+	  name:{
+	    required :true,
+	     remote:{
+		    url: "$!webPath/admin/goods_type_verify.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "name": function(){return jQuery("#name").val();},
+				  "id":function(){return jQuery("#id").val()}
+		     }
+			}
+	  }
+	 },
+	messages:{
+	  name:{required:"类型名称不能为空",remote:"该类型已经存在"}
+	}
+  });
+});
+function saveForm(){
+  var gss="";
+  var gbs="";
+  jQuery(":checkbox:checked[id^='gs_']").each(function(){
+    gss=gss+","+jQuery(this).val();
+  });
+  jQuery(":checkbox:checked[id^='gb_']").each(function(){
+    gbs=gbs+","+jQuery(this).val();
+  });
+  jQuery("#spec_ids").val(gss);
+  jQuery("#brand_ids").val(gbs);
+  jQuery("#count").val(count);
+  jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form name="theForm" id="theForm" action="$!webPath/admin/goods_type_save.htm" method="post">
+  <input name="id" id="id" type="hidden" value="$!obj.id"/>
+  <input name="cmd" id="cmd" type="hidden"/>
+  <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/goods_type_add.htm" />
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/goods_type_list.htm" />
+  <input name="spec_ids" type="hidden" id="spec_ids" />
+  <input name="brand_ids" type="hidden" id="brand_ids" />
+  <input name="count" type="hidden" id="count" />
+  <div class="cont">
+    <h1 class="seth1">类型管理</h1>
+    <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/goods_type_list.htm">列表</a> | <a href="$!webPath/admin/goods_type_add.htm" #if(!$!edit)class="this"#end>新增</a> #if($!edit)
+	   <a href="javascript:void(0);" class="this">编辑</a>
+	   #end</span> <span class="tab-two"></span></div>
+    <div class="edit">
+      <div class="editul ">
+        <ul>
+          <li><strong style="color:#FF0000; font-size:16px; vertical-align:middle;">*</strong>类型名称</li>
+          <li><span class="pxnum">
+            <input name="name" type="text" id="name" value="$!obj.name" />
+            </span></li>
+        </ul>
+        <ul class="set3">
+          <li>排序</li>
+          <li><span class="pxnum">
+            <input name="sequence" type="text" id="sequence" value="$!obj.sequence"/>
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">请填写整数。类型列表将会根据排序进行由小到大排列显示。</strong><strong class="c"></strong></span></li>
+        </ul>
+      </div>
+      <div class="specification">
+        <h2>选择关联规格</h2>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spe_table">
+          <tr>
+            <td width="30">&nbsp;</td>
+            <td width="150"><strong>规格名称</strong></td>
+            <td><strong>规格值</strong></td>
+          </tr>
+          #foreach($gs in $gss)
+          <tr> #set($ret=0)
+            #foreach($info in $obj.gss)
+            #if($info.id==$!gs.id)
+            #set($ret=1)
+            #end
+            #end
+            <td align="center"><input name="gs_$!{gs.id}" type="checkbox" id="gs_$!{gs.id}" value="$!gs.id" #if($!ret==1)checked="checked"#end />
+            </td>
+            <td>$!gs.name</td>
+            <td>$!shopTools.genericProperty($!gs)</td>
+          </tr>
+          #end
+        </table>
+      </div>
+      <div class="specification">
+        <h2>选择关联品牌</h2>
+        #foreach($gbc in $gbcs)
+        <ul class="spec_sports">
+          <h3>$!gbc.name</h3>
+          #foreach($gb in $gbc.brands)
+          #set($ret=0)
+          #foreach($info in $obj.gbs)
+          #if($!info.id==$!gb.id)
+          #set($ret=1)
+          #end
+          #end
+          <li> <span class="span1">
+            <input name="gb_$!{gb.id}" type="checkbox" id="gb_$!{gb.id}" value="$!gb.id" #if($!ret==1) checked="checked"#end/>　
+            $!gb.name
+            </span> </li>
+          #end
+        </ul>
+        #end </div>
+      <div class="specification">
+        <h2>新增属性</h2>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="addsx_table">
+          <tr id="goods_type_property_">
+            <td width="70"><strong>排序</strong></td>
+            <td width="270"><strong>属性名称</strong></td>
+            <td width="270"><strong>属性可选值(多个属性值用“,”分割)</strong></td>
+            <td width="100"><strong>显示</strong></td>
+            <td width="100"><strong>操作</strong></td>
+          </tr>
+          #if($!obj)
+          #foreach($gtp in $obj.properties)
+          <tr id="goods_type_property_">
+            <td><span class="pxnum size5">
+              <input name="gtp_sequence_$!velocityCount" type="text" id="gtp_sequence_$!velocityCount" value="$!gtp.sequence"/>
+              <input name="gtp_id_$!velocityCount" type="hidden" id="gtp_id_$!velocityCount" value="$!gtp.id" />
+              </span></td>
+            <td><span class="pxnum size7">
+              <input name="gtp_name_$!velocityCount" type="text" id="gtp_name_$!velocityCount" value="$!gtp.name"/>
+              </span></td>
+            <td><span class="pxnum size7">
+              <input name="gtp_value_$!velocityCount" type="text" id="gtp_value_$!velocityCount" value="$!gtp.value"/>
+              </span></td>
+            <td><input name="gtp_display_$!velocityCount" type="checkbox" id="gtp_display_$!velocityCount" value="true" #if($!gtp.display==true)checked="checked"#end /></td>
+            <td class="ac8"><a href="javascript:void(0);" onclick="remove_gtp(this.parentNode.parentNode,'$!gtp.id')">删除</a></td>
+          </tr>
+          #end
+          #else
+          <tr id="goods_type_property_">
+            <td><span class="pxnum size5">
+              <input name="gtp_sequence_1" type="text" id="gtp_sequence_1" />
+              </span></td>
+            <td><span class="pxnum size7">
+              <input name="gtp_name_1" type="text" id="gtp_name_1" />
+              </span></td>
+            <td><span class="pxnum size7">
+              <input name="gtp_value_1" type="text" id="gtp_value_1" />
+              </span></td>
+            <td><input name="gtp_display_1" type="checkbox" id="gtp_display_1" value="true" checked="checked" /></td>
+            <td class="ac8"><a href="javascript:void(0);" onclick="remove_gtp(this.parentNode.parentNode,'')">删除</a></td>
+          </tr>
+          #end
+          <tr>
+            <td colspan="2"><span class="newclass"><a href="javascript:void(0);" onclick="add_gtp();">新增一个属性</a></span></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+      </div>
+      <script>
+	  #if($!obj&&$!obj.properties.size()>1)
+	  var count=$!obj.properties.size();
+	  #else
+	  var count=1;
+	  #end
+	   function remove_gtp(obj,id){
+	     jQuery.post("$!webPath/admin/goods_type_property_delete.htm",{"id":id},function(data){
+            if(data=="true"){
+	          jQuery(obj).remove();
+              count--;
+	        }else alert("规格值删除失败！");
+          },"text");
+	   }
+	   function add_gtp(){
+	     count++;
+	     var gtp="<tr id='goods_type_property_'> <td><span class='pxnum size5'><input name='gtp_sequence_count' type='text' id='gtp_sequence_count' /></span></td><td><span class='pxnum size7'><input name='gtp_name_count' type='text' id='gtp_name_count' /></span></td><td><span class='pxnum size7'><input name='gtp_value_count' type='text' id='gtp_value_count' /></span></td><td><input name='gtp_display_count' type='checkbox' checked='checked' id='gtp_display_count' value='true' /></td><td class='ac8'><a href='javascript:void(0);' onclick='remove_gtp(this.parentNode.parentNode,\"\")'>删除</a></td></tr>";		 
+		 jQuery("tr[id^=goods_type_property_]:last").after(gtp.replace(/count/g,count));
+	   }
+	  </script>
+    </div>
+    <div class="submit">
+      <input name="" type="button" value="提交" onclick="saveForm();"/>
+    </div>
+  </div>
+</form>
+</body>
+</html>

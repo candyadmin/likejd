@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!store.store_name - $!config.title - Powered by shopping</title>
+<meta name="keywords" content="$!store.store_seo_keywords" />
+<meta name="description" content="$!store.store_seo_description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/shop/$!{store.template}/css/default.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery(".smallgoods .goodsimgs img").lazyload({effect:"fadeIn",width:178,height:170});
+  jQuery(".brand_sort a").removeClass("this");
+  jQuery(".brand_sort a i").removeClass().css("padding-right","0px");
+  jQuery(".brand_sort a[id=$!orderBy]").addClass("this");
+  jQuery(".brand_sort a[id=$!orderBy]").attr("orderType","$!orderType");
+  #if($!orderType=="asc")
+    jQuery(".brand_sort a[id=$!orderBy] i").css("padding-right","10px").addClass("sort_b");
+  #end
+  #if($!orderType=="desc")
+    jQuery(".brand_sort a[id=$!orderBy] i").css("padding-right","10px").addClass("sort_a");
+  #end 
+  jQuery(".brand_sort a").click(function(){
+    var orderBy=jQuery(this).attr("id");
+	var orderType=jQuery(this).attr("orderType");
+	if(orderType=="asc"){
+	  orderType="desc";
+	}else orderType="asc";
+	jQuery("#orderBy").val(orderBy);
+	jQuery("#orderType").val(orderType);
+	jQuery("#ListForm").submit();
+  });
+});
+function query_price(){
+  var store_price_begin=jQuery("#store_price_begin").val();
+  var store_price_end=jQuery("#store_price_end").val();
+  jQuery("#begin_price").val(store_price_begin);
+  jQuery("#end_price").val(store_price_end);
+  jQuery("#ListForm").submit();
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm") 
+$!httpInclude.include("/store_head.htm?store_id=$!{store.id}")
+  #set($banner="$!webPath/resources/style/shop/$!{store.template}/images/banner.jpg")
+  #if($!store.store_banner)
+    #set($banner="$!webPath/$!store.store_banner.path/$!store.store_banner.name")
+  #end
+<div class="banner_width">
+  <div class="shopbanner"><img src="$!banner"  width="1002" /></div>
+</div>
+<div class="nav_width">
+  <div class="main">
+  <div class="nav_bg">
+    <div class="shopnav"> $!httpInclude.include("/store_nav.htm?id=$!store.id&goods_list=true")
+      <div class="shopnavs"></div>
+    </div>
+    </div>
+  </div>
+  <div class="navbotm"></div>
+</div>
+<div class="main">
+  <div class="shop">
+    <div class="shop_index"> $!httpInclude.include("/store_left.htm?id=$!store.id")
+      <div class="shopindex_right">
+        <div class="regoods"> #if($!ugc)#set($title="$!ugc.className")#end
+          #if($!recommend=="true")#set($title="推荐商品")#end
+          <h1><span>$!title</span></h1>
+          <div class="brand_ser">
+            <div class="brand_serin"><span class="brand_px"><b>排序：</b>
+              <div class="brand_sort"> <a href="javascript:void(0);" class="this" id="addTime"> <i class="sort_a">默认</i> </a> <a href="javascript:void(0);" id="store_price"><i>价格</i></a> <a href="javascript:void(0);" id="goods_salenum"><i>销量</i></a> <a href="javascript:void(0);" id="goods_click"><i>人气</i></a> </div>
+              </span><span class="brand_money"><i>价格：</i><b class="bran_int">
+              <input name="store_price_begin" id="store_price_begin" type="text" />
+              </b><b>~</b><b class="bran_int">
+              <input name="store_price_end" id="store_price_end" type="text" />
+              </b><b class="bran_btn">
+              <input name="input" value="提交" style="cursor:pointer;" type="button" id="input" onclick="query_price();" />
+              </b></span>
+              </div>
+          </div>
+          #if($!objs)
+          <form action="$!webPath/goods_list.htm" method="post" id="ListForm">
+            <div class="smallgoods"> #foreach($goods in $objs)
+              #if($!goods.goods_main_photo)
+              #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}")
+              #else
+              #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+              #end
+              <ul>
+                <li class="goodsimgs"><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank"><span class="goods_sp_span">
+                  <p><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28"/></p>
+                </span></a></li>
+                <li class="goodslook"><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank" class="look">查看详情</a><strong>¥$!goods.store_price</strong></li>
+                <li class="goodsnames">
+                <a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!CommUtil.substring("$!goods.goods_name",22)</a>
+                #if($!goods.group_buy==2)<span style="padding:3px 3px;color:#FFF;background:#F00">团购</span>#end
+                #if($!goods.activity_status==2)<span style="padding:3px 3px;color:#FFF;background:#F00">活动</span>#end
+                #if($!goods.bargain_status==2)<span style="padding:3px 3px;color:#FFF;background:#F00">特价</span>#end
+                #if($!goods.combin_status==2)<span style="padding:3px 3px;color:#FFF;background:#F00">组合</span>#end
+                #if($!goods.delivery_status==2)<span style="padding:3px 3px;color:#FFF;background:#F00">买就送</span>#end
+                </li>
+                <li class="recentgoodsok">最近成交<strong>$!goods.goods_salenum</strong>笔</li>
+              </ul>
+              #end </div>
+            <div class="shop_page"><span>
+              <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+              <input name="orderType" type="hidden" id="orderType" value="$!orderType" />
+              <input name="store_id" type="hidden" id="store_id" value="$!store.id" />
+              <input name="gc_id" type="hidden" id="gc_id" value="$!ugc.id" />
+              <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+              <input name="recommend" type="hidden" id="recommend" value="$!recommend" />
+              <input name="begin_price" type="hidden" id="begin_price" value="$!begin_price" />
+              <input name="end_price" type="hidden" id="end_price" value="$!end_price" />
+              $!gotoPageFormHTML</span> </div>
+          </form>
+          #else
+          <div class="sigh"> <span><img src="$!imageWebServer/resources/style/system/front/default/images/sigh.png" width="120" height="109" /></span> <b>对不起，没有对应商品信息！</b> </div>
+        </div>
+        #end </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+   <!--店铺二维码-->
+ #if($!store.weixin_qr_img)
+ <script>
+ jQuery(document).ready(function(e) {
+    jQuery(".ewm_close").click(function(){
+		jQuery(this).parent().hide();
+		});
+});
+ </script>
+<div class="shop_erweiwrap">
+<a class="ewm_close" href="javascript:void(0);"><img src="$!webPath/resources/style/system/front/default/images/ewm_close.jpg" /></a>
+</div>
+#end
+</body>
+</html>

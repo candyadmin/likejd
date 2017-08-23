@@ -1,0 +1,37 @@
+<script>
+		jQuery("tr[id^=table_tr_]").click(function(){
+		jQuery("td[id^=td_]").removeClass("oppertrsp opertable_store_list_td2").addClass("oppertrsp opertable_store_list_td1");	
+		 var id = jQuery(this).attr("tr_id");
+		 var goods_id = jQuery(this).attr("goods_id");
+		 jQuery("#td_"+id).removeClass("oppertrsp opertable_store_list_td1").addClass("oppertrsp opertable_store_list_td2");
+		 jQuery("span[id^=span_]").hide();
+		 jQuery("#span_"+id).show();
+		 jQuery("#goods_id").val(goods_id);
+		});
+</script>		
+
+<table width="450" border="0" cellspacing="0" cellpadding="0" class="opertable_store_list" >
+                        #foreach($obj in $objs)
+                        <tr style="cursor:pointer;" tr_id="$!obj.id" goods_id="$!obj.goods.id" id="table_tr_$!obj.id">
+                          <td class="#if($!velocityCount==1)oppertrsp opertable_store_list_td2 #else oppertrsp opertable_store_list_td1 #end"    id="td_$!{obj.id}">
+                          <span class="oppersp2">
+                            #set($goods_logo="$!webPath/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}")
+							 <img src="$!goods_logo" width="50" height="50" /></span>
+                            #if($!velocityCount==1)
+                            <input id="goods_id" type="hidden" name="goods_id" value="$!obj.goods.id"/>
+                            #end
+                            <span style="margin-top:18px;">$!CommUtil.substring("$!obj.goods.goods_name",18)</span>   
+                            <span id="span_$!obj.id" goods_id="$!obj.id" style="font-size:18px; color: #FC3; float:right; margin-right:30px; margin-top:10px;#if($!velocityCount!=1)display:none#end">
+                             <img src="$!webPath/resources/style/common/images/icon/succeed.png"/>
+                             </span>
+                           </td>
+                           
+                        </tr>
+                        
+                        #end
+                        <tr>
+                        <td style="text-align:center; height:20px; line-height:20px; clear:both; padding-bottom:10px; padding-top:5px;">
+                           	$!gotoPageAjaxHTML
+                           </td>
+                        </tr>
+    </table>

@@ -1,0 +1,60 @@
+<script>
+jQuery(document).ready(function(){
+  jQuery(":radio").click(function(){
+     if(jQuery(this).val()=="user"){
+	   jQuery("li[id^=user_adv_]").show();
+	   jQuery("#shop_adv").hide();
+	 }else{
+	   jQuery("li[id^=user_adv_]").hide();
+	   jQuery("#shop_adv").show();	 
+	 }
+  });
+  jQuery("#img").change(function(){
+     jQuery("#file_val").val(jQuery(this).val());
+  });
+});
+</script>
+<form action="$!webPath/admin/goods_floor_left_adv_save.htm" method="post" enctype="multipart/form-data" id="theForm">
+<div class="box_floor">
+  <div class="floor_advertisment"> <em class="floor_warning">注释：可以上传广告图片也可以使用商城广告</em>
+    <ul class="floor_adv">
+      <li>
+       <b>
+       <input name="id" type="hidden" id="id" value="$!obj.id">
+       选择类型：</b> 
+      <span class="floor_adv_sp">
+      <i><input name="type" type="radio" id="type" value="user" checked="checked" />图片上传</i>
+      <i><input name="type" type="radio" id="type" value="adv" />商城广告</i>
+      </span> 
+      </li>
+      <li id="user_adv_img"> 
+      <b>广告图片上传：</b> 
+      <span class="floor_adv_sp">
+        <input name="file_val"  type="text" class="floor_file_txt" id="file_val" />
+        <input name="button" type="button" class="floor_file_btn" value=""/>
+        <input  type="file"  size="33" class="flooor_file" id="img" name="img"/>
+        </span>
+        <i class="floor_adv_i">建议上传193*193像素图片</i> 
+      </li>
+      <li id="user_adv_url"> <b>广告链接：</b>
+       <span class="floor_adv_sp">
+        <input name="adv_url" type="text"class="floor_file_txt2" id="adv_url" />
+        </span>
+      </li>
+       <li id="shop_adv" style="display:none;"> <b>广告选择：</b>
+       <span class="floor_adv_sp">
+       <select name="adv_id" id="adv_id">
+       #foreach($ap in $aps)
+       <option value="$!ap.id">$!{ap.ap_title}</option>
+       #end
+       </select>
+        </span>
+        <i class="floor_adv_i">仅支持193*193图片广告位</i> 
+      </li>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="" type="submit" value="提交" />
+  </div>
+</div>
+</form>

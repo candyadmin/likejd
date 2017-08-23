@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+function dele(obj){
+	if(obj=="$!{album.album_cover.id}"){
+		alert("封面不可删除！");
+	}else{
+		if(confirm("确定要执行该操作？")){
+		window.location.href="$!webPath/admin/user_pic_del.htm?mulitId="+obj+"&aid=$!{album.id}&currentPage=$!currentPage";
+		}	
+	}
+
+	}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">图片管理</h1>
+  <div class="settab"><span class="tab1"></span> <span class="tabs"> <a href="$!webPath/admin/user_photo_list.htm">相册列表</a> | <a href="javascript:void(0);" class="this" >图片列表</a> </span> <span class="tab2"></span></div>
+  <div class="pic_allset">
+    <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+    <em> <label  for="all" >全部</label></em> &nbsp;&nbsp;
+    <a href="javascript:void(0);" onclick="cmd('$!webPath/admin/user_pic_del.htm');">删除</a> 
+    </div>
+  <form id="ListForm" name="ListForm" action="$!webPath/admin/user_pic_list.htm" method="post">
+    <input id="aid" name="aid" value="$!{album.id}" type="hidden"/>
+    <input id="currentPage" name="currentPage" value="$!currentPage" type="hidden"/>
+    <input type="hidden" name="mulitId" id="mulitId" />
+    <div class="allshop_ul">
+      <ul>
+        #foreach($obj in $objs)
+        <li class="allshop_td"> <span class="span_pic"> <a href="$!webPath/$!obj.path/$!obj.name" title="点击查看原图"  target="_blank"> <img src="$!webPath/$!obj.path/$!obj.name" width="80" height="80" /> </a> </span> <span class="span_set">
+          <input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" />
+          <a href="javascript:void(0);"  onclick="dele('$!obj.id')">删除</a></span> </li>
+        #end
+      </ul>
+    </div>
+    <div class="fenye3">$!gotoPageFormHTML</div>
+  </form>
+</div>
+</body>
+</html>

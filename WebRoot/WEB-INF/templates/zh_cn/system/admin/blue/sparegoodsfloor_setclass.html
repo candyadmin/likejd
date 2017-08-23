@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/sparegoodsfloor_class_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 } 
+				  if(data=="true"){
+					jQuery("#td_switch_"+id).find("a").html("隐藏"); 
+				   }else{
+					 jQuery("#td_switch_"+id).find("a").html("显示"); 					 
+				   }
+              }
+	    });
+}
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">商品楼层分类设置</h1>
+  <div class="settab"> 
+  <span class="tab-one"></span> <span class="tabs"> 
+  <a href="javascript:void(0);"  class="this">楼层分类设置</a> </span> <span class="tab-two"></span> </div>
+  <form name="ListForm" id="ListForm" action="$!webPath/admin/sparegoodsfloor_setclass.htm" method="post">
+    <div class="brandtable">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="brand_table">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="6%"></td>
+          <td width="40%">分类名称</td>
+          <td width="15%" align="center">分类层级</td>
+          <td width="20%" align="center">状态</td>
+          <td align="center">操作</td>
+        </tr>
+        #foreach($obj in $objs)
+        <tr style="height:40px;">
+          <td align="center"><input type="checkbox" name="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td>$!obj.className</td>
+          <td align="center">$!obj.level级分类</td>
+          <td class="ac8" align="center">  <img  onclick="ajax_update('$!obj.id','viewInFloor',this)" src="$!webPath/resources/style/system/manage/blue/images/$!{obj.viewInFloor}.png" width="25" height="21" border="0" style="cursor:pointer;" title="可编辑"/></td>
+          <td align="center"  id="td_switch_$!obj.id">#if($!obj.viewInFloor==true)<a href="javascript:void(0);" onclick="if(confirm('是否在楼层中隐藏该分类?'))window.location.href='$!webPath/admin/sparegoodsfloor_setclass_switch.htm?mulitId=$!obj.id&fid=$!fid&type=hide&currentPage=$!currentPage'">隐藏</a>#end #if($!obj.viewInFloor==false)<a href="javascript:void(0);" onclick="if(confirm('是否在楼层中显示该分类?'))window.location.href='$!webPath/admin/sparegoodsfloor_setclass_switch.htm?mulitId=$!obj.id&fid=$!fid&type=show&currentPage=$!currentPage'">显示</a> #end</td>
+        </tr>
+        #end
+        <tr style="background:#F2F2F2; height:30px;">
+          <td align="center"><input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/></td>
+          <td colspan="2" class="bdel"><span class="sp1">
+            <label for="all">全部</label>
+            </span> <span class="sp2">
+            <div class="shop_btn_del shopbtn">
+              <input name="" type="button" style="cursor:pointer;" value="显示" onclick="cmd('$!webPath/admin/sparegoodsfloor_setclass_switch.htm?cid=$!id&type=show');"/>
+            </div>
+            </span> <span class="sp2">
+            <div class="shop_btn_del shopbtn">
+              <input name="" type="button" style="cursor:pointer;" value="不显示" onclick="cmd('$!webPath/admin/sparegoodsfloor_setclass_switch.htm?cid=$!id&type=hide');"/>
+            </div>
+            </span></td>
+          <td colspan="4"></td>
+        </tr>
+      </table>
+      <div class="fenye" align="right" id="queryCondition">
+       <input name="fid" id="fid" type="hidden"  value="$!fid"  />
+        <input name="mulitId" type="hidden" id="mulitId" />
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

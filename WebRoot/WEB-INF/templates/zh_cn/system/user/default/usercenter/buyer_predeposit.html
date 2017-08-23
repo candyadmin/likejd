@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>预存款充值  -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+       rules: {
+			pd_payment:{required:true},
+			pd_amount:{required:true,range:[0.01,1000000000]},
+			pd_remittance_user:{required:true},
+			pd_remittance_bank:{required:true},
+			pd_remittance_time:{required:true}
+		  },
+	   messages: {
+		    pd_payment:{required:"支付方式不能为空"},
+			pd_amount:{required:"充值金额不能为空",range:"请输入大于{0}的金额数字"},
+			pd_remittance_user:{required:"汇款人不能为空"},
+			pd_remittance_bank:{required:"汇款银行不能为空"},
+			pd_remittance_time:{required:"汇款时间不能为空"}
+	     }
+  });
+  //
+ jQuery('#pd_remittance_time').datepicker({
+        dateFormat:"yy-mm-dd",
+		yearRange:"1950:2020",
+		changeMonth: true,
+		changeYear: true
+  });
+ //
+ jQuery("#pd_payment").change(function(){
+    var val=jQuery(this).val();
+	if(val=="outline"){
+	  jQuery("tr[id^=pd_remittance_]").show();
+	  jQuery("tr[id^=pd_remittance_] input").show();
+	}else{
+	  jQuery("tr[id^=pd_remittance_]").hide();
+	   jQuery("tr[id^=pd_remittance_] input").hide();
+	}
+  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/buyer/account_nav.htm?op=predeposit")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">我的账户</a> > <span>账户充值</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href='$!webPath/buyer/predeposit.htm' >账户充值</a></li>
+                <li><a href='$!webPath/buyer/predeposit_list.htm'>充值列表</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+                <form action="$!webPath/buyer/predeposit_save.htm" method="post" name="theForm" id="theForm">
+                  <table width="705" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                    <tr>
+                      <td width="102" align="right" valign="top" class="modifysp"><span>支付方式：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td width="603"  class="px10"><select name="pd_payment" id="pd_payment">
+                          <option value="" selected="selected">请选择支付方式</option>
+                          
+                      #foreach($payment in $payments)
+                      
+                          <option value="$!payment.mark">$!payment.name</option>
+                          
+                      #end
+                    
+                        </select></td>
+                    </tr>
+                    <tr>
+                      <td width="102" align="right" valign="top" class="modifysp"><span>支付金额：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td  class="px10"><span class="setinput">
+                        <input name="pd_amount" type="text" id="pd_amount"  />
+                        </span></td>
+                    </tr>
+                    <tr id="pd_remittance_user_tr" style="display:none;">
+                      <td align="right" valign="top" class="modifysp"><span>汇款人姓名：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td  class="px10"><span class="setinput">
+                        
+                        <input name="pd_remittance_user" type="text" id="pd_remittance_user" style="display:none;" />
+                      </span></td>
+                    </tr>
+                   <tr id="pd_remittance_bank_tr" style="display:none;">
+                      <td align="right" valign="top" class="modifysp"><span>汇款银行：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td  class="px10"><span class="setinput"><input name="pd_remittance_bank" type="text" id="pd_remittance_bank" style="display:none;" /></span></td>
+                    </tr>
+                    <tr id="pd_remittance_time_tr" style="display:none;">
+                      <td align="right" valign="top" class="modifysp"><span>汇款日期：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td  class="px10"><span class="setinput">
+                        <input name="pd_remittance_time" type="text" id="pd_remittance_time" readonly="readonly" style="display:none;" />
+                      </span></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>支付备注：</span></td>
+                      <td  class="px10"><span class="setinput">
+                        <textarea name="pd_remittance_info" cols="40" rows="6" id="pd_remittance_info"></textarea>
+                      </span></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td class="px10"><span class="setsub">
+                        <input name="" type="submit"  value="提交" style="cursor:pointer;"/>
+                        </span></td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

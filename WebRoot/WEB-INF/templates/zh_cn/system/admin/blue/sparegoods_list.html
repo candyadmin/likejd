@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/sparegoods_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){ 
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">闲置商品</h1>
+  <div class="settab"> 
+	<span class="tab-one"></span> <span class="tabs"> 
+	<a href="$!webPath/admin/sparegoods_list.htm" #if(!$!type) class="this" #end>管理</a> | 
+    <a href="$!webPath/admin/sparegoods_list.htm?type=-1" #if($!type==-1) class="this" #end>违规下架</a>
+	</span> 
+	<span class="tab-two"></span>	</div>
+	
+  
+  <form name="ListForm" id="ListForm" action="$!webPath/admin/sparegoods_list.htm" method="post">
+    <div class="brandtable">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="brand_table">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="45">&nbsp;</td>
+          <td width="65" align="center">图片</td>
+          <td width="600">闲置商品标题</td>
+          <td width="90" align="center">分类</td>
+          #if(!$!type)
+          <td width="55" align="center">推荐</td>
+          #end
+          <td width="95" align="center">商品状态</td>
+          <td  align="center">操作</td>
+        </tr>
+        #foreach($obj in $objs)
+            #if($!obj.down==-1)
+            #set($down = "卖家已下架")
+            #end
+            #if($!obj.down==0)
+            #set($down = "上架")
+            #end
+        <tr>
+          <td align="center"><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td align="center"><a href="$!webPath/sparegoods_$!{obj.id}.htm" target="_blank"><img src="$!webPath/$!obj.main_img.path/$!obj.main_img.name" width="50" height="50"/></a></td>
+          <td><a href="$!webPath/sparegoods_$!{obj.id}.htm" target="_blank">$!CommUtil.substring($!obj.title,45)</a></td>
+          <td align="center">$!obj.spareGoodsClass.className</td>
+           #if(!$!type)
+          <td align="center"><img onclick="ajax_update('$!obj.id','recommend',this)" src="$!webPath/resources/style/system/manage/blue/images/$!{obj.recommend}.png" width="25" height="21" border="0" style="cursor:pointer;" title="推荐后出现在搜索页“帮你淘”"/></td>
+          #end
+          <td align="center">$!down</td>
+          <td class="ac8" align="center">
+           <a href="$!webPath/sparegoods_$!{obj.id}.htm" target="_blank">详情</a>|<a href="$!webPath/admin/sparegoods_dele.htm?mulitId=$!obj.id&currentPage=$!currentPage">删除</a>|#if($!obj.status==0)<a href="$!webPath/admin/sparegoods_switch.htm?id=$!obj.id">违规下架</a>
+          #end
+           #if($!obj.status==-1)
+          <a href="$!webPath/admin/sparegoods_switch.htm?id=$!obj.id&type=-1">清除违规</a>
+          #end
+        
+          </td>
+        </tr>
+        #end
+		<tr style="background:#F2F2F2; height:30px;">
+        <td align="center" ><input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/></td>
+        <td colspan="2" class="bdel">
+		<span class="sp1"><label for="all">全部</label></span><span class="sp2">
+          <div class="shop_btn_del shopbtn">
+            <input name="" type="button" style="cursor:pointer;" value="删除" onclick="cmd('$!webPath/admin/sparegoods_dele.htm?currentPage=$!currentPage');"/>
+          </div>
+          </span>
+		  </td>
+        <td colspan="4"></td>
+      </tr>
+    </table>
+      <div class="fenye" align="right" id="queryCondition">
+        <input name="type" type="hidden" id="type" value="$!type" />
+	    <input name="mulitId" type="hidden" id="mulitId" />
+	    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	   $!gotoPageFormHTML	  
+       </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

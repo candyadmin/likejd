@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+</head>
+<body>
+<form name="ListForm" id="ListForm" method="post" action="$!webPath/admin/user/admin_list.htm">
+<div class="cont">
+  <h1 class="seth1">管理员列表</h1>
+  <div class="settab">
+  <span class="tab-one" style="margin-left:15px;"></span> 
+  <span class="tabs"> 
+  <a href="$!webPath/admin/admin_list.htm"  class="this">管理员列表</a> | 
+  <a href="$!webPath/admin/admin_add.htm">管理员新增</a>|
+  <a href="javascript:void(0);" onclick="if(confirm('执行权限初始化将会初始化所有系统权限及用户权限，且不可恢复，是否继续？'))window.location.href='$!webPath/admin/init_role.htm'">权限初始化</a>
+  </span> 
+  <span class="tab-two"></span>  </div>
+  <div class="paytable">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pay_table">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="299" class="amanmspan"><span>
+          <input name="all_checkbox" type="checkbox" id="all_checkbox" onclick="selectAll();" />
+          </span><span>用户名</span></td>
+        <td width="593" align="center">最后一次登录</td>
+        <td width="179" align="center">登录次数</td>
+        <td  align="center" width="323">操作</td>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td width="299" class="amanmspan"><span>
+          <input name="ids" type="checkbox" id="ids" value="$!obj.id" />
+          </span><span>$!obj.userName</span></td>
+        <td align="center">$!CommUtil.formatLongDate($!obj.lastLoginDate)</td>
+        <td align="center">$!obj.loginCount</td>
+        <td align="center">#if($!obj.userName!="admin")<a href="$!webPath/admin/admin_edit.htm?id=$!obj.id&op=admin_set" class="blue">编辑权限</a>|<a href="javascript:void(0);" onclick="if(confirm('删除管理员后不可恢复，是否继续？'))window.location.href='$!webPath/admin/admin_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">删除</a>|<a href="$!webPath/admin/admin_edit.htm?id=$!obj.id&op=admin_edit" class="blue">修改密码</a>#else默认超级管理员不可编辑#end</td>
+      </tr>
+	  #end
+    </table>
+  </div>
+  <div class="delconsul2"><span>
+    <input name="all_checkbox" type="checkbox" id="all_checkbox" onclick="selectAll();" />
+    全选</span><span class="shop_btn_del shopbtn">
+    <input name="" type="button"  value="删除" onclick="cmd('$!webPath/admin/admin_del.htm')" style="cursor:pointer;"/>
+    </span></div>
+  <div class="fenye2"><input name="userRole" type="hidden" id="userRole" value="ADMIN" />
+      <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+      <input name="mulitId" type="hidden" id="mulitId" />
+      $!gotoPageFormHTML</div>
+</div>
+</form>
+</body>
+</html>

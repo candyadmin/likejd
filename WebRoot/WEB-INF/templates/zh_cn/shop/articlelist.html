@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<title>
+#if($!obj.className)
+$!{obj.className}-$!{config.title}-Powered by shopping
+#else
+新闻列表-$!{config.title}-Powered by shopping
+#end
+</title>
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+    <div class="index">
+    <div class="position">当前位置：<a href="$!webPath/index.htm" >首页</a>><span>$!ac.className</span></div>
+    <div class="index2">
+      <div class="articlesleft">
+        <div class="art1">
+          <h1>文章分类</h1>
+          <ul class="artul">
+            #foreach($ac in $acs)
+			<li><a href="$!webPath/articlelist_$!{ac.id}.htm">$!ac.className</a></li>
+            #end
+          </ul>
+        </div>
+        <div class="art2">
+          <h1>最新文章</h1>
+          <ul class="artul2">
+            #foreach($article in $articles)
+               #if($!{article.url}&&$!{article.url}!="")
+               <li><a href="$!url" target="_blank">$!article.title</a></li>
+              #else
+			    <li><a href="$!webPath/article_$!{article.id}.htm">$!article.title</a></li>
+              #end
+            #end
+          </ul>
+        </div>
+      </div>
+      <div class="articlesright">
+        <div class="artilist">
+          <ul class="aritlistul">
+            #foreach($obj in $objs)
+			<li><span>$!CommUtil.formatShortDate($!obj.addTime)</span><a href="$!webPath/article_$!{obj.id}.htm">$!obj.title</a></li>
+            #end
+          </ul>
+        </div>
+        <div class="fenye">
+          $!gotoPageStaticHTML
+        </div>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

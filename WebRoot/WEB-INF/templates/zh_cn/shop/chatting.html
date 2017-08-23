@@ -1,0 +1,469 @@
+<script>
+ jQuery(document).ready(function(){							 
+	var s = jQuery("#ul_user_list").find("li").length;	
+	if(s==0){
+	jQuery("#ids").val("")
+	jQuery("#user_id").val("");
+	jQuery("#chatting_content").val("");
+		}							 
+	//点击在线好友
+	jQuery("#Online").click(function(){
+			jQuery(this).hide();
+			jQuery("div.chat_box_r").css("display","block");
+			jQuery("#msg_img").hide();
+			jQuery("#friends").show();
+		});
+	//点击正在联系好友
+	jQuery("#Contacting").click(function(){
+		jQuery("div.chat_box_l").show();
+		jQuery(this).hide();
+		});
+	//点击在线好友列表最小化
+	jQuery("#talbe2_hide").click(function(){
+		jQuery("div.chat_box_r").hide(500);
+		jQuery("#Online").show();
+		});
+	//点击正在联系好友列表最小化
+	jQuery("#table1_hide").click(function(){
+		var user_name =	jQuery("#dialog_user_name").html();
+		jQuery("div.chat_bottom_l").html(user_name+"...");
+		jQuery("div.chat_box_l").hide(800);
+		jQuery("#Contacting").show();
+		});
+	//点击好友列表中我的好友和最近联系人切换
+	jQuery("div.chat_box_r_tab ul li a").click(function(){
+		var mark = jQuery(this).attr("mark");
+		jQuery("#"+mark+"_ul").parent().find("ul").hide();
+		jQuery("#"+mark+"_ul").show();
+		jQuery(this).parent().parent().find("li").removeAttr("class");
+		jQuery(this).parent().addClass("this")
+		});
+	//点击正在联系人关闭按钮
+	jQuery("#talk_table_close").click(function(){
+		showDialog("close_table","系统提示","即将关闭所有人的聊天窗口，是否继续？",1,"question","",closeTable);																		
+		});
+	//删除临时对话用户列表
+	jQuery("a[id^=remove_user_]").live("click",
+			function(){
+			if(jQuery("#ul_user_list li:visible").length==1){
+				closeTable();
+			}else{
+				jQuery(this).parent().slideUp();
+				jQuery("#logs_ul_"+user_id).css("display","none");	
+			}
+			});
+	
+	//点击用户生成对话框
+	jQuery("a[id^=userDialog_]").click(function(){
+		jQuery(this).parent().parent().find("em").hide();
+			jQuery(".chat_box_y").css("display","block");
+			jQuery("#chatting_history_loading").css("display","none");
+			jQuery(".chatting_history").remove();
+			jQuery(".history_fenye").remove();										   
+			jQuery("#Showhistory").parent().removeAttr("style");											
+		var user_id = jQuery(this).attr("user_id");
+		var old_user_id = jQuery("#user_id").val();
+		if(user_id!=old_user_id){							
+		window.setInterval(refresh_chat,5000);											
+		var src = jQuery(this).parent().parent().find("b").find("img").attr("src");
+		jQuery("#user_id").val(user_id);
+		var user_name =  jQuery(this).attr("user_name");
+		var ids = jQuery("#ids").val();
+	 	var str = ids.split(",");
+		var tempMark =0;
+		for(var i=0;i<=str.length;i++){
+			if(user_id==str[i]){
+				tempMark++;
+				}
+			}
+		if(tempMark==0){//点击联系人列表，添加新用户会话窗口
+		jQuery("#ids").val(jQuery("#ids").val()+","+user_id);
+		jQuery("#dialog_user_name").html(user_name);
+		jQuery(".chat_box_y ul").css("display","none");	
+		jQuery(".chat_box_y ul:last").after("<ul id='logs_ul_"+user_id+"'><li></li></ul>");	
+		addUserList(user_id,user_name,src);
+		}else{//临时会话列表中已经存在该用户，直接打开窗口，
+		jQuery("#dialog_user_name").html(user_name);
+		jQuery("#user_list_"+user_id).parent().find("li").removeClass("this");
+		jQuery("#user_list_"+user_id).css("display","block").addClass("this");
+		jQuery(".chat_box_y ul").css("display","none");
+		jQuery("#logs_ul_"+user_id).css("display","block");
+		}
+		}
+		jQuery("div.chat_box_l").show();
+		if(jQuery("div.chat_box_l").css("display")=="block"){	
+			jQuery("#Contacting").hide();
+			}
+		refresh_chat();
+		});
+	//点击userlist列表切换会话用户
+	jQuery("a[id^=swith_user_]").live("click",function(){
+			jQuery(".chat_box_y").css("display","block");
+			jQuery("#chatting_history_loading").css("display","none");
+			jQuery(".chatting_history").remove();
+			jQuery(".history_fenye").remove();										   
+			jQuery("#Showhistory").parent().removeAttr("style");
+			jQuery(this).parent().parent().find("li").removeClass("this");
+			var user_id = jQuery(this).parent().addClass("this").attr("user_id");
+			var old_user_id =jQuery("#user_id").val();	
+			if(user_id!=old_user_id){
+			jQuery(".chat_box_y ul").css("display","none");
+			jQuery("#logs_ul_"+user_id).css("display","block");
+			jQuery("#user_id").val(user_id);
+			jQuery("#dialog_user_name").html(jQuery(this).attr("user_name"));
+			jQuery(".chat_box_y ul").css("display","none");
+			jQuery("#logs_ul_"+user_id).css("display","block");
+			}
+		 });
+	//发送消息
+	jQuery("#sendMessage").click(function(){
+				sendMessage();	
+				});
+	//鼠标移动显示进入主页入口
+	jQuery("li[id^=show_home_li_]").mouseover(function(){
+			jQuery("a[id^=a_home_]").css("display","none");
+			jQuery(this).find("a:last").css("display","block");
+			});
+	//展开表情窗口
+	jQuery("#show_emos,#show_emos1").click(function(){
+		var dis = jQuery(".chatting_Container").css("display");
+			if(dis=="none"){
+				jQuery(".chatting_Container").css("display","block");
+				}else{
+				jQuery(".chatting_Container").css("display","none");	
+					}
+		});
+	//鼠标点击表情事件
+	jQuery(".chatting_Container_content_QQ ul li img").click(function(){
+	var emoNum = jQuery(this).attr("emoNum");
+    var count =	jQuery("#chatting_content").val();
+	jQuery("#chatting_content").val(count+"[em_"+emoNum+"]");
+	});
+	//表情框鼠标离开
+	jQuery(".chatting_Container").mouseleave(function(){
+				jQuery(".chatting_Container").css("display","none");										  
+						});
+	
+	//临时会话用户列切换表
+	var tempLengths = 0; //临时变量,当前移动的长度
+	jQuery("a[id^=user_slide_]").click(function(){
+		var viewNums = 8; //设置每次显示图片的个数量
+		var moveNums = 1; //每次移动的数量
+		var moveTimes = 300; //移动速度,毫秒
+		var scrollDivs = jQuery("#ul_user_list"); //进行移动动画的容器
+		var scrollItemss = jQuery("#ul_user_list li"); //移动容器里的集合
+		var moveLengths = scrollItemss.eq(0).height() * moveNums; //计算每次移动的长度
+		var countLengths = (scrollItemss.length - viewNums) * scrollItemss.eq(0).height(); //计算总长度,总个数*单个长度
+		var mark = jQuery(this).attr("mark");
+		//向下按钮
+		if(mark=="x"){
+			if(tempLengths < countLengths){
+				if((countLengths - tempLengths) > moveLengths){
+					scrollDivs.animate({top:"-=" + moveLengths + "px"}, moveTimes);
+					tempLengths += moveLengths;
+				}else{
+					scrollDivs.animate({top:"-=" + (countLengths - tempLengths) + "px"}, moveTimes);
+					tempLengths += (countLengths - tempLengths);
+				}
+			}
+		}
+		//向上按钮
+		if(mark=="t"){
+			if(tempLengths > 0){
+				if(tempLengths > moveLengths){
+					scrollDivs.animate({top: "+=" + moveLengths + "px"}, moveTimes);
+					tempLengths -= moveLengths;
+				}else{
+					scrollDivs.animate({top: "+=" + tempLengths + "px"}, moveTimes);
+					tempLengths = 0;
+				}
+			}
+		}
+	});
+	//查看聊天记录
+	jQuery("#Showhistory").click(function(){
+			var user_id = jQuery("#user_id").val();							  
+			var style = jQuery(this).parent().css("background-color");
+			if(style=="rgb(204, 204, 204)" || style=="#ccc" || style=="#CCC"){
+				jQuery(this).parent().removeAttr("style");		
+				jQuery(".chat_box_y").css("display","block");
+				jQuery(".chatting_history").hide();
+				jQuery(".history_fenye").hide();
+				jQuery("#chatting_history_loading").css("display","none");
+			}else{
+				jQuery(this).parent().attr("style","background-color:#CCC;");						   
+				jQuery(".chat_box_y").css("display","none");
+				jQuery("#chatting_history_loading").css("display","block");
+				jQuery.post("$!webPath/chatting_ShowHistory.htm",{
+						"user_id":user_id,
+						"pageCount":""
+						},function(data){
+							var data = jQuery.trim(data);
+							if(data!=""){
+								jQuery("#chatting_history_loading").css("display","none");
+								jQuery(".chat_box_sr").append(data);
+								}
+							else{
+								jQuery("#chatting_history_loading").find("strong").html("消息记录不存在！");
+								}	
+							},"text");		
+			 }
+		});
+
+});
+ 
+ //发送信息
+ function sendMessage(){
+	 	var curren_user =jQuery("#ul_user_list").find("li:visible.this").length;
+	 	var user_id = jQuery("#user_id").val();
+				var chatting_content = jQuery.trim(jQuery("#chatting_content").val());
+				if(user_id=="" || curren_user==0){
+					jQuery("#chatting_show_error").html("请选择一个用户！");
+				}else{	
+				if(chatting_content.length==""){
+					jQuery("#chatting_show_error").html("发送内容不能为空，请重新输入！");
+				}else{	
+	     			jQuery.post("$!webPath/chatting_save.htm",
+						{
+						"user_id":user_id,
+						"content":replace_em(chatting_content)
+						},
+						function(data){
+						  if(data){
+							jQuery("#logs_ul_"+user_id+" li:last").after(data);
+							jQuery("div.chat_box_y").scrollTop(jQuery("div.chat_box_y").scrollTop()*5);
+							jQuery("#chatting_content").val("");
+							}else{
+								alert("系统繁忙！");
+								}
+							},"text");
+						}
+				}	
+	 };
+ 
+ //关闭会话窗口
+ function closeTable(){
+		jQuery("div.chat_box_l").hide(500);
+		jQuery("#ul_user_list").html("");
+		jQuery("#user_id").val("");
+		jQuery("#ids").val("");
+	};
+//添加临时会话用户列表	
+function addUserList(user_id,user_name,src){
+	jQuery("#ul_user_list").find("li").removeClass("this");
+	jQuery("#ul_user_list").prepend("<li class='this' user_id='"+user_id+"' user_name="+user_name+" id='user_list_"+user_id+"'><b><img src='"+src+"' width='9' height='9' /> </b><a href='javascript:void(0);' id='swith_user_"+user_id+"' user_name='"+user_name+"'>"+user_name+"</a>  <a href='javascript:void(0);' id='remove_user_"+user_id+"'>×</a></li>");	
+	};
+//刷新聊天记录
+function refresh_chat(){
+	var user_id = jQuery("#user_id").val();
+	jQuery.post("$!webPath/chatting_refresh.htm",
+				{
+				"user_id":user_id
+				},
+				function(data){
+					if(data){
+						jQuery("#logs_ul_"+user_id+" li:last").after(data);
+						jQuery("div.chat_box_y").scrollTop(jQuery("div.chat_box_y").scrollTop()*2);
+						}
+					},"text");
+}
+//表情过滤
+function replace_em(str){
+	str = str.replace(/\</g,'&lt;');
+	str = str.replace(/\>/g,'&gt;');
+	str = str.replace(/\n/g,'<br/>');
+	str = str.replace(/\[em_([0-9]*)\]/g,'<img src="$!webPath/resources/editor/plugins/emoticons/images/$1.gif" border="0" />');
+	return str;
+}
+
+//消息记录Ajax分页
+function ajaxPage(url,page,obj){
+	var user_id =jQuery("#user_id").val();
+ 		 jQuery.ajax({type:'POST',url:url,
+			 data:{
+				 "currentPage":page,
+			 	"user_id":user_id	
+			 		},
+			  success:function(data){
+				 if(data){
+					 jQuery(".chatting_history").remove();
+					 jQuery(".history_fenye").remove();
+					 jQuery(".chat_box_sr").append(data);
+					 }																										               }																																		    });
+}
+
+
+</script>
+<style>
+
+/*微信对话框里面*/
+.chat_box_y{ position:relative;}
+.wx_dialog{  padding:5px; overflow:hidden; padding-bottom:10px;}
+.you_dialog{ width:85%; float:left; margin-top:10px; }
+.you_dialog span{ float:left; width:15%}
+.you_dialog b{ display:block; text-align:center;  line-height:15px;  float:left; font-size:11px; font-weight:lighter }
+.you_dialog span img{  border:1px solid #ddd;width:35px; height:35px; border-radius:5px; float:left} 
+.you_dialog_con{ float:left; width:75%; position:relative; left:5px; top:4px;}
+.you_dialog_con i{ background:url($!webPath/resources/style/system/front/default/images/usercenter/wx_i.jpg) no-repeat; width:10px; height:15px; display:block; float:left; position:absolute;  left:-10px; top:6px; overflow:hidden; _position:relative;}
+.you_dialog_con p{ padding-left:5px; padding-right:5px; border-radius:5px; overflow:hidden; background:#afef52; float:left; box-shadow:1px 1px 2px #ccc;  line-height:20px; color:#000; font-family:"宋体"; padding-bottom:3px; padding-top:3px;position:relative; left:0px;_left:-10px;}
+
+.me_dialog{ width:85%; float:right; margin-top:10px;  }
+.me_dialog span{ float:right; width:15%;}
+.me_dialog b{ display:block; text-align:center; float:right;  line-height:15px;font-size:11px; font-weight:lighter }
+.me_dialog span img{  border:1px solid #ddd;width:35px; height:35px; border-radius:5px; float:right;} 
+.me_dialog_con{ float:right; width:75%; position:relative; right:5px;top:4px;}
+.me_dialog i{ background:url($!webPath/resources/style/system/front/default/images/usercenter/wx_i_r.jpg) no-repeat; width:10px; height:15px; display:block; float:right; position:absolute; right:-10px; top:6px; z-index:2; overflow:hidden; _position:relative;}
+.me_dialog p{ padding-left:5px; padding-right:5px; border-radius:5px; background:#ededed; overflow:hidden; border:1px solid #dadada;  box-shadow:1px 1px 2px #ccc; line-height:20px; color:#000; font-family:"宋体"; float:right; position:relative; z-index:1;right:-1px; _padding-bottom:3px; padding-top:3px; _right:-11px; }
+</style>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" /> 
+<!--聊天框面板-->
+<div class="chat_box" >
+  <div class="chat_box_l" style="display:none">
+    <h1><span class="lf">与 <b id="dialog_user_name"></b> 对话中</span><span class="rg"><a href="javascript:void(0);" id="talk_table_close">×</a><a href="javascript:void(0);" id="table1_hide">-</a></span></h1>
+    <div class="chat_box_l_ul"> <span class="tp"><a href="javascript:void(0);" mark="t" id="user_slide_t"><b>︿</b></a></span>
+      <!--用户列表-->
+      <ul id="ul_user_list">
+      </ul>
+      <span class="bt"><a href="javascript:void(0);" id="user_slide_x" mark="x"><b>﹀</b></a></span> </div>
+    <div class="chat_box_sr">
+      <!--聊天信息-->
+      <div class="chat_box_y">
+        <ul>
+        </ul>
+      </div>
+      <!--聊天记录-->
+      <div class="chat_box_y" id="chatting_history_loading"  style="display:none"><strong>消息记录加载中...</strong></div>
+    </div>
+    <div class="chat_box_face"> <i><a href="javascript:void(0);" id="show_emos"><img src="$!webPath/resources/style/system/front/default/images/chatting/pic_4.jpg" width="14" height="14" /></a></i> <span id="show_emos1" style="cursor:pointer;">表情</span>
+      <div class="chat_history"><a href="javascript:void(0);" id="Showhistory">消息记录</a></div>
+    </div>
+    <!--表情-->
+    <div class="chatting_Container" style="display:none">
+      <div class="chatting_Container_content">
+        <div class="chatting_Container_content_QQ">
+          <ul>
+            #set($emoNum=0) 
+            #foreach($emo in $emoticons)
+            #set($emoNum = $!emoNum + 1)
+            <li><img src="$!webPath/resources/editor/plugins/emoticons/images/$!{emoNum}.gif" emoNum="$!emoNum" width="20" height="20" style="cursor:pointer"/></li>
+            #end
+          </ul>
+        </div>
+      </div>
+      <div class="chatting_Container_top"><img src="$!webPath/resources/style/system/front/default/images/chatting/top_bt.png" width="7" height="4" /></div>
+    </div>
+    <!--表情-->
+    <div class="chat_box_tx">
+      <textarea id="chatting_content" name="chatting_content"></textarea>
+    </div>
+    <div class="chat_box_send">
+      <input id="user_id" name="user_id" type="hidden" />
+      <input id="ids" name="ids" type="hidden" />
+      <span id="chatting_show_error" style=" color:#F00; float:left;"></span> <span style="color:#999;">按Enter键发送消息</span>
+      <input type="button" value="发送"  id="sendMessage" style="cursor:pointer" />
+    </div>
+    <script>
+    jQuery(document).keyup(function(e){
+        var key =  e.which;
+		if(key==13){
+			sendMessage();
+			}
+    });
+	jQuery("#chatting_content").keydown(function(){
+		jQuery("#chatting_show_error").html("");
+	});
+	</script>
+  </div>
+  <div class="chat_box_r" style="display:none">
+    <h1><span class="rl">在线好友(<b>#if($!OnlineCount) $!OnlineCount #else 0 #end</b>)</span> <span class="rr" id="talbe2_hide" style="cursor:pointer">－</span></h1>
+    <div class="chat_box_r_tab">
+      <ul>
+        <li class="this"><a href="javascript:void(0);" mark="online">我的好友</a></li>
+        <li><a href="javascript:void(0);"  mark="last">最近联系人</a></li>
+      </ul>
+    </div>
+    <div class="chat_box_r_ul" >
+      <ul id="online_ul">
+        #foreach($friend in $Friends)
+        #set($online_Img="$!webPath/resources/style/system/front/default/images/chatting/pic_1.jpg")
+        #if($!userTools.userOnLine("$!friend.toUser.userName")=="false")
+        #set($online_Img="$!webPath/resources/style/system/front/default/images/chatting/pic_2.jpg")
+        #end
+        <li id="show_home_li_online_$!friend.toUser.id"> #set($img="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+          #if($!friend.toUser.photo)
+          #set($img="$!webPath/$!friend.toUser.photo.path/$!friend.toUser.photo.name")
+          #end <i><a href="javascript:void(0);" user_id="$!friend.toUser.id" id="userDialog_img_friend_$!friend.toUser.id" user_name="$!friend.toUser.userName"><img src="$!img" width="30" height="30"/></a> </i> <span><b><img src="$!online_Img" width="9" height="9" /></b><a href="javascript:void(0);" user_id="$!friend.toUser.id" id="userDialog_friend_$!friend.toUser.id" user_name="$!friend.toUser.userName">$!friend.toUser.userName  
+          #set($unmark= 0 ) 
+          #foreach($unread in $unreads)
+          #if($!{unread.user.id}==$!{friend.toUser.id})
+          #set($unmark = $!unmark + 1)
+          #end
+          #end
+          #if($!unmark!=0) 
+          <em id="new_msg1" style="color:#F00; font-style:normal; font-size:10px">新消息</em>
+          <script>
+		jQuery(document).ready(function(){
+        jQuery("#online_un").val("$!unmark");
+		});
+        </script>
+          #end </a></span> 
+          </li>
+        #end
+      </ul>
+      <ul id="last_ul" style="display:none">
+        #foreach($contact in $Contactings)
+        #set($online_Img="$!webPath/resources/style/system/front/default/images/chatting/pic_1.jpg")
+        #if($!userTools.userOnLine("$!contact.friendUser.userName")=="false")
+        #set($online_Img="$!webPath/resources/style/system/front/default/images/chatting/pic_2.jpg")
+        #end
+        <li id="show_home_li_contact_$!contact.friendUser.id"> #set($img="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+          #if($!contact.friendUser.photo)
+          #set($img="$!webPath/$!contact.friendUser.photo.path/$!contact.friendUser.photo.name")
+          #end <i><a href="javascript:void(0);" user_id="$!contact.friendUser.id" id="userDialog_img_contact_$!contact.friendUser.id" user_name="$!contact.friendUser.userName"> <img src="$!img" width="30" height="30"/> </a></i> <span><b><img src="$!online_Img" width="9" height="9" /></b> <a href="javascript:void(0);" user_id="$!contact.friendUser.id" id="userDialog_contact_$!contact.friendUser.id" user_name="$!contact.friendUser.userName">$!contact.friendUser.userName 
+          #set($unmark= 0 ) 
+          #foreach($unread in $unreads)
+          #if($!{unread.user.id}==$!{contact.friendUser.id})
+          #set($unmark = $!unmark + 1)
+          #end
+          #end
+          #if($!unmark!=0)
+          <em id="new_msg2" style="color:#F00; font-style:normal; font-size:10px">新消息</em>
+          <script>
+			jQuery(document).ready(function(){
+			jQuery("#contact_un").val("$!unmark");	
+			});
+        </script>
+          #end </a>
+           
+          </span>  </li>
+        #end
+      </ul>
+    </div>
+  </div>
+</div>
+<!--聊天框最小化-->
+<script>
+jQuery(document).ready(function(){
+var online_un = jQuery("#online_un").val();
+var contact_un = jQuery("#contact_un").val();
+var allCount = online_un + contact_un ;
+jQuery(".chat_bottom_r").find("span").hide();
+if(allCount>0){
+	jQuery(".chat_bottom_r").find("span").last().show();	
+	}
+	else{
+	jQuery(".chat_bottom_r").find("span").first().show();
+		}		
+jQuery("#online_un").val("");
+jQuery("#contact_un").val("");		
+});
+</script>
+<div class="chat_bottom">
+  <div class="chat_bottom_l" style="cursor:pointer; display:none; " id="Contacting"></div>
+  <div class="chat_bottom_r" style="cursor:pointer" id="Online"> 
+  <span id="friends" > 在线好友(#if($!OnlineCount) $!OnlineCount #else 0 #end)</span> 
+  <span id="msg_img" style="display:none"><img  src="$!webPath/resources/style/system/front/default/images/chatting/newMessage.gif"/></span>
+   </div>
+</div>
+<input id="online_un" name="online_un" type="hidden"/>
+<input id="contact_un" name="contact_un" type="hidden"/>

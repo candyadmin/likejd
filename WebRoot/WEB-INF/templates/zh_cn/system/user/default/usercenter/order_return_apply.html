@@ -1,0 +1,44 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+	   rules:{
+		   return_content:{required:true}
+		   },
+	   messages:{
+		   return_content:{required:"申请说明不能为空"}
+	   }
+	});
+});
+</script>
+#if($!view)
+提交申请后请及时与卖家联系，退货操作由卖家来完成  
+  <table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="">
+    <tr>
+      <td height="78" align="right" valign="top"> 
+      <div style="float:center; margin-top:10px; margin-left:10px;"><span style="margin-right:10px; float:left">申请说明：</span><b style="float:left">$!obj.return_content</b></div></td>
+    </tr>
+    <tr>
+      <td height="50" align="center"><span class="inputbtn">
+      </span></td>
+    </tr>
+  </table>
+#else
+<form action="$!webPath/buyer/order_return_apply_save.htm" method="post" id="theForm">
+ 提交申请后请及时与卖家联系，卖家同意退货后可填写退货物流信息      
+  <table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="">
+    <tr>
+      <td height="78" align="right" valign="top"> 
+      <div style="float:center; margin-top:10px; margin-left:10px;"><span style="margin-right:10px; float:left">申请说明：</span><b style="float:left"><textarea name="return_content" cols="55" rows="5" id="return_content"></textarea></b></div></td>
+    </tr>
+    <tr>
+      <td height="50" align="center"><span class="inputbtn">
+        <input name="" type="submit" value="提交" style="cursor:pointer;"/>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        <input name="id" type="hidden" id="id" value="$!obj.id" />
+      </span></td>
+    </tr>
+  </table>
+</form>
+#end

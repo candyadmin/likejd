@@ -1,0 +1,33 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<form action="$!webPath/seller/seller_order_outline_save.htm" method="post" id="theForm">
+  <table style="float:left;" width="390" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td colspan="2" align="left" valign="top">请确认已经收到该订单的货款吗？</td>
+    </tr>
+    <tr>
+      <td width="100" align="right" valign="top">订单编号：
+        <input name="id" type="hidden" id="id" value="$!obj.id" />
+      </td>
+      <td align="left">$!obj.order_id</td>
+    </tr>
+        <tr>
+      <td align="right" valign="top">订单金额：</td>
+      <td align="left"><span style="color:#F00; font-weight:bold;" id="total_price_text">$!{obj.totalPrice}
+      </span></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">汇款说明：</td>
+          <td align="left">$!{obj.pay_msg}</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">操作说明：</td>
+      <td align="left"><textarea name="state_info" cols="35" rows="6" id="state_info"></textarea></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+        <input name="" type="submit" value="提交" style="cursor:pointer;"/>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      </span></td>
+    </tr>
+  </table>
+</form>

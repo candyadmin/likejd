@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+   $!httpInclude.include("/nav.htm")
+  
+  <div class="index">
+    <div class="position">当前位置：<a href="$!webPath/wap/index.htm" >首页</a> > <span>商品分类</span></div>
+    <div class="index2">
+      <div class="web_class">
+        <h1>商品分类</h1>
+        <div class="webclsbox">
+        #foreach($gc in $gcs)
+          <div class="class_a">
+            <h2><a href="$!webPath/store_goods_list_$!{gc.id}.htm" target="_blank">$!gc.className</a></h2>
+            #foreach($c_gc in $gc.childs)
+            <div class="class_b">
+              <h3><a href="$!webPath/store_goods_list_$!{c_gc.id}.htm" target="_blank">$c_gc.className</a></h3>
+              <div class="class_c">#foreach($c_c_gc in $c_gc.childs)<a href="$!webPath/store_goods_list_$!{c_c_gc.id}.htm" target="_blank">$!c_c_gc.className</a><b>|</b>#end</div>
+            </div>
+            #end
+          </div>
+          #end     
+        </div>
+      </div>
+    </div>
+  </div>
+   $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

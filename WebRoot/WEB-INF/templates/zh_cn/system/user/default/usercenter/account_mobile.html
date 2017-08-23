@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>手机号码修改-$!{config.title}-Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+       rules: {
+			mobile:{
+				required:true,
+			    remote:{
+		          url: "$!webPath/verify_mobile.htm",     //后台处理程序
+                  type: "post",               //数据发送方式
+                  dataType: "json",           //接受数据格式   
+                  data: {                     //要传递的数据
+                    "mobile": function(){return jQuery("#mobile").val();},"id":"$!user.id"
+		          }
+		       }
+			},
+			mobile_verify_code:{required:true}
+		  },
+	   messages: {
+		    mobile:{required:"手机号码不能为空",remote:"该手机号码已经绑定"},
+			mobile_verify_code:{required:"验证码不能为空"}
+		}
+  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/buyer/account_nav.htm?op=account")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">我的账户</a> > <span>修改手机号码</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li><a href='$!webPath/buyer/account.htm' >基本信息</a></li>
+                <li><a href='$!webPath/buyer/account_password.htm'>修改密码</a></li>
+                <li><a href='$!webPath/buyer/account_email.htm'>修改电子邮件</a></li>
+				<li class="this"><a href='$!webPath/buyer/account_mobile.htm'>修改手机号码</a></li>
+                <li><a href='$!webPath/buyer/account_avatar.htm'>更换头像</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+			<script>
+			var time=60;
+			var time_id="";
+			function generic_mobile_verify_code(){
+               var mobile=jQuery("#mobile").val();
+               if(isMobil(mobile)){
+			      jQuery.post("$!webPath/buyer/account_mobile_sms.htm",{"type":"mobile_vetify_code","mobile":mobile},function(data){
+				    if(data=="100"){
+					     jQuery("#mobile_verify_code_generic").hide();
+				         time_id=setInterval(countDown,1000);
+					}
+					if(data=="200"){
+					   alert("短信发送失败");
+					}
+					if(data=="300"){
+					   alert("商城未开启短信服务");
+					}
+				  },"text");
+               }else{
+			      alert("请输入正确的手机号码");
+			   }
+             }
+		   function countDown(){
+		     --time;
+			 jQuery("#time_out_generic").html(time+"秒后可以重新获取,验证码15分钟有效");
+			 if(time==0){
+			   clearInterval(time_id);
+			   jQuery("#time_out_generic").html("");
+			   jQuery("#mobile_verify_code_generic").show();
+               time=10;
+			 }
+		   }
+           function isMobil(s) {
+             var patrn = /(^0{0,1}1[3|4|5|6|7|8|9][0-9]{9}$)/;
+             if (!patrn.exec(s)) {
+                 return false;
+             }
+             return true;
+            } 
+			</script>
+              <div class="addnav">
+			    <form action="$!webPath/buyer/account_mobile_save.htm" method="post" name="theForm" id="theForm">
+                <table width="705" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                  <tr>
+                    <td width="101" align="right" valign="top" class="modifysp"><span>新手机号码：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                    <td width="604"  class="px10"><span class="setinput">
+                      <input name="mobile" type="text" id="mobile" />
+                      <a href="javascript:void(0);" onclick="generic_mobile_verify_code();" id="mobile_verify_code_generic">获取验证码</a><span id="time_out_generic"></span></span></td>
+                  </tr>
+                  <tr>
+                    <td width="101" align="right" valign="top" class="modifysp"><span>手机验证码：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                    <td  class="px10"><span class="setinput">
+                      <input name="mobile_verify_code" type="text" id="mobile_verify_code" />
+                      </span></td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td class="px10"><span class="setsub">
+                       <input type="submit"  value="绑定手机" style="cursor:pointer;"/>
+                      </span></td>
+                  </tr>
+                </table>
+				</form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+   $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

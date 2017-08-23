@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function() {
+	var browser = {
+		    versions: function () {
+		        var u = navigator.userAgent, app = navigator.appVersion;
+		        return {         //移动终端浏览器版本信息
+		            trident: u.indexOf('Trident') > -1, //IE内核
+		            presto: u.indexOf('Presto') > -1, //opera内核
+		            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+		            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+		            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+		            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+		            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+		            iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+		            iPad: u.indexOf('iPad') > -1, //是否iPad
+		            webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+		        };
+		    }(),
+		    language: (navigator.browserLanguage || navigator.language).toLowerCase()
+	}
+	if (browser.versions.mobile) {//判断是否是移动设备打开。browser代码在下面
+	    var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+	    if (browser.versions.ios) {
+	            //是否在IOS浏览器打开
+	    	jQuery(" li[id^=wxpay_]").hide();
+	    	jQuery(" li[id^=alipay_]").show();
+	    } 
+	    if(browser.versions.android){
+	            //是否在安卓浏览器打开
+	    	jQuery(" li[id^=wxpay_]").hide();
+	    	jQuery(" li[id^=alipay_]").show();
+	    }
+	    if (ua.match(/WeiBo/i) == "weibo") {
+	            //在新浪微博客户端打开
+	    }
+	    if (ua.match(/QQ/i) == "qq") {
+	            //在QQ空间打开
+	    }
+	    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+	            //在微信中打开
+	    	jQuery(" li[id^=wxpay_]").show();
+	    	jQuery(" li[id^=alipay_]").hide();
+	    }
+	    
+	} else {
+	    //否则就是PC浏览器打开
+		jQuery(" li[id^=wxpay_]").hide();
+    	jQuery(" li[id^=alipay_]").show();
+	}
+});
+//返回当前页面高度
+function order_pay(payType){
+  /* var h=document.body.clientHeight;
+  var top= document.documentElement.scrollTop;
+  top=top+(h-top)/2;
+  jQuery('.black_overlay').css("height",h);
+  jQuery(".white_content").css("top",top);
+  jQuery('#pay_overlay').show() */
+  jQuery("#payType").val(payType);
+  jQuery("#paysub").attr("disabled","disabled");
+  jQuery('#theForm').submit();
+}
+/* window.onscroll=function(){
+  var h=document.body.clientHeight;
+  var top= document.documentElement.scrollTop;
+  top=top-50+(h-top)/2;
+  jQuery(".white_content").css("top",top);
+} */
+</script>
+</head>
+<body>
+
+<div class="main">
+
+	<div class="phone_hd">
+		<a class="back" href="javascript:history.go(-1);">
+			<img src="$!webPath/resources/style/system/front/wap/images/back.png" width="25" height="25">
+		</a>
+		订单支付
+		<a class="edit" href="$!webPath/wap/index.htm">
+			<img src="$!webPath/resources/style/system/front/wap/images/home.png" width="25" height="25">
+		</a>
+	</div>
+
+    <div class="pd5">
+      
+      <form action="$!webPath/pay_submit.htm" method="post" id="theForm">
+      <div class="payment">
+      
+        <div class="pay_detail">
+        
+        
+        	<dl>
+	        <dt><img width="62" src="$!webPath/resources/style/system/front/wap/images/dun.png"></dt>
+	        <dd>
+	        	<div class="paybot">
+		            <h1>订单提交成功</h1>
+		            <ul>
+		              <li><strong>订单编号：</strong><strong class="orange">$!{of.order_id}</strong></li>
+		              <li><strong>应付金额：</strong><strong class="orange">¥$!{of.totalPrice}</strong></li>
+		            </ul>
+		       </div>
+	          
+	        </dd>
+	      </dl>
+      
+        </div>
+        
+        <div class="payfor">
+          <div class="banktitle">
+            <span class="pay-tip">请选择支付方式</span>
+          </div>
+          <div class="bankcar">
+            <ul class="list">
+                
+                #set($paym=$!config.getConfig_payment_type())
+                
+                #if($!paym==1)
+                	<li id="wxpay_1" class="list-item pay-list-item">
+	                #set($install=$!paymentTools.queryShopPayment("weixin_wap").get("install"))
+	                #if($!install==true)                
+	                <a class="list-link" href="javascript:void(0)" onclick="order_pay('weixin_wap')">
+		                <span class="pay-icon-wx"></span>
+		                <span class="title-main">微信公众号支付</span>
+		                <span class="title-vice">微信支付服务</span>
+	                </a>
+	                #end
+	                </li>
+	                <li id="alipay_1" class="list-item pay-list-item">
+	                #set($install=$!paymentTools.queryShopPayment("alipay_wap").get("install"))
+	                #if($!install==true)
+	                <a class="list-link" href="javascript:void(0)" onclick="order_pay('alipay_wap')">
+		                <span class="pay-icon-zfb"></span>
+		                <span class="title-main">支付宝wap支付</span>
+		                <span class="title-vice">支付宝wap支付服务</span>
+	                </a>
+	                #end
+	                </li>
+                #else
+                	<li id="wxpay_0" class="list-item pay-list-item">
+	                #set($install=$!paymentTools.queryStorePayment("weixin_wap","$!{of.store.id}").get("install"))
+	                #if($!install==true)                
+	                <a class="list-link" href="javascript:void(0)" onclick="order_pay('weixin_wap')">
+		                <span class="pay-icon"></span>
+		                <span class="title-main">微信公众号支付</span>
+		                <span class="title-vice">微信支付服务</span>
+	                </a>
+	                #end
+	                </li>
+	                <li id="alipay_0" class="list-item pay-list-item">
+	                #set($install=$!paymentTools.queryStorePayment("alipay_wap","$!{of.store.id}").get("install"))
+	                #if($!install==true)
+	                <a class="list-link" href="javascript:void(0)" onclick="order_pay('alipay_wap')">
+		                <span class="pay-icon"></span>
+		                <span class="title-main">支付宝wap支付</span>
+		                <span class="title-vice">支付宝wap支付服务</span>
+	                </a>
+	                #end
+	                </li>
+                #end
+                
+                
+                </li>
+            </ul>
+            <input name="order_id" type="hidden" id="order_id" value="$!{of.id}" />
+            <input name="payType" type="hidden" id="payType" value="" />
+          </div>
+          
+        </div>
+      </div>
+      
+      </form>
+      
+    </div>
+
+
+
+	<!-- <div style="display:none;" id="pay_overlay">
+	  <div class="white_content"> <a href="javascript:void(0);" onclick="javascript:jQuery('#pay_overlay').hide();" class="white_close"><img src="$!imageWebServer/resources/style/system/front/default/images/close.jpg" width="14" height="14" /></a>
+	    <div class="white_box">
+	      <h1>支付提醒</h1>
+	      <dl class="white_dl">
+	        <dt></dt>
+	        <dd>
+	          <div class="payf"><a href="$!webPath/order_finish.htm?order_id=$!{of.id}">已经完成支付！</a></div>
+	          <div class="payf"><a href="javascript:void(0);"  onclick="javascript:jQuery('#pay_overlay').hide();" >支付出现问题！</a></div>
+	        </dd>
+	      </dl>
+	    </div>
+	  </div>
+	  <div class="black_overlay"></div>
+	</div> -->
+	
+$!httpInclude.include("/footer.htm") 
+
+</div>	
+	
+</body>
+
+</html>

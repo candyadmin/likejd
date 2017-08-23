@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+//设置默认状态以及判断初始显示状态
+	var state = jQuery("#display").val();
+	if(state==""){
+		jQuery("#display").val("true");
+		jQuery("#displayOff").hide();
+	}else{
+		 if(state=="true"){
+			jQuery("#displayOff").hide();
+		}else{
+			jQuery("#displayOn").hide();
+		}
+	}
+	
+	var state1 = jQuery("#recommend").val();
+	if(state1==""){
+		jQuery("#recommend").val("true");
+		jQuery("#recommendOff").hide();
+	}else{
+		 if(state1=="true"){
+			jQuery("#recommendOff").hide();
+		}else{
+			jQuery("#recommendOn").hide();
+		}	
+	}	
+//
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+jQuery("#pid").val("$!obj.parent.id");
+jQuery("#goodsTypeId").val("$!obj.goodsType.id");
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  className:{
+	    required :true,
+	     remote:{
+		    url: "$!webPath/admin/goods_class_verify.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "className": function(){return jQuery("#className").val();},
+				  "id":function(){return jQuery("#id").val()},
+				  "pid":function(){return jQuery("#pid").val()}
+		     }
+			}
+	  }
+	 },
+	messages:{
+	  className:{required:"分类名称不能为空",remote:"该分类已经存在"}
+	}
+  });
+  //图标
+  jQuery("#pid").change(function(){
+	 var val = jQuery(this).val();
+	  if(val==""){
+		 jQuery("#icon").show(); 
+		 jQuery("#icon_sys_ul").show();
+		  }else{
+		 jQuery("#icon").hide();	
+		 jQuery("#icon_sys_ul").hide();  
+		 jQuery("#icon_acc_ul").hide(); 
+			  }
+	  });
+  jQuery("input[type='radio']").click(function(){
+	 var val = jQuery(this).attr("value");
+	  if(val==1){
+	  jQuery("#icon_sys_ul").hide();
+	  jQuery("#icon_acc_ul").show();	  
+	  }else{
+	  jQuery("#icon_sys_ul").show();
+	  jQuery("#icon_acc_ul").hide();		  
+	  }
+  });
+  jQuery(".icon_sys a").click(function(){
+	  jQuery("#icon_sys").val(jQuery(this).attr("icon"));
+	  jQuery(this).parent().find("a").removeClass("this");
+	  jQuery(this).addClass("this");
+	  });
+   jQuery("#icon_acc").change(function(){
+	 jQuery("#textfield1").val(jQuery("#icon_acc").val());
+   })
+     jQuery("#logoShow").mouseover(function(){
+	    jQuery("#logoImg").css('display','block');
+   }).mouseout(function(){
+		jQuery("#logoImg").css('display','none');
+	});
+#if($!obj.icon_type)	
+#if($!obj.icon_type==0)
+jQuery("#icon_sys_ul").show();
+jQuery("#icon_acc_ul").hide();
+jQuery(".icon_sys a").removeClass("this");
+jQuery(".icon_sys a[icon='$!obj.icon_sys']").addClass("this");
+#else
+jQuery("#icon_sys_ul").hide();
+jQuery("#icon_acc_ul").show();
+#end
+#end
+#if($!obj.parent.id)
+jQuery("#icon").hide();	
+jQuery("#icon_sys_ul").hide();  
+jQuery("#icon_acc_ul").hide();
+#end	
+});
+
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+
+//设置显示开关
+function displayState(){
+	var state = jQuery("#display").val();
+	if(state=="true"){
+		jQuery("#display").val("false");
+		jQuery("#displayOff").show();
+		jQuery("#displayOn").hide();
+	}else{
+		jQuery("#display").val("true");
+		jQuery("#displayOff").hide();
+		jQuery("#displayOn").show();
+	}
+}
+
+//设置推荐开关
+function recommendState(){
+	var state = jQuery("#recommend").val();
+	if(state=="true"){
+		jQuery("#recommend").val("false");
+		jQuery("#recommendOff").show();
+		jQuery("#recommendOn").hide();
+	}else{
+		jQuery("#recommend").val("true");
+		jQuery("#recommendOff").hide();
+		jQuery("#recommendOn").show();
+	}
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">商品分类</h1>
+  <div class="settab"><span class="tab-one"></span>
+      <span class="tabs">
+       <a href="$!webPath/admin/goods_class_list.htm">管理</a> |
+       <a href="$!webPath/admin/goods_class_add.htm" #if(!$!edit)class="this"#end>新增</a>	   
+       #if($!edit) | 
+	   <a href="javascript:void(0);" class="this">编辑</a>
+	   #end
+	   </span>
+      
+      <span class="tab-two"></span></div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/goods_class_save.htm" method="post" enctype="multipart/form-data">
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/goods_class_list.htm" />
+  <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/goods_class_add.htm" />
+  <div class="setcont">
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>分类名称</li>
+      <li><span class="webname">
+        <input name="className" type="text" id="className" value="$!obj.className" size="40" />
+      </span></li>
+    </ul>
+    <!--鼠标未经过样式-->
+    <ul class="set1">
+      <li>上级分类</li>
+      <li><span class="webnamesec sizese">
+        <select name="pid" id="pid">
+              <option value="">请选择上级商品分类...</option>
+			  #foreach($gc in $gcs)
+              <option value="$!gc.id">$!gc.ClassName</option>
+              		  #foreach($child in $gc.childs)
+                      <option value="$!child.id">&nbsp;&nbsp;&nbsp;&nbsp;$!child.ClassName</option>
+                      			 #foreach($c in $child.childs)
+                                  <option value="$!c.id">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$!c.ClassName</option>
+                                  #end
+                      #end
+              #end
+         </select>
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">如果选择上级分类，那么新增的分类则为被选择上级分类的子分类</strong><strong class="c"></strong></span></li>
+    </ul>
+	<ul class="set1">
+      <li>类型</li>
+	  <li>关联类型到下级<input name="child_link" type="checkbox" id="child_link" value="true" />
+	  </li>
+      <li><span class="webnamesec sizese">
+        <select name="goodsTypeId" id="goodsTypeId">
+		  <option value="">请选择...</option>
+		#foreach($gt in $!gts)
+          <option value="$!gt.id">$!gt.name</option>
+		#end  
+        </select>
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">如果当前下拉选项中没有适合的类型，可以去<a href="javascript:void(0);" onclick="window.parent.openURL('url','$!webPath/admin/goods_type_list.htm','main_workspace','goods_type_op','about_goods')" style="color:#fff; background-color:#FF6600; padding:2px 4px; border-radius:4px 4px 4px 4px;">类型管理</a>功能中新增新的类型</strong></span></li>
+      <strong></strong>
+	</ul>
+	
+	<ul class="set1">
+      <li>显示</li>
+     <input name="display" id="display" type="hidden" value="$!obj.display" />
+          <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="displayOn" onclick="displayState();" style="cursor:pointer"/> <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="displayOff" onclick="displayState();" style="cursor:pointer"/>
+    </ul>
+	<ul class="set1">
+      <li>推荐</li>
+       <li> <span class="webSwitch">
+      <input name="recommend" id="recommend" type="hidden" value="$!obj.recommend" />
+          <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="recommendOn" onclick="recommendState();" style="cursor:pointer"/> <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="recommendOff" onclick="recommendState();" style="cursor:pointer"/></span><span id="nothis"><strong class="q"></strong><strong class="w">推荐商品分类将会在首页楼层显示</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1" id="icon">
+      <li>图标</li>
+       <li> <span class="webSwitch">
+       
+       <input name="icon_type" id="type1"  type="radio" #if($!obj.icon_type==0 || !$!obj.icon_type) checked="checked" #end value="0"><label for="type1">系统图标</label></input>
+    
+       <input name="icon_type" id="type2"  type="radio"  #if($!obj.icon_type==1) checked="checked" #end value="1"><label for="type2">图标上传</label></input>
+           </span><span id="nothis"><strong class="q"></strong><strong class="w">商城分类图标只在一级分类旁显示，最佳尺寸为：18x20</strong><strong class="c"></strong></span></li>
+    </ul>
+     
+    <ul class="set1" id="icon_sys_ul" >
+      <li>系统图标</li>
+      <li><span class="webname">
+       <div class="icon_sys">
+       		<a href="javascript:void(0);" icon="" class="this"><img src="$!webPath/resources/style/common/images/icon/default_icon.png" /></a>
+            <a href="javascript:void(0);" icon="1"><img src="$!webPath/resources/style/common/images/icon/icon_1.png" /></a>
+            <a href="javascript:void(0);" icon="2"><img src="$!webPath/resources/style/common/images/icon/icon_2.png" /></a>
+            <a href="javascript:void(0);" icon="3"><img src="$!webPath/resources/style/common/images/icon/icon_3.png" /></a>
+            <a href="javascript:void(0);" icon="4"><img src="$!webPath/resources/style/common/images/icon/icon_4.png" /></a>
+            <a href="javascript:void(0);" icon="5"><img src="$!webPath/resources/style/common/images/icon/icon_5.png" /></a>
+            <a href="javascript:void(0);" icon="6"><img src="$!webPath/resources/style/common/images/icon/icon_6.png" /></a>
+            <a href="javascript:void(0);" icon="7"><img src="$!webPath/resources/style/common/images/icon/icon_7.png" /></a>
+            <a href="javascript:void(0);" icon="8"><img src="$!webPath/resources/style/common/images/icon/icon_8.png" /></a>
+            <a href="javascript:void(0);" icon="9"><img src="$!webPath/resources/style/common/images/icon/icon_9.png" /></a>
+            <a href="javascript:void(0);" icon="10"><img src="$!webPath/resources/style/common/images/icon/icon_10.png" /></a>
+            <a href="javascript:void(0);" icon="11"><img src="$!webPath/resources/style/common/images/icon/icon_11.png" /></a>
+            <a href="javascript:void(0);" icon="12"><img src="$!webPath/resources/style/common/images/icon/icon_12.png" /></a>
+            <a href="javascript:void(0);" icon="13"><img src="$!webPath/resources/style/common/images/icon/icon_13.png" /></a>
+            <a href="javascript:void(0);" icon="14"><img src="$!webPath/resources/style/common/images/icon/icon_14.png" /></a>
+            <a href="javascript:void(0);" icon="15"><img src="$!webPath/resources/style/common/images/icon/icon_15.png" /></a>
+            <a href="javascript:void(0);" icon="16"><img src="$!webPath/resources/style/common/images/icon/icon_16.png" /></a>
+            <a href="javascript:void(0);" icon="17"><img src="$!webPath/resources/style/common/images/icon/icon_17.png" /></a>
+            <a href="javascript:void(0);" icon="18"><img src="$!webPath/resources/style/common/images/icon/icon_18.png" /></a>
+            <a href="javascript:void(0);" icon="19"><img src="$!webPath/resources/style/common/images/icon/icon_19.png" /></a>
+            <a href="javascript:void(0);" icon="20"><img src="$!webPath/resources/style/common/images/icon/icon_20.png" /></a>
+            <a href="javascript:void(0);" icon="21"><img src="$!webPath/resources/style/common/images/icon/icon_21.png" /></a>
+            <a href="javascript:void(0);" icon="22"><img src="$!webPath/resources/style/common/images/icon/icon_22.png" /></a>
+            <a href="javascript:void(0);" icon="23"><img src="$!webPath/resources/style/common/images/icon/icon_23.png" /></a>
+            <a href="javascript:void(0);" icon="24"><img src="$!webPath/resources/style/common/images/icon/icon_24.png" /></a>
+            <a href="javascript:void(0);" icon="25"><img src="$!webPath/resources/style/common/images/icon/icon_25.png" /></a>
+            <a href="javascript:void(0);" icon="26"><img src="$!webPath/resources/style/common/images/icon/icon_26.png" /></a>
+            <a href="javascript:void(0);" icon="27"><img src="$!webPath/resources/style/common/images/icon/icon_27.png" /></a>
+            <a href="javascript:void(0);" icon="28"><img src="$!webPath/resources/style/common/images/icon/icon_28.png" /></a>
+            <a href="javascript:void(0);" icon="29"><img src="$!webPath/resources/style/common/images/icon/icon_29.png" /></a>
+            <a href="javascript:void(0);" icon="30"><img src="$!webPath/resources/style/common/images/icon/icon_30.png" /></a>
+            <a href="javascript:void(0);" icon="31"><img src="$!webPath/resources/style/common/images/icon/icon_31.png" /></a>
+            <a href="javascript:void(0);" icon="32"><img src="$!webPath/resources/style/common/images/icon/icon_32.png" /></a>
+            <a href="javascript:void(0);" icon="33"><img src="$!webPath/resources/style/common/images/icon/icon_33.png" /></a>
+            <a href="javascript:void(0);" icon="34"><img src="$!webPath/resources/style/common/images/icon/icon_34.png" /></a>
+            <a href="javascript:void(0);" icon="35"><img src="$!webPath/resources/style/common/images/icon/icon_35.png" /></a>
+            <a href="javascript:void(0);" icon="36"><img src="$!webPath/resources/style/common/images/icon/icon_36.png" /></a>
+            <a href="javascript:void(0);" icon="38"><img src="$!webPath/resources/style/common/images/icon/icon_38.png" /></a>
+            <a href="javascript:void(0);" icon="39"><img src="$!webPath/resources/style/common/images/icon/icon_39.png" /></a>
+            <a href="javascript:void(0);" icon="40"><img src="$!webPath/resources/style/common/images/icon/icon_40.png" /></a>
+            
+            
+       </div>
+      </span></li>
+       <input name="icon_sys" type="hidden" id="icon_sys"  />
+    </ul>   
+    <ul class="set1" id="icon_acc_ul" style="display:none" >
+        <li>图标上传</li>
+        <li> <span class="size13" >
+          <input name="textfield" type="text" id="textfield1" />
+          </span> <span class="filebtn">
+          <input name="button" type="button" id="button1" value=""/>
+          </span> <span style="float:left;" class="file">
+          <input name="icon_acc" type="file" id="icon_acc" class="file-text" size="30"/>
+          </span> <span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span>#if(!$!obj.icon_acc)<span id="nothis"><strong class="q"></strong><strong class="w">暂无图标</strong><strong class="c"></strong></span>#end
+          #if($!obj.icon_acc)
+          <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!webPath/$!obj.icon_acc.path/$!obj.icon_acc.name"  width="20" height="18" id="logoShow2"/> </div>
+          #end
+        </li>
+      </ul>   
+       
+    
+    <ul class="set1">
+      <li>排序</li>
+      <li><span class="webname">
+        <input name="sequence" type="text" id="sequence" value="$!obj.sequence" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小，分类显示越靠前</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>SEO关键字</li>
+      <li><span class="webname">
+        <textarea name="seo_keywords" cols="40" rows="6" id="seo_keywords">$!obj.seo_keywords</textarea>
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li>SEO描述</li>
+      <li><span class="webname">
+        <textarea name="seo_description" cols="40" rows="6" id="seo_description">$!obj.seo_description</textarea>
+      </span></li>
+    </ul>
+    </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

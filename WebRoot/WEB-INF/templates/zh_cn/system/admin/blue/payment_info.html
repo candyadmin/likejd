@@ -1,0 +1,463 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  #if($!obj.install)
+  jQuery("#install_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+  #end
+//
+ jQuery("#install_img").click(function(){
+    var display=jQuery("#install").val();
+	if(display=="true"){
+	  jQuery("#install_img").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+	  jQuery("#install").val("false");
+	}else{
+	  jQuery("#install_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	  jQuery("#install").val("true");
+	}
+  }); 	
+//
+jQuery("#interfaceType").val("$!obj.interfaceType");
+jQuery("#trade_mode").val("$!obj.trade_mode");
+});
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">支付方式</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/payment_list.htm">管理</a> |  #if($!edit) <a href="javascript:void(0);" class="this">编辑支付方式</a> #end </span> <span class="tab-two"></span></div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/payment_save.htm" method=post>
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/payment_list.htm" />
+    <input name="mark" type="hidden" id="mark" value="$!obj.mark" />
+	#if($!obj.mark=="outline")
+    <div class="setcont">
+      <ul class="set1">
+        <li>支付方式名称</li>
+        <li><span class="webname">
+          <input name="name" type="text" id="name" #if($!obj.name)value="$!obj.name"#else value="线下支付"#end/>
+        </span></li>
+      </ul>
+      <ul class="set1">
+        <li>账号信息</li>
+        <li><span class="webname">
+          <textarea name="content" cols="40" rows="8" id="content">$!obj.content</textarea>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写线下支付的银行信息</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>是否开启</li>
+        <li><span class="webSwitch"><input name="install" type="hidden" id="install" value="$!obj.install" />
+         <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="install_img"  style="cursor:pointer" />
+          </span></li>
+      </ul>
+    </div>
+	#end
+	#if($!obj.mark=="balance")
+	<div class="setcont">
+      <ul class="set1">
+        <li>支付方式名称</li>
+        <li><span class="webname">
+           <input name="name" type="text" id="name" #if($!obj.name)value="$!obj.name"#else value="预付款"#end/>
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li>分润比例</li>
+        <li><span class="webname">
+          <input name="balance_divide_rate" type="text" id="balance_divide_rate" value="$!obj.balance_divide_rate"/>
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">请填写需要分润的比例，如：给平台分润10%，请填写0.1</strong><strong class="c"></strong></span></li>  
+      </ul>
+      <ul class="set1">
+        <li>是否开启</li>
+        <li><span class="webSwitch"><input name="install" type="hidden" id="install" value="$!obj.install" />
+         <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="install_img"  style="cursor:pointer" />
+          </span></li>
+      </ul>
+    </div>
+	#end
+    #if($!obj.mark=="alipay")
+    <div class="setcont">
+      <ul class="set1">
+        <li>支付方式名称</li>
+        <li><span class="webname">
+         <input name="name" type="text" id="name" #if($!obj.name)value="$!obj.name"#else value="支付宝"#end/>
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li>支付宝账号</li>
+        <li><span class="webname">
+          <input name="seller_email" type="text" id="seller_email" value="$!obj.seller_email"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写支付宝账户名称</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>安全校验码</li>
+        <li><span class="webname">
+          <input name="safeKey" type="text" id="safeKey" value="$!obj.safeKey"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写支付宝安全校验码</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>合作者身份ID</li>
+        <li><span class="webname">
+          <input name="partner" type="text" id="partner" value="$!obj.partner"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写合作者身份ID</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+	  <ul class="set1">
+        <li>接口类型</li>
+        <li><span class="webnamesec sizese">
+        <select name="interfaceType" id="interfaceType">
+		  <option value="">请选择接口类型...</option>
+		  <option value="0">即时到帐接口</option>
+          <option value="1">担保交易接口</option>
+          <option value="2">标注双接口</option>
+        </select>
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">填写合作者身份ID</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>支付手续费率</li>
+        <li><span class="webname">
+          <input name="alipay_rate" type="text" id="alipay_rate" value="$!obj.alipay_rate"/>
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">请准确填写签约支付时候的手续费率</strong><strong class="c"></strong></span></li>  
+      </ul>
+      <ul class="set1">
+        <li>分润比例</li>
+        <li><span class="webname">
+          <input name="alipay_divide_rate" type="text" id="alipay_divide_rate" value="$!obj.alipay_divide_rate"/>
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">请填写需要分润的比例，如：给平台分润10%，请填写0.1</strong><strong class="c"></strong></span></li>  
+      </ul>
+      <ul class="set1">
+        <li>是否开启</li>
+        <li><span class="webSwitch"><input name="install" type="hidden" id="install" value="$!obj.install" />
+         <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="install_img"  style="cursor:pointer" />
+          </span></li>
+      </ul>
+    </div>
+	#end
+    #if($!obj.mark=="alipay_wap")
+    <div class="setcont">
+      <ul class="set1">
+        <li>支付方式名称</li>
+        <li><span class="webname">
+         <input name="name" type="text" id="name" #if($!obj.name)value="$!obj.name"#else value="支付宝"#end/>
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li>手机支付宝账号</li>
+        <li><span class="webname">
+          <input name="seller_email" type="text" id="seller_email" value="$!obj.seller_email"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写手机支付宝账户名称</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>安全校验码</li>
+        <li><span class="webname">
+          <input name="safeKey" type="text" id="safeKey" value="$!obj.safeKey"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写支付宝安全校验码</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>合作者身份ID</li>
+        <li><span class="webname">
+          <input name="partner" type="text" id="partner" value="$!obj.partner"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写合作者身份ID</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+	  <ul class="set1">
+        <li>接口类型</li>
+        <li><span class="webnamesec sizese">
+        <select name="interfaceType" id="interfaceType">
+		  <option value="">请选择接口类型...</option>
+		  <option value="0">即时到帐接口</option>
+          <option value="1">担保交易接口</option>
+          <option value="2">标注双接口</option>
+        </select>
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">填写合作者身份ID</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>支付手续费率</li>
+        <li><span class="webname">
+          <input name="alipay_rate" type="text" id="alipay_rate" value="$!obj.alipay_rate"/>
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">请准确填写签约支付时候的手续费率</strong><strong class="c"></strong></span></li>  
+      </ul>
+      <ul class="set1">
+        <li>是否开启</li>
+        <li><span class="webSwitch"><input name="install" type="hidden" id="install" value="$!obj.install" />
+         <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="install_img"  style="cursor:pointer" />
+          </span></li>
+      </ul>
+    </div>
+	#end
+	
+	#if($!obj.mark=="weixin_wap")
+    <div class="setcont">
+      <ul class="set1">
+        <li>支付方式名称</li>
+        <li><span class="webname">
+         <input name="name" type="text" id="name" #if($!obj.name)value="$!obj.name"#else value="微信公众号支付"#end/>
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li>微信APPID</li>
+        <li><span class="webname">
+          <input name="weixin_appId" type="text" id="weixin_appId" value="$!obj.weixin_appId"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写微信APPID</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li>微信AppSecret</li>
+        <li><span class="webname">
+          <input name="weixin_appSecret" type="text" id="weixin_appSecret" value="$!obj.weixin_appSecret"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写微信AppSecret</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li>商户账户Mchid</li>
+        <li></li>
+		  <span class="webname">
+		  <input name="weixin_partnerId" type="text" id="weixin_partnerId" value="$!obj.weixin_partnerId"/>
+		  </span><span id="nothis"><strong class="q"></strong><strong class="w">填写微信商户的账户号Mchid</strong><strong class="c"></strong></span>
+      </ul>
+      <ul class="set1">
+        <li>商户安全Apikey</li>
+        <li><span class="webname">
+          <input name="weixin_paySignKey" type="text" id="weixin_partnerKey" value="$!obj.weixin_paySignKey"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写微信商户安全API密钥：在微信商户平台-支付密钥 > 商户平台 > API安全 > 密钥管理</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li>是否开启</li>
+        <li><span class="webSwitch"><input name="install" type="hidden" id="install" value="$!obj.install" />
+         <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="install_img"  style="cursor:pointer" />
+          </span></li>
+      </ul>
+    </div>
+	#end
+	
+	#if($!obj.mark=="wxcodepay")
+    <div class="setcont">
+      <ul class="set1">
+        <li>支付方式名称</li>
+        <li><span class="webname">
+         <input name="name" type="text" id="name" #if($!obj.name)value="$!obj.name"#else value="微信扫码支付"#end/>
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li>微信APPID</li>
+        <li><span class="webname">
+          <input name="weixin_appId" type="text" id="weixin_appId" value="$!obj.weixin_appId"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写微信APPID</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li>微信AppSecret</li>
+        <li><span class="webname">
+          <input name="weixin_appSecret" type="text" id="weixin_appSecret" value="$!obj.weixin_appSecret"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写微信AppSecret</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li>商户账户Mchid</li>
+        <li></li>
+		  <span class="webname">
+		  <input name="weixin_partnerId" type="text" id="weixin_partnerId" value="$!obj.weixin_partnerId"/>
+		  </span><span id="nothis"><strong class="q"></strong><strong class="w">填写微信商户的账户号Mchid</strong><strong class="c"></strong></span>
+      </ul>
+      <ul class="set1">
+        <li>商户安全Apikey</li>
+        <li><span class="webname">
+          <input name="weixin_paySignKey" type="text" id="weixin_partnerKey" value="$!obj.weixin_paySignKey"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写微信商户安全API密钥：在微信商户平台-支付密钥 > 商户平台 > API安全 > 密钥管理</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li>是否开启</li>
+        <li><span class="webSwitch"><input name="install" type="hidden" id="install" value="$!obj.install" />
+         <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="install_img"  style="cursor:pointer" />
+          </span></li>
+      </ul>
+    </div>
+	#end
+	
+    #if($!obj.mark=="tenpay")
+    <div class="setcont">
+      <ul class="set1">
+        <li>支付方式名称</li>
+        <li><span class="webname">
+         <input name="name" type="text" id="name" #if($!obj.name)value="$!obj.name"#else value="财付通"#end/>
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li>商户名称</li>
+        <li></li>
+		  <span class="webname">
+		  <input name="spname" type="text" id="spname" value="$!obj.spname"/>
+		  </span><span id="nothis"><strong class="q"></strong><strong class="w">填写财付商户名称</strong><strong class="c"></strong></span>
+      </ul>
+      <ul class="set1">
+        <li>财付通商户号</li>
+        <li><span class="webname">
+          <input name="tenpay_partner" type="text" id="tenpay_partner" value="$!obj.tenpay_partner"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写财付通商户号</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>财付通安全密钥</li>
+        <li><span class="webname">
+          <input name="tenpay_key" type="text" id="tenpay_key" value="$!obj.tenpay_key"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写财付通安全校密钥</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>财付通支付方式</li>
+        <li><span class="webnamesec sizese">
+        <select name="trade_mode" id="trade_mode">
+		  <option value="">请选择支付方式...</option>
+		  <option value="1">即时到帐</option>
+          <option value="2">中介担保</option>
+          <option value="3">后台选择</option>
+        </select>
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">填写合作者身份ID</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>是否开启</li>
+        <li><span class="webSwitch"><input name="install" type="hidden" id="install" value="$!obj.install" />
+         <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="install_img"  style="cursor:pointer" />
+          </span></li>
+      </ul>
+    </div>
+	#end
+    #if($!obj.mark=="bill")
+    <div class="setcont">
+      <ul class="set1">
+        <li>支付方式名称</li>
+        <li><span class="webname">
+          <input name="name" type="text" id="name" #if($!obj.name)value="$!obj.name"#else value="快钱"#end/>
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li>快钱帐户</li>
+        <li><span class="webname">
+          <input name="merchantAcctId" type="text" id="merchantAcctId" value="$!obj.merchantAcctId"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写快钱账户名称</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>人民币网关密钥</li>
+        <li><span class="webname">
+          <input name="rmbKey" type="text" id="rmbKey" value="$!obj.rmbKey"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写人民币网关密钥</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li>合作伙伴账户号</li>
+        <li><span class="webname">
+          <input name="pid" type="text" id="pid" value="$!obj.pid"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写快钱的合作伙伴的账户号</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>是否开启</li>
+        <li><span class="webSwitch"><input name="install" type="hidden" id="install" value="$!obj.install" />
+         <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="install_img"  style="cursor:pointer" />
+          </span></li>
+      </ul>
+    </div>
+	#end
+ #if($!obj.mark=="chinabank")
+    <div class="setcont">
+      <ul class="set1">
+        <li>支付方式名称</li>
+        <li><span class="webname">
+          <input name="name" type="text" id="name" #if($!obj.name)value="$!obj.name"#else value="网银在线"#end/>
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li>网银在线商户号</li>
+        <li><span class="webname">
+          <input name="chinabank_account" type="text" id="chinabank_account" value="$!obj.chinabank_account"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写快网银在线商户号</strong><strong class="c"></strong></span></li>	  
+      </ul>
+      <ul class="set1">
+        <li>网银在线密钥</li>
+        <li><span class="webname">
+          <input name="chinabank_key" type="text" id="chinabank_key" value="$!obj.chinabank_key"/>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">填写网银在线密钥</strong><strong class="c"></strong></span></li> 
+      </ul>
+      <ul class="set1">
+        <li>是否开启</li>
+        <li><span class="webSwitch"><input name="install" type="hidden" id="install" value="$!obj.install" />
+         <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="install_img"  style="cursor:pointer" />
+          </span></li>
+      </ul>
+    </div>
+	#end
+  #if($!obj.mark=="paypal")
+    <div class="setcont">
+      <ul class="set1">
+        <li>支付方式名称</li>
+        <li><span class="webname">
+          <input name="name" type="text" id="name" #if($!obj.name)value="$!obj.name"#else value="Paypal"#end/>
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li>商户名称</li>
+        <li></li>
+        <span class="webname">
+        <input name="paypal_userId" type="text" id="paypal_userId" value="$!obj.paypal_userId"/>
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">填写Paypal商户名称</strong><strong class="c"></strong></span>
+      </ul>
+      <ul class="set1">
+        <li>支付货币</li>
+        <li><span class="webnamesec sizese">
+          <select id="currency_code" name="currency_code">
+            <option value="USD" selected="">USD - U.S. Dollars</option>
+            <option value="AUD">AUD - Australian Dollars</option>
+            <option value="BRL">BRL - Brazilian Reais</option>
+            <option value="GBP">GBP - British Pounds</option>
+            <option value="CAD">CAD - Canadian Dollars</option>
+            <option value="CZK">CZK - Czech Koruny</option>
+            <option value="DKK">DKK - Danish Kroner</option>
+            <option value="EUR">EUR - Euros</option>
+            <option value="HKD">HKD - Hong Kong Dollars</option>
+            <option value="HUF">HUF - Hungarian Forints</option>
+            <option value="ILS">ILS - Israeli New Shekels</option>
+            <option value="JPY">JPY - Japanese Yen</option>
+            <option value="MYR">MYR - Malaysian Ringgit</option>
+            <option value="MXN">MXN - Mexican Pesos</option>
+            <option value="TWD">TWD - New Taiwan Dollars</option>
+            <option value="NZD">NZD - New Zealand Dollars</option>
+            <option value="NOK">NOK - Norwegian Kroner</option>
+            <option value="PHP">PHP - Philippine Pesos</option>
+            <option value="PLN">PLN - Polish Zlotys</option>
+            <option value="SGD">SGD - Singapore Dollars</option>
+            <option value="SEK">SEK - Swedish Kronor</option>
+            <option value="CHF">CHF - Swiss Francs</option>
+            <option value="THB">THB - Thai Baht</option>
+            <option value="TRY">TRY - Turkish Liras</option>
+          </select>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">选择支付使用的货币名称</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li>是否开启</li>
+        <li><span class="webSwitch">
+          <input name="install" type="hidden" id="install" value="$!obj.install" />
+          <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="install_img"  style="cursor:pointer" /> </span></li>
+      </ul>
+    </div>
+    #end
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

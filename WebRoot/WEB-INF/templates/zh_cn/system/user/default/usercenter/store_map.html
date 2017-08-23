@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>店铺设置  -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="http://api.map.baidu.com/api?v=1.4" type="text/javascript"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=store_set")
+        <td id="centerbg" valign="top">
+         <div class="seller_position_2">
+              <div class="seller_p_box_2"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>店铺地图</span></div>
+        </div>
+        <div class="productmain">
+          <div class="ordernav">
+            <ul class="orderul">
+              <li><a href="$!webPath/seller/store_set.htm">店铺设置</a></li>
+              <li><a href="$!webPath/seller/store_slide.htm">店铺幻灯</a></li>
+              <li class="this"><a href="$!webPath/seller/store_map.htm">店铺地图</a></li>
+              <li><a href="$!webPath/seller/store_approve.htm">店铺认证</a></li>
+            </ul>
+          </div>
+          <form action="$!webPath/seller/store_map_save.htm" method="post" enctype="multipart/form-data" id="theForm">
+            <div class="ordercon">
+              <div class="setshop">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="setshoptable">
+                  <tr>
+                    <td height="30" align="right" valign="middle"><input name="store_lat" type="hidden" id="store_lat" value="$!store.store_lat" />
+                      <input name="store_lng" type="hidden" id="store_lng" value="$!store.store_lng" />
+                      输入地址：</td>
+                    <td align="left" valign="middle"><input name="location" type="text" id="location" size="40" />
+                      <input type="button" name="button" id="button" value="搜索位置" onclick="search_location();" style="cursor:pointer;" /></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" align="right" valign="top">
+                    <div id="map" style="width:100%;height:500px;">
+                    </div>
+                     </td>
+                  </tr>
+                  <tr>
+                    <td width="103" align="right">&nbsp;</td>
+                    <td width="897" style="padding-left:30px;"><span class="setsub">
+                      <input name="input" type="submit"  value="提交" style="cursor:pointer;"/>
+                    </span></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </form>
+        </div></td>
+      </tr>
+    </table>
+  </div>
+  <script type="text/javascript">
+    #set($store_logo="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+    #if($!store.store_logo)
+       #set($store_logo="$!webPath/$!store.store_logo.path/$!store.store_logo.name")
+    #end
+   var map = new BMap.Map("map");
+   var point_add=0;//标注是否添加标注点
+   #if($!{store.store_lng}&&$!{store.store_lat})
+   map.centerAndZoom(new BMap.Point($!{store.store_lng},$!{store.store_lat}), 16);
+   var sContent ="<h4 style='margin:0 0 5px 0;padding:0.2em 0'>$!{store.store_name}</h4>" + 
+"<img style='float:right;margin:4px' id='imgDemo' src='$!store_logo' width='100' height='100' title='$!{store.store_name}'/>";
+    var point = new BMap.Point($!{store.store_lng},$!{store.store_lat});
+    var marker = new BMap.Marker(point);
+    var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+    map.centerAndZoom(point, 15);
+    map.addOverlay(marker);
+	marker.enableDragging();
+	marker.setAnimation(BMAP_ANIMATION_BOUNCE); 
+	marker.openInfoWindow(infoWindow);
+	marker.addEventListener("click", function(){          
+      this.openInfoWindow(infoWindow);
+    });
+	//
+	marker.addEventListener("dragend",function(e){
+	  jQuery("#store_lng").val(e.point.lng);
+	  jQuery("#store_lat").val(e.point.lat);
+    });
+    point_add=1;
+   #else
+   map.centerAndZoom(new BMap.Point(123.425329,41.792454), 11);
+   #end
+   map.enableScrollWheelZoom(); 
+   map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+ map.addEventListener("click",function(e){
+   // alert(e.point.lng + "," + e.point.lat);
+  if(point_add==0){ 
+   if(confirm("确定添加店铺地图位置吗？")){
+	var sContent ="<h4 style='margin:0 0 5px 0;padding:0.2em 0'>$!{store.store_name}</h4>" + 
+"<img style='float:right;margin:4px' id='imgDemo' src='$!store_logo' width='100' height='100' title='$!{store.store_name}'/>" + "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>$!store_info</p>" + 
+"</div>";
+    var point = new BMap.Point(e.point.lng, e.point.lat);
+	jQuery("#store_lng").val(e.point.lng);
+	jQuery("#store_lat").val(e.point.lat);
+    var marker = new BMap.Marker(point);
+    var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+    map.centerAndZoom(point, 15);
+    map.addOverlay(marker);
+	marker.enableDragging();
+	marker.setAnimation(BMAP_ANIMATION_BOUNCE); 
+	point_add=1;
+    marker.addEventListener("click", function(){          
+    this.openInfoWindow(infoWindow);
+   //图片加载完毕重绘infowindow
+     document.getElementById('imgDemo').onload = function (){
+        infoWindow.redraw();
+     }
+    });
+	//
+	marker.addEventListener("dragend",function(e){
+	  jQuery("#store_lng").val(e.point.lng);
+	  jQuery("#store_lat").val(e.point.lat);
+    });
+  }
+ }
+});
+   function search_location(){
+     var local = new BMap.LocalSearch(map, {
+       renderOptions:{map: map}
+     });
+	 var location=jQuery("#location").val();
+      local.search(location);
+   }
+  </script>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

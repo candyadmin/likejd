@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>卖家中心-$!{config.title}-Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery.rating.css" type="text/css" rel="stylesheet"/>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.metadata.js"></script>
+<script src="$!webPath/resources/js/jquery.rating.pack.js" type="text/javascript" language="javascript"></script>
+<script>
+jQuery(document).ready(function(){
+  #if($!{store.point.description_evaluate}>0)
+  jQuery(":radio.description_evaluate").each(function(){
+    var description_evaluate=$!{store.point.description_evaluate};
+	if(jQuery(this).val()>=description_evaluate){
+		jQuery(this).attr("checked","checked");
+		return false;
+	}
+  });
+  #end				
+  jQuery("input.description_evaluate").rating();
+   #if($!{store.point.service_evaluate}>0)
+  jQuery(":radio.service_evaluate").each(function(){
+    var service_evaluate=$!{store.point.service_evaluate};
+	if(jQuery(this).val()>=service_evaluate){
+		jQuery(this).attr("checked","checked");
+		return false;
+	}
+  });
+  #end				
+  jQuery("input.service_evaluate").rating();
+  #if($!{store.point.ship_evaluate}>0)
+  jQuery(":radio.ship_evaluate").each(function(){
+    var ship_evaluate=$!{store.point.ship_evaluate};
+	if(jQuery(this).val()>=ship_evaluate){
+		jQuery(this).attr("checked","checked");
+		return false;
+	}
+  });
+  #end				
+  jQuery("input.ship_evaluate").rating();  
+});
+</script>
+</head>
+<body class="seller_body">
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm")
+        <td id="centerbg" valign="top">
+        #if($!user.store)
+        <div class="table_sellerleft ">
+            <div class="seller_position">
+              <div class="seller_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>账户概览</span></div>
+            </div>
+            <div class="seller_index_box">
+              <div class="seller_index_left">
+                <div class="seller_shop"> #if(!$!{store.grade.validity})
+                  #set($validity="无限期")
+                  #else
+                  #set($validity=$!CommUtil.formatLongDate($!{store.grade.valitity}))
+                  #end
+                  <h3><span><i>店铺等级：$!{store.grade.gradeName}</i>|<i>有效期：$!{validity}</i>|<i>商品情况：$!{store.goods_list.size()}/$!{store.grade.goodsCount}</i></span>店铺概况</h3>
+                  <div class="seller_shop_box">
+                    <div class="seller_shop_top">
+                      <dl>
+                        <dt><span class="compimg_span">
+                          <p> #if($!store.store_logo)
+                            #set($store_logo="$!webPath/$!{store.store_logo.path}/$!{store.store_logo.name}")
+                            #else
+                            #set($store_logo="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+                            #end <img src="$!store_logo" width="82" height="82" /> </p>
+                          </span></dt>
+                        <dd>
+                          <ul>
+                            <li><strong>$!CommUtil.substring("$!{user.userName}",12)</strong> <em><a href="$!webPath/seller/store_approve.htm" title="店铺认证"><img src="$!imageWebServer/resources/style/common/images/card_approve_$!{store.card_approve}.gif" /><img src="$!imageWebServer/resources/style/common/images/realstore_approve_$!{store.realstore_approve}.gif" /></a></em> </li>
+                            <li> #set($credit=$!storeViewTools.generic_store_credit("$!store.id"))
+                              #set($img="$!imageWebServer/resources/style/common/images/level_0.gif")
+                              #if($credit<10 && $credit>0)
+                              #set($credit=${credit} / 2)
+                              #set($credit=$credit+1)
+                              #end
+                              #if($credit>=20)
+                              #set($img="$!imageWebServer/resources/style/common/images/level_2.gif") 
+                              #set($credit=($credit - 20)/2) 
+                              #set($credit=$credit+1)
+                              #end
+                              #if($credit>=10)
+                              #set($img="$!imageWebServer/resources/style/common/images/level_1.gif") 
+                              #set($credit=($credit - 10)/2)
+                              #set($credit=$credit+1)
+                              #end
+                              #if($credit>5)#set($credit=5)#end <i>卖家信誉：#if($!credit==0) <img src="$!imageWebServer/resources/style/common/images/level_-1.gif"/> #else #foreach($count in [1..$!credit])<img style="margin-left:1px;" src="$!img" />#end #end</i> </li>
+                            <li><i>店铺名称：</i><em><a href="$!webPath/store_$!{store.id}.htm" target="_blank">$!CommUtil.substring("$!{store.store_name}",12)</a></em><i>$!areaViewTools.generic_area_info("$!store.area.id")</i></li>
+                          </ul>
+                        </dd>
+                      </dl>
+                      <div class="seller_shop_r">
+                        <h4>店铺动态评分</h4>
+                        <ul>
+                          <li><i>描述相符：</i> <span> #foreach($i in [1..25])
+                            #set($val=$i * 0.2)
+                            #set($val=$!CommUtil.formatDouble($val,1))
+                            <input name="description_evaluate" class="description_evaluate {split:5}" type="radio" value="$!val"  disabled="disabled" />
+                            #end </span><i>$!CommUtil.null2Double($!{store.point.description_evaluate})分</i></li>
+                          <li><i>服务态度：</i><span> #foreach($i in [1..25])
+                            #set($val=$i * 0.2)
+                            #set($val=$!CommUtil.formatDouble($val,1))
+                            <input class="service_evaluate {split:5}" type="radio" name="service_evaluate" disabled="disabled"  value="$!val" />
+                            #end </span><i>$!CommUtil.null2Double($!{store.point.service_evaluate})分</i></li>
+                          <li><i>发货速度：</i><span> #foreach($i in [1..25])
+                            #set($val=$i * 0.2)
+                            #set($val=$!CommUtil.formatDouble($val,1))
+                            <input class="ship_evaluate {split:5}" type="radio" name="ship_evaluate" disabled="disabled"  value="$!val" />
+                            #end </span><i>$!CommUtil.null2Double($!{store.point.ship_evaluate})分</i></li>
+                        </ul>
+                      </div>
+                    </div>
+                    #set($goods_count=0)
+                    #set($goods_repertory_count=0)
+                    #set($goods_report_count=0)
+                    #set($consult_count=0)
+                    #foreach($goods in $store.goods_list)
+                    #if($!goods.goods_status==1)
+                    #set($goods_repertory_count=$goods_repertory_count+1)
+                    #end
+                    #if($!goods.goods_status==-2)
+                    #set($goods_report_count=$goods_report_count+1) 
+                    #end
+                    #if($!goods.goods_status==0)
+                    #set($goods_count=$goods_count+1) 
+                    #end
+                    #foreach($cousult in $goods.consults)
+                    #if(!$!cousult.reply)
+                    #set($consult_count=$consult_count+1)
+                    #end 
+                    #end  
+                    #end
+                    <div class="seller_shop_bottom">
+                      <ul>
+                        <li class="this">
+                          <h5>您需要关注的店铺情况：</h5>
+                          <span>商品提示：<i><a href="$!webPath/seller/goods_storage.htm">已下架的商品</a>(<b>$!{goods_repertory_count}</b>)</i></span><span>违规提示：<i><a href="$!webPath/seller/goods_report.htm">被举报禁售商品</a>(<b>$!{goods_report_count}</b>)</i></span><span>咨询提示：<i><a href="$!webPath/seller/consult.htm?reply=false">未回复的咨询</a>(<b>$!{consult_count}</b>)</i></span> </li>
+                        <li class="other"><span><a href="$!webPath/seller/goods.htm">出售中的商品：($!goods_count)</a></span><span><a href="$!webPath/seller/goods_out.htm">违规下架的商品：(0)</a></span><span><a href="$!webPath/seller/gold_record.htm">可用金币数：($!{user.gold})</a></span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                #set($order_count=0)
+                #set($order_wait_pay_count=0)
+                #set($order_wait_ship_count=0)
+                #set($order_wait_takeover_count=0)
+                #set($order_wait_evaluate_count=0)
+                #foreach($order in $store.ofs)
+                #if($order.order_status<60)
+                #set($order_count=$order_count+1)
+                #end
+                #if($!order.order_status==10)
+                #set($order_wait_pay_count=$order_wait_pay_count+1)
+                #end
+                #if($!order.order_status==20)
+                #set($order_wait_ship_count=$order_wait_ship_count+1)
+                #end
+                #if($!order.order_status==30)
+                #set($order_wait_takeover_count=$order_wait_takeover_count+1)
+                #end
+                #if($!order.order_status==50)
+                #set($order_wait_evaluate_count=$order_wait_evaluate_count+1)
+                #end
+                #end
+                <div class="seller_shop">
+                  <h3>交易提示</h3>
+                  <div class="seller_shop_box">
+                    <div class="seller_shop_bottom">
+                      <ul>
+                        <li class="this">
+                          <h5>您需要立即处理的交易订单：</h5>
+                          <span>近期销售：<i><a href="$!webPath/seller/order.htm">交易中的订单</a>(<b>$!{order_count}</b>)</i></span><span>维权提示：<i><a href="$!webPath/seller/complaint.htm">收到维权投诉</a>(<b>0</b>)</i></span> </li>
+                        <li class="other"><span><a href="$!webPath/seller/order.htm?order_status=order_submit">待买家付款：($!{order_wait_pay_count})</a></span><span><a href="$!webPath/seller/order.htm?order_status=order_pay">待发货：($!{order_wait_ship_count})</a></span><span><a href="$!webPath/seller/order.htm?order_status=order_shipping">待卖家收货：($!{order_wait_takeover_count})</a></span><span><a href="$!webPath/seller/order.htm?order_status=order_evaluate">待评价：($!order_wait_evaluate_count)</a></span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="seller_spread">
+                  <h3>店铺运营推广</h3>
+                  <div class="seller_shop_box">
+                    <ul class="seller_promotions">
+                      <li><a href="$!webPath/seller/group.htm"><span><img src="$!webPath/resources/style/system/front/default/images/usercenter/promotions_a.jpg" width="70" height="60" /></span><b>团购活动</b><i>参与团购活动，商品销量快速飙升，赚钱真的容易</i></a></li>
+                      <li><a href="$!webPath/seller/bargain.htm"><span><img src="$!webPath/resources/style/system/front/default/images/usercenter/promotions_b.jpg" width="70" height="60" /></span><b>天天特价</b><i>每日特价商品，提升商家信用，数量有限，快来参加</i></a></li>
+                      <li><a href="$!webPath/seller/delivery.htm"><span><img src="$!webPath/resources/style/system/front/default/images/usercenter/promotions_c.jpg" width="70" height="60" /></span><b>买就送</b><i>购物即送礼，买家获赠，卖家获利，加入请速度</i></a></li>
+                      <li><a href="$!webPath/seller/combin.htm"><span><img src="$!webPath/resources/style/system/front/default/images/usercenter/promotions_e.jpg" width="70" height="60" /></span><b>组合销售</b><i>千种商品，万种组合，最佳拍档，优惠多多</i></a></li>
+                      <li><a href="$!webPath/seller/delivery.htm"><span><img src="$!webPath/resources/style/system/front/default/images/usercenter/promotions_f.jpg" width="70" height="60" /></span><b>商城活动</b><i>千种商品，万种组合，最佳拍档，优惠多多</i></a></li>
+                      <li><a href="$webPath/seller/advert_list.htm"><span><img src="$!webPath/resources/style/system/front/default/images/usercenter/promotions_d.jpg" width="70" height="60" /></span><b>广告服务</b><i>参与商城广告，让更多买家找到你，不赚钱很难的哦</i></a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="seller_index_right">
+                <div class="seller_r_one">
+                  <h3>商城公告</h3>
+                  <ul class="seller_notice">
+                    #foreach($article in $articles)
+                    #if($!{article.url}&&$!{article.url}!="")
+                    <li><a href="$!article.url" target="_blank">$!CommUtil.substring("$!{article.title}",16)</a></li>
+                    #else
+                    <li><a href="$!webPath/article_$!{article.id}.htm">$!CommUtil.substring("$!{article.title}",16)</a></li>
+                    #end
+                    #end
+                  </ul>
+                </div>
+                <div class="seller_r_one">
+                  <h3>官方客服</h3>
+                  <ul class="seller_contact">
+                    #foreach($service_telphone in $CommUtil.str2list("$!config.service_telphone_list"))
+                    <li>客服电话$!{velocityCount}：$!service_telphone</li>
+                    #end
+                    #foreach($service_qq in $CommUtil.str2list("$!config.service_qq_list"))
+                    <li><span>在线客服$!{velocityCount}：</span> <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=$!service_qq&Site=$!service_qq&Menu=yes"><img alt="点击这里给我发消息" src="http://wpa.qq.com/pa?p=2:$!service_qq:51" /></a> </li>
+                    #end
+                  </ul>
+                </div>
+              </div>
+            </div>
+        #else
+         <div class="seller_center">
+              <div class="seller_center_top">
+                <h1>欢迎来到$!{config.title}卖家中心</h1>
+                <span>您现在还未开店，卖家中心的大部分信息还不能看到，您可以</span> </div>
+              <div class="seller_center_ul">
+                <ul>
+                  <li class="seller_shop_index">
+                    <h2><a href="$!webPath/seller/store_create_first.htm">免费开店</a></h2>
+                    <span> 通过实名认证、开店考试后，即可免费开始您的shopping店铺。<a href="http://bbs.shopping.com/thread-243-1-1.html" target="_blank">开店全攻略>></a></span></li>
+                  <li class="seller_idle">
+                    <h2><a href="$!webPath/seller/add_spare_goods.htm" target="_blank">出售闲置</a></h2>
+                    <span> 不用开店，即可发布您的闲置物品，享受交易乐趣。</span></li>
+                </ul>
+              </div>
+            </div>   
+        #end    
+          </td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

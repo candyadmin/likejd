@@ -1,0 +1,47 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{ margin:0px; font-size:12px; color:#000; padding:0px; font-family:Arial, Helvetica, sans-serif,"瀹嬩?"; background:url(images/loginbg.jpg) repeat-x #7DBEDA;}
+ul{padding:0px;margin:0px;list-style:none; }
+li{padding:0px;margin:0px;list-style:none;}
+ol,ul,li{list-style-image:none;
+list-style-position:outside;
+list-style-type:none;}
+img{ border:0px;}
+h1,h2,h3,h4,h5,h6{font-size:14px;padding:0px;margin:0px;}
+a{ text-decoration:none; color:#000;}
+a:hover{ color:#EE4F00;}
+html { overflow:-moz-scrollbars-vertical; } /*Always show Firefox scrollbar*/
+td{ margin-left:5px;}
+form, fieldset, legend, input, button, textarea, p, blockquote{ margin:0px; padding:0px; font-size:12px;}
+
+.main_body {width:479px;text-align:left;height:357px; position:absolute;top:50%;left:50%;margin:-178px 0 0 -239px; }
+.login_top{ width:478px; background:url(images/logtop.gif) no-repeat; height:77px;}
+.login_mid{ width:478px; height:126px; }
+.login_left{ background:url(images/loginl.jpg) no-repeat; width:150px; height:126px; float:left;}
+.login_m{ background:#6DD0F7; width:320px; height:126px; float:left}
+.login_r{ background:url(images/login_r.jpg) no-repeat; width:8px; height:126px; float:left}
+.login_mid2{ width:478px; height:59px;}
+.login_left2{ background:url(images/l2.jpg) no-repeat; width:9px; height:59px; float:left;}
+.login_m2{ width:461px; height:59px; background:#6DD0F7; float:left; }
+.login_r2{ background:url(images/r2.jpg) no-repeat; width:8px; height:59px; float:left}
+.bottom{ width:478px; height:65px; float:left; overflow:hidden;}
+.bottoml{ background:url(images/bottom1.gif) no-repeat; width:9px; height:65px; float:left}
+.bottomm{ background:url(images/bottomm.gif) repeat-x; width:461px; height:65px; float:left}
+.bottomr{ width:8px; height:65px; background:url(images/bottomr.gif) no-repeat; float:left}
+.login_m ul li{ width:320px; float:left; margin-top:5px;}
+.usename{ background:url(images/yhm.jpg) no-repeat; width:93px; height:38px; float:left}
+.password{ background:url(images/mima.jpg) no-repeat; width:93px; height:35px; float:left}
+.yzm{ background:url(images/yzm.jpg) no-repeat; width:93px; height:36px; float:left}
+.utxt{width:148px; height:30px; float:left;padding-left:5px; margin-top:8px; font-size:18px; color:#FFFFFF;}
+.ntxt,.ptxt{ background:url(images/yhmtxt.jpg) no-repeat;width:148px; height:30px; float:left;padding-left:5px; }
+.ntxt input,.ptxt input{width:136px; height:19px; float:left; border:0px; margin-top:5px;  line-height:19px; border:0px;}
+.ytxt{ background:url(images/yzmtxt.jpg) no-repeat; width:79px; height:30px; float:left; padding-left:5px;}
+.ytxt input{ border:0px; margin-top:4px; width:67px; height:19px; line-height:19px;border:0px;}
+.yzmimg img{ margin-top:2px; margin-left:5px;}
+.m1,.m2{ width:68px; float:left;}
+.m1{ padding-left:95px; padding-top:20px; padding-right:20px;}
+.m2{padding-top:20px; }
+.m1 input{ background:url(images/degl.jpg) no-repeat; width:68px; height:38px; border:0px;}
+.m2 input{ background:url(images/qingc.jpg) no-repeat; width:68px; height:38px; border:0px;}
+.tell{ color:#FFF; text-align:center; width:478px; line-height:30px;}

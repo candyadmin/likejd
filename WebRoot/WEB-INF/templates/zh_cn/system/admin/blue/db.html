@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+var timer;
+jQuery(document).ready(function(){
+  #if($!mode=="store")
+  jQuery.post("$!webPath/admin/database_bund_store.htm","","json");
+  #end
+  #if($!mode=="backup")
+  jQuery.post("$!webPath/admin/database_bund_backup.htm","","json");
+  #end
+ //
+ timer=setInterval("queryBound()", 500);
+});
+function queryBound(){
+  jQuery.getJSON("$!webPath/admin/database_deal_info.htm","",function(data){
+      if(data.bound=="null"){
+	    clearInterval(timer);
+	  }else
+        jQuery("#bound").html(data.bound);
+	  if(data.result=="1"){
+	    window.location.href="$!webPath/admin/database_success.htm?mode="+data.mode;
+	  }
+	  if(data.result=="-1"){
+	    window.location.href="$!webPath/admin/database_error.htm?mode="+data.mode;
+	  }
+  })
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">系统消息</h1>
+  <div class="bigok">
+    <div class="bigokimg"><img src="$!webPath/resources/style/system/manage/blue/images/sys.jpg" width="121" height="113" /></div>
+    <div class="bigleft">
+      <ul>
+	    #if($!mode=="store")
+        <li class="hui">正在恢复$!{name}第#<span id="bound">1</span>卷！</li>
+		#end
+		#if($!mode=="backup")
+        <li class="hui">正在备份$!{name}第#<span id="bound">1</span>卷！</li>
+		#end
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });	
+  //
+  #if($!config.uc_bbs=="true")
+   jQuery("#uc_bbs_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+  #else
+   jQuery("#uc_bbs_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+  #end
+  jQuery("#uc_bbs_status").click(function(){
+     var uc_bbs=jQuery("#uc_bbs").val();
+	 if(uc_bbs=="true"){
+	   jQuery("#uc_bbs_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	   jQuery("#uc_bbs").val("false");
+	 }else{
+	   jQuery("#uc_bbs_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	   jQuery("#uc_bbs").val("true");
+	 }
+  });
+});
+
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/ucenter_save.htm" method="post" name="theForm" id="theForm">
+<input name="id" id="id" type="hidden" value="$!config.id"/>
+<div class="cont">
+  <h1 class="seth1">UC整合</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="javascript:void(0);" class="this">基本设置</a> </span> <span class="tab-two"></span></div>
+  <div class="setcont">
+    <ul class="set1">
+      <li>UC整合:</li>
+      <li>
+	  <span class="webSwitch"> 
+	  <input name="uc_bbs" id="uc_bbs" type="hidden" value="$!config.uc_bbs" />
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" style="cursor:pointer" id="uc_bbs_status"/> 
+	  </span></li>
+    </ul>
+    <ul class="set1">
+      <li>应用ID:</li>
+      <li><span class="webname">
+        <input name="uc_appid" type="text" id="uc_appid" value="$!config.uc_appid" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">shopping商城系统在整合UCenter应用ID</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>访问地址:</li>
+      <li><span class="webname">
+        <input name="uc_api" type="text" id="uc_api" value="$!config.uc_api" reg="^-?\d+$" tip="端口只能为整数"/>
+      </span><span id="nothis"><strong class="w">填写UCenter的访问地址;</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>通讯密钥:</li>
+      <li><span class="webname">
+	   <input name="uc_key" type="text" id="uc_key" value="$!config.uc_key" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">shopping在UCenter应用中的通信密钥</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>IP地址:</li>
+      <li><span class="webname">
+               <input name="uc_ip" type="text" id="uc_ip" value="$!config.uc_ip" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">需要整合应用的IP地址</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>数据库地址:</li>
+      <li><span class="webname">
+        <input name="uc_database_url" type="text" id="uc_database_url" value="$!config.uc_database_url" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">需要整合应用的数据库地址</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>数据库端口:</li>
+      <li><span class="webname">
+        <input name="uc_database_port" type="text" id="uc_database_port" value="$!config.uc_database_port" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">需要整合应用的数据库访问账号</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>数据库用户名:</li>
+      <li><span class="webname">
+        <input name="uc_database_username" type="text" id="uc_database_username" value="$!config.uc_database_username" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">需要整合应用的数据库访问账号</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>数据库密码:</li>
+      <li><span class="webname">
+        <input name="uc_database_pws" type="text" id="uc_database_pws" value="$!config.uc_database_pws" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">需要整合应用的数据库访问密码</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>数据库名:</li>
+      <li><span class="webname">
+        <input name="uc_database" type="text" id="uc_database" value="$!config.uc_database" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">需要整合应用的数据库名</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>表前缀:</li>
+      <li><span class="webname">
+        <input name="uc_table_preffix" type="text" id="uc_table_preffix" value="$!config.uc_table_preffix" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">需要整合应用的表前缀</strong><strong class="c"></strong></span></li>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="" type="submit" value="提交" style="cursor:pointer;"/>
+  </div>
+</div>
+</form>
+</body>
+</html>

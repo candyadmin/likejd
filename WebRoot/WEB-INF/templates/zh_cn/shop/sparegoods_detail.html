@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!obj.title -$!{config.title} -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/second.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+jQuery("#show_message").hover(
+			function(){
+			jQuery(this).addClass("top_nav_lf_hover").find(".details").show();						   
+				},function(){
+			jQuery(this).removeClass("top_nav_lf_hover").find(".details").hide();								   
+				});
+//图片切换
+	jQuery(".thumb_list ul li").click(function(){
+	jQuery(this).parent().find("li a").removeClass("this");
+	jQuery(this).find("a").addClass("this");
+	var mark =jQuery(this).attr("mark");
+	jQuery(".Detail_slider ul:first li").css("display","none");
+	jQuery(".Detail_slider ul:first li[mark='"+mark+"']").show();
+	});
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/sparegoods_head.htm") </div>
+$!httpInclude.include("/sparegoods_nav.htm")
+<div class="main">
+  <div class="Detail">
+    <div class="top_nav">
+      <!--top_nav_lf-->
+      <div class="top_nav_lf" id="show_message"> <span class="name"> #set($user_img ="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+        #if($!obj.user.phtot)
+        #set($user_img ="$!webPath/$!obj.user.photo.path/$!obj.user.photo.name")
+        #end <i><img src="$!user_img" width="30" height="30" /></i> <a href="javascript:void(0);">$!obj.user.userName</a> </span> <b> <em><img src="$!webPath/resources/style/system/front/default/images/icon_3.png" /></em> </b>
+        <div class="details" style="display:none">
+          <ul>
+            <li>注册时间：$!CommUtil.formatShortDate($!obj.user.addTime)</li>
+            <li>真实姓名：#if($!obj.user.trueName!="")$!obj.user.trueName #else 暂无 #end</li>
+            <li>性别：#if($!obj.user.sex==-1)保密#end #if($!obj.user.sex==1)男#end #if($!obj.user.sex==0)女#end</li>
+            <li>所在地：$!obj.area.parent.parent.areaName $!obj.area.parent.areaName $!obj.area.areaName</li>
+            <li>QQ：#if($!obj.user.QQ!="")$!obj.user.QQ #else 暂无 #end</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="Detail_main">
+      <div class="Detail_sub">
+        <div class="Detail_slider">
+          <ul style="width:1460px; height:390px; position:absolute; overflow:hidden">
+            <li mark="1"><a title="查看原图"  target="_blank" href="$!webPath/$!obj.img1.path/$!obj.img1.name"><img src="$!webPath/$!obj.img1.path/$!obj.img1.name" width="600" height="400" /></a></li>
+            <li mark="2" style="display:none"><a target="_blank" title="查看原图" href="$!webPath/$!obj.img2.path/$!obj.img2.name"><img src="$!webPath/$!obj.img2.path/$!obj.img2.name" width="600" height="400"/></a></li>
+            <li mark="3" style="display:none"><a target="_blank" title="查看原图" href="$!webPath/$!obj.img3.path/$!obj.img3.name"><img src="$!webPath/$!obj.img3.path/$!obj.img3.name" width="600" height="400"/></a></li>
+            <li mark="4" style="display:none"><a title="查看原图" target="_blank" href="$!webPath/$!obj.img4.path/$!obj.img4.name"><img src="$!webPath/$!obj.img4.path/$!obj.img4.name" width="600" height="400"/></a></li>
+            <li mark="5" style="display:none"><a title="查看原图" target="_blank" href="$!webPath/$!obj.img5.path/$!obj.img5.name"><img src="$!webPath/$!obj.img5.path/$!obj.img5.name" width="600" height="400"/></a></li>
+          </ul>
+          <div class="thumb_list">
+            <ul>
+              <li  mark="1"><a class="this" href="javascript:void(0);"><img src="$!webPath/$!obj.img1.path/$!obj.img1.name" width="92" height="55" /></a></li>
+              #if($!obj.img2)
+              <li  mark="2"><a href="javascript:void(0);"><img src="$!webPath/$!obj.img2.path/$!obj.img2.name" width="92" height="55" /></a></li>
+              #end
+              #if($!obj.img3)
+              <li  mark="3"><a href="javascript:void(0);"><img src="$!webPath/$!obj.img3.path/$!obj.img3.name" width="92" height="55" /></a></li>
+              #end
+              #if($!obj.img4)
+              <li  mark="4"><a href="javascript:void(0);"><img src="$!webPath/$!obj.img4.path/$!obj.img4.name" width="92" height="55" /></a></li>
+              #end
+              #if($!obj.img5)
+              <li  mark="5"><a href="javascript:void(0);"><img src="$!webPath/$!obj.img5.path/$!obj.img5.name" width="92" height="55" /></a></li>
+              #end
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="Detail_right">
+        <div class="h1">
+          <h1>$!obj.title</h1>
+          <ul>
+            <li><span class="para"> 转&nbsp;&nbsp;卖&nbsp;&nbsp;价：</span> ¥<b>$!obj.goods_price</b> </li>
+            <li><span class="para"> 原&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价：</span> ¥<s> $!obj.goods_old_price</s> </li>
+          </ul>
+        </div>
+        <div class="h2">
+          <ul>
+            <li><span class="para">成&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;色：</span>#if($!obj.oldAndnew==1)全新 #else 非全新#end </li>
+            <li><span class="para">所&nbsp;在&nbsp;地：</span>$!obj.area.parent.parent.areaName $!obj.area.parent.areaName  $!obj.area.areaName</li>
+            <li><span class="para">发&nbsp;布&nbsp;人：</span>$!obj.name（$!{obj.user.userName}）<i> #if($!user) <a href="$!webPath/buyer/message_send.htm?userName=$!obj.user.userName" target="_blank"><img src="$!webPath/resources/style/system/front/default/images/usercenter/order_04.gif" width="15" height="11" /></a> #else <a href="javascript:void(0);"  dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="450" dialog_height="100" dialog_id="user_login"><img src="$!webPath/resources/style/system/front/default/images/usercenter/order_04.gif" width="15" height="11" /></a> #end </i></li>
+            <li><span class="para">Q&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Q：</span>#if($!obj.QQ) <a style="margin-top:8px; float:left;" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=$!obj.QQ&Site=$!obj.QQ&Menu=yes"><img src="http://wpa.qq.com/pa?p=2:$!{obj.QQ}:51" /></a> #else暂无#end</li>
+            <li><span class="para">联系方式：</span>$!obj.phone</li>
+            #if($!user)
+            <li> <a style=" margin-left:90px; margin-top:35px; float:left" href="javascript:void(0);" user_id="$!obj.user.id" id="userDialog_img_contact_$!obj.user.id" user_name="$!obj.user.userName"> <img src="$!webPath/resources/style/system/front/default/images/message.jpg"/> </a> </li>
+            #else
+            <li> <a style=" margin-left:90px; margin-top:35px; float:left" href="javascript:void(0);" dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="450" dialog_height="100" dialog_id="user_login"> <img src="$!webPath/resources/style/system/front/default/images/message.jpg"/> </a> </li>
+            #end
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="Detail_main">
+        <div class="tit">
+          <ul>
+            <li class="this"><a href="javascript:void(0);">宝贝介绍</a></li>
+          </ul>
+        </div>
+        <div class="baby_idle">
+          <div class="bady_h2"><b>宝贝介绍</b></div>
+          <div class="bady_p"> $!obj.content </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") 
+  #if($!user)   
+  $!httpInclude.include("/chatting.htm") 
+  #end </div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>直通车商品 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=ztc_apply")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>直通车商品</span></div></div>
+        <form action="$!webPath/seller/ztc_list.htm" method="post" name="ListForm" id="ListForm">
+            <div class="productmain">
+              <div class="ordernav">
+                <ul class="orderul">
+                  <li class="other"><a href='$!webPath/seller/ztc_apply.htm'>直通车申请</a></li>
+                   <li class="other"><a href='$!webPath/seller/ztc_apply_list.htm'>直通车申请列表</a></li>
+                  <li class="this"><a href='$!webPath/seller/ztc_list.htm'>直通车商品</a></li>
+                </ul>
+              </div>
+              <div class="ordercon">
+                <div class="ordersear"> <span class="ordersel">
+                  商品名称
+                  </span> <span class="ordersp1 size7">
+                  <input name="goods_name" type="text" id="goods_name" />
+                  </span><span class="orderbtn">
+                  <input name="" type="submit" value="搜索" style="cursor:pointer;" />
+                  </span> </div>
+                <div class="operation">
+                  <table width="99%" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                    <tr id="opertitle">
+                      <td class="proname" width="35%">商品名称</td>
+                      <td width="15%" class="proclassify">剩余金币(枚)</td>
+                      <td width="20%" class="promoney">开始时间</td>
+                      <td width="15%" align="center">上架状态</td>
+                      <td   class="prorec">推荐</td>
+                    </tr>
+                    #foreach($obj in $objs)
+                    <tr class="opertr">
+                    #if($!obj.goods_main_photo)
+                        #set($img="$!webPath/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}")
+                        #else
+                        #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                        #end
+                      <td class="proname" valign="middle" ><span class="checkpro">
+                        </span><span class="imgpro"><img src="$!img" width="60" height="63" /></span><span class="nameproduct" style="width:200px;"><a href="$!webPath/goods_$!{obj.id}.htm" target="_blank">$!obj.goods_name</a></span></td>
+                      <td class="proclassify">$!obj.ztc_gold</td>
+                      <td  class="promoney">$!obj.ztc_begin_time</td>
+                      #if($!obj.goods_status==0)
+                        #set($goods_status="上架")
+                      #end
+                      #if($!obj.goods_status==1)
+                        #set($goods_status="仓库中")
+                      #end
+                      #if($!obj.goods_status==-1)
+                        #set($goods_status="手动下架")
+                      #end
+                      #if($!obj.goods_status==-2)
+                        #set($goods_status="违规下架")
+                      #end
+                      #if($!obj.goods_status==-3)
+                        #set($goods_status="举报禁售")
+                      #end
+                      <td class="operajt">$!goods_status</td>
+                      <td class="prorec"><img src="$!webPath/resources/style/system/front/default/images/usercenter/$!{obj.goods_recommend}.jpg" width="16" height="14" /></td>
+                    </tr>
+                    #end
+                  </table>
+                </div>
+              </div>
+              <div class="alldel">
+                <div  class="userfenye">
+                  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                $!gotoPageFormHTML</div>
+              </div>
+            </div>
+          </form></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

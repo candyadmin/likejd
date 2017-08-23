@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>被举报禁售商品 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> 
+  $!httpInclude.include("/seller/nav_head.htm")
+    <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=goods_report")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>被举报禁售商品</span></div></div>
+        <form method="post" id="ListForm">
+        <div class="productmain">
+            <div class="pdctitle blue2">被举报禁售商品</div>
+            <div class="operation">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                <tr id="opertitle">
+                  <td class="proname2" >商品名称</td>
+                  <td class="banclass">举报类型</td>
+                  <td  class="theme" align="center">举报主题</td>
+                  <td class="banpic"  align="center">图片</td>
+                  <td class="bantime">举报时间</td>
+                  <td class="banstate">状态</td>
+                  <td class="result">处理结果</td>
+                  <td align="center">操作</td>
+                </tr>
+                #foreach($obj in $objs)
+                <tr class="opertr">
+                  <td class="proname2" valign="middle" ><span class="nameproduct blue">$!obj.goods.goods_name</span></td>
+                  <td class="banclass">$!obj.subject.type.name</td>
+                  <td class="theme" align="center">$!obj.subject.title</td>
+                  <td  class="banpic"  align="center"><a href="$!webPath/seller/report_img.htm?id=$!obj.id" target="_blank" class="blue">查看图片</a></td>
+                  <td class="bantime">$!CommUtil.formatLongDate($!obj.addTime)</td>
+                      #if($!obj.status==0)#set($status="未处理")#end
+                      #if($!obj.status==1)#set($status="已处理")#end
+                      #if($!obj.status==-1)#set($status="已取消")#end
+                  <td class="banstate">$!status</td>
+                      #set($result="等待处理")
+                      #if($!obj.result==1)
+                        #set($result="有效举报")
+                      #end
+                      #if($!obj.result==-1)
+                        #set($result="无效举报")
+                      #end
+                      #if($!obj.result==-2)
+                        #set($result="恶意举报")
+                      #end
+                  <td class="result">$!result</td>
+                  <td class="operaup" style="padding-left:30px;"><span class="bandetail"><a href="javascript:void(0);" onclick="javascript:jQuery('#content_$!{obj.id}').show();">详细</a></span></span></td>
+                </tr>
+                <tr id="content_$!{obj.id}" style="display:none;">
+                  <td colspan="8"><div class="banreport">
+                      <div class="report1">
+                        <h1><a class="close" href="javascript:void(0);" onclick="javascript:jQuery('#content_$!{obj.id}').hide();"><img src="$!webPath/resources/style/system/front/default/images/usercenter/close.jpg" width="12" height="13" /></a>举报内容</h1>
+                        <div class="rep">$!obj.content</div>
+                      </div>
+                      <div class="report2">
+                        <h1>处理意见</h1>
+                        <div class="rep">$!obj.handle_info</div>
+                      </div>
+                    </div></td>
+                </tr>
+                #end
+              </table>
+            </div>
+            <div class="alldel">
+              <div  class="userfenye">$!gotoPageFormHTML</div>
+            </div>
+          </div>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

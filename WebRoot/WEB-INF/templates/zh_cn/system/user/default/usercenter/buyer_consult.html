@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>咨询管理 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">$!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/buyer/nav.htm?op=consult")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/index.htm">买家中心</a> > <span>全部咨询</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li #if($!{reply}=="")class="this"#end><a href="$!webPath/buyer/consult.htm">全部咨询</a></li>
+                <li #if($!{reply}=="false")class="this"#end><a href="$!webPath/buyer/consult.htm?reply=false">未回复咨询</a></li>
+                <li #if($!{reply}=="true")class="this"#end><a href="$!webPath/buyer/consult.htm?reply=true">已回复咨询</a></li>
+              </ul>
+            </div>
+           <form action="$!webPath/buyer/consult.htm" method="post" id="ListForm">
+            <div class="ordercon">
+              <div class="ordersear" style="border:none;height:5px;">
+              </div>
+              #foreach($obj in $objs)
+              <div class="consultation">
+                <div class="consul"></div>
+                <div class="tation">
+                  <div class="ctation">
+                    <div class="hhcation"><strong><a href="$!webPath/goods_$!{obj.goods.id}.htm" target="_blank">$!{obj.goods.goods_name}</a></strong><span class="shopconsu">[商品咨询]</span><span class="del_edit"></span></div>
+                    <div class="constit"><span class="constitsp"><strong>咨询时间：</strong>$!CommUtil.formatLongDate($!obj.addTime)</span></div>
+                    <div class="consts"><strong>咨询内容：</strong>$!{obj.consult_content}</div>
+                  </div>
+                  #if($!obj.consult_reply)
+                  <div class="onstation">
+                    <div class="consts"><strong>回复内容：</strong>$!{obj.consult_reply}</div>
+                    <div class="consts"><strong>回复时间：</strong>$!CommUtil.formatLongDate($!obj.reply_time)</div>
+                  </div>
+                  #end
+                </div>
+              </div>
+              #end
+              
+              <div class="alldel">
+                <div  class="userfenye">
+                  <input name="mulitId" type="hidden" id="mulitId" />
+                  <input name="reply" type="hidden" id="reply" value="$!reply" />
+                  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                  $!gotoPageFormHTML</div>
+              </div>
+            </div>
+            </form>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

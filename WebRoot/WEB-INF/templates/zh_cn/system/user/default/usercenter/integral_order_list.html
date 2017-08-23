@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>积分兑换 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">$!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <form action="$!webPath/buyer/order.htm" method="post" id="ListForm">
+      <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+        <tr> $!httpInclude.include("/buyer/nav.htm?op=integral")
+          <td id="centerbg" valign="top">
+          <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/index.htm">买家中心</a> > <span>兑换记录</span></div></div>
+          <div class="productmain">
+          <div class="ordernav">
+            <ul class="orderul">
+              <li class="this"><a href="$!webPath/buyer/integral_order_list.htm">兑换记录</a></li>
+            </ul>
+          </div>
+          <div class="ordercon">
+            <div class="myorder"> #foreach($obj in $objs)
+              <div class="myordone"> #if($!obj.igo_status==-1)
+                #set($status="已取消")
+                #end
+                #if($!obj.igo_status==0)
+                #set($status="待付款")
+                #end
+                #if($!obj.igo_status==10)
+                #set($status="线下支付待审核")
+                #end
+                #if($!obj.igo_status==20)
+                #set($status="已付款，待发货")
+                #end
+                #if($!obj.igo_status==30)
+                #set($status="已发货")        
+                #end                
+                #if($!obj.igo_status==40)
+                #set($status="已收货完成")
+                #end
+                <div class="myordertitle"><span id="my_orderstate">订单状态：<strong>$!status</strong></span><span class="my_ordernum">兑换单号: $!obj.igo_order_sn </span></div>
+                #foreach($gc in $obj.igo_gcs)
+                <div class="my_content">
+                  <ul>
+                    #if($!gc.goods.ig_goods_img)
+                    #set($img="$!webPath/$!{gc.goods.ig_goods_img.path}/$!{gc.goods.ig_goods_img.name}_small.$!{gc.goods.ig_goods_img.ext}")
+                    #else
+                    #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                    #end
+                    <li class="my_con1"><span class="img_span"><img src="$!img" width="50" height="50" /></span><span class="txt_span"><a href="$!webPath/integral_view_$!{gc.goods.id}.htm" target="_blank">$!{gc.goods.ig_goods_name}</a></span></li>
+                    <li class="my_con2"><span class="hui">消耗积分：</span>$!{gc.integral}</li>
+                    <li class="my_con3"><span class="hui">数量：</span>$!{gc.count}</li>
+                  </ul>
+                </div>
+                #end
+                <div class="myordfot">
+                  <div class="myordto"><span style="padding-left:3px;" class="myorder_momey">运费：<strong class="redoredr">¥$!CommUtil.null2Double($!{obj.igo_trans_fee})</strong></span> #if($!obj.igo_status==0) <span class="myorderbtn"> <a href="$!webPath/integral_order_pay_view.htm?id=$!obj.id" target="_blank">付款</a></span> #end
+                    #if($!obj.igo_status<20&&$!{obj.igo_status}>-1) <span class="myorderbtn"> <a href="javascript:void(0);" onclick="if(confirm('取消订单将会返回对应的积分，是否继续?'))window.location.href='$!webPath/buyer/integral_order_cancel.htm?id=$!obj.id&currentPage=$!currentPage'">取消订单</a></span> #end 
+                    #if($!obj.igo_status==30) <span class="myorderbtn"> <a href="javascript:void(0);" dialog_uri="$!webPath/buyer/integral_order_cofirm.htm?id=$!obj.id&currentPage=$!currentPage" dialog_title="确认收货" dialog_width="400" dialog_height="100" dialog_id="order_cancel">确认收货</a></span> #end <span class="myorderbtn"> <a href="$!webPath/buyer/integral_order_view.htm?id=$!obj.id&currentPage=$!currentPage">查看订单</a></span></div>
+                  #if($!obj.igo_payment=="alipay")
+                  #set($payment="支付宝")
+                  #end
+                  #if($!obj.igo_payment=="tenpay")
+                  #set($payment="财付通")
+                  #end
+                  #if($!obj.igo_payment=="bill")
+                  #set($payment="快钱")
+                  #end                 
+                  #if($!obj.igo_payment=="chinabank")
+                  #set($payment="网银在线")
+                  #end       
+                  #if($!obj.igo_payment=="outline")
+                  #set($payment="线下支付")
+                  #end                  
+                  #if($!obj.igo_payment=="balance")
+                  #set($payment="预存款支付")
+                  #end 
+                  #if($!obj.igo_payment=="no_fee")
+                  #set($payment="无运费订单")
+                  #end 
+                  #if(!$!obj.igo_payment)
+                  #set($payment="未支付")
+                  #end <span class="myfotspa">下单时间：$!CommUtil.formatLongDate($!obj.addTime)</span><span>支付方式：$!payment</span></div>
+              </div>
+              #end </div>
+            <div class="alldel">
+              <div  class="userfenye">
+                <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                $!gotoPageFormHTML</div>
+            </div>
+            </div>
+          </div></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

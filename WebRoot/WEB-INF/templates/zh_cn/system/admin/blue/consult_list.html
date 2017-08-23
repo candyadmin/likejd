@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">咨询管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a  href="javascript:void(0);" class="this">&nbsp;所有咨询&nbsp;</a> </span> <span class="tab-two"></span></div>
+  <form action="$!webPath/admin/consult_list.htm" method="post" id="queryForm">
+  <div class="shop_search"> <span >咨询人</span><span class="shopn_search">
+    <input name="consult_user_userName" type="text" id="consult_user_userName" />
+    </span><span class="btn_search">
+    <input name="" type="submit"  value="搜索" style="cursor:pointer;"/>
+    </span> </div>
+    </form>
+  <div class="operation">
+    <h3>操作提示</h3>
+    <ul>
+      <li>会员可在商品信息页对商品进行咨询，设置 - 站点设置 - 管理相关 可设置游客是否能够咨询</li>
+    </ul>
+  </div>
+  <form action="$!webPath/admin/consult_list.htm" method="post" id="ListForm">
+  <div class="consultation">
+    <!--咨询开始-->
+    #foreach($obj in $objs)
+    <div class="consulone">
+      <div class="consultitle"><span class="consuin">
+        <input type="checkbox" name="checkbox" id="checkbox" value="$!obj.id" />
+        </span><span class="consulop"><strong>咨询对象:</strong><a href="$!webPath/goods_$!{obj.goods.id}.htm" target="_blank">[$!{obj.goods.goods_name}]</a></span><span class="consushopname"><strong>店铺名称：$!{obj.goods.goods_store.store_name}</strong></span><span class="consulopr"><strong>操作：<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/admin/consult_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'">删除</a></strong></span></div>
+      <div class="consula">
+        <h2><span>咨询人：$!{obj.consult_user.userName}</span><span>咨询时间:$!CommUtil.formatLongDate($!obj.addTime)</span></h2>
+        <div class="consulacon">$!{obj.consult_content}</div>
+      </div>
+      <div class="consulb">
+        <h2><span style="color:#C60">店主回复</span></h2>
+        <div class="consulacon">#if($!obj.reply)<span id="summary_$!{obj.id}">$!CommUtil.substring("$!{obj.consult_reply}",60)</span> #else 暂无回复 #end <span id="detail_$!{obj.id}" style="display:none;">$!{obj.consult_reply}</span><a id="show_$!{obj.id}" href="javascript:void(0);" onclick="javascript:jQuery('#detail_$!{obj.id}').show();jQuery('#summary_$!{obj.id}').hide();jQuery('#show_$!{obj.id}').hide();jQuery('#hide_$!{obj.id}').show();">【展开】</a><a id="hide_$!{obj.id}" href="javascript:void(0);" onclick="javascript:jQuery('#detail_$!{obj.id}').hide();jQuery('#summary_$!{obj.id}').show();jQuery('#show_$!{obj.id}').show();jQuery('#hide_$!{obj.id}').hide();" style="display:none;">【收起】</a></div>
+      </div>
+    </div>
+    #end
+    <!--咨询结束-->
+    <div class="delconsul"><span>
+      <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this);" />
+      全选</span><span class="shop_btn_del shopbtn">
+      <input name="" type="button"  onclick="cmd('$!webPath/admin/consult_del.htm','')" style="cursor:pointer;" value="删除"/>
+      </span></div>
+      <div class="fenye">
+        <input name="consult_user_userName" type="hidden" id="consult_user_userName" value="$!consult_user_userName" />
+        <input name="consult_content" type="hidden" id="consult_content" value="$!consult_content" />
+        <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	  <input name="mulitId" type="hidden" id="mulitId" />
+	  $!gotoPageFormHTML</div>
+  </div>
+  </form>
+</div>
+</body>
+</html>

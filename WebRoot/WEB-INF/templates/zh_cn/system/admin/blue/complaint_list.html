@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#beginTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  //
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">投诉管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"><a href="$!webPath/admin/complaint_list.htm?status=new" #if($!status=="new")class="this"#end>新投诉</a> | <a href="$!webPath/admin/complaint_list.htm?status=complain" #if($!status=="complain")class="this"#end>待申诉</a>|<a href="$!webPath/admin/complaint_list.htm?status=talk" #if($!status=="talk")class="this"#end>对话中</a>|<a href="$!webPath/admin/complaint_list.htm?status=arbitrate" #if($!status=="arbitrate")class="this"#end>等仲裁</a>|<a href="$!webPath/admin/complaint_list.htm?status=close" #if($!status=="close")class="this"#end>已关闭</a>|<a href="$!webPath/admin/complaintsubject_list.htm">投诉主题</a>|<a href="$!webPath/admin/complaintsubject_add.htm">新增投诉主题</a>|<a href="$!webPath/admin/complaint_set.htm">投诉设置</a></span> <span class="tab-two"></span></div>
+ <form method="post" id="queryForm">
+  <div class="allpro_search">
+    <ul>
+      <li> <span>投诉人</span><span class="allpro size3">
+        <input name="from_user" type="text" id="from_user" />
+        </span> <span>投诉主题</span><span class="allpro size12">
+        <input name="title" type="text" id="title" />
+      </span> </li>
+      <li> <span>被投诉</span><span class="allpro size3">
+        <input name="to_user" type="text" id="to_user" />
+        </span> <span>投诉时间</span><span class="allpro size8">
+        <input name="beginTime" type="text" id="beginTime" readonly="readonly" />
+        </span> <span>—</span><span class="allpro size8">
+        <input name="endTime" type="text" id="endTime" readonly="readonly" />
+        </span> <span class="btn_search">
+        <input name="" type="submit" style="cursor:pointer"  value="搜索"/>
+      </span> </li>
+    </ul>
+  </div>
+  </form>
+  <form method="post" id="ListForm">
+  <div class="allpro_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="warning">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="170">投诉人</td>
+        <td width="190" align="center">被投诉人</td>
+        <td width="350">投诉主题</td>
+        <td width="150" align="center">投诉时间</td>
+        <td width="100" align="center">操作</td>
+      </tr>
+      #foreach($obj in $objs)
+      <tr>
+        <td>$!obj.from_user.userName</td>
+        <td width="190" align="center">$!obj.to_user.userName</td>
+        <td>$!obj.cs.title</td>
+        <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+        <td align="center"  class="jub"><a href="$!webPath/admin/complaint_view.htm?id=$!obj.id" class="blue">详细</a></td>
+      </tr>
+      #end
+    </table>
+  </div>
+  <div class="fenye">
+    <div class="fenye3">
+      <input name="endTime" type="hidden" id="endTime" value="$!endTime" />
+      <input name="beginTime" type="hidden" id="beginTime" value="$!beginTime" />
+      <input name="title" type="hidden" id="title" value="$!title" />
+      <input name="to_user" type="hidden" id="to_user" value="$!to_user" />
+      <input name="from_user" type="hidden" id="from_user" value="$!from_user" />
+      <input name="status" type="hidden" id="status" value="$!status" />
+      $!gotoPageFormHTMl</div>
+  </div>
+  </form>
+</div>
+</body>
+</html>

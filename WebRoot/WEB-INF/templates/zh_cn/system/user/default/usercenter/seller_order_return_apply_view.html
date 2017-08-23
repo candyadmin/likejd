@@ -1,0 +1,25 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+	function saveForm(obj){
+		jQuery("#mark").val(obj);
+		jQuery("#theForm").submit();
+		}
+</script>
+<form  id="theForm" name="theForm" action="$!webPath/seller/seller_order_return.htm" method="post">
+ 是否同意买家退货？卖家确认收到退货后请执行退货操作改变商品的库存等信息，否则将影响该商品的库存信息！
+  <table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="">
+    <tr>
+      <td height="78" align="right" valign="top"> 
+      <div style="float:center; margin-top:10px; margin-left:10px;"><span style="margin-right:10px; float:left">申请说明：</span><b style="float:left">$!obj.return_content</b></div></td>
+    </tr>
+    <tr>
+      <td height="70" align="center" valign="bottom"><span class="inputbtn">
+     
+      <input name="mark" type="hidden" id="mark" value="" />
+      <input name="id" type="hidden" id="id" value="$!obj.id" />
+      <input type="button" onclick="saveForm('true');" style=" cursor:pointer" value="同意" />
+      <input type="button" onclick="saveForm('false');" style=" cursor:pointer" value="拒绝" />
+      </span></td>
+    </tr>
+  </table>
+</form>

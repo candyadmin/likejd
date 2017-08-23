@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+    jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/store_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">店铺管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/store_list.htm">管理</a> | <a href="$!webPath/admin/store_add.htm">新增</a>|<a href="$!webPath/admin/store_gradelog_list.htm" class="this">升级申请</a> </span> <span class="tab-two"></span></div>
+  <form action="$!webPath/admin/store_gradelog_list.htm" method="post" name="queryForm" id="queryForm">
+  <div class="allmem_search">
+    <ul>
+      <li> <span>店铺名称</span> <span class="allmen size4">
+        <input name="store_name" type="text" id="store_name" />
+        </span> <span>店铺等级</span> <span class="allmen size4">
+        <select name="grade_id" id="grade_id">
+		  <option value="">请选择...</option>
+		  #foreach($!grade in $grades)
+		  <option value="$!grade.id">$!grade.gradeName</option>
+		  #end
+        </select>
+        </span><span>审核状态</span> <span class="allmen size4">
+        <select name="store_grade_status" id="store_grade_status">
+		  <option value="">请选择...</option>
+		  <option value="0">待审核</option>
+		  <option value="1">审核通过</option>
+		  <option value="-1">审核失败</option>
+        </select>
+        </span> <span class="btn_search">
+        <input name="" type="submit"  value="搜索" style="cursor:pointer;" />
+        </span> </li>
+    </ul>
+  </div>
+  </form>
+    <form action="$!webPath/admin/store_gradelog_list.htm" method="post" name="ListForm" id="ListForm">
+  <div class="leveltable">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="level_table">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td colspan="2">&nbsp;</td>
+        <td width="216" >店铺名称</td>
+        <td width="251">店铺等级</td>
+        <td width="207">审核状态</td>
+        <td width="223">申请时间</td>
+        <td width="136">操作</td>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td colspan="2"><input type="checkbox" name="checkbox" id="checkbox" value="$!obj.id" />        </td>
+        <td>$!obj.store.store_name</td>
+        <td>$!obj.store.grade.gradeName</td>
+		#if($!obj.store_grade_status==1)
+		  #set($store_grade_status="审核通过")
+		#end
+		#if($!obj.store_grade_status==0)
+		  #set($store_grade_status="待审核")
+		#end		
+		#if($!obj.store_grade_status==-1)
+		  #set($store_grade_status="审核失败")
+		#end
+        <td>$!store_grade_status</td>
+        <td>$!CommUtil.formatLongDate($!obj.addTime)</td>
+        <td class="ac9">#if(!$!obj.log_edit)<a href="$!webPath/admin/store_gradelog_edit.htm?id=$!obj.id">编辑</a> |#end <a href="$!webPath/admin/store_gradelog_view.htm?id=$!obj.id">查看</a> </td>
+      </tr>
+      #end
+      <tr>
+        <td width="71"><input type="checkbox" name="all" id="all" value="" onclick="selectAll(this);" /></td>
+        <td colspan="6"><span class="allevel">全部</span><span class="shop_btn_del">
+          <input name="" type="button" value="删除" style="cursor:pointer;" />
+          </span></td>
+      </tr>
+    </table>
+  </div>
+  <div class="fenye">
+    <input name="store_name" type="hidden" id="store_name" value="$!store_name" />
+    <input name="grade_id" type="hidden" id="grade_id" value="$!grade_id" />
+    <input name="store_grade_status" type="hidden" id="store_grade_status" value="$!store_grade_status" />
+<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  $!gotoPageFormHTML</div>
+  </form>
+</div>
+</body>
+</html>

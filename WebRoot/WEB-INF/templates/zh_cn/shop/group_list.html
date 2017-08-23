@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>团购信息 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/groupbuy.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/group_head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="index2">
+      <div class="gp_goodstop">
+        <div class="gp_topbar">
+          <h2><a href="$!webPath/group.htm">当前团购</a>|<a href="$!webPath/group_list.htm?time=soon" #if($time=="soon")class="this"#end>即将开始</a>|<a href="$!webPath/group_list.htm?time=history" #if($time=="history")class="this"#end>往期团购</a></h2>
+        </div>
+      </div>
+     #if($!objs.size()>0) 
+     <form method="post" id="ListForm">
+      #foreach($obj in $objs)
+      <div class="before_tuan">
+        <h4 class="before_h4"><span class="beforeh_sp">$!{obj.group_name}</span></h4>
+        <div class="before_box">
+          <div class="before_intbox">
+            #if($!time=="soon")
+            #foreach($!gg in $!groupViewTools.query_goods("$!obj.id",6))
+            <dl class="before_d">
+              <dt>$!gg.gg_name</dt>
+              <dd>
+                <ul class="before_u">
+                  <!--act_one\act_two\act_three-->
+                  <li class="before_act"><span class="act_one">即将开始</span></li>
+                  <li class="before_shu">记得抢购哦</li>
+                  <li class="before_money">原价:<b><s>￥$!{gg.gg_goods.goods_price}</s></b></li>
+                  <li class="before_money">折扣:<strong>$!{gg.gg_rebate}折</strong></li>
+                  <li class="before_money">现价:<b>$!{gg.gg_price}</b></li>
+                  #set($save_money=$!obj.gg_goods.goods_price - $!obj.gg_price)
+                  <li class="before_money">节省:<b>$!{save_money}</b></li>
+                </ul>
+                <div class="befoue_spimg"><span class="gp_img_cspan">
+                  <p><img src="$!imageWebServer/$!gg.gg_img.path/$!gg.gg_img.name" width="190" height="190" /></p>
+                  </span></div>
+              </dd>
+            </dl>
+            #end
+            #end
+            #if($!time=="history")
+             #foreach($!gg in $!groupViewTools.query_goods("$!obj.id",6))
+            <dl class="before_d">
+              <dt>$!gg.gg_name</dt>
+              <dd>
+                <ul class="before_u">
+                  <!--act_one\act_two\act_three-->
+                  <li class="before_act"><span class="act_two">已经结束</span></li>
+                  <li class="before_shu">期待下次吧</li>
+                  <li class="before_money">原价:<b><s>￥$!{gg.gg_goods.goods_price}</s></b></li>
+                  <li class="before_money">折扣:<strong>$!{gg.gg_rebate}折</strong></li>
+                  <li class="before_money">现价:<b>$!{gg.gg_price}</b></li>
+                  #set($save_money=$!obj.gg_goods.goods_price - $!obj.gg_price)
+                  <li class="before_money">节省:<b>$!{save_money}</b></li>
+                </ul>
+                <div class="befoue_spimg"><span class="gp_img_cspan">
+                  <p><img src="$!imageWebServer/$!gg.gg_img.path/$!gg.gg_img.name" width="190" height="190" /></p>
+                  </span></div>
+              </dd>
+            </dl>
+            #end
+            #end
+          </div>
+        </div>
+      </div>
+      #end
+      <div class="fenye">
+            <div class="fenyes">
+              <input name="time" type="hidden" id="time" value="$!time" />
+              <input type="hidden" name="currentPage" id="currentPage" />
+              $!gotoPageFormHTML </div>
+          </div>
+      </form>
+     #else
+     <div class="index_w">
+        <div class="tuan_empty"> 
+         <i><img src="$!imageWebServer/resources/style/system/front/default/images/group/empty.jpg" width="120" height="109" /></i>
+         #if($!time=="soon")
+         <span>没有即将开始团购活动</span> 
+         #end
+         #if($!time=="history")
+         <span>没有往期团购活动</span> 
+         #end
+        </div>
+      </div>
+     #end
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

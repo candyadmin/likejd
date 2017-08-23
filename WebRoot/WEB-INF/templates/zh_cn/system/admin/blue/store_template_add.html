@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+<form action="$!webPath/admin/store_template_save.htm" method="post" name="theForm" id="theForm">
+  <div class="cont">
+    <h1 class="seth1">店铺模板
+      <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/store_template.htm" />
+      <input name="id" type="hidden" id="id" value="$!config.id" />
+    </h1>
+    <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/store_template.htm">模板预览</a> | <a href="$!webPath/admin/store_template_add.htm"   class="this">编辑</a> </span> <span class="tab-two"></span></div>
+    <div class="edit">
+      <div class="editul setcont ">
+        <ul class="set3">
+          <li>模板列表</li>
+          <li><span class="pxnum txtarsize" style="height:160px;">
+            <textarea name="templates" id="templates" style="height:150px;">$!config.templates</textarea>
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">每行一个模板名称，根据shopping模板规则,下载或制作相应的店铺模板，在此新增模板名称，系统自动识别</strong><strong class="c"></strong></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="submit">
+      <input name="" type="submit" value="提交" />
+    </div>
+  </div>
+</form>
+</body>
+</html>

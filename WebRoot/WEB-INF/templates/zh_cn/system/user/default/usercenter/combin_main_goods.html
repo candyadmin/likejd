@@ -1,0 +1,58 @@
+<script>
+function ajaxPage(url,currentPage,obj){
+  var target_id=jQuery(obj).parent().attr("target_id");	
+  jQuery.post(url,{"currentPage":currentPage,"target_id":target_id},
+			      function(data){
+							  jQuery("#"+target_id).empty().append(data);
+							 },"text");
+}
+function set_combin_main_goods(obj){
+  var goods_name= jQuery(obj).attr("goods_name");
+  var goods_img=jQuery(obj).attr("goods_img");
+  var goods_current_price=jQuery(obj).attr("goods_current_price");
+  var goods_id=jQuery(obj).attr("goods_id");
+  var combin=false;
+  jQuery("img[combin_goods_img=true]").each(function(){
+     var combin_goods_id=jQuery(this).attr("goods_id");
+	 if(combin_goods_id==goods_id){
+         combin=true;
+	 }
+  });
+  if(combin){
+   	 alert("组合中已经存在该商品");
+	 return;
+  }
+  jQuery("#combin_main_goods_img").attr("src",goods_img);
+  jQuery("#combin_main_goods_img").attr("goods_current_price",goods_current_price);
+  jQuery("#combin_main_goods_name").html(goods_name);
+  jQuery("#combin_main_goods_id").val(goods_id);
+  jQuery("label[for=combin_main_goods_id]").remove();
+  var total_price=parseFloat(goods_current_price);
+	jQuery("img[combin_goods_img=true]").each(function(){
+	   var combin_goods_price=jQuery(this).attr("goods_current_price");
+	   if(combin_goods_price!=undefined){
+	     total_price=total_price+parseFloat(combin_goods_price);
+	   }
+	});
+  jQuery("#combin_goods_price").html(total_price);
+}
+</script>
+<div class="main_body">
+  <ul>
+  #foreach($obj in $objs)
+      #if($!obj.goods_main_photo)               
+        #set($img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+      #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+      #end
+      <li class="item"> <span><a href="$!webPath/goods_$!{obj.id}.htm" target="_blank"><img src="$!img" width="110" height="110" /></a></span> <i><a href="$!webPath/goods_$!{obj.id}.htm" target="_blank">$!CommUtil.substring("$!obj.goods_name",8)</a></i>
+      <div class="ogal_price"><b>价格：</b>¥$!{obj.goods_current_price}
+      </div>
+      <div class="add_gp">
+        <input type="button" value="添加主商品" goods_img="$!img" goods_name="$!obj.goods_name" goods_current_price="$!obj.goods_current_price" goods_id="$!obj.id" onclick="set_combin_main_goods(this);" class="add_ip" />
+      </div>
+    </li>
+    #end
+  </ul>
+  <div class="Day_fy" target_id="$!target_id">$!gotoPageAjaxHTML</div>
+</div>

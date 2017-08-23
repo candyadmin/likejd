@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery(".allshop_b").find("a").click(function(){
+	var display =jQuery(this).attr("display");
+	var id = jQuery(this).attr("id");
+	if(display=="true"){
+		jQuery(this).html("不可见").attr("display","false");
+		}else{
+		jQuery(this).html("可见").attr("display","true");	
+			}
+	        jQuery.post("$!webPath/admin/sns_set_display.htm",{
+				"id":id
+				},function(data){},"text");		
+	    });								
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">会员动态</h1>
+  <div class="settab"><span class="tab1"></span> <span class="tabs"> <a href="javascript:void(0);" class="this">动态列表</a> </span> <span class="tab2"></span></div>
+  <form id="queryForm" name="queryForm" method="post" action="$!webPath/admin/sns_user.htm">
+    <div class="orders">
+      <ul>
+        <li><span style="font-weight:bold">请输入会员名称</span> <span class="allmen size6">
+          <input name="userName" type="text" value="$!userName" />
+          </span> </span> <span class="btn_search">
+          <input name="" type="submit"  value="搜索" style="cursor:pointer"/>
+          </span> </li>
+      </ul>
+    </div>
+  </form>
+  <form id="ListForm" name="ListForm" action="$!webPath/admin/sns_user.htm" method="post">
+    <input id="currentPage" name="currentPage" value="$!currentPage" type="hidden"/>
+    <input id="userName" name="userName" value="$!userName" type="hidden"/>
+    <div class="allshop_table">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        #foreach($obj in $objs)
+        <tr>
+          <td width="5%" align="right" valign="top" style="padding-top:10px;">
+          <input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td width="5%px" align="center" valign="top" ><span class="allmen size5"> #set($user_img ="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+            #if($!obj.user.phtot)
+            #set($user_img ="$!webPath/$!obj.user.photo.path/$!obj.user.photo.name")
+            #end <img src="$!user_img" width="70" height="70" /> </span></td>
+          <td width="90%"  colspan="4"><div style="width:1002px;">
+              <div class="h1">$!obj.user.userName：$!obj.content</div>
+              <!--对应商品信息-->
+              #if($!obj.goods)
+              <div class="allshop_tu"> <span class="allshop_pic"><a href="$!webPath/goods_$!{obj.goods.id}.htm" target="_blank"><img src="$!webPath/$!obj.goods.goods_main_photo.path/$!obj.goods.goods_main_photo.name" /></a></span> <span class="allshop_jj">
+                <h2><a href="$!webPath/goods_$!{obj.goods.id}.htm" target="_blank">$!obj.goods.goods_name</a></h2>
+                <em>价格：￥$!obj.goods.store_price</em> <em>运费：￥$!obj.goods.goods_fee</em> </span> </div>
+              #end 
+              
+              #if($!obj.childs.size()>0)
+              <div class="allshop_tu"> <span class="allshop_jj"> #foreach($child in $obj.childs)
+                <h2>$!child.user.userName： $!child.content</h2>
+                #end </span> </div>
+              #end
+              <div class="allshop_b" style="color:#000"> $!CommUtil.formatLongDate($!obj.addTime) 转发($!obj.turnNum) | 评论($!obj.childs.size())&nbsp;&nbsp; 状态：#if($!obj.locked==true)已加密#else 正常#end &nbsp;&nbsp; 可见度：<a href="javascript:void(0);" 
+              id="$!obj.id" display="$!obj.display">#if($!obj.display==true)可见#else不可见#end </a> </div>
+            </div></td>
+        </tr>
+        #end
+        <tr style="background:#F2F2F2; height:30px;">
+          <td colspan="8"><div class="fenye3">$!gotoPageFormHTML</div>
+            <div class="shopbtn shopfx">
+              <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+              &nbsp;&nbsp;全部</div>
+            <div class="shop_btn_del shopbtn">
+              <input name="" type="button" value="删除" onclick="cmd('$!webPath/admin/sns_del.htm');"/>
+            </div></td>
+        </tr>
+      </table>
+    </div>
+    <input type="hidden" name="mulitId" id="mulitId" />
+  </form>
+</div>
+</body>
+</html>

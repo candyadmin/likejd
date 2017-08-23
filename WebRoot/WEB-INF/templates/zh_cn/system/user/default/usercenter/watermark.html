@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>水印设置 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user_photo.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery.bigcolorpicker.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.bigcolorpicker.js"></script>
+<script>
+jQuery(document).ready(function(){
+   jQuery("#img_wm_set a").click(function(){
+	 jQuery("#img_wm_set a").removeClass("this");
+	 jQuery(this).addClass("this");
+	 jQuery("#wm_image_pos").val(jQuery(this).attr("pos"));
+   });
+   jQuery("#text_wm_set a").click(function(){
+	 jQuery("#text_wm_set a").removeClass("this");
+	 jQuery(this).addClass("this");
+	 jQuery("#wm_text_pos").val(jQuery(this).attr("pos"));
+   });
+   jQuery("#wm_text_color").bigColorpicker();		
+ #if($!obj)
+   jQuery(":checkbox[id=wm_image_open_ck]").attr("checked",$!obj.wm_image_open);
+   jQuery(":checkbox[id=wm_text_open_ck]").attr("checked",$!obj.wm_text_open);
+   jQuery("#wm_text_font").val("$!obj.wm_text_font");
+   jQuery("#img_wm_set a").removeClass("this");
+   jQuery("#img_wm_set a[pos=$!obj.wm_image_pos]").addClass("this");
+   jQuery("#text_wm_set a").removeClass("this");
+   jQuery("#text_wm_set a[pos=$!obj.wm_text_pos]").addClass("this");
+  #end
+});
+function save_form(){
+  var wm_image_open=jQuery("#wm_image_open_ck").attr("checked")=="checked"?true:false;
+  var wm_text_open=jQuery("#wm_text_open_ck").attr("checked")=="checked"?true:false;
+  jQuery("#wm_text_open").val(wm_text_open);
+  jQuery("#wm_image_open").val(wm_image_open);
+  jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=album")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>水印管理</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li ><a href="$!webPath/seller/album.htm">我的相册</a></li>
+                <li class="this"><a href="$!webPath/seller/watermark.htm">水印管理</a></li>
+              </ul>
+            </div>
+            <form action="$!webPath/seller/watermark_save.htm" method="post" enctype="multipart/form-data" id="theForm">
+              <div class="ordercon">
+                <div class="photo_manage">
+                  <div class="watermark">
+                    <dl>
+                      <dt>
+                        <input name="id" type="hidden" id="id" value="$!obj.id" />
+                        开启图片水印: </dt>
+                      <dd>
+                        <ul>
+                          <li>
+                            <input name="wm_image_open_ck" type="checkbox" id="wm_image_open_ck" value="true" />
+                            <input name="wm_image_open" type="hidden" id="wm_image_open" value="$!obj.wm_image_open" />
+                          </li>
+                          <li><span class="water_sp">开启后，上传图片自动进行图片水印</span></li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl>
+                      <dt>水印图片:</dt>
+                      <dd>
+                        <ul>
+                          #if($!obj&&$!{obj.wm_image})
+                          <li class="warterprint"><img src="$!webPath/$!obj.wm_image.path/$!obj.wm_image.name"/></li>
+                          #end
+                          <li> <span class="water_upload"> <b>
+                            <input name="wm_img" id="wm_img" type="file"  size="32"/>
+                            </b> </span></li>
+                          <li><span class="water_sp">选择水印图片</span></li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl>
+                      <dt>图片透明度:</dt>
+                      <dd>
+                        <ul>
+                          <li><span class="sint">
+                            <input name="wm_image_alpha" type="text" id="wm_image_alpha" value="$!obj.wm_image_alpha" />
+                            </span>%</li>
+                          <li><span class="water_sp">0-100</span></li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl>
+                      <dt>
+                        <input type="hidden" name="wm_image_pos" id="wm_image_pos" />
+                        图片位置:</dt>
+                      <dd>
+                        <div class="mark_position">
+                          <div class="mark_outside">
+                            <div class="mark_inside">
+                              <h2>选择水印图片所在位置</h2>
+                              <div class="marking" id="img_wm_set"> <a href="javascript:void(0);" class="this" pos="1">左上</a> <a href="javascript:void(0);" pos="2">中上</a> <a  href="javascript:void(0);" pos="3">右上</a> <a href="javascript:void(0);" pos="8">左中</a> <a href="javascript:void(0);" pos="9">正中</a> <a href="javascript:void(0);" pos="4">右中</a> <a href="javascript:void(0);" pos="7">左下</a> <a href="javascript:void(0);" pos="6">中下</a> <a href="javascript:void(0);" pos="5">右下</a> </div>
+                            </div>
+                          </div>
+                        </div>
+                      </dd>
+                    </dl>
+                    <dl>
+                      <dt>开启文字水印: </dt>
+                      <dd>
+                        <ul>
+                          <li>
+                            <input name="wm_text_open_ck" type="checkbox" id="wm_text_open_ck" value="true" />
+                            <input name="wm_text_open" type="hidden" id="wm_text_open" value="$!obj.wm_text_open" />
+                          </li>
+                          <li><span class="water_sp">开启文字水印后，上传图片时候系统自动文字水印</span></li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl>
+                      <dt>水印文字: </dt>
+                      <dd>
+                        <ul>
+                          <li><span class="sintcolor">
+                            <input name="wm_text" type="text" id="wm_text" value="$!obj.wm_text"/>
+                            </span></li>
+                          <li><span class="water_sp">设置水印文字</span></li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl>
+                      <dt>文字大小: </dt>
+                      <dd>
+                        <ul>
+                          <li><span class="sint">
+                            <input name="wm_text_font_size" type="text" id="wm_text_font_size" value="$!obj.wm_text_font_size" />
+                            </span>px</li>
+                          <li><span class="water_sp">设置水印文字大小</span></li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl>
+                      <dt>
+                        <input name="wm_text_pos" type="hidden" id="wm_text_pos" value="$!obj.wm_text_pos" />
+                        文字水印位置:</dt>
+                      <dd>
+                        <div class="mark_position">
+                          <div class="mark_outside">
+                            <div class="mark_inside">
+                              <h2>选择水印图片放置位置</h2>
+                              <div class="marking" id="text_wm_set"> <a href="javascript:void(0);" class="this" pos="1">左上</a> <a href="javascript:void(0);" pos="2">中上</a> <a  href="javascript:void(0);" pos="3">右上</a> <a href="javascript:void(0);" pos="8">左中</a> <a href="javascript:void(0);" pos="9">正中</a> <a href="javascript:void(0);" pos="4">右中</a> <a href="javascript:void(0);" pos="7">左下</a> <a href="javascript:void(0);" pos="6">中下</a> <a href="javascript:void(0);" pos="5">右下</a></div>
+                            </div>
+                          </div>
+                        </div>
+                      </dd>
+                    </dl>
+                    <dl>
+                      <dt>文字字体:</dt>
+                      <dd>
+                        <ul>
+                          <li>
+                            <select name="wm_text_font" id="wm_text_font">
+                              <option value="Arial">Arial</option>
+                               <option value="黑体">黑体</option>
+                                <option value="宋体">宋体</option>
+                            </select>
+                          </li>
+                          <li><span class="water_sp">水印文字的字体,中文水印请不要选择Arial字体</span></li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl>
+                      <dt>文字颜色: </dt>
+                      <dd>
+                        <ul>
+                          <li><span class="sintcolor">
+                            <input name="wm_text_color" type="text" id="wm_text_color" value="$!obj.wm_text_color"  readonly="true"/>
+                            </span></li>
+                          <li><span class="water_sp">水印字体的颜色值</span></li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <span class="btnsub">
+                    <input type="button"  value="提交" style="cursor:pointer;" onclick="save_form();"/>
+                    </span> </div>
+                </div>
+              </div>
+            </form>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>热卖商品 - Powered by shopping</title>
+<meta name="keywords" content="$!gc.seo_keywords" />
+<meta name="description" content="$!gc.seo_description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goodshidden.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script>
+jQuery(document).ready(function(){
+ jQuery(".pro_ul_one img").lazyload({effect:"fadeIn",width:220,height:220});
+ jQuery(".product_one").mouseover(function(){
+	 jQuery(".product_border").removeClass("this");
+	 jQuery(this).find(".product_border").addClass("this");
+	 });
+});
+</script>
+</head>
+
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm?type=$!type")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="position">当前位置：<a href="$!webPath/index.htm" >首页</a> > <span>热卖商品</span></div>
+    <div class="index2">
+      <form action="$!webPath/ztc_goods_list.htm"  method="post" id="ListForm">
+        <div class="product_list_hot"> #if($!objs)
+          #foreach($obj in $objs)
+          #if($!obj.goods_main_photo)
+          #set($img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}")
+          #else
+          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+          #end
+          <div class="product_one">
+            <div class="product_border #if($!velocityCount==1) this #end">
+              <ul class="product_ul">
+                <li class="pro_ul_one"><a href="$!webPath/goods_$!{obj.id}.htm" target="_blank"> <img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28"/></a></li>
+                <li class="pro_price"><i>¥$!{obj.goods_price}</i> <span><strong>¥</strong>$!{obj.goods_current_price}</span> </li>
+                <li class="pro_name_s"><a href="$!webPath/goods_$!{obj.id}.htm" target="_blank"> $!CommUtil.substring("$!obj.goods_name",30)</a></li>
+                <li class="pro_month">月销量<strong>$!{obj.goods_salenum}</strong>|<a href="$!webPath/goods_$!{obj.id}.htm" target="_blank">累计评价:$!{obj.evaluates.size()}</a></li>
+                <li class="pro_shop_name"><a href="$!webPath/store_$!{obj.goods_store.id}.htm" target="_blank"> $!{obj.goods_store.store_name} </a></li>
+              </ul>
+            </div>
+          </div>
+          #end
+          #else
+          <div class="starshop_list">
+            <div class="sigh"> <span><img src="$!imageWebServer/resources/style/system/front/default/images/sigh.png" width="120" height="109" /></span> <b>对不起，没有对应的数据!</b> </div>
+          </div>
+          #end </div>
+        <div class="fenye" style="text-align:left; width:600px;">
+          <div class="fenyes">
+            <blockquote>
+              <p>
+                <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                $!gotoPageFormHTML</p>
+            </blockquote>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

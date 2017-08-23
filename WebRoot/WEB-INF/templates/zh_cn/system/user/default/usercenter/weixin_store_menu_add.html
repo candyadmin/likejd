@@ -1,0 +1,114 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script>
+jQuery(document).ready(function(){
+    jQuery("#theForm").validate({
+	   rules:{
+		   menu_name:{required:true},
+		   menu_url:{required:true},
+		   menu_key:{required:true,
+					 remote:{
+						url: "$!webPath/weixin_menukey_verify.htm",     //后台处理程序
+						type: "post",               //数据发送方式
+						dataType: "json",           //接受数据格式   
+						data: {                     //要传递的数据
+							  "menu_key": function(){return jQuery("#menu_key").val();},
+							  "store_id":$!store.id,
+							  "menu_id":function(){return jQuery("#menu_id").val();}
+						      }
+						     }
+			         }
+	   },
+	   messages:{
+	       menu_name:{required:"菜单名称不能为空"},
+		   menu_url:{required:"菜单URL不能为空"},
+		   menu_key:{required:"菜单Key不能为空",remote:"菜单Key已存在"}
+	   }
+	});
+	jQuery(":radio").click(function(){
+	   var menu_type=jQuery(this).val()
+	   if(menu_type=="click"){
+	     jQuery("#menu_key_info").show();
+		 jQuery("#tr_menu_key_content").show();
+		 jQuery("#menu_url_info").hide();
+	   }
+	   if(menu_type=="view"){
+	     jQuery("#menu_key_info").hide();
+		 jQuery("#tr_menu_key_content").hide();
+		 jQuery("#menu_url_info").show();	   
+	   }
+	});
+	#if($!obj.menu_type=="click")
+	     jQuery("#menu_key_info").show();
+		  jQuery("#tr_menu_key_content").show();
+		 jQuery("#menu_url_info").hide();	
+	#end
+	#if($!obj.menu_type=="view")
+	     jQuery("#menu_key_info").hide();
+		  jQuery("#tr_menu_key_content").hide();
+		 jQuery("#menu_url_info").show();	
+	#end	
+	jQuery(":radio[value=$!{obj.menu_type}]").attr("checked",true);
+});
+function menu_remove(){
+  if(confirm('删除菜单会同步删除下级，确定删除？')){
+     window.location.href='$!webPath/seller/weixin_store_menu_delete.htm?menu_id=$!obj.id';
+  }
+}
+
+function menu_save(){
+	jQuery("#theForm").submit();
+	}
+</script>
+<form action="$!webPath/seller/weixin_store_menu_save.htm" method="post" id="theForm">
+  <table style="float:left;" width="390" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td width="100" align="right" valign="top">店铺名称：</td>
+      <td align="left">$!store.store_name</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">菜单名称：</td>
+      <td align="left"><input name="menu_name" type="text" id="menu_name" value="$!obj.menu_name" style="width:200px;" />
+        <input name="menu_id" type="hidden" id="menu_id" value="$!obj.id" />
+      <input name="pmenu_id" type="hidden" id="pmenu_id" value="$!pmenu_id" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">菜单序号：</td>
+      <td align="left"><input name="menu_sequence" type="text" id="menu_sequence" value="$!obj.menu_sequence" style="width:200px;" />
+        正序排列</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">菜单类型：</td>
+      <td align="left"><label>
+        <input name="menu_type" type="radio" id="menu_type" value="click" checked="checked" />
+        点击事件
+      </label>
+      <label>
+        <input type="radio" name="menu_type" id="menu_type" value="view" />
+        URL请求
+      </label>
+      </td>
+    </tr>
+    <tr id="menu_url_info" style="display:none;">
+      <td align="right" valign="top">菜单URL：</td>
+      <td align="left"><input name="menu_url" type="text" id="menu_url" value="$!obj.menu_url" style="width:200px;" /></td>
+    </tr>
+    <tr id="menu_key_info">
+      <td align="right" valign="top">菜单Key：</td>
+      <td align="left"><input name="menu_key" type="text" id="menu_key" value="$!obj.menu_key" style="width:200px;" /></td>
+    </tr>
+        <tr id="tr_menu_key_content">
+      <td align="right" valign="top">菜单Key内容：</td>
+      <td align="left"><textarea name="menu_key_content" type="text" id="menu_key_content"style="width:200px; height:80px" >$!obj.menu_key_content</textarea></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+        <input type="button" onclick="menu_save()" value="保存" style="cursor:pointer;"/> 
+&nbsp;        &nbsp;
+        <input name="按钮" onclick="menu_remove();" type="button" style="cursor:pointer;" value="删除"/>
+      </span></td>
+    </tr>
+  </table>
+</form>

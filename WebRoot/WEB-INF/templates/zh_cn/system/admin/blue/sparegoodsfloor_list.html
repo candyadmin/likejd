@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/sparegoodsfloor_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){ 
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">闲置商品楼层</h1>
+  <div class="settab"> 
+	<span class="tab-one"></span> <span class="tabs"> 
+	<a href="$!webPath/admin/sparegoodsfloor_list.htm"  class="this">管理</a> | 
+    <a href="$!webPath/admin/sparegoodsfloor_add.htm" >新增</a>
+	</span> 
+	<span class="tab-two"></span>	</div>
+	
+  
+  <form name="ListForm" id="ListForm" action="$!webPath/admin/sparegoodsfloor_list.htm" method="post">
+    <div class="brandtable">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="brand_table">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="45">&nbsp;</td>
+          <td width="70">排序</td>
+          <td width="200">楼层标题</td>
+          <td width="520">楼层分类</td>
+          <td width="60" align="center">显示</td>
+          <td  align="center">操作</td>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+          <td align="center"><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td><span class="pxnum size5"> <input type="text" name="$!obj.sequence" id="$!obj.sequence"  value="$!obj.sequence"  onblur="ajax_update('$!obj.id','sequence',this)" title="可编辑"/></span></td>
+          <td><span class="classies"><input name="$!obj.title" type="text" id="$!obj.title"  onblur="ajax_update('$!obj.id','title',this)"  value="$!obj.title" title="可编辑"/>
+          </span></td>
+           <td>$!obj.sgc.className</td>
+          <td align="center"><img onclick="ajax_update('$!obj.id','display',this)" src="$!webPath/resources/style/system/manage/blue/images/$!{obj.display}.png" width="25" height="21" border="0" style="cursor:pointer;" title="可编辑"/> </td>
+          <td class="ac8" align="center">
+          <a href="$!webPath/admin/sparegoodsfloor_edit.htm?id=$!obj.id&currentPage=$!currentPage">编辑</a>|<a href="$!webPath/admin/sparegoodsfloor_del.htm?mulitId=$!obj.id&currentPage=$!currentPage">删除</a>|<a href="$!webPath/admin/sparegoodsfloor_setclass.htm?fid=$!obj.id">分类设置</a>|<a href="$!webPath/admin/sparegoodsfloor_setgoods.htm?fid=$!obj.id">商品设置</a>
+          </td>
+        </tr>
+        #end
+		<tr style="background:#F2F2F2; height:30px;">
+        <td align="center"><input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/></td>
+        <td colspan="2" class="bdel">
+		<span class="sp1">全部</span><span class="sp2">
+          <div class="shop_btn_del shopbtn">
+            <input name="" type="button" style="cursor:pointer;" value="删除" onclick="cmd('$!webPath/admin/sparegoodsfloor_del.htm?currentPage=$!currentPage');"/>
+          </div>
+          </span>
+		  </td>
+        <td colspan="4"></td>
+      </tr>
+    </table>
+      <div class="fenye" align="right" id="queryCondition">
+	    <input name="mulitId" type="hidden" id="mulitId" />
+	    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	   $!gotoPageFormHTML	  
+       </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+ //改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+jQuery("#pid").val("$!obj.parent.id");
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  className:{
+	    required :true,
+	     remote:{
+		    url: "$!webPath/admin/storeclass_verify.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "className": function(){return jQuery("#className").val();},
+				  "id":function(){return jQuery("#id").val()}
+		     }
+			}
+	  }
+	 },
+	messages:{
+	  className:{required:"分类名称不能为空",remote:"该分类已经存在"}
+	}
+  });	
+});
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+
+
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">店铺分类</h1>
+  <div class="settab"><span class="tab-one"></span>
+      <span class="tabs">
+       <a href="$!webPath/admin/storeclass_list.htm">管理</a> |
+       <a href="$!webPath/admin/storeclass_add.htm"  #if(!$!edit)class="this"#end>新增</a> 
+         #if($!edit)
+	   <a href="javascript:void(0);" class="this">编辑</a>
+	   #end
+	   </span>
+      
+      <span class="tab-two"></span></div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/storeclass_save.htm" method="post">
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/storeclass_list.htm" />
+  <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/storeclass_add.htm" />
+  <div class="setcont">
+    <!--鼠标经过样式-->
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>分类名称</li>
+      <li><span class="webname">
+        <input name="className" type="text" id="className" value="$!obj.className" size="40" />
+      </span></li>
+    </ul>
+    <!--鼠标未经过样式-->
+    <ul class="set1">
+      <li>上级分类</li>
+      <li><span class="webnamesec sizese">
+        <select name="pid" id="pid">
+              <option value="">请选择...</option>
+			 #foreach($sc in $scs)
+			 <option value="$!sc.id">$!sc.className</option>
+			 #end
+         </select>
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">如果选择上级分类，那么新增的分类则为被选择上级分类的子分类</strong><strong class="c"></strong></span></li>
+    </ul>
+	<ul class="set1">
+      <li>排序</li>
+      <li><span class="webname">
+        <input name="sequence" type="text" id="sequence" value="$!obj.sequence" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小，分类显示越靠前</strong><strong class="c"></strong></span></li>
+    </ul>
+    </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

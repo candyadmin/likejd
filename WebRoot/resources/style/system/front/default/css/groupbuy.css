@@ -1,0 +1,240 @@
+﻿@charset "utf-8";
+/* CSS Document default*/
+
+.gp_img_cspan{
+display:table-cell;
+*display:block;
+text-align:center;
+position:relative; 
+vertical-align:middle; }
+.gp_img_cspan p{*position:absolute;
+top:50%;
+left:50%;  } 
+.gp_img_cspan p img{ 	
+*position:relative;
+top:-50%;
+left:-50%; z-index:1;}
+
+
+.gp_goodstop{ width:100%;  overflow:hidden}
+.gp_topbar{ height:40px; overflow:hidden; background:#FFF6E5;  border:1px solid #FDD57E; border-bottom:2px solid #FD7B25}
+.gp_topa{ float:right; margin-right:10px; color:#CCC; margin-top:12px;}
+.gp_topa a{padding-right:5px; padding-left:5px; color:#333;} 
+.gp_topa a:hover{ background:#FE0000; color:#fff;}
+.gp_topbar h2{ color:#000; float:left; padding-left:10px; margin-top:10px; margin-right:10px;}
+.gp_topbar b{ background:#FCFCD6; border:1px solid #FCC954; height:23px; line-height:23px; display:block; float:left; padding-left:10px; padding-right:10px; margin-top:8px;}
+.gp_topbar strong{ color:#D70707; padding-left:4px; padding-right:4px;}
+.gp_class_money{  border:1px solid #FDD57E; overflow:hidden;  border-top:0px;}
+.gp_cm{ float:left; width:78%; overflow:hidden}
+.gp_time{ float:left; width:22%; overflow:hidden; text-align:right;}
+.gp_cm ul{ float:left; width:100%; overflow:hidden; padding-top:5px; padding-bottom:5px;}
+.gp_cm ul li{ width:100%; float:left; overflow:hidden; height:30px; line-height:30px;}
+.gp_cm ul li span{ font-weight:bold; padding-left:20px;  display:block; float:left; color:#444;}
+.gp_cm ul li strong{ display:block; float:left; color:#999;}
+.gp_cm ul li strong a{ border:1px solid #fff; padding-left:5px; padding-right:5px; padding-top:2px; padding-bottom:2px; color:#444; margin-left:5px; margin-right:5px;} 
+.gp_cm ul li strong .this{ border:1px solid #F97425; background:#FF951D; color:#fff; padding-left:5px; padding-right:5px; padding-top:2px; padding-bottom:2px;} 
+.gp_cm ul li strong a:hover{ border:1px solid #ccc; background:#f1f1f1; color:#444; padding-left:5px; padding-right:5px; padding-top:2px; padding-bottom:2px;} 
+.gp_cm ul li strong .this:hover{border:1px solid #F97425; background:#FF951D; color:#fff; padding-left:5px; padding-right:5px; padding-top:2px; padding-bottom:2px;}
+.gp_time span{ float:right; width:200px; padding-right:20px; color:#FF0000; font-size:14px; margin-top:10px;}
+.gp_time span i{ background:url(../images/group/limittime.jpg) no-repeat; width:30px; height:29px; float:right; display:block; margin-right:5px;}
+.gp_time span strong{ float:right; line-height:30px; height:30px;}
+.gp_time b{ float:right; width:200px; padding-right:20px; color:#000; font-size:16px; font-weight:bold;}
+.gp_time b em{ color:#F00; font-style:normal; padding-left:3px; padding-right:3px;}
+.gp_scort{ width:100%; float:left; overflow:hidden; margin-top:10px;}
+.gp_scort b{ display:block; float:left; padding-left:20px; color:#D74E01; height:23px; line-height:23px; padding-right:5px;}
+.gp_scort em{ display:block; float:left;font-style:normal;}
+.gp_scort em a{ display:block;  overflow:hidden; height:23px; padding-left:10px; padding-right:10px; margin-right:10px; line-height:23px; border:1px solid #CDCDCD;float:left;}
+.gp_scort em a span{ float:left; display:block;}
+.gp_scort em a:hover{ background:#f1f1f1; color:#000;} 
+.gp_scort em .this{ background:#FE951F;border:1px solid #EB610F; color:#FFF}
+.gp_scort em .this:hover{ background:#FE951F;border:1px solid #EB610F; color:#FFF}
+.scort_a{ background:url(../images/group/scort.gif) no-repeat 8px center; width:9px; height:8px; display:block; float:left; margin-top:9px; _margin-top:3px; padding-left:8px;}
+.scort_b{ background:url(../images/group/scort_a.gif) no-repeat 8px center; width:9px; height:8px; display:block; float:left; margin-top:9px; _margin-top:3px; padding-left:8px;}
+.scort_c{ background:url(../images/group/scorta_a.gif) no-repeat 8px center; width:9px; height:8px; display:block; float:left; margin-top:9px; _margin-top:3px; padding-left:8px;}
+.scort_d{ background:url(../images/group/scorta.gif) no-repeat 8px center; width:9px; height:8px; display:block; float:left; margin-top:9px; _margin-top:3px; padding-left:8px;}
+
+.gp_list_box{ width:100%; overflow:hidden; margin-top:20px;}
+.gp_list{ width:1020px; float:left;}
+.gp_list_one{ border:1px solid #DDDDDD; float:left; display:inline; height:438px; width:322px; margin-right:14px; margin-bottom:10px; border-radius:5px;}
+.gp_list_one .gp_listimg{ padding:5px 22px; width:278px; height:278px;}
+.gp_list_one .gp_listimg span{ width:278px; height:278px; overflow:hidden}
+.gp_list_one .gp_listname{  padding:5px; font-size:14px; line-height:18px; height:35px; overflow:hidden}
+.gp_list_one .gp_listsee{ width:288px; overflow:hidden;}
+.gp_list_one .gp_listsee b{ color:#FF0000; font-size:18px; padding-left:10px; padding-top:10px; float:left}
+.gp_list_one .gp_look{ background:url(../images/group/gpmoneysee.jpg) no-repeat; width:212px; height:50px; float:left; display:block; float:left}
+.gp_list_one .gp_look i{ width:119px; float:left; display:block; padding-left:16px; line-height:50px; color:#FFF; font-style:normal; font-size:20px;}
+.gp_list_one .gp_look a{ background:url(../images/group/gpsee.jpg) no-repeat; width:69px; height:38px; display:block; float:left; margin-top:6px;}
+.gp_list_one .gp_look_hui{ background:url(../images/group/gpmoneysee_hui.jpg) no-repeat; width:212px; height:50px; float:left; display:block; float:left}
+.gp_list_one .gp_look_hui i{ width:119px; float:left; display:block; padding-left:16px; line-height:50px; color:#FFF; font-style:normal; font-size:20px;}
+.gp_list_one .gp_look_hui a{ background:url(../images/group/gpsee_hui.jpg) no-repeat; width:69px; height:38px; display:block; float:left; margin-top:6px; cursor:default}
+.gp_list_one .gp_listorder{  padding:5px; background:#fff1cf; margin-top:10px; overflow:hidden}
+.gp_list_one .gp_listorder i{ width:103px; display:block; float:left; text-align:center;}
+.gp_list_one .gp_listorder i em{ display:block; font-style:normal; color:#006600}
+.gp_list_one .gp_listorder i b{ display:block; }
+.gp_list_one .gp_listorder_line{ text-decoration:line-through; color:#999}
+.gp_list_one .gp_listorder_red{ color:#FF0000}
+.fenye{ width:100%;}
+.head{ position:relative; height:106px; z-index:10000}
+.toph_bigsearch{ position:absolute; left:300px;}
+.tuang{ position:absolute; top:20px; left:200px; z-index:1000;}
+@media screen and (min-widht:800px) and (max-width:1024px){
+	.toph_bigsearch{ position:absolute; left:300px;}
+	.tuang{ left:200px;}
+	.gp_list{ width:1020px; float:left;}
+	.gp_list_one{width:322px;  }
+	.gp_list_one .gp_listimg{ padding:5px 22px;}
+	.gp_list_one .gp_listorder i{ width:103px;}
+}
+@media screen and (min-width:1024px) {
+	.toph_bigsearch{ position:absolute; left:370px;}
+	.tuang{  left:240px;}
+	.gp_list{ width:1222px; float:left;}
+	.gp_list_one{width:288px;  }
+	.gp_list_one .gp_listimg{ padding:5px;}
+	.gp_list_one .gp_listorder i{ width:92px;}
+}
+
+.tuan_spr{ float:left; height:44px;}
+.tuan_span{ background:url(../images/group/tuang.jpg) no-repeat; width:89px; height:44px; float:left; display:block;}
+.tuan_rs{ background:url(../images/group/tuangbg.jpg) repeat-x; float:left;}
+.tuan_rs span{  background:url(../images/group/tuangr.jpg) no-repeat right top; height:44px; padding-right:8px;line-height:44px;display:-moz-inline-box; display:-webkit-inline-box; display:block\9;line-height:44px; _display:inline-block;}
+.tuantxt{ padding-left:5px;  font-style:normal; float:left; margin-right:3px; position:relative; z-index:10001;}
+.tuan_active{ background:url(../images/group/tuanactivel.jpg) no-repeat; float:left;position:relative; z-index:1000; _position:absolute;}
+.tuan_active span{  background:url(../images/group/tuanactiver.jpg) no-repeat right top; height:44px; padding-right:8px; display:-moz-inline-box; display:-webkit-inline-box; display:block\9;line-height:44px; _display:inline-block;}
+.tuanspan{ float:left; margin-top:20px; width:9px; height:6px;position:relative; z-index:10001;}
+.tuan_block{ width:264px; float:left; overflow:hidden; position:absolute; z-index:10; background:url(../images/group/tuanblockt.gif) no-repeat; padding-top:6px; top:38px; *left:89px;}
+.tuan_block_box{ width:264px; float:left; background:url(../images/group/blockx.jpg) repeat-y; overflow:hidden;}
+.tuan_block_box em{ position:absolute; right:5px; top:5px;}
+.tuan_block_box em a{ background:url(../images/group/blockclose.jpg) no-repeat; width:16px; height:16px; display:block;} 
+.tuan_blockb{ background:url(../images/group/tuanblockb.gif) no-repeat; width:264px; height:6px; float:left; overflow:hidden;}
+.tuan_address{ padding:10px; line-height:20px; width:244px; overflow:hidden; padding-bottom:0px;}
+.tuan_address i{ font-style:normal; margin-right:5px; word-spacing:normal;white-space:nowrap;}
+.index_w{ overflow:hidden; border:1px solid #DFDEDE; margin-top:5px;}
+.tuan_empty{ width:350px; margin-left:auto; margin-right:auto; margin-top:30px; margin-bottom:30px; overflow:hidden}
+.tuan_empty i{ width:120px; height:109px; float:left; display:block;}
+.tuan_empty span{ float:left; display:block; width:230px; text-align:center; font-size:18px; margin-top:40px;}
+.tuan_details{ width:965px; float:left; overflow:hidden; margin-top:10px; padding-left:37px;}
+.tuan_dleft{ width:753px; float:left; border:1px solid #DDDDDD; background:#F9F9F9;}
+.tuanname{ float:left; padding:10px 20px; width:713px; overflow:hidden; font-size:20px;}
+.tuanname a{ color:#000;}
+.tuanname a:hover{ text-decoration:underline}
+.tuanbuy_box{ padding-left:20px; width:733px; float:left;}
+.tuanbuy_left{ float:left; width:260px; margin-right:8px; position:relative; z-index:1;}
+.tuanbuy_right{ width:463px; height:463px; float:left; background:#fff; overflow:hidden; border-left:1px solid #DDDDDD; border-top:1px solid #DDDDDD; position:relative;z-index:1;}
+.tuanbtop{ background:#EEEEEE; border:1px solid #BEBEBE; height:160px; position:relative; width:258px; float:left; margin-bottom:10px;}
+.tuanbuyt{ background:url(../images/group/buyt.jpg) no-repeat; width:317px; height:85px; display:block; position:absolute; top:-1px; left:-59px;}
+.tuanbuyt b{ color:#FFF; padding-left:40px; display:block;  height:45px; float:left; width:133px;word-break:break-all; position:relative; }
+.tuanbuyt b p{ position:absolute; top:50%;font-size:20px;}
+.tuanbuyt_hui{ background:url(../images/group/buyt_hui.jpg) no-repeat; width:317px; height:85px; display:block; position:absolute; top:-1px; left:-59px;}
+.tuanbuyt_hui b{ color:#FFF; padding-left:40px; display:block;  height:45px; float:left; width:133px;word-break:break-all; position:relative; }
+.tuanbuyt_hui b p{ position:absolute; top:50%;font-size:20px;}
+.tuanbuyt_green{ background:url(../images/group/buyt_green.jpg) no-repeat; width:317px; height:85px; display:block; position:absolute; top:-1px; left:-59px;}
+.tuanbuyt_green b{ color:#FFF; padding-left:40px; display:block;  height:45px; float:left; width:133px;word-break:break-all; position:relative; }
+.tuanbuyt_green b p{ position:absolute; top:50%;font-size:20px;}
+.tuanbuyt .buytuan{ background:url(../images/group/tuanbuy.jpg) no-repeat; width:136px; height:56px; border:0px; float:left; margin-top:10px; display:block;}
+.tuanbuyt_hui .buytuan{ background:url(../images/group/tuanbuy_hui.jpg) no-repeat; width:136px; height:56px; border:0px; float:left; margin-top:10px; display:block;cursor:default}
+.tuanbuyt_green .buytuan{ background:url(../images/group/tuanbuy_green.jpg) no-repeat; width:136px; height:56px; border:0px; float:left; margin-top:10px; display:block; cursor:default}
+
+
+
+
+.tuanbuyb{ width:258px; margin-top:90px; display:block; height:60px; position:absolute; top:0px; left:0px;}
+.tuanbuyb i{ width:79px;  float:left; color:#000; font-style:normal; display:block; padding-left:3px; padding-right:3px;}
+.tuanbuyb i em{ width:79px; display:block; float:left; color:#000; text-align:center;font-style:normal;font-size:14px;}
+.tuanbuyb i strong{ width:79px; float:left; display:block; color:#F00; text-align:center; margin-top:5px;word-break:break-all; font-size:14px;}
+.tuanbuyb i  b{ width:79px; float:left; display:block; color:#000; text-align:center; margin-top:5px; word-break:break-all;}
+.tuanbotm{ background:#E4E4E4; width:258px; border:1px solid #D9D9D9;overflow:hidden; height:270px; clear:both}
+.tuan_buyed{ width:258px; float:left; padding-top:20px; text-align:center;}
+.tuan_buyed span{ display:block; font-size:12px; margin-top:5px; color:#000;word-break:break-all;}
+.tuan_buyed span b{ color:#F00; font-size:16px;word-break:break-all;}
+.tuansuces{ width:150px; margin-left:auto; font-weight:bold; margin-right:auto; clear:both; overflow:hidden; color:#000; font-size:18px; padding-top:10px;}
+.tuansuces span{ margin-right:10px;}
+.tuanlimit{ width:258px; clear:both; padding-top:20px;}
+.tuanlitm{ text-align:center; font-size:14px; color:#000; font-weight:bold;}
+.tuanlitime{ text-align:center; margin-top:10px;}
+.tuanlitime b{ color:#000; font-size:14px; background:#fff; padding:5px;}
+.tuanlitime i{ color:#000; font-style:normal; font-size:14px;}
+.tuanbuy_right span{ width:463px; height:463px;}
+.tuan_left_box{ width:755px; float:left; margin-right:10px;}
+.tuan_left_botm{ float:left; width:755px; }
+.tuan_btm_left{ width:595px; margin-right:10px; float:left;}
+.tuan_btm_right{ width:150px; float:left; overflow:hidden; background:#F5F5F5; margin-top:1px; position:relative}
+.tuan_btm_h3{ color:#FA5606; border-bottom:1px solid #ccc; line-height:40px;}
+.tuan_btm_deta{ float:left; width:595px; overflow:hidden; padding-top:20px;}
+.tuanrbt_h3{ line-height:30px; padding-left:15px; float:left; width:120px;}
+.tuanrbt_h3 span{ display:block;border-bottom:1px solid #E7E7E7; color:#FA5606; width:120px;}
+.tuanrbt_h4{ background:url(../images/group/tuanrs.jpg) no-repeat 15px center; height:30px; line-height:30px; width:150px; float:left; margin-top:10px;}
+.tuanrbt_h4 span{ padding-left:25px; font-size:12px; font-weight:bold;color:#000; } 
+.tuanrbt_shop{ width:125px; float:left;  padding-left:15px;}
+.tuan_shopa{ color:#03C; text-decoration:underline;}
+.tuan_btr_u{ width:120px; padding:15px; float:left; border-top:1px dashed #ccc;}
+.tuan_btr_u li{ float:left; width:120px; margin-bottom:10px;}
+.tuan_btr_img{ width:120px; height:120px;}
+.tuan_btr_img span{ width:120px; height:120px; background:#fff;}
+.tuan_btr_name a{ color:#000;}
+.tuan_btr_name a:hover{ color:#F00;}
+.tuan_btr_money{ color:#000;}
+.tuan_btr_money b{ color:#F00;} 
+.tuan_btr_money s{ color:#666}
+.tuan_order_buy{ width:593px; overflow:hidden; margin-top:20px; border:1px solid #E7E7E7; float:left; }
+.tuan_buy_rush{ width:593px; height:82px; border-bottom:1px solid #E7E7E7; background:#F1F6F9; }
+.rush_btn{ float:right; background:url(../images/group/rushbtn.jpg) no-repeat; width:114px; height:40px; border:0px; margin-top:20px; margin-right:20px; display:block;}
+.wait_btn{ float:right; background:url(../images/group/waitbtn.jpg) no-repeat; width:114px; height:40px; border:0px; margin-top:20px; margin-right:20px; display:block;}
+.buyout_btn{ float:right; background:url(../images/group/buyout.jpg) no-repeat; width:114px; height:40px; border:0px; margin-top:20px; margin-right:20px; display:block;}
+.tuan_rush_m{  padding-left:20px; display:block; float:left; height:82px; padding-right:30px; line-height:82px; font-size:28px; color:#FE0000;}
+.tuan_rush_money{ display:block; float:left; width:270px;}
+.tuan_rush_money i{ width:90px; display:block; float:left;text-align:center; font-style:normal}
+.tuan_rush_money i b{ color:#000; text-align:center; display:block; float:left; width:90px; margin-top:20px; margin-bottom:5px;}
+.tuan_rush_money i em{ color:#000; text-align:center; display:block; float:left; width:90px;font-style:normal}
+.tuan_rush_money i s{ width:90px; display:block; float:left; text-align:center; color:#000;}
+.tuan_buyer{ width:573px; float:left; overflow:hidden; padding:10px;}
+.tuan_buyer h4{ color:#FF4B04; border-bottom:1px solid #E7E7E7; padding-bottom:10px}
+.tuan_buyer_info{ width:573px; float:left; overflow:hidden; margin-top:10px;}
+.tuanin_table{border-collapse:collapse; }
+.tuanin_table td{border-collapse:collapse; padding-left:10px;}
+.tuanin_th{ background:#EEEEEE; line-height:30px; font-weight:bold;}
+.tuanin_th b{ color:#000;}
+.tuanin_tb td{ border-bottom:1px dashed #ccc; text-align:center; padding-top:10px; padding-bottom:10px;}
+.tuan_dright{ width:200px; overflow:hidden; float:left;}
+.tuandr_h3{ color:#C80909; background:url(../images/group/tuandrh.jpg) repeat-x; line-height:29px; height:29px; padding-left:10px; border:1px solid #D2D2D2; width:188px;}
+.tuan_drbox{ width:198px; border:1px solid #DDD; margin-top:10px; overflow:hidden;}
+.tuan_dru{ width:178px; padding:10px; float:left; border-bottom:1px dashed #E0E0E0;}
+.tuandru_img span{ width:178px; height:178px;}
+.tuandru_img{ width:178px; height:178px; position:relative;}
+.tuandru_filter{ width:178px; height:30px; line-height:30px; position:absolute; bottom:0; left:0px;}
+.tuandru_filter i{ position:absolute; z-index:1; top:0px; height:30px; width:178px;filter:alpha(opacity=70);
+-moz-opacity:0.70;
+opacity:0.70;
+background-color:#B40C0C;}
+.tuandru_filter em{ position:absolute; z-index:2; top:0px; height:30px; width:178px; color:#FFF; font-style:normal;}
+.tuandru_filter em s{ float:right; margin-right:10px;} 
+.tuandru_name a{ color:#0B72A4;}
+.tuandru_name a:hover{ text-decoration:underline}
+.tuandru_name{ margin-top:5px; line-height:20px; height:40px;}
+.tuandru_m{ margin-top:5px;}
+.tuandru_rush{ float:right;  display:block; background:url(../images/group/tuandrum.jpg) no-repeat; width:79px; height:25px; line-height:25px; text-align:center;}
+.tuandru_m b{ color:#000; line-height:25px;}
+.tuandru_m b strong{ color:#F00; padding-left:3px; padding-right:3px;} 
+.before_tuan{ width:1002px; margin-top:10px;}
+.before_h4{ width:1002px; border-bottom:1px solid #FF7928; overflow:hidden; margin-bottom:10px; padding-bottom:10px;}
+.beforeh_sp{ background:#FCFCD5; border:1px solid #FDCB5D; display:block; float:left; color:#000; height:25px; line-height:25px; padding-left:10px; padding-right:10px;}
+.before_box{ width:1002px; overflow:hidden; padding-bottom:10px;}
+.before_intbox{ width:1010px; overflow:hidden}
+.before_d{ width:304px; float:left; border-right:1px dashed #CDCDCD;border-bottom:1px dashed #CDCDCD; padding:15px; overflow:hidden}
+.before_d dt{ width:304px; height:45px; float:left; font-size:14px;}
+.before_d dt a{ color:#000;} 
+.before_d dt a:hover{ color:#F60; text-decoration:underline}
+.before_d dd{ width:304px; float:left; background:#F5F5F5; height:190px;  }
+.before_u{ width:114px; float:left; position:relative;}
+.before_u li{ width:110px; float:left; margin-bottom:8px; _margin-bottom:6px; padding-left:4px;}
+.befoue_spimg{ width:190px; float:left; height:190px; }
+.act_one{ display:block; background:url(../images/group/tuan_hing.jpg) no-repeat; width:95px; height:50px; position:absolute; top:0px; left:-10px; line-height:50px; color:#fff; font-size:14px; padding-left:10px;}
+.before_shu{ color:#999; margin-top:50px;}
+.before_shu b{ font-size:16px; color:#CC3333;}
+.before_money{ color:#999;}
+.before_money b{ color:#000;}
+.before_money strong{ color:#CC3333; font-size:14px;}
+.befoue_spimg span{ width:190px; height:190px; background:#fff;}
+.befoue_spimg span img{ *margin-top:4px;} 
+.act_two{display:block; background:url(../images/group/tuan_ht.jpg) no-repeat; width:95px; height:50px; position:absolute; top:0px; left:-10px; line-height:50px; color:#f1f1f1; font-size:14px; padding-left:10px;}
+.act_three{display:block; background:url(../images/group/tuan_ora.jpg) no-repeat; width:95px; height:50px; position:absolute; top:0px; left:-10px; line-height:50px; color:#fff; font-size:14px; padding-left:10px;}

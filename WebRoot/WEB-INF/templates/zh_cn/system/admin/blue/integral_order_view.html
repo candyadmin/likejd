@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="cont">
+  <div class="orderdetail">
+    <div class="orderh">兑换信息</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">兑换单号:</span><span>$!obj.igo_order_sn</span></li>
+       #if($!obj.igo_status==-1)
+                  #set($status="已取消")
+                #end
+                #if($!obj.igo_status==0)
+                  #set($status="待付款")
+                #end
+                #if($!obj.igo_status==10)
+                  #set($status="线下支付待审核")
+                #end
+                #if($!obj.igo_status==20)
+                  #set($status="已付款，待发货")
+                #end
+                #if($!obj.igo_status==30)
+                  #set($status="已发货")        
+                #end                
+                #if($!obj.igo_status==40)
+                #set($status="已收货完成")
+                #end     
+        <li><span class="ordertitle"> 兑换状态:</span><span>$!status</span></li>
+        <li><span class="ordertitle"> 兑换积分:</span><span>$!{obj.igo_total_integral}</span></li>
+        <li><span class="ordertitle">运费金额:</span><span><strong class="orange" style="padding-right:10px;">¥$!{obj.igo_trans_fee}</strong></span></li>
+        <li><span class="ordertitle">下单时间:</span><span>$!CommUtil.formatLongDate($!obj.addTime)</span></li>
+      </ul>
+    </div>
+    <div class="orderh">兑换详情</div>
+    <div class="orderhh">会员信息</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">会员名:</span><span>$!{obj.igo_user.userName}</span></li>
+        <li><span class="ordertitle">会员Email:</span><span>$!{obj.igo_user.email}</span></li>
+        <li><span class="ordertitle">兑换留言:</span><span>$!{obj.igo_msg}</span></li>
+      </ul>
+    </div>
+   <div class="orderhh">支付信息</div>
+    <div class="orderul">
+      <ul>
+      #if($!obj.igo_payment=="alipay")
+                  #set($payment="支付宝")
+                  #end
+                  #if($!obj.igo_payment=="tenpay")
+                     #set($payment="财付通")
+                    #end
+                  #if($!obj.igo_payment=="bill")
+                  #set($payment="快钱")
+                  #end                 
+                  #if($!obj.igo_payment=="chinabank")
+                  #set($payment="网银在线")
+                  #end       
+                  #if($!obj.igo_payment=="outline")
+                  #set($payment="线下支付")
+                  #end                  
+                  #if($!obj.igo_payment=="balance")
+                  #set($payment="预存款支付")
+                  #end 
+                  #if($!obj.igo_payment=="no_fee")
+                  #set($payment="无运费订单")
+                  #end 
+                  #if(!$!obj.igo_payment)
+                  #set($payment="未支付")
+                  #end
+        <li><span class="ordertitle">支付方式:</span><span>$!payment</span></li>
+        <li><span class="ordertitle">支付时间:</span><span>$!CommUtil.formatLongDate($!obj.igo_pay_time)</span></li>
+        <li><span class="ordertitle">支付留言:</span><span>$!obj.igo_pay_msg</span></li>
+      </ul>
+    </div>
+    <div class="orderhhh">收货人及发货信息</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">收货人姓名:</span><span>$!{obj.igo_addr.trueName}</span></li>
+        <li><span class="ordertitle">所在地区:</span><span>$!{obj.igo_addr.area.parent.parent.areaName} $!{obj.igo_addr.area.parent.areaName} $!{obj.igo_addr.area.areaName}</span></li>
+        <li><span class="ordertitle">邮政编码:</span><span>$!{obj.igo_addr.zip}</span></li>
+        <li><span class="ordertitle">电话号码:</span><span>$!{obj.igo_addr.telephone}</span></li>
+        <li><span class="ordertitle">手机号码:</span><span>$!{obj.igo_addr.mobile}</span></li>
+        <li><span class="ordertitle">详细地址:</span><span>$!{obj.igo_addr.area_info}</span></li>
+        #if($!obj.igo_ship_time)
+        <li><span class="ordertitle">发货时间:</span><span>$!CommUtil.formatLongDate($!{obj.igo_ship_time})</span></li>
+        #end
+        #if($!obj.igo_ship_code)
+        <li><span class="ordertitle">物流单号:</span><span>$!{obj.igo_ship_code}</span></li>
+        #end
+        #if($!obj.igo_ship_content)
+        <li><span class="ordertitle">发货说明:</span><span>$!{obj.igo_ship_content}</span></li>
+        #end
+      </ul>
+    </div>
+    <div class="orderhhh">礼品信息</div>
+    <div class="ordetable">
+      <table width="95%" border="0" cellspacing="0" cellpadding="0" class="orde_table">
+        <tr style="border-bottom:1px dotted #CCEAF4">
+          <td width="15%">&nbsp;</td>
+          <td width="40%"><strong>礼品信息</strong></td>
+          <td width="15%"><strong>兑换数量</strong></td>
+          <td><strong>兑换积分</strong></td>
+        </tr>
+        #foreach($gc in $obj.igo_gcs)
+        <tr style="border-bottom:1px dotted #CCEAF4"> 
+           #if($!gc.goods.ig_goods_img)
+             #set($img="$!webPath/$!{gc.goods.ig_goods_img.path}/$!{gc.goods.ig_goods_img.name}_small.$!{gc.goods.ig_goods_img.ext}")
+           #else
+             #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+           #end
+          <td><img src="$!img" width="45" height="45" /></td>
+          <td><a href="$!webPath/integral_view_$!{gc.goods.id}.htm" target="_blank" class="blue2">$!gc.goods.ig_goods_name</a></td>
+          <td>$!gc.count</td>
+          <td>$!gc.integral</td>
+        </tr>
+        #end
+      </table>
+    </div>
+<div class="submit">
+    <input name="go" type="button" value="返回列表" onclick="window.location.href='$!webPath/admin/integral_order.htm'" />
+  </div>
+  </div>
+</div>
+</body>
+</html>

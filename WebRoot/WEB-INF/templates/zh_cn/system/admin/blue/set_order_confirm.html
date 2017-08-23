@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery.validator.addMethod("compare_auto_order_confirm",function(value,element){
+  var auto_order_confirm=parseInt(jQuery("#auto_order_confirm").val());
+  var auto_order_notice=parseInt(jQuery("#auto_order_notice").val());
+  if(auto_order_confirm<auto_order_notice){
+     return false;
+	 
+  }else return true;
+});
+jQuery(document).ready(function(){
+jQuery("#theForm").validate({
+	ignore: "",						  
+    rules:{
+	  auto_order_confirm:{required :true,number:true,digits:true},
+	  auto_order_notice:{required:true,number:true,compare_auto_order_confirm:true,digits:true}
+	},
+	messages:{
+	  auto_order_confirm:{required:"自动确认收货时长不能为空",number:"自动确认收货时长只能为数字",digits:"只能输入正整数"},
+	  auto_order_notice:{required:"自动收货提醒时长不能为空",number:"自动收货提醒时长序号只能为数字",compare_auto_order_confirm:"自动收货提醒时长必须小于自动确认收货时长",digits:"只能输入正整数"}
+	}
+  });	
+});
+
+function saveForm(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/set_order_confirm_save.htm" method="post"  name="theForm" id="theForm">
+  <div class="cont">
+  <h1 class="seth1">订单设置
+    <input name="id" id="id" type="hidden" value="$!config.id"/>
+  </h1>
+  <div class="settab">
+  <span class="tab-one" style="margin-left:25px;"></span> 
+  <span class="tabs"> <a href="javascript:void(0);" class="this">基本设置</a> </span> 
+  <span class="tab-two"></span>
+</div>
+  <div class="setcont">
+    <ul class="set1">
+      <li>自动确认收货时长</li>
+      <li><span class="webname">
+        <input name="auto_order_confirm" type="text" id="auto_order_confirm" value="$!config.auto_order_confirm" size="40" autocomplete="off" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">卖家发货后，达到该时间系统自动确认收货</strong><strong class="c"></strong></span></li>
+    </ul>
+ 	<ul class="set1">
+      <li>自动收货提醒时长</li>
+      <li><span class="webname">
+        <input name="auto_order_notice" type="text" id="auto_order_notice" value="$!config.auto_order_notice" size="40" autocomplete="off" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">卖家发货后达到该时长，给买家发送即将自动确认收货的短信、邮件提醒</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>买家申请退货有效时长</li>
+      <li><span class="webname">
+        <input name="auto_order_return" type="text" id="auto_order_return" value="$!config.auto_order_return" size="40" autocomplete="off" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">买家在该有效时长内需提交退货物流单号及物流公司信息，超过该时长退货申请关闭，订单变为待评价订单</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>订单可评价有效时长</li>
+      <li><span class="webname">
+        <input name="auto_order_evaluate" type="text" id="auto_order_evaluate" value="$!config.auto_order_evaluate" size="40" autocomplete="off" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">到达该有效时长后订单不可评价</strong><strong class="c"></strong></span></li>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="提交" onclick="saveForm();"/>
+  </div>
+</div>
+</form>
+</body>
+</html>

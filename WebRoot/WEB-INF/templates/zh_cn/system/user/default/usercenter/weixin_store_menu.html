@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>微信商城  -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="../../../../../../../resources/style/system/front/default/css/user.css"  type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+//
+jQuery(".wx_foot_ul>ul>li>a").mouseover(function(){
+   jQuery(".wx_foot_ul>ul>li>a").removeClass();
+   jQuery(this).addClass("wx_add");
+}).mouseleave(function(){
+   jQuery(".wx_foot_ul>ul>li>a").removeClass();
+});
+//
+jQuery(".wx_foot_ul>ul>li").mouseover(function(){
+  jQuery(this).find(".wx_ps_ul").show();
+  jQuery(this).find(".wx_san_d").show();
+}).mouseleave(function(){
+  jQuery(".wx_ps_ul").hide();
+  jQuery(".wx_san_d").hide();
+});
+});
+function weixin_menu_create(){
+  jQuery.ajax({type:'POST',
+			   url:'$!webPath/seller/weixin_store_menu_create.htm',
+			   data:'',
+			   success:function(data){
+				     if(data=="0"){
+				        alert("菜单生成成功，由于微信缓存不能立刻显示！");
+					 }
+				   }
+		     });
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/seller/nav.htm?op=weixin_store")
+        <td id="centerbg" valign="top"><div class="buyer_position">
+            <div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>微信商城</span></div>
+          </div>
+          <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li><a href="$!webPath/seller/weixin_store.htm">微信商城</a></li>
+                <li><a href="$!webPath/seller/weixin_store_log.htm">购买日志</a></li>
+                #if($!store.weixin_status==1)
+                <li class="this"><a href="$!webPath/seller/weixin_store_menu.htm">微信菜单</a></li>
+                #end
+              </ul>
+              <div class="addnew"><a class="button_common" href="$!webPath/seller/weixin_store_buy.htm">立即购买</a></div>
+            </div>
+            <div class="ordercon">
+              <div class="wx_box_ps">
+                <div class="wx_header"> <span class="wx_header_l"><a href="javascript:void(0);">返回</a></span> <span class="wx_header_m">$!{store.weixin_account}</span> <span class="wx_header_r"><a href=""></a></span> </div>
+                <div class="wx_container"> <span class="wx_logo"><img src="$!webPath/$!store.weixin_qr_img.path/$!store.weixin_qr_img.name" width="100" height="100" /></span> <span class="wx_logo_bt">#if($!vmenus.size()<3)<a href="javascript:void(0);" dialog_uri="$!webPath/seller/weixin_store_menu_add.htm" dialog_title="设置微信菜单" dialog_width="400" dialog_height="400" dialog_id="store_quick_menu"><img src="$!webPath/resources/style/system/front/default/images/wx_add.png" /></a>#end<a href="javascript:void(0);" onclick="weixin_menu_create()"><img src="$!webPath/resources/style/system/front/default/images/wx_sc.png" /></a> </span> </div>
+                <div class="wx_footer">
+                  <div class="wx_foot_box">
+                    <div class="wx_foot_l"><a href=""></a></div>
+                    <div class="wx_foot_ul">
+                      <ul>
+                       #foreach($vmenu in $vmenus)
+                        <li #if($!velocityCount==$!vmenus.size()) class="this last" #else class="this"#end ><a  href="javascript:void(0);" dialog_uri="$!webPath/seller/weixin_store_menu_add.htm?menu_id=$!{vmenu.id}" dialog_title="设置微信菜单" dialog_width="400" dialog_height="400" dialog_id="store_quick_menu">$!{vmenu.menu_name}</a>
+                          <div class="wx_ps_ul" style="display:none;">
+                            <ul>
+                              <li><a  href="javascript:void(0);" dialog_uri="$!webPath/seller/weixin_store_menu_add.htm?pmenu_id=$!{vmenu.id}" dialog_title="设置微信菜单" dialog_width="400" dialog_height="400" dialog_id="store_quick_menu" >+</a></li>
+                              #foreach($c_vmenu in $vmenu.childs)
+                               <li><a  href="javascript:void(0);" dialog_uri="$!webPath/seller/weixin_store_menu_add.htm?menu_id=$!{c_vmenu.id}" dialog_title="设置微信菜单" dialog_width="400" dialog_height="400" dialog_id="store_quick_menu" >$!{c_vmenu.menu_name}</a></li>
+                              #end
+                            </ul>
+                          </div>
+                          <div class="wx_san_d" style="display:none;"></div>
+                          <i></i>
+                       </li>
+                       #end
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

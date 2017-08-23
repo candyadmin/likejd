@@ -1,0 +1,18 @@
+@charset "utf-8";
+/* CSS Document */
+
+.errorpage{ width:549px; overflow:hidden; margin-left:auto; margin-right:auto; background:url(../images/error/errorbg.jpg) repeat-y;}
+.errortop{ width:549px; background:url(../images/error/errortop.jpg) no-repeat; height:11px; float:left}
+.errorbtom{ width:549px; background:url(../images/error/errorbotom.jpg) no-repeat; height:12px; float:left}
+.errordex{ width:538px; overflow:hidden; float:left; padding:5px; padding-left:6px;}
+.pagertop{ background:url(../images/error/errorw.jpg) repeat-x left bottom; width:539px; padding-bottom:15px;}
+.pagertop h1{ color:#000; font-size:18px; text-align:center; line-height:30px;}
+.errp{ padding:10px; width:518px; overflow:hidden;}
+.errpbox{ background:url(../images/error/errorc.jpg) repeat-x left bottom; width:518px; overflow:hidden}
+.errorimg{ width:150px; height:220px; margin-left:auto; margin-right:auto;}
+.errorback{ width:518px; overflow:hidden; float:left; height:38px;}
+.errorback a{ background:url(../images/error/errorback.jpg) no-repeat; width:135px; padding-left:20px; height:28px; line-height:28px; color:#6196B5; display:block; margin-left:auto; margin-right:auto} 
+.errorback a:hover{color:#6196B5;}
+.pagertop span{ display:block; padding-left:30px; color:#A1A1A1; line-height:25px;} 
+.pagertop span a{ font-weight:bold; margin-left:10px; color:#93D9F3;}
+.pagertop span a:hover{ color:#000; text-decoration:underline;}

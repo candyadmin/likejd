@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#integral_status").click(function(){
+	   var integral=jQuery("#integral").val();
+	   if(integral=="true"){
+	      jQuery("#integral_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+		  jQuery("#integral").val("false");
+	   }else{
+	      jQuery("#integral_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+		  jQuery("#integral").val("true");
+	   }
+	});
+	//
+	jQuery("#groupBuy_status").click(function(){
+	   var groupBuy=jQuery("#groupBuy").val();
+	   if(groupBuy=="true"){
+	      jQuery("#groupBuy_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+		  jQuery("#groupBuy").val("false");
+	   }else{
+	      jQuery("#groupBuy_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+		  jQuery("#groupBuy").val("true");
+	   }
+	});	
+	//
+	jQuery("#integralStore_status").click(function(){
+	   var integralStore=jQuery("#integralStore").val();
+	   if(integralStore=="true"){
+	      jQuery("#integralStore_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+		  jQuery("#integralStore").val("false");
+	   }else{
+	      jQuery("#integralStore_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+		  jQuery("#integralStore").val("true");
+	   }
+	});	
+	//
+	jQuery("#deposit_status").click(function(){
+	   var deposit=jQuery("#deposit").val();
+	   if(deposit=="true"){
+	      jQuery("#deposit_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+		  jQuery("#deposit").val("false");
+	   }else{
+	      jQuery("#deposit_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+		  jQuery("#deposit").val("true");
+	   }
+	});	
+	//
+   jQuery("#gold_status").click(function(){
+	   var gold=jQuery("#gold").val();
+	   if(gold=="true"){
+	      jQuery("#gold_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+		  jQuery("#gold").val("false");
+	   }else{
+	      jQuery("#gold_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+		  jQuery("#gold").val("true");
+	   }
+	});	
+	//
+	#if($!config.groupBuy)
+	jQuery("#groupBuy_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	#else
+	jQuery("#groupBuy_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+	#end
+	#if($!config.integral)
+	jQuery("#integral_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	#else
+	jQuery("#integral_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+	#end
+	#if($!config.integralStore)
+	jQuery("#integralStore_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	#else
+	jQuery("#integralStore_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+	#end
+	#if($!config.deposit)
+	jQuery("#deposit_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	#else
+	jQuery("#deposit_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+	#end	
+	#if($!config.gold)
+	jQuery("#gold_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	#else
+	jQuery("#gold_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+	#end		
+});
+
+function saveForm(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/base_set_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <div class="cont">
+  <h1 class="seth1">基本设置
+    <input name="id" id="id" type="hidden" value="$!config.id"/>
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/operation_base_set.htm" />
+  </h1>
+  <div class="settab">
+  <span class="tab-one" style="margin-left:25px;"></span> 
+  <span class="tabs"> <a href="javascript:void(0);" class="this">基本设置</a> </span> 
+  <span class="tab-two"></span>
+</div>
+  <div class="setcont">
+    <ul class="set1">
+      <li style="margin-left:20px;">是否启用积分</li>
+      <li style="margin-left:20px;">
+	  <span class="webSwitch"> 
+	  <input name="integral" id="integral" type="hidden" value="$!config.integral" />
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg" width="61" height="23" style="cursor:pointer" id="integral_status"/></span> 
+	  <span id="nothis"><strong class="q"></strong><strong class="w">积分启用后，会员注册、登录会获取对应积分，卖家商品可以使用积分抵扣，商品购买成功后可以获取积分</strong><strong class="c"></strong></span></li>
+    </ul>
+ 	<ul class="set1">
+      <li style="margin-left:20px;">是否启用积分商城</li>
+      <li style="margin-left:20px;">
+	  <span class="webSwitch"> 
+	  <input name="integralStore" id="integralStore" type="hidden" value="$!config.integralStore" />
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg" width="61" height="23" style="cursor:pointer" id="integralStore_status"/></span> 
+	  <span id="nothis"><strong class="q"></strong><strong class="w">积分商城启用后，商城前台自动出现积分商城链接，同时可以管理积分商城商品</strong><strong class="c"></strong></span></li>
+    </ul>
+	<ul class="set1">
+      <li style="margin-left:20px;">是否启用预存款</li>
+      <li style="margin-left:20px;">
+	  <span class="webSwitch"> 
+	  <input name="deposit" id="deposit" type="hidden" value="$!config.deposit" />
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg" width="61" height="23" style="cursor:pointer"  id="deposit_status"/></span> 
+	  <span id="nothis"><strong class="q"></strong><strong class="w">预存款启用后，会员可以给自己帐户充值进行交易</strong><strong class="c"></strong></span></li>
+    </ul>
+	<ul class="set1">
+      <li style="margin-left:20px;">是否启用金币</li>
+      <li style="margin-left:20px;">
+	  <span class="webSwitch"> 
+	  <input name="gold" id="gold" type="hidden" value="$!config.gold" />
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg" width="61" height="23" style="cursor:pointer" id="gold_status"/></span> 
+	  <span id="nothis"><strong class="q"></strong><strong class="w">金币功能启用后，店主可通过平台提供的交易方式进行购买，金币可用来购买广告、直通车等</strong><strong class="c"></strong></span></li>
+    </ul>
+	<ul class="set1">
+      <li style="margin-left:20px;">金币兑换</li>
+      <li style="margin-left:20px;"><span class="allmen size5">
+        一元人民币可兑换<input name="goldMarketValue" type="text" id="goldMarketValue" value="$!config.goldMarketValue" />枚金币
+        </span></li>
+    </ul>
+    <ul class="set1">
+      <li style="margin-left:20px;">是否启用团购</li>
+      <li style="margin-left:20px;">
+	  <span class="webSwitch"> 
+	  <input name="groupBuy" id="groupBuy" type="hidden" value="$!config.groupBuy" />
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg" width="61" height="23" style="cursor:pointer" id="groupBuy_status"/> 
+	  </span> 
+	  <span id="nothis"><strong class="q"></strong><strong class="w">团购启用后，商城前台自动出现团购链接，同时可以管理团购相关信息</strong><strong class="c"></strong></span></li>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="提交" onclick="saveForm();"/>
+  </div>
+</div>
+</form>
+</body>
+</html>

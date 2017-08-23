@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>提现申请 -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+       rules: {
+			cash_payment:{required:true},
+			cash_amount:{required:true,range:[0.01,$!{availableBalance}]},
+			cash_userName:{required:true},
+			cash_bank:{required:true},
+			cash_account:{required:true}
+		  },
+	   messages: {
+		    cash_payment:{required:"支付方式不能为空"},
+			cash_amount:{required:"提现金额不能为空",range:"请输入大于{0}-{1}的金额数字"},
+			cash_userName:{required:"收款人不能为空"},
+			cash_bank:{required:"收款银行不能为空"},
+			cash_account:{required:"收款账号不能为空"}
+	     }
+  });
+ //
+ jQuery("#cash_payment").change(function(){
+    var val=jQuery(this).val();
+	if(val=="outline"){
+	  jQuery("tr[id^=cash_]").show();
+	  jQuery("tr[id^=cash_] input").show();
+	}else{
+	  jQuery("tr[id^=cash_]").hide();
+	   jQuery("tr[id^=cash_] input").hide();
+	}
+  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/buyer/account_nav.htm?op=buyer_cash")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">我的账户</a> > <span>申请提现</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href='$!webPath/buyer/buyer_cash.htm' >提现申请</a></li>
+                <li><a href='$!webPath/buyer/buyer_cash_list.htm'>申请列表</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+                <form action="$!webPath/buyer/buyer_cash_save.htm" method="post" name="theForm" id="theForm">
+                  <table width="705" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                    <tr>
+                      <td align="right" valign="top" class="modifysp">可提余额：</td>
+                      <td  class="px10">¥${availableBalance}</td>
+                    </tr>
+                    <tr>
+                      <td width="102" align="right" valign="top" class="modifysp"><span>提现方式：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td width="603"  class="px10"><select name="cash_payment" id="cash_payment">
+                          <option value="" selected="selected">请选择支付方式</option>
+                          <option value="alipay">支付宝</option>
+                          <option value="chinabank">网银在线</option>
+                          <option value="tenpay">财付通</option>
+                          <option value="bill">快钱</option>
+                          <option value="outline">线下支付</option>
+                        </select></td>
+                    </tr>
+                    <tr>
+                      <td width="102" align="right" valign="top" class="modifysp"><span>提现金额：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td  class="px10"><span class="setinput">
+                        <input name="cash_amount" type="text" id="cash_amount"  />
+                        </span></td>
+                    </tr>
+                    <tr id="cash_user_tr" style="display:none;">
+                      <td align="right" valign="top" class="modifysp"><span>收款人姓名：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td  class="px10"><span class="setinput">
+                        <input name="cash_userName" type="text" id="cash_userName" style="display:none;" />
+                        </span></td>
+                    </tr>
+                    <tr id="cash_bank_tr" style="display:none;">
+                      <td align="right" valign="top" class="modifysp"><span>收款银行：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td  class="px10"><span class="setinput">
+                        <input name="cash_bank" type="text" id="cash_bank" style="display:none;" />
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>收款账号：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                      <td  class="px10"><span class="setinput">
+                        <input name="cash_account" type="text" id="cash_account"  />
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top" class="modifysp"><span>提现备注：</span></td>
+                      <td  class="px10"><span class="setinput">
+                        <textarea name="cash_info" cols="40" rows="6" id="cash_info"></textarea>
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td class="px10"><span class="setsub">
+                        <input name="" type="submit"  value="提交" style="cursor:pointer;"/>
+                        </span></td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>查看物流 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">$!httpInclude.include("/buyer/head.htm")
+  <div class="orderdetail">
+    <div class="orderdh">
+      <h1>物流信息</h1>
+    </div>
+    <div class="ordersee">
+      <div class="ordersee4">
+        <ul>
+          <li><span class="orseet">收货人:</span><span class="orseet2">$!obj.addr.trueName</span></li>
+          <li><span class="orseet">收货地址:</span><span class="orseet2">$!{obj.addr.area.parent.parent.areaName} $!{obj.addr.area.parent.areaName} $!{obj.addr.area.areaName} $!{obj.addr.area_info}</span></li>
+          <li><span class="orseet">邮政编码:</span><span class="orseet2">$!{obj.addr.zip}</span></li>
+          <li><span class="orseet">电话号码:</span><span class="orseet2">$!{obj.addr.telephone}</span></li>
+          <li><span class="orseet">手机号码:</span><span class="orseet2">$!{obj.addr.mobile}</span></li>
+          <li><span class="orseet">配送方式:</span><span class="orseet2">$!obj.ship.shipping_name</span></li>
+          <li><span class="orseet">配送时间:</span><span class="orseet2">$!CommUtil.formatLongDate($!obj.shipTime)</span></li>
+          #if($!{obj.msg} && $!{obj.msg}!="")
+          <li><span class="orseet">买家留言:</span><span class="orseet2">$!obj.msg</span></li>
+          #end
+          <li><span class="orseet">发票类型:</span><span class="orseet2">#if($!obj.invoiceType==0)个人 #else 单位#end</span></li>
+          #if($!{obj.invoice} && $!{obj.invoice}!="")
+          <li><span class="orseet">发票台头:</span><span class="orseet2">$!obj.invoice</span></li>
+          #end
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="orderdetail">
+    <div class="orderdh">
+      <h1>物流动态</h1>
+    </div>
+    <div class="ordersee">
+      <div class="ordersee4">
+        <ul>
+          <li><span class="orseet">订单编号:</span><span class="orseet2">$!obj.order_id</span></li>
+          <li><span class="orseet">物流公司:</span><span class="orseet2">$!obj.ec.company_name</span></li>
+          <li><span class="orseet">物流单号:</span><span class="orseet2">$!obj.shipCode</span></li>
+          #if($!transInfo.status==1)
+          #foreach($info in $transInfo.data)
+          <li><span class="orseet"> &nbsp;</span><span class="orseet2">$!info.time $!info.context</span></li>
+          #end
+          #end
+          #if($!transInfo.status==0)
+          <li><span class="orseet"></span><span class="orseet2">暂无物流信息</span></li>
+          #end
+        </ul>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

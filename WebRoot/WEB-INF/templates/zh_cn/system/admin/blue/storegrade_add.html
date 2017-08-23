@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  #if($!obj.audit==true)
+    jQuery("#audit_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+  #else
+    jQuery("#audit_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+  #end
+   #if($!CommUtil.indexOf("$!obj.add_funciton","editor_multimedia")>=0)
+    jQuery("#add_funciton_ck").attr("checked",true);
+  #else
+     jQuery("#add_funciton_ck").attr("checked",false);
+  #end
+  jQuery("#audit_img").click(function(){
+     var audit=jQuery("#audit").val()
+	 if(audit=="true"){
+	    jQuery("#audit").val("false");
+		jQuery("#audit_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	 }else{
+	    jQuery("#audit").val("true");
+		jQuery("#audit_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	 }
+  });
+  jQuery("#add_funciton_ck").click(function(){
+    var v=jQuery(this).val();
+	if(v=="true"){
+	  jQuery("#add_funciton").val("editor_multimedia");
+	}else{
+	  jQuery("#add_funciton").val("");
+	}
+  });
+  jQuery("#theForm").validate({
+    rules:{
+	  gradeName:{required :true},
+	  price:{required :true}
+	},
+	messages:{
+	  gradeName:{required:"店铺等级不能为空"},
+	  price:{required:"店铺价格不能为空"}
+	}
+  });
+});
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/storegrade_save.htm" method="post" name="theForm" id="theForm">
+ <div class="cont">
+      <h1 class="seth1">店铺等级</h1>
+      <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/storegrade_list.htm" >管理</a> | <a href="$!webPath/admin/storegrade_add.htm"  #if(!$!edit)class="this"#end>新增</a> #if($!edit) <a href="javascript:void(0);" class="this">编辑</a> #end </span> <span class="tab-two"></span></div>
+      <div class="edit">
+        <div class="editul setcont ">
+          <ul class="set3">
+            <li><strong class="orange fontsize20">*</strong>等级名称
+              <input name="id" type="hidden" id="id" value="$!obj.id" />
+              <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/storegrade_add.htm" />
+              <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/storegrade_list.htm" />
+            </li>
+            <li><span class="pxnum">
+              <input name="gradeName" type="text" id="gradeName" value="$!obj.gradeName"  />
+              </span></li>
+          </ul>
+          <ul class="set3">
+            <li>允许发布商品数</li>
+            <li><span class="pxnum">
+              <input name="goodsCount" type="text" id="goodsCount" value="$!obj.goodsCount" />
+              </span><span id="nothis"><strong class="q"></strong><strong class="w">0表示没有限制</strong><strong class="c"></strong></span></li>
+          </ul>
+          <ul class="set3">
+            <li>店铺附件空间</li>
+            <li><span class="pxnum">
+              <input name="spaceSize" type="text" id="spaceSize" value="$!obj.spaceSize" />
+              </span><span id="nothis"><strong class="q"></strong><strong class="w">0表示没有限制，店铺附件空间用来存放商品图片等所有店铺附件</strong><strong class="c"></strong></span></li>
+          </ul>
+          <ul class="set3">
+            <li>等级序号</li>
+            <li><span class="pxnum">
+              <input name="sequence" type="text" id="sequence" value="$!obj.sequence" />
+              </span><span id="nothis"><strong class="q"></strong><strong class="w">越小显示越靠前</strong><strong class="c"></strong></span></li>
+          </ul>
+          <ul class="set3">
+            <li>等级级别</li>
+            <li><span class="pxnum">
+              <input name="gradeLevel" type="text" id="gradeLevel" value="$!obj.gradeLevel" />
+              </span><span id="nothis"><strong class="q"></strong><strong class="w">数值越大级别越高，用于店铺升级</strong><strong class="c"></strong></span></li>
+          </ul>
+          <ul class="set3">
+            <li>允许子账户个数</li>
+            <li><span class="pxnum">
+              <input name="acount_num" type="text" id="acount_num" value="$!obj.acount_num" />
+              </span><span id="nothis"><strong class="q"></strong><strong class="w">允许卖家添加的子账户个数</strong><strong class="c"></strong></span></li>
+          </ul>
+          <ul class="set3">
+            <li>是否需要审核</li>
+            <li> <span class="webSwitch">
+              <input name="audit" id="audit" type="hidden" value="$!obj.audit" />
+              <img  src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="audit_img" style="cursor:pointer;" /> </span> <span id="nothis"><strong class="q"></strong><strong class="w">需要审核等级，用户提交申请后需管理员确认方可开通</strong><strong class="c"></strong></span></li>
+          </ul>
+          <ul class="set3">
+            <li>可选模板套数</li>
+            <li class="hui">0(在店铺等级列表设置)</li>
+          </ul>
+          <ul class="set3">
+            <li>可用附加功能</li>
+            <li class="meduit"><span class="mdspan1">
+              <input name="add_funciton_ck" type="checkbox" id="add_funciton_ck" value="true" />
+              <input name="add_funciton" type="hidden" id="add_funciton" value="$!obj.add_funciton" />
+              </span><span class="mdspan2">编辑器多媒体功能</span></li>
+          </ul>
+          <ul class="set3">
+            <li><strong class="orange fontsize20">*</strong>收费标准</li>
+            <li><span class="pxnum">
+              <input name="price" type="text" id="price" value="$!obj.price" />
+              </span><span id="nothis"><strong class="q"></strong><strong class="w">收费标准，在会员开通或升级店铺时将显示在前台</strong><strong class="c"></strong></span></li>
+          </ul>
+          <ul class="set3">
+            <li>申请说明</li>
+            <li><span class="pxnum txtarsize">
+              <textarea name="content" cols="" rows="" id="content">$!obj.content</textarea>
+              </span><span id="nothis"><strong class="q"></strong><strong class="w">申请说明，在会员开通或升级店铺时将显示在前台</strong><strong class="c"></strong></span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="submit">
+        <input name="" type="submit" value="提交" />
+      </div>
+    </div>
+</form>
+</body>
+</html>

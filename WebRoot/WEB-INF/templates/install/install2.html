@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>shopping多用户商城$!{version}正式版 - 系统安装程序</title>
+<meta name="generator" content="shopping 1.3" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/common/css/install.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+ jQuery("#theForm").validate({
+  rules:{
+	   title:{required:true},
+	   pws:{required:true,minlength:6},
+	   pws1:{required:true,equalTo:"#pws"}
+	  },
+  messages:{
+	   title:{required:"商城标题不能为空"},
+	   pws:{required:"密码不能为空",minlength:"密码长度最少为{0}位"},
+	   pws1:{required:"重复密码不能为空",equalTo:"两次输入的密码不一致"}	   
+	  }
+ });
+});
+</script>
+</head>
+<body>
+<div class="install_head"> </div>
+<div class="install">
+  <div class="install_box" >
+    <div class="install_box_top"></div>
+    <div class="install_box_logo"><span class="install_edition">$!{version}版本</span>
+      <div class="install_logo"><img src="$!webPath/resources/style/common/images/install/ins_logo.png" width="197" height="49" /></div>
+      <span class="install_t">安装向导</span></div>
+    <div class="install_box_bg">
+      <div class="install_conent">
+        <div class="instal_step"> <span><i class="this">1</i><b class="this_b">初始数据</b></span> <span><i>2</i><b >创建数据</b></span> <span><i>3</i><b>完成安装</b></span> </div>
+        <div class="insprogess"><span class="insprogess_a"></span></div>
+        <div class="install_software_box">
+          <form action="$!webPath/install.htm" method="post" id="theForm">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="install_table">
+              <tr>
+                <td align="right" valign="top" class="font_b">网站名称：</td>
+                <td><input name="title" type="text"class="install_input" id="title" /></td>
+              </tr>
+              <tr>
+                <td width="40%" align="right" valign="top" class="font_b">用户名：</td>
+                <td width="60%"><input name="userName" type="text"class="install_input" id="userName" value="admin" readonly="readonly" /></td>
+              </tr>
+              <tr>
+                <td align="right" valign="top" class="font_b"> 密 &nbsp;&nbsp;&nbsp;码：</td>
+                <td><input name="pws" type="password" class="install_input" id="pws"/></td>
+              </tr>
+              <tr>
+                <td align="right" valign="top" class="font_b">重复密码：</td>
+                <td><input name="pws1" type="password" class="install_input" id="pws1"/></td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><input name="test_data" type="checkbox" value="true"class="install_check" id="test_data" />
+                  <strong class="install_check_txt"><label for="test_data">安装演示数据</label></strong></td>
+              </tr>
+              <tr>
+                <td colspan="2" align="center"></td>
+              </tr>
+            </table>
+            <div class="install_software_width"> <span class="install_s"> 
+            <input name="install_status" type="hidden" id="install_status" value="$!install_status" />
+            <input name="" onclick="history.go(-1)" style="cursor:pointer;" type="button" value="上一步" class="install_software_btn"/>
+              <input name="提交" type="submit" style="cursor:pointer;" class="install_software_btn" value="安装商城"/>
+              <input name="" type="button" style="cursor:pointer;" onclick="javascript:window.close();" value="退出安装" class="install_software_btn"/>
+               </span> </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="ins_box_botm"></div>
+  </div>
+</div>
+<div class="install_foot">
+  <div class="install_foot_box">
+  </div>
+</div>
+</body>
+</html>

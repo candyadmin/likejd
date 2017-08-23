@@ -1,0 +1,26 @@
+
+
+<div class="per_page_left">
+        <div class="per_interview">
+          <h3><span class="in_left">最近访问</span> <span class="in_right">总浏览量$!visits.size()次</span></h3>
+          <ul>
+            #foreach($obj in $visits)
+            #set($visitImg="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+            #if($!obj.user.photo)
+            #set($visitImg="$!webPath/$!obj.user.photo.path/$!obj.user.photo.name")
+            #end
+           
+                <li id="visit_list_$!obj.user.id" visit_id=$!obj.user.id ><span> <a href="$!webPath/buyer/homepage.htm?uid=$!{obj.user.id}"> <img src="$!visitImg" width="50" height="50" /> </a> </span><b>$!obj.user.userName<div class="per_interview_x"  style="display:none; ">
+                  #if($!owner.id==$!user.id)
+                <a href="javascript:void(0);" id="visit_dele_$!obj.user.id" visit_id=$!obj.user.id >x</a>
+                  #end
+                </div></b>
+                <i>$!CommUtil.formatTime("MM月dd日HH:mm",$!obj.addTime) </i>
+                </li>
+                #end
+          
+            <input id="visit_dele_id" name="visit_dele_id" type="hidden" value=""/>
+          </ul>
+        </div>
+      </div>
+      $!httpInclude.include("/footer.htm")

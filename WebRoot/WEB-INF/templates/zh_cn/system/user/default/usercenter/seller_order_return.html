@@ -1,0 +1,52 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+	   rules:{
+		 #foreach($gc in $obj.gcs)
+		   refund_count_$!{gc.id}:{max:$!gc.count,digits:true},
+		 #end
+		   id:{required:true}
+		   },
+	   messages:{
+	     #foreach($gc in $obj.gcs)
+		   refund_count_$!{gc.id}:{max:"最大为$!gc.count",digits:"必须为整数"},
+		 #end
+		   id:{required:true}
+	   }
+	});
+});
+</script>
+<form action="$!webPath/seller/order_return_save.htm" method="post" id="theForm">
+ <table style="float:left;" width="98%" border="0" cellspacing="0" cellpadding="0" class="table_tuih">
+    <tr valign="middle" style="background:#f1f1f1">
+      <td align="center" valign="top" width="200">商品名称</td>
+      <td align="center" width="80">可退数量</td>
+      <td align="center" width="100">退货数量</td>
+    </tr>
+    #foreach($gc in $obj.gcs)
+    #if($!gc.count>0)
+    <tr valign="middle">
+      <td width="100" align="left"><span style="color:#999; font-weight:normal;">$!gc.goods.goods_name<span style="color:#F60">[$!gc.spec_info]</span></span></td>
+      <td align="center">$!gc.count</td>
+        <td align="center"><input name="refund_count_$!{gc.id}" type="text" id="refund_count_$!{gc.id}" value="$!gc.count" size="3"  /></td>
+    </tr>
+    #end
+    #end
+  </table>
+  
+  
+  <table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="">
+    <tr>
+      <td height="78" align="right" valign="top"> 
+      <div style="float:center; margin-top:10px; margin-left:10px;"><span style="margin-right:10px; float:left">操作说明：</span><b style="float:left"><textarea name="return_info" cols="40" rows="5" id="return_info"></textarea></b></div></td>
+    </tr>
+    <tr>
+      <td height="50" align="center"><span class="inputbtn">
+        <input name="" type="submit" value="提交" style="cursor:pointer;"/>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        <input name="id" type="hidden" id="id" value="$!obj.id" />
+      </span></td>
+    </tr>
+  </table>
+</form>

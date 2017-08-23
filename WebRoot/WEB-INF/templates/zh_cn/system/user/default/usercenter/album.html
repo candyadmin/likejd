@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>图片空间 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user_photo.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/swfupload.js"></script>
+<script src="$!webPath/resources/js/swfupload.queue.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=album")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>我的相册</span></div></div>
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href="$!webPath/seller/album.htm">我的相册</a></li>
+                <li ><a href="$!webPath/seller/watermark.htm">水印管理</a></li>
+              </ul>
+            </div>
+             <form action="" method="post" name="ListForm" id="ListForm">
+            <div class="ordercon">
+              <div class="photo_manage">
+                <div class="photo_oper">
+                  <div class="photo_creat"><a class="photo_creata" href="javascript:void(0);" dialog_uri="$!webPath/seller/album_add.htm?currentPage=$!currentPage" dialog_title="创建相册" dialog_width="400" dialog_height="100" dialog_id="album_add">创建相册</a><a href="javascript:void(0);" dialog_uri="$!webPath/seller/album_upload.htm?currentPage=$!currentPage" dialog_title="上传相片" dialog_width="400" dialog_height="100" dialog_id="album_add" class="photos_upload">上传相片</a><input name="mulitId" type="hidden" id="mulitId" /></div>                
+                  </div>
+                </div>
+                 #foreach($obj in $objs)
+                   #if($!obj.album_cover)
+                      #set($cover_img="$!webPath/$!obj.album_cover.path/$!obj.album_cover.name")
+                   #else
+                      #set($cover_img="$!webPath/resources/style/system/front/default/images/user_photo/photom.jpg")
+                   #end
+                   <ul class="photo_listul">
+                    <li class="photo_bg"><span><a href="$!webPath/seller/album_image.htm?id=$!obj.id"><img src="$!cover_img" width="150" height="150"/></a></span><i><a href="javascript:void(0);" dialog_uri="$!webPath/seller/album_edit.htm?id=$!obj.id&currentPage=$!currentPage" dialog_title="编辑相册" dialog_width="400" dialog_height="100" dialog_id="album_edit"class="pens">编辑</a></i>#if(!$!obj.album_default)<i><a  href="javascript:void(0);" onclick="if(confirm('删除商品相册会同步删除相册里图片，可能影响商品显示，是否继续?'))window.location.href='$!webPath/seller/album_del.htm?mulitId=$!obj.id'" class="delp">删除</a>#end</i></li>
+                    <li class="photo_name"><b style="float:right; margin-right:20px; font-weight:lighter;">共$!{albumViewTools.query_album("$!obj.id").size()}张</b><a href="$!webPath/seller/album_image.htm?id=$!obj.id">$!obj.album_name</a></li>
+                    <li ></li>
+                  </ul>                
+                 #end
+                </div>
+                <div class="alldel">
+                  <div  class="userfenye">$!gotoPageHTML</div>
+                </div>
+            </form>
+          </td>
+      </tr>
+    </table>
+  </div>
+   $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

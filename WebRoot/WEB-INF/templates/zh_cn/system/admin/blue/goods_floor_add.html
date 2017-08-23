@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){	
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  gf_name:{required :true},
+	  gf_css:{required :true}
+	 },
+	messages:{
+	  gf_name:{required:"楼层标题不能为空"},
+	  gf_css:{required:"楼层样式不能为空"}
+	}
+  });
+ //
+ jQuery("#gf_display_img").click(function(){
+   var gf_display=jQuery("#gf_display").val();
+   if(gf_display=="true"){
+     jQuery("#gf_display_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	 jQuery("#gf_display").val("false");
+    }else{
+     jQuery("#gf_display_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	 jQuery("#gf_display").val("true");
+   }
+ })
+ jQuery("#pid").change(function(){
+    var pid=jQuery(this).val();
+	if(pid==""){
+      jQuery("#gf_css_info").show();
+	}else{
+	  jQuery("#gf_css_info").hide();	
+	}
+  });
+ //
+ var gf_display=jQuery("#gf_display").val();
+ if(gf_display=="true"){
+   jQuery("#gf_display_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+ }else{
+   jQuery("#gf_display_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+ }
+ //
+ jQuery("#pid").val("$!obj.parent.id");
+});
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">首页楼层</h1>
+  <div class="settab"><span class="tab-one"></span>
+      <span class="tabs">
+       <a href="$!webPath/admin/goods_floor_list.htm">管理</a> |
+       <a href="$!webPath/admin/goods_floor_add.htm" #if(!$!edit)class="this"#end>新增</a>	   
+       #if($!edit) | 
+	   <a href="javascript:void(0);" class="this">编辑</a>
+	   #end
+	   </span>
+      
+      <span class="tab-two"></span></div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/goods_floor_save.htm" method=post>
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/goods_floor_list.htm" />
+  <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/goods_floor_add.htm" />
+  <div class="setcont">
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>楼层标题</li>
+      <li><span class="webname">
+        <input name="gf_name" type="text" id="gf_name" value="$!obj.gf_name" size="40" />
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li>上级楼层</li>
+      <li><span class="webnamesec sizese">
+        <select name="pid" id="pid">
+              <option value="">请选择上级楼层...</option>
+			  #foreach($gf in $gfs)
+              <option value="$!gf.id">$!gf.gf_name</option>
+              #end
+         </select>
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">如果选择上级分类，那么新增的分类则为被选择上级分类的子分类</strong><strong class="c"></strong></span></li>
+    </ul>
+    #if($!obj.gf_level==0)
+    <ul class="set1" id="gf_css_info">
+      <li><strong class="orange fontsize20">*</strong>楼层样式</li>
+      <li><span class="webname">
+        <input name="gf_css" type="text" id="gf_css" value="$!obj.gf_css" size="40" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">系统默认4种风格：floor_orange(桔黄色),floor_green(翠竹绿),floor_blue(海之蓝),floor_purple(尊贵紫)</strong><strong class="c"></strong></span></li>
+    </ul>
+    #end
+    <ul class="set1">
+      <li>显示</li>
+     <input name="gf_display" id="gf_display" type="hidden" value="$!obj.gf_display" />
+          <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="gf_display_img"  style="cursor:pointer"/>
+    </ul>
+	<ul class="set1">
+	  <li>排序</li>
+      <li><span class="webname">
+        <input name="gf_sequence" type="text" id="gf_sequence" value="$!obj.gf_sequence" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小，楼层显示越靠前</strong><strong class="c"></strong></span></li>
+    </ul>
+  </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

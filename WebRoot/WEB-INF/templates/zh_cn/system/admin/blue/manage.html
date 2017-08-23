@@ -1,0 +1,612 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<meta http-equiv="Content-Type" content="text/html;" charset="UTF-8">
+	<title>shopping B2B2C</title>
+	<link href="$!webPath/resources/style/admin/resource/css/skin_$!{config.websiteCss}.css" rel="stylesheet" type="text/css" id="cssfile"/>
+
+	<script type="text/javascript" src="$!webPath/resources/style/new/js/jquery.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/style/new/js/jquery.validation.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/style/new/js/jquery.cookie.js"></script>
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="$!webPath/resources_new/admin/resource/js/html5shiv.js"></script>
+	<script src="$!webPath/resources_new/admin/resource/js/respond.min.js"></script>
+	<![endif]-->
+	<script src="$!webPath/resources/style/new/js/admincp.js" type="text/javascript"></script>
+	<script src="$!webPath/resources/style/new/js/common.js" type="text/javascript"></script>
+	<script src="$!webPath/resources/style/new/js/layer/layer.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="$!webPath/resources/style/new/js/layer/skin/layer.css" id="layui_layer_skinlayercss">
+
+	<script>
+		//
+		jQuery(document).ready(function () {
+			jQuery('span.bar-btn').click(function () {
+				jQuery('ul.bar-list').toggle('fast');
+			});
+			jQuery(".sitemap a").click(function() {
+				jQuery(".webmap_box").fadeIn('normal');
+			});
+			jQuery(".close_map").click(function() {
+				jQuery(".webmap_box").fadeOut('normal');
+			});
+			jQuery(".skin li").click(function() {
+				var webcss = jQuery(this).attr("webcss");
+				jQuery.post("$!webPath/admin/set_websiteCss.htm",
+						{
+							"webcss" : webcss
+						},
+						function(data) {
+							window.location.href = "$!webPath/admin/index.htm";
+						}, "text");
+			});
+
+			//记录当前nav点击位置
+			jQuery("#nav li a").click(function() {
+				var nav_id = jQuery(this).attr("id");
+				jQuery.cookie("nav_id", nav_id);
+			});
+			//记录当前mainMenu点击位置
+			jQuery("#mainMenu li a").click(function() {
+				var mainMenu_id = jQuery(this).attr("id");
+				jQuery.cookie("mainMenu_id", mainMenu_id);
+			});
+			//页面加载时绑定相应点击事件
+			if (jQuery.cookie("nav_id") != null) {
+				jQuery("#" + jQuery.cookie("nav_id")).click();
+			}
+			if (jQuery.cookie("mainMenu_id") != null) {
+				jQuery("#" + jQuery.cookie("mainMenu_id")).click();
+			}
+
+		});
+
+		jQuery(document).ready(function(){
+
+			var pagestyle = function() {
+				var iframe = jQuery("#workspace");
+				var h = jQuery(window).height() - iframe.offset().top;
+				var w = jQuery(window).width() - iframe.offset().left;
+				if(h < 300) h = 300;
+				if(w < 973) w = 973;
+				iframe.height(h);
+				iframe.width(w);
+			}
+			pagestyle();
+			jQuery(window).resize(pagestyle);
+			//turn location
+			if(jQuery.cookie('now_menu_id') != null){
+				openItem(jQuery.cookie('now_menu_id'),jQuery.cookie('now_sub_menu_id'));
+			}else{
+				jQuery('#mainMenu>ul').first().css('display','block');
+				var first_sub_menu = jQuery('#mainMenu>ul').first().find("a").first();
+				jQuery(first_sub_menu).addClass('selected');
+				//第一次进入后台时，默认定到欢迎界面
+				jQuery("#nav>ul>li").first().children("a").addClass('actived');
+				jQuery('#workspace').attr('src',jQuery(first_sub_menu).attr("url"));
+			}
+			jQuery('#iframe_refresh').click(function(){
+				var fr = document.frames ? document.frames("workspace") : document.getElementById("workspace").contentWindow;;
+				fr.location.reload();
+			});
+
+		});
+		//收藏夹
+		function addBookmark(url, label) {
+			if (document.all)
+			{
+				window.external.addFavorite(url, label);
+			}
+			else if (window.sidebar)
+			{
+				window.sidebar.addPanel(label, url, '');
+			}
+		}
+
+		function openItem(menu_id, sub_menu_id){
+			closeBg();
+			//var menu_id = arguments[0];
+			jQuery('.actived').removeClass('actived');
+			jQuery('#'+menu_id).addClass('actived');
+			jQuery('.selected').removeClass('selected');
+			jQuery('#mainMenu ul').css('display','none');
+			jQuery('#sort_'+menu_id).css('display','block');
+			if (!sub_menu_id) {
+				var first_obj = jQuery('#sort_'+menu_id+'>li>dl>dd>ol>li').first().children('a');
+				jQuery(first_obj).addClass('selected');
+				jQuery('#crumbs').html('<span>'+jQuery('#'+menu_id+' > span').html()+'</span><span class="arrow">&nbsp;</span><span>'+jQuery(first_obj).text()+'</span>');
+				jQuery('#workspace').attr('src',jQuery(first_obj).attr("url"));
+			} else {
+				//var sub_menu_id = arguments[1];
+				jQuery.cookie('now_menu_id',menu_id);
+				jQuery.cookie('now_sub_menu_id',sub_menu_id);
+				jQuery("#" + sub_menu_id).addClass("selected");
+				jQuery('#crumbs').html('<span>'+jQuery('#'+menu_id+' > span').html()+'</span><span class="arrow">&nbsp;</span><span>'+jQuery("#"+sub_menu_id).text()+'</span>');
+				jQuery('#workspace').attr('src',jQuery("#"+sub_menu_id).attr("url"));
+			}
+		}
+
+		//关闭灰色JS遮罩层和操作窗口
+		function closeBg(){
+			jQuery("#pagemask").css("display","none");
+			//jQuery("#dialog").css("display","none");
+			jQuery(".webmap_box").fadeOut('normal');
+		}
+
+	</script>
+
+	<!--
+	<script type="text/javascript">
+		function addFavorite(url, title) {
+			try {
+				window.external.addFavorite(url, title);
+			} catch (e){
+				try {
+					window.sidebar.addPanel(title, url, '');
+				} catch (e) {
+					showDialog("请按 Ctrl+D 键添加到收藏夹", 'notice');
+				}
+			}
+		}
+	</script>
+	-->
+</head>
+<body style="margin: 0px;" scroll="no">
+<div id="pagemask" style="display: none;"></div>
+<table style="width: 100%;" id="frametable" height="100%" width="100%" cellpadding="0" cellspacing="0">
+	<tbody>
+	<tr style="background: rgb(255, 255, 255);">
+		<td colspan="2" height="90" class="mainhd"><div class="layout-header"> <!-- Title/Logo - can use text instead of image -->
+			<div id="title"><a href="#"></a></div>
+			<!-- Top navigation -->
+			<div id="topnav" class="top-nav">
+				<ul>
+					<li class="adminid" title="您好:$!{user.userName}">您好&nbsp;:&nbsp;<strong>$!{user.userName}</strong></li>
+					<li><a href="$!webPath/admin/admin_pws.htm" target="workspace"><span>修改密码</span></a></li>
+					<li><a href="$!webPath/shopping_logout.htm" title="退出"><span>退出</span></a></li>
+					<li><a href="$!webPath/index.htm" target="_blank" title="商城首页"><span>商城首页</span></a></li>
+				</ul>
+			</div>
+			<!-- End of Top navigation -->
+			<!-- Main navigation -->
+			<nav id="nav" class="main-nav">
+				<ul>
+					<li><a class="link actived" id="15" href="javascript:;"
+						   onclick="openItem('15');"><span>首页</span></a></li>
+					<li><a class="link" id="240" href="javascript:;"
+						   onclick="openItem('240');"><span>设置</span></a></li>
+					<li><a class="link" id="17" href="javascript:;"
+						   onclick="openItem('17');"><span>商品</span></a></li>
+					<li><a class="link" id="16" href="javascript:;"
+						   onclick="openItem('16');"><span>闲置</span></a></li>
+					<li><a class="link" id="18" href="javascript:;"
+						   onclick="openItem('18');"><span>店铺</span></a></li>
+					<li><a class="link" id="112" href="javascript:;"
+						   onclick="openItem('112');"><span>会员</span></a></li>
+					
+					<li><a class="link" id="87" href="javascript:;"
+						   onclick="openItem('87');"><span>运营</span></a></li>
+					
+					<li><a class="link" id="21" href="javascript:;"
+						   onclick="openItem('21');"><span>网站</span></a></li>
+					<li><a class="link" id="20" href="javascript:;"
+						   onclick="openItem('20');"><span>交易</span></a></li>
+					
+					<li><a class="link" id="191" href="javascript:;"
+						   onclick="openItem('191');"><span>工具</span></a></li>
+				</ul>
+			</nav>
+
+			<div class="loca"><strong>您的位置:</strong>
+				<div id="crumbs" class="crumbs"><span>控制台</span><span class="arrow">&nbsp;</span><span>关于我们</span></div>
+			</div>
+
+			<div class="toolbar">
+				
+				<ul id="skin" class="skin"><span>换肤</span>
+					<li id="skin_0" #if($!config.websiteCss=="blue") class="selected" #end webcss="blue" title="默认风格"></li>
+					<li id="skin_1" #if($!config.websiteCss=="black") class="selected" #end webcss="black" title="Mac风格"></li>
+				</ul>
+				<div class="sitemap">
+					<a id="siteMapBtn" href="#rhis" >
+						<span>管理地图</span>
+					</a>
+				</div>
+			</div>
+
+		</div>
+			<div> </div>
+		</td>
+	</tr>
+	<tr style="background: rgb(251, 251, 251);">
+		<td class="menutd" valign="top" width="161">
+			<div id="mainMenu" class="main-menu">
+
+				<ul id="sort_15" style="display: block;">
+					<li><dl>
+						<dd>
+							<ol>  
+								<li><a name="27" id="27" href="javascript:void(0);" url="$!webPath/admin/welcome.htm" onclick="openItem('15','27');" class="selected">欢迎页面</a></li>         
+						        <li><a href="javascript:void(0);"  name="28" id="28" url="$!webPath/admin/set_site.htm" onclick="openItem('15','28');">站点设置</a></li>
+						        <li><a href="javascript:void(0);" name="29" id="29" url="$!webPath/admin/user_list.htm" onclick="openItem('15','29');">会员管理</a></li>
+						        <li><a href="javascript:void(0);" name="30" id="30" url="$!webPath/admin/store_list.htm" onclick="openItem('15','30');">店铺管理</a></li>
+						        <li><a href="javascript:void(0);" name="31" id="31" url="$!webPath/admin/goods_list.htm" onclick="openItem('15','31');">商品管理</a></li>
+						        <li><a href="javascript:void(0);" name="32" id="32" url="$!webPath/admin/order_list.htm" onclick="openItem('15','32');">订单管理</a></li>
+							</ol>
+						</dd>
+					</dl></li>
+				</ul>
+				<ul id="sort_240" style="display: none;">
+					<li><dl>
+						<dd>
+							<ol>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/set_site.htm" name="242" id="242"
+									   onclick="openItem('240','242');" class="">站点设置</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/set_image.htm" name="241" id="241"
+									   onclick="openItem('240','241');">上传设置</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/set_seo.htm" name="239" id="239"
+									   onclick="openItem('240','239');">搜索优化</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/set_email.htm" name="238" id="238"
+									   onclick="openItem('240','238');">平台邮箱</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/template_list.htm" name="237" id="237"
+									   onclick="openItem('240','237');">消息模板</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/set_second_domain.htm" name="236" id="236"
+									   onclick="openItem('240','236');">域名设置</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/admin_list.htm" name="234" id="234"
+									   onclick="openItem('240','234');">平台管理员</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/area_list.htm" name="233" id="233"
+									   onclick="openItem('240','233');">配送区域</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/trans_area_list.htm" name="231" id="231"
+									   onclick="openItem('240','231');">运费区域</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/payment_list.htm" name="2311" id="2311"
+									   onclick="openItem('240','2311');">支付设置</a></li>
+									   
+								<!-- <li><a href="javascript:void(0);"
+									   url="$!webPath/admin/set_fenrun.htm" name="2361" id="2361"
+									   onclick="openItem('240','2361');">分润管理</a></li> -->	   
+									   
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/set_kuaidi.htm" name="230" id="230"
+									   onclick="openItem('240','230');">快递设置</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/express_company_list.htm" name="229" id="229"
+									   onclick="openItem('240','229');">快递公司</a></li>
+								 
+							</ol>
+						</dd>
+					</dl></li>
+				</ul>
+				<ul id="sort_17" style="display: none;">
+					<li><dl>
+						<dd>
+							<ol>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/goods_list.htm" name="37"
+									   id="37" onclick="openItem('17','37');" class="">商品管理</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/goods_class_list.htm" name="35" id="35"
+									   onclick="openItem('17','35');">分类管理</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/goods_brand_list.htm" name="36" id="36"
+									   onclick="openItem('17','36');">品牌管理</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/goods_type_list.htm" name="81" id="81"
+									   onclick="openItem('17','81');">类型管理</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/goods_spec_list.htm" name="382" id="382"
+									   onclick="openItem('17','382');">商品规格</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/goods_floor_list.htm" name="381" id="381"
+									   onclick="openItem('17','381');">首页楼层</a></li>
+							</ol>
+						</dd>
+					</dl></li>
+				</ul>
+				<ul id="sort_18" style="display: none;">
+					<li><dl>
+						<dd>
+							<ol>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/store_base.htm" name="39"
+									   id="39" onclick="openItem('18','39');" class="">卖家信用</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/store_list.htm" name="41" id="41"
+									   onclick="openItem('18','41');">店铺管理</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/store_template.htm" name="244"
+									   id="244" onclick="openItem('18','244');">店铺模板</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/storegrade_list.htm" name="401" id="401"
+									   onclick="openItem('18','401');">店铺类型</a></li>
+								<li><a href="javascript:void(0);"
+									   url="$!webPath/admin/storeclass_list.htm" name="40" id="40"
+									   onclick="openItem('18','40');">店铺分类</a></li>
+							</ol>
+						</dd>
+					</dl></li>
+				</ul>
+				<ul id="sort_16" style="display: none;">
+					<li>
+						<dl>
+							<dd>
+								<ol>
+									<li><a href="javascript:void(0);" url="$!webPath/admin/sparegoods_class_list.htm" name="1201" id="1201" onclick="openItem('16','1201');" class="">闲置分类</a></li>
+
+									<li><a href="javascript:void(0);" url="$!webPath/admin/sparegoods_list.htm" name="1202" id="1202" onclick="openItem('16','1202');" class="">闲置商品</a></li>
+
+									<li><a href="javascript:void(0);" url="$!webPath/admin/sparegoodsfloor_list.htm" name="1203" id="1203" onclick="openItem('16','1203');" class="">闲置楼层</a></li>
+								</ol>
+							</dd>
+						</dl>
+					</li>
+				</ul>
+				
+				<ul id="sort_112" style="display: none;">
+					<li><dl>
+						<dd>
+							<ol>
+								<li><a href="javascript:void(0);" url="$!webPath/admin/user_list.htm" name="2351" id="2351" onclick="openItem('112','2351');" class="">会员管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/user_creditrule.htm" name="2352" id="2352" onclick="openItem('112','2352');" class="">会员信用</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/user_msg.htm" name="2353" id="2353" onclick="openItem('112','2353');" class="">会员通知</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/user_integral.htm" name="2354" id="2354" onclick="openItem('112','2354');" class="">积分管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/integrallog_list.htm" name="2355" id="2355" onclick="openItem('112','2355');" class="">积分明细</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/predeposit_list.htm" name="23551" id="23551" onclick="openItem('112','23551');" class="">预存款管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/predepositlog_list.htm" name="23552" id="23552" onclick="openItem('112','23552');" class="">预存款明细</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/user_photo_list.htm" name="23553" id="23553" onclick="openItem('112','23553');" class="">图片管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/sns_user.htm" name="23555" id="23555" onclick="openItem('112','23555');" class="">会员动态</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/sns_store.htm" name="23556" id="23556" onclick="openItem('112','23556');" class="">店铺动态</a></li>
+		
+							</ol>
+						</dd>
+					</dl></li>
+				</ul>
+
+				<ul id="sort_87" style="display: none;">
+					<li><dl>
+						<dd>
+							<ol>
+								<li><a href="javascript:void(0);" url="$!webPath/admin/operation_base_set.htm" name="2451" id="2451" onclick="openItem('87','2451');" class="">基本设置</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/gold_record.htm" name="2452" id="2452" onclick="openItem('87','2452');" class="">金币管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/ztc_set.htm" name="2453" id="2453" onclick="openItem('87','2453');" class="">竞价直通车</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/coupon_list.htm" name="2454" id="2454" onclick="openItem('87','2454');" class="">优惠券管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/advert_list.htm" name="2457" id="2457" onclick="openItem('87','2457');" class="">广告管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/operation_integral_rule.htm" name="2458" id="2458" onclick="openItem('87','2458');" class="">积分规则</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/integral_goods.htm" name="2459" id="2459" onclick="openItem('87','2459');" class="">积分商城</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/activity_list.htm" name="2450" id="2450" onclick="openItem('87','2450');" class="">活动管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/group_list.htm" name="24511" id="24512" onclick="openItem('87','24512');" class="">团购管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/set_combin.htm" name="24514" id="24514" onclick="openItem('87','24514');" class="">组合销售</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/set_bargain.htm" name="24522" id="24522" onclick="openItem('87','24522');" class="">天天特价</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/set_delivery.htm" name="24523" id="24523" onclick="openItem('87','24523');" class="">买就送</a></li>
+							</ol>
+						</dd>
+					</dl></li>
+				</ul>
+				
+				<ul id="sort_21" style="display: none;">
+					<li><dl>
+						<dd>
+							<ol>
+								<li><a href="javascript:void(0);" url="$!webPath/admin/articleclass_list.htm" name="521" id="521" onclick="openItem('21','521');" class="">文章分类</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/article_list.htm" name="522" id="522" onclick="openItem('21','522');" class="">文章管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/document_list.htm" name="523" id="523" onclick="openItem('21','523');" class="">系统文章</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/partner_list.htm" name="524" id="524" onclick="openItem('21','524');" class="">合作伙伴</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/navigation_list.htm" name="525" id="525" onclick="openItem('21','525');" class="">页面导航</a></li>
+          
+							</ol>
+						</dd>
+					</dl></li>
+				</ul>
+				<ul id="sort_20" style="display: none;">
+					<li><dl>
+						<dd>
+							<ol>
+								<li><a href="javascript:void(0);" url="$!webPath/admin/order_list.htm" name="451" id="451"
+									   onclick="openItem('20','451');" class="">订单管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/set_order_confirm.htm" name="452" id="452"
+									   onclick="openItem('20','452');" class="">订单设置</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/consult_list.htm" name="453" id="453"
+									   onclick="openItem('20','453');" class="">咨询管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/evaluate_list.htm" name="455" id="455"
+									   onclick="openItem('20','455');" class="">商品评价</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/complaint_list.htm" name="456" id="456"
+									   onclick="openItem('20','456');" class="">投诉管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/report_list.htm" name="457" id="457"
+									   onclick="openItem('20','457');" class="">举报管理</a></li>
+          
+							</ol>
+						</dd>
+					</dl></li>
+				</ul>
+				
+				<ul id="sort_191" style="display: none;">
+					<li><dl>
+						<dd>
+							<ol>
+								<li><a href="javascript:void(0);" url="$!webPath/admin/cache_list.htm" name="1101" id="1101" onclick="openItem('191','1101');" class="">缓存管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/database_add.htm" name="1102" id="1102" onclick="openItem('191','1102');" class="">数据库管理</a></li>
+
+								<li><a href="javascript:void(0);" url="$!webPath/admin/lucene.htm" name="1103" id="1103" onclick="openItem('191','1103');" class="">全文检索</a></li>
+							</ol>
+						</dd>
+					</dl></li>
+				</ul>
+			</div>
+		</td>
+		<td valign="top" width="100%">
+			<iframe src="$!webPath/admin/welcome.htm" id="workspace" name="workspace" style="overflow: visible; height: 336px; width: 1243px;"
+					frameborder="0" width="100%" height="100%" scrolling="yes" onload="window.parent">
+			</iframe>
+		</td>
+	</tr>
+	</tbody>
+</table>
+
+
+<div class="webmap_box" style="display: none;">
+	<h4>
+		<a href="javascript:void(0);" class="close_map"></a>管理中心导航
+	</h4>
+	<div class="webmap_list">
+		<span class="weblist_sp">
+			<h5>设置</h5>
+			<a href="javascript:void(0);" onclick="openItem('240','242');">常规设置</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('240','241');">图片服务器</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('240','239');">搜索优化</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('240','238');">平台邮箱</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('240','237');">消息模板</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('240','236');">域名设置</a>
+			<!-- <a href="javascript:void(0);"
+			   onclick="openItem('240','2361');">分润管理</a> -->
+			<a href="javascript:void(0);"
+			   onclick="openItem('240','234');">平台管理员</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('240','233');">配送区域</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('240','231');">运费区域</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('240','2311');">支付设置</a>
+			<a href="javascript:void(0);" id="kaudi_set_op"
+			   onclick="openItem('240','230');">快递设置</a>
+			<a href="javascript:void(0);" id="kaudi_company_op"
+			   onclick="openItem('240','229');">快递公司</a>
+									   
+		</span>
+
+		<span class="weblist_sp">
+			<h5>商品</h5>
+			<a href="javascript:void(0);"
+			   onclick="openItem('17','35');">分类管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('17','36');">品牌管理</a>
+			<a href="javascript:void(0);"
+				onclick="openItem('17','37');" class="">商品管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('17','81');">类型管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('17','381');">首页楼层</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('17','382');">商品规格</a>
+		</span>
+		
+		<span class="weblist_sp">
+			<h5>运营</h5>
+			<a href="javascript:void(0);"
+			   onclick="openItem('87','2451');" class="">基本设置</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('87','2452');" class="">金币管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('87','2453');" class="">竞价直通车</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('87','2454');" class="">优惠券管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('87','2457');" class="">广告管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('87','2458');" class="">积分规则</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('87','2459');" class="">积分商城</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('87','2450');" class="">活动管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('87','24512');" class="">团购管理</a>
+			<a href="javascript:void(0);"
+				onclick="openItem('87','24514');" class="">组合销售</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('87','24522');" class="">天天特价</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('87','24523');" class="">买就送</a>
+			
+		</span>
+
+		
+		<span class="weblist_sp">
+			<h5>网站</h5>
+			<a href="javascript:void(0);"
+			   onclick="openItem('21','521');" class="">文章分类</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('21','522');" class="">文章管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('21','523');" class="">系统文章</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('21','524');" class="">合作伙伴</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('21','525');" class="">页面导航</a>
+		</span>
+		
+
+		<span class="weblist_sp">
+			<h5>交易</h5>
+			<a href="javascript:void(0);"
+			   onclick="openItem('20','451');" class="">订单管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('20','452');" class="">订单设置</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('20','453');" class="">咨询管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('20','455');" class="">商品评价</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('20','456');" class="">投诉管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('20','457');" class="">举报管理</a>
+		</span>
+		
+		<span class="weblist_sp">
+			<h5>工具</h5>
+			<a href="javascript:void(0);"
+			   onclick="openItem('191','1101');" class="">缓存管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('191','1102');" class="">数据库管理</a>
+			<a href="javascript:void(0);"
+			   onclick="openItem('191','1103');" class="">全文检索</a>
+		</span>
+	</div>
+</div>
+
+
+</body>
+</html>

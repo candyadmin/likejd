@@ -1,0 +1,423 @@
+@charset "utf-8";
+/* CSS Document */
+html,body{ width:100%}
+.head{ margin-top:-20px;}
+/***2013-9-17(闲置宝贝 搜索行start)-----------------------------------------------------------------------------------****/
+
+.keyword{ clear:both; line-height:30px;}
+.keyword a{ margin-left:5px; margin-right:5px;}
+.keyword a:hover{ text-decoration:underline}
+.green{ color:#009600;}
+.logo{ width:300px;}
+.logo span{ width:300px;} 
+.bigsearch{ float:left; width:550px; margin-top:30px;}
+.search_box{ width:100%;}
+.search_box_sp{ width:365px; display:block; height:28px; border:3px solid #e6e6e6; float:left; border-right:0px;} 
+.search_box_sp input{ width:365px; height:28px; line-height:28px; border:0px;}
+.search_btn_a{ width:80px; height:34px; background:#A8D300; color:#fff; border:0px; font-size:14px; float:left; margin-right:10px;}
+.search_btn_b{ width:80px; height:34px; background:#FF5400; color:#fff; border:0px; font-size:14px; float:left;}
+/***2013-9-17(闲置宝贝 导航start)-----------------------------------------------------------------------------------****/
+.Idle_nav { width:100%;background:url(../images/special_img/Idle_01.jpg) repeat-x bottom; height:34px; line-height:34px; padding-bottom:6px; font-weight:bold;}
+.Idle_menu { width:1002px; margin-left:auto; margin-right:auto; position:relative;}
+.Classify { width:118px; height:34px; float:left;}
+.Classify a { width:89px; padding-left:10px; font-size:14px; display:block; color:#349000; background:url(../images/special_img/Idle_02.jpg) no-repeat; float:left;}
+.Classify a:hover { width:89px; padding-left:10px; font-size:14px; display:block; color:#fff; background:url(../images/special_img/Idle_03.jpg) no-repeat;}
+.Classify span { display:block; font-weight:normal; color:#999; float:left; font-family:"宋体"; margin-left:10px;}
+
+
+
+.Idle_menu .navigation { float:left;}
+.Idle_menu .navigation li { float:left; line-height:34px;}
+.Idle_menu .navigation li a { padding:0px 20px; height:34px; color:#349000; font-size:14px; float:left;}
+.Idle_menu .navigation li a:hover { padding:0px 19px; height:33px; line-height:33px; border-top:1px solid #a5d788; border-left:1px solid #a5d788; border-right:1px solid #a5d788; border-radius:4px 4px 0px 0px; background-color:#edf9e6;}
+
+.Idle_menu .My_idle { float:right; position:relative;}
+.Idle_menu .My_idle a { width:116px; display:block; color:#349000; background:url(../images/special_img/Idle_05.jpg) no-repeat; text-align:center; line-height:34px; font-size:14px;}
+.Idle_menu .My_idle a:hover { width:116px; background:url(../images/special_img/Idle_06.png) no-repeat; color:#FFF;}
+.Idle_menu .My_idle_list { width:140px; width:auto; position:absolute; top:34px; right:0px; border:1px solid #349000; background-color:#FFF; z-index:100; box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.19); padding-bottom:1px;}
+.Idle_menu .My_idle_list ul li { width:140px; float:left; border-top:1px solid #eaeaea; height:29px;}
+.Idle_menu .My_idle_list ul li a { width:120px; line-height:29px; color:#349000; padding:0px 10px; font-size:12px; font-weight:normal; background:none; text-align:left; float:left;}
+.Idle_menu .My_idle_list ul li a span { color:#F00; font-family:"宋体"; font-size:14px;}
+.Idle_menu .My_idle_list ul li a:hover { width:120px; float:left; background-image:none; background-color:#edf9e6; color:#349000;}
+.Idle_menu .release { width:80px; height:34px; margin-right:40px; _margin-right:30px; float:right; line-height:34px;} 
+.Idle_menu .release a { width:80px; float:left; font-size:14px; padding-left:20px; background:url(../images/special_img/Idle_07.png) no-repeat left center; color:#349000;}
+
+.Classify_ul { width:186px; position:absolute; background-color:#FFF; border:2px solid #399b01; top:34px; left:0px; z-index:191; box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.19);}
+.Classify_ul li { width:186px; float:left; line-height:24px;}
+.Classify_ul .item { width:186px; float:left;position:relative; z-index:192; background-color:#FFF;}
+.Classify_ul .this { width:188px; border-top:1px solid #349000;overflow:hidden; border-bottom:1px solid #349000;}
+.Classify_ul .this .ul_left .title { background:none;}
+.Classify_ul .this .ul_left .links { border:none;}
+.Classify_ul .ul_left { width:168px; padding-left:10px; padding-right:10px; }
+.Classify_ul .ul_left .title { width:166px; background:url(../images/Idle_04.jpg) no-repeat right center; float:left;}
+.Classify_ul .ul_left .title a { padding:0px 5px; color:#349000; display:block; float:left;}
+.Classify_ul .ul_left .title a:hover { text-decoration:underline;}
+.Classify_ul .ul_left .links { width:166px; border-bottom:1px solid #eaeaea; float:left; white-space: nowrap;}
+.Classify_ul .ul_left .links a { padding:0px 5px; color:#999; font-weight:normal; display:block; float:left;} 
+.Classify_ul .ul_left .links a:hover,.Classify_ul .ul_right .right_l dl dd li a:hover,.Classify_ul .ul_right .right_r dl dd li a:hover { text-decoration:underline; color:#349000;}
+
+.Classify_ul .ul_right { width:450px; padding-left:10px; overflow:hidden; border:1px solid #399b01; position:absolute; left:187px; z-index:191; background-color:#FFF;}
+.Classify_ul .ul_right .right_box { float:left;}
+.Classify_ul .ul_right .right_l { width:430px; padding:0px 10px; float:left;}
+.Classify_ul .ul_right .right_l dl { width:430px; border-top:1px dotted #CCC; margin-top:-1px; padding-bottom:10px; float:left; }
+.Classify_ul .ul_right .right_l dl dt {float: left; width: 70px; text-align: right; line-height: 14px; padding: 18px 0px; font-weight:bold; color:#349000;}
+.Classify_ul .ul_right .right_l dl dd { width:350px; overflow:hidden; padding-top:18px; padding-left:10px; float:left;}
+.Classify_ul .ul_right .right_l dl dd li { width:auto; border-right:1px solid #eaeaea; float:left; padding:0px 8px; margin-bottom:5px; line-height:14px; height:14px;}
+.Classify_ul .ul_right .right_l dl dd li a,.Classify_ul .ul_right .right_r dl dd li a { color:#333; font-weight:normal; white-space:nowrap;}
+
+.Classify_ul .ul_right .right_r { float:left; background-color:#f8fff2; border-left:1px solid #e9f7de; width:196px; padding-top:18px; line-height:22px; padding-bottom:100px;}
+.Classify_ul .ul_right .right_r dl { float:left; width:196px; padding-bottom:10px;}
+.Classify_ul .ul_right .right_r dl dt { padding-left:15px; color:#333;}
+.Classify_ul .ul_right .right_r dl dd li { float:left; width:80px; margin-left:15px; _margin-left:8px; text-align:left;}
+
+
+/***2013-9-9(闲置宝贝start)-----------------------------------------------------------------------------------****/
+.Idle_baby { width:1002px; float:left; padding-top:30px;}
+.Idle_baby h1 { font-size:18px; font-family:"微软雅黑"; padding:5px 0px;}
+.Idle_baby_left { width:710px; float:left;}
+.Idle_baby_tab { width:710px; height:32px; float:left; border-bottom:2px solid #4d950b;}
+.Idle_baby_tab ul { float:left;}
+.Idle_baby_tab li { width:90px; float:left; margin-right:5px; height:32px; line-height:32px; text-align:center;}
+.Idle_baby_tab li a { width:90px; float:left; height:32px; line-height:32px; background-color:#4d950b; color:#FFF; border-radius:2px 2px 0px 0px; }
+.Idle_baby_tab .this a { width:88px; height:30px; border-top:2px solid #4d950b; border-right:1px solid #4d950b; border-left:1px solid #4d950b; border-bottom:2px solid #FFF; background-color:#FFF; color:#4d950b; border-radius:2px 2px 0px 0px; float:left; }
+.Idle_baby_tab p { background:url(../images/Idle_02.png) no-repeat -135px -20px; width:147px; height:23px; float:left; padding-left:15px; padding-top:3px; color:#ff4400; margin-top:4px;}
+.Idle_baby_tab span { float:right; margin-top:10px;}
+.Idle_baby_tab span a { color:#4b9908;}
+.Idle_baby_tab span a:hover { text-decoration:underline;}
+.Idle_baby_form { width:710px; float:left; padding-top:10px;}
+.Idle_baby_form li { width:710px; float:left; height:40px; line-height:40px;}
+.form_left { width:78px; float:left; padding-right:20px; text-align:right; font-weight:bold; color:#333;}
+.form_right { width:612px; float:left;}
+.form_right .title { margin-top:8px; width:348px; padding:4px 5px; height:14px; line-height:14px; box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) inset; border-radius:1px; border:1px solid #CCC;}
+.form_right_btn .btn { width:146px; height:28px; line-height:28px; border:1px solid #d7d7d7; background-color:#efefef; cursor:pointer;}
+.form_right_btn .btn b { width:6px; height:3px; background:url(../images/icon_3.png) no-repeat; display:inline-block; vertical-align:middle; margin-left:5px;}
+.form_right_btn .btn_d { width:146px; height:28px; line-height:28px; border:1px solid #51982a; background-color:#61b732; cursor:pointer; color:#FFF;}
+.form_right_btn .btn_d b { width:6px; height:3px; background:url(../images/icon_4.png) no-repeat; display:inline-block; vertical-align:middle; margin-left:5px;}
+.form_right_btn { position:relative;}
+.form_right_btn .btn_ul { position:absolute; top:28px; left:98px; z-index:99;}
+.form_right_btn .btn_ul .btn_list { width:495px; padding:5px; border:1px solid #CCC; background-color:#f4f4f4; float:left; box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);}
+.form_right_btn .btn_ul .btn_list ul { width:485px; float:left; background-color:#FFF; padding:5px;}
+.form_right_btn .btn_ul .btn_list ul li { width:176px; float:left; height:32px; line-height:32px; font-size:14px; padding-left:10px; margin-right:40px; margin-bottom:5px;}
+.form_right_btn .btn_ul .btn_list ul li a { width:176px; float:left; padding-left:10px;}
+.form_right_btn .btn_ul .btn_list .this a, .form_right_btn .btn_ul .btn_list ul li a:hover {float:left; background-color:#4b9808; color:#FFF;}
+.form_right_btn .btn_ul .btn_list .item { position:relative;}
+.form_right_btn .btn_ul .btn_list .down { position:absolute; top:10px; left:143px; z-index:10000;}
+.form_right_btn .btn_ul .btn_list .down ul { width:234px; background-color:#f9f9f9; padding:10px; border:1px solid #c3c3c3;}
+.form_right_btn .btn_ul .btn_list .down ul li { width:100px; height:32px; padding-left:7px; float:left; margin-right:10px; margin-bottom:5px; background:none;}
+.form_right_btn .btn_ul .btn_list .down ul li a { width:100px; padding-left:7px; float:left;  background:none; color:#404040;}
+.form_right_btn .btn_ul .btn_list .down .that a, .form_right_btn .btn_ul .btn_list .down a:hover {float:left; background-color:#4b9808; color:#FFF;}
+.form_right_line_03 { width:612px; float:left;}
+.form_right_03 { font-size:0px; margin-top:5px;}
+.form_right_03 .btn_03 { border:1px solid #CCC; padding:5px 10px; cursor:pointer; margin-right:-1px; text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.75);}
+.form_right_03 .this { border:1px solid #b0b0b0; background-color:#cacaca; box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.2) inset;}
+.form_right_line_04 { width:612px; float:left;}
+.form_right_line_04 input { width:120px; padding:4px 5px; height:14px; line-height:14px; box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) inset; margin-right:5px; border:1px solid #CCC; margin-top:8px;}
+.form_right_line_05 { width:612px; float:left; padding-top:8px; }
+.form_right_line_05 .form_right_city { position:relative; width:150px; display: inline-block; vertical-align: middle; float:left; margin-right:10px;}
+.form_right_line_05 .form_right_city .city_input { width:117px; height:14px; padding:4px 5px; line-height:14px; box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) inset; border:1px solid #CCC; border-radius:1px; cursor:pointer; padding-right:25px;}
+.form_right_line_05 .form_right_city b { background:url(../images/city_01.jpg) no-repeat; float:right; width:22px; height:22px; cursor:pointer; position:absolute; top:1px; left:125px; border-left:1px solid #CCC;}
+.form_right_line_05 .city_Poput { position:absolute; top:22px; left:0px; z-index:99;}
+.form_right_line_05 .city_Poput .Poput_box { width:435px; border:1px solid #CCC; padding:5px; box-shadow:1px 1px 2px rgba(0,0,0,0.2); background-color:#f4f4f4; overflow:hidden;}
+.form_right_line_05 .city_Poput .Poput_bg { width:425px; background-color:#FFF; padding:5px; float:left;}
+.form_right_line_05 .city_Poput .Poput_bg p { width:415px; padding-left:10px; float:left; line-height:30px; height:30px;}
+.form_right_line_05 .city_Poput .Poput_bg ul { width:415px; float:left; padding-left:10px;}
+.form_right_line_05 .city_Poput .Poput_bg ul li { width:54px; height:24px; line-height:24px; float:left; margin:0px 25px 6px 0px;}
+.form_right_line_05 .city_Poput .Poput_bg ul li a { width:54px; height:24px; float:left; line-height:24px; text-indent:6px;}
+.form_right_line_05 .city_Poput .Poput_bg ul li a:hover,.form_right_line_05 .city_Poput .Poput_bg .this a { width:54px; height:24px; float:left; background-color:#4b9808; color:#FFF;}
+.form_right_line_05 .city_Poput .Poput_bg .Poput_item { position:relative;}
+.form_right_line_05 .city_Poput .Poput_bg .Poput_ul { position:absolute; top:23px; left:50px; z-index:99999;}
+.form_right_line_05 .city_Poput .Poput_bg .Poput_ul ul { width:244px; background-color:#f9f9f9; float:left; border:1px solid #CCC; padding:5px;}
+.form_right_line_05 .city_Poput .Poput_bg .Poput_ul ul li { margin-right:6px; text-align:center; width:auto;}
+.form_right_line_05 .city_Poput .Poput_bg .Poput_ul ul li a { padding:3px 5px; line-height:24px; background-color:#f9f9f9; color:#333; word-break: keep-all; width:auto; }
+.form_right_line_05 .city_Poput .Poput_bg .Poput_ul ul li a:hover {padding:3px 5px; background-color:#4b9808; color:#FFF;}
+.form_right_line_05 .form_right_city .Select { position:absolute; top:22px; left:0px; z-index:99;}
+.form_right_line_05 .form_right_city .Select_box { width:147px; height:234px; overflow-y:scroll; border:1px solid #CCC; box-shadow:1px 1px 2px rgba(0,0,0,0.2); line-height:24px; border:1px solid #CCC; background-color:#f9f9f9; padding:5px 0px;}
+.form_right_line_05 .form_right_city .Select_box ul li a { width:130px; height:24px; line-height:24px; float:left; text-indent:6px;}
+.form_right_line_05 .form_right_city .Select_box ul li { width:130px; height:24px; line-height:24px; float:left;}
+.form_right_line_05 .form_right_city .Select_box ul li a:hover { background-color:#4b9808; color:#FFF;}
+.Idle_baby_form .baby_img { width:710px; height:auto; float:left;}
+.form_right_line_06 { width:612px; float:left;}
+.form_right_line_06 .line_06_img_box { width:117px; float:left; margin-right:5px;}
+.form_right_line_06 .line_06_img { width:109px; height:109px; border:1px solid #dddddd; position:relative; padding:4px;}
+.form_right_line_06 .line_06_img .img { width:109px; height:109px; background-color:#f4f4f4;}
+.form_right_line_06 .line_06_img .img b { width:66px; height:55px; float:left; margin-top:32px; margin-left:21px; _margin-left:15px;}
+.form_right_line_06 .line_06_img_box p { line-height:20px;}
+.form_right_line_06 .line_06_img .img ul { position:absolute; z-index:999; top:40px; left:21px; background-color:#ebffe8; padding:5px;}
+.form_close { height:17px; line-height:17px; position:absolute; top:3px; right:3px;}
+.form_close_a { padding:0px 4px; background-color:#fff; color:#333;}
+.form_fm { width:109px; height:20px; text-align:center; position:absolute; bottom:5px; left:5px;}
+.form_fm a { background-color:#FFF; color:#333; padding:0px 5px; text-align:center; border-radius:4px;}
+.form_right_line_06 .line_06_img .img ul li { float:left; height:30px; width:110px; text-align:center;}
+.form_right_line_06 .line_06_img .img ul li a { width:110px; height:30px; line-height:30px; float:left;}
+.form_right_line_06 .line_06_img .img ul li a:hover { width:110px; height:30px; background-color:#c4ffbc; color:#333;}
+.form_right_line_07 { width:612px; float:left; margin-top:10px;}
+.form_right_line_07 .text { width:600px; height:500px; float:left; line-height:24px; border:1px solid #CCC;}
+.form_right_line_08 { width:62px; float:left; margin-top:20px;}
+.form_right_line_08 input { width:125px; height:40px; text-align:center; border-radius:4px; background-color:#090; border:1px solid #060; color:#FFF; font-size:16px; cursor:pointer;}
+
+.Idle_baby_right { width:292px; float:left;}
+.Idle_baby_right h4 { width:248px; height:136px; float:left;}
+.Idle_baby_right ul { width:290px; float:left;}
+.Idle_baby_right ul li { width:270px; float:left; height:40px; line-height:40px; padding-bottom:10px; padding-left:20px;}
+.Idle_baby_right ul li a { font-size:16px; color:#090; padding:5px;}
+.Idle_baby_right ul li a:hover { background-color:#edf9e2; border-radius:15px; color:#428a04; padding:5px;}
+
+/***2013-9-9(闲置宝贝end)-----------------------------------------------------------------------------------****/***(闲置宝贝 详细页start)-----------------------------------------------------------------------------------****/
+.Detail { width:1002px; float:left;}
+.top_nav { width:1000px; height:60px; float:left; background:url(../images/Idle_04.png) repeat-x 0px 47px; border-left:1px solid #eeeeee; border-right:1px solid #eeeeee; border-bottom:1px solid #eeeeee;
+ border-radius:0px 0px 4px 4px;}
+.top_nav_lf { width:224px; float:left; background:url(../images/Idle_04.png) repeat-x 0px -58px; height:50px; padding-top:10px; border-right:1px solid #e6e6e6; border-radius:0px 0px 0px 4px; padding-left:10px;
+position:relative;}
+.top_nav_lf_hover { width:224px; float:left; background-color:#FFF; height:50px; padding-top:10px; border-right:1px solid #e6e6e6; padding-left:10px; box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);position:relative; z-index:99999}
+.top_nav_lf .pic { float:left; margin-right:10px;}
+.top_nav_lf .name i { margin-left:10px;}
+.top_nav_lf b { width:37px; height:8px; border:1px solid #e6e6e6; position:absolute; left:91px; top:51px; background-color:#FFF;}
+.top_nav_lf b em { width:6px; height:3px; position:absolute; left:14px; top:2px; }
+.top_nav_lf .details { width:214px; padding:10px; border:1px solid #e6e6e6; background-color:#FFF; position:absolute; left:-1px; top:59px;}
+.top_nav_lf .details li { width:214px; float:left; line-height:20px;}
+
+.top_nav_lf_hover .pic { float:left; margin-right:10px;}
+.top_nav_lf_hover .name i { margin-left:10px;}
+.top_nav_lf_hover .details { width:214px; padding:10px; border:1px solid #e6e6e6; background-color:#FFF; position:absolute; left:-1px; top:59px; box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);}
+.top_nav_lf_hover .details li {width:214px; float:left; line-height:20px;}
+
+.Detail_main { width:1002px; float:left; padding-top:10px;}
+.Detail_sub { width:600px; float:left;}
+.Detail_slider { width:600px; height:470px; position:relative; overflow:hidden; background:url(../images/Idle_03.png) repeat;}
+.Detail_slider li { width:600px; height:390px; float:left; display:table;}
+.Detail_slider li a { width:600px; height:390px; display:table-cell;vertical-align:middle;}
+
+.thumb_list { width:495px; height:60px; position:absolute; bottom:10px; margin-left:60px; _margin-left:40px;}
+.thumb_list ul li { width:96px; height:56px; float:left; display:table; text-align:center;}
+.thumb_list ul li a { width:76px; height:56px; display:table-cell; vertical-align:middle; border:2px solid #e6e6e6;}
+
+.thumb_list ul li img { max-width:76px; max-height:56px;}
+.thumb_list .this { border:2px solid #418a01;}
+
+.Detail_right { width:390px; float:left; padding-left:12px;}
+.Detail_right .h1 { width:390px; float:left; border-bottom:1px solid #e6e6e6; padding-bottom:10px;}
+.h1 h1 { width:390px; float:left; line-height:45px; font-size:24px; color:#333;}
+.h1 ul { width:390px; float:left;}
+.h1 .para,.h2 .para { width:80px; text-align:right; float:left; padding-right:10px;}
+.h1 ul li,.h2 ul li { width:390px; float:left; font-size:14px; line-height:40px; height:40px;}
+.h1 ul li b { font-size:24px; color:#F30;}
+.Detail_right .h2 { width:390px; float:left;}
+.h2 .QQ a { margin-right:10px;}
+.h2 .QQ { width:105px; height:25px; float:left; margin-top:8px;}
+
+
+/***(闲置宝贝 首页start)-----------------------------------------------------------------------------------****/
+.index_Classify { width:210px; height:34px; float:left; background-color:#6cbe3d; margin-right:10px;}
+.index_Classify a { width:200px; padding-left:10px; font-size:14px; display:block; color:#FFF; float:left;}
+.index_navigation { float:left;}
+.index_navigation li { float:left; line-height:34px;font-weight:normal;}
+.index_navigation .this a {  color:#6cbe3d}
+.index_navigation li a { padding:0px 20px; height:34px; color:#333; font-size:14px; float:left;}
+.index_navigation li a:hover { color:#6cbe3d;}
+
+.index_nav_list { width:208px; position:absolute; top:34px; left:0px; border:1px solid #e6e6e6; background-color:#FFF; font-weight:normal;}
+.index_nav_list .item { position:relative; z-index:999;}
+.index_nav_list .div_left { width:188px; padding:10px;float:left; border-top:1px dotted #e6e6e6; margin-top:-1px; line-height:24px;}
+.index_nav_list .hover { width:188px; float:left; background-color:#f5f5f5;}
+.index_nav_list .div_left .font_14 { font-size:14px; color:#333;}
+.index_nav_list .div_left .font_12 { color:#969696;}
+.index_nav_list .div_right { width:494px; padding:10px 20px; position:absolute; top:0px; left:208px; border:1px solid #e6e6e6; background-color:#FFF;}
+.index_nav_list .div_right dl { width:227px; float:left; padding-right:20px;}
+.index_nav_list .div_right dt a { color:#333; font-size:14px; border-left:2px solid #6cbe3d; line-height:18px; padding-left:8px;}
+.index_nav_list .div_right dd ul li { height:14px; line-height:14px; float:left; margin-bottom:8px;}
+.index_nav_list .div_right dd ul li a { padding-right:8px; color:#999; white-space:nowrap;}
+.index_nav_list .div_right dd ul li a:hover { color:#6cbe3d; text-decoration:underline;}
+
+/***(闲置宝贝 幻灯start)-----------------------------------------------------------------------------------****/
+.Banner_line { width:792px; margin-left:210px; _margin-left:150px; overflow:hidden;}
+.index_slider { width:580px; height:264px; border-bottom:1px solid #e6e6e6; margin:0px 10px; position:relative; overflow:hidden; float:left;}
+.index_slider .slider_list { width:580px; height:264px; overflow:hidden;}
+.index_slider .slider_list li { width:580px; height:264px; overflow:hidden; float:left; display:block;}
+.index_slider .slider_list li img { width:580px;}
+.index_slider .slider_dian { position:absolute; left:20px; bottom:8px; width:200px;}
+.index_slider .slider_dian li { float:left; margin-right:5px;}
+
+.slider_right { width:190px; float:left; height:264px; border:1px solid #e6e6e6;}
+.slider_right_top { width:190px; float:left; border-bottom:1px solid #e6e6e6; padding-top:20px; padding-bottom:17px;}
+.slider_right_top h4 { width:150px; font-size:18px; font-weight:normal; float:left; color:#333; text-align:center; padding:0px 20px;}
+.slider_right_top span { width:145px; float:left; text-align:center; padding-left:35px; margin-top:10px;}
+.slider_right_top span a { width:120px; height:14px; line-height:14px; padding:10px 0px; background-color:#6cbe3d; font-size:14px; color:#FFF; border:none; float:left;}
+.silder_botm_img{ width:190px; height:132px; overflow:hidden;}
+
+/***(闲置宝贝 列表start)-----------------------------------------------------------------------------------****/
+.index_floor { width:1002px; float:left; padding-top:30px;}
+.index_floor h1 { width:985px; float:left; line-height:14px; height:14px; border-left:2px solid #6cbe3d; padding-left:15px; font-size:16px; color:#333; font-weight:normal;}
+.index_floor h1 a:hover { color:#6cbe3d; text-decoration:underline;}
+.index_floor .list { width:1002px; margin-top:20px; padding:10px 0px; float:left; border-top:1px solid #e6e6e6;}
+.index_floor .left_list { width:250px; float:left; padding-top:10px;}
+.index_floor .left_list a { padding:5px 15px 5px 15px; white-space:nowrap; float:left; border-bottom:1px dotted #e6e6e6;}
+.index_floor .left_list a:hover,.list_ul a:hover { color:#6cbe3d; text-decoration:underline;}
+.index_floor .mid_list { width:750px; float:left;}
+.index_floor .mid_list .item { position:relative;}
+.index_floor .mid_list li { width:145px; float:left; margin-left:5px; margin-bottom:10px;}
+.index_floor .mid_list li img { width:145px;}
+.index_floor .mid_list li a { width:145px; float:left;}
+.index_floor .mid_list li p { width:145px; float:left; text-align:left; line-height:24px; overflow:hidden; height:50px}
+.index_floor .mid_list .price { width:145px; text-align:right; float:left; font-size:14px; padding-top:5px;}
+.index_floor .mid_list .price span { color:#F60; font-weight:bold;}
+.index_floor .mid_list .new { width:61px; height:23px; line-height:23px; position:absolute; top:5px; left:0px; background:url(../images/special_img/floor_02.png) no-repeat; padding-left:5px; color:#FFF;}
+.all_list { width:230px; float:left; padding:20px 20px 15px 0px; border-bottom:1px solid #e6e6e6;}
+.all_list h1 { width:215px; border-left:2px solid #6cbe3d; font-size:14px; padding-left:15px; font-weight:bold; margin-bottom:15px;}
+.list_ul { width:230px; float:left; overflow:hidden;}
+.list_ul a { padding:0px 8px; white-space:nowrap; float:left; color:#999; border-left:1px solid #e6e6e6; margin-left:-1px; margin-bottom:10px;}
+
+/***(闲置宝贝 产品列表页start)-----------------------------------------------------------------------------------****/
+.Idle_list { width:100%; background:url(../images/special_img/Idle_01.gif) repeat; overflow:hidden;}
+.Idle_list_box {  padding:10px 0px;}
+.Idle_list_box h1 { width:100%; float:left; height:30px; line-height:30px; color:#333;}
+.Idle_list_box h1 span { font-size:12px; font-weight:normal;}
+.Idle_list_box h1 span a { color:#6cbe3d;}
+.Idle_list_box h1 span a:hover { text-decoration:underline;}
+.Idle_list_ul { width:100%; float:left; border-radius:10px; background-color:#FFF;}
+.Idle_list_ul ul { float:left; padding:10px;}
+.Idle_list_ul ul li { width:176px; float:left; line-height:30px; padding-left:20px;}
+.Idle_list_ul ul li a { color:#333;}
+.Idle_list_ul ul li a:hover { color:#6cbe3d; text-decoration:underline;}
+.Idle_list_ul ul li { color:#666;}
+.Idle_list_box .h2 { float:left; height:14px; padding:10px 0px;}
+.h2 .h2_left { padding-right:10px; border-right:1px dotted #cccccc; float:left;}
+.h2 .h2_left span { float:left; background-color:#f9f9f9;}
+.h2 .h2_left .help a { padding:3px 8px; border-radius:8px 0px 0px 8px; border:1px solid #e6e6e6; float:left; display:block; color:#418a01; text-align:center;}
+.h2 .h2_left span a:hover,.h2 .h2_left .this a { background-color:#dbf2db;}
+.h2 .h2_left .time a { padding:3px 8px; border-top:1px solid #e6e6e6; border-bottom:1px solid #e6e6e6; float:left; display:block; color:#418a01; text-align:center;}
+.h2 .h2_left .price a { padding:3px 8px; border:1px solid #e6e6e6; border-radius:0px 8px 8px 0px; float:left; display:block; color:#418a01; text-align:center;}
+.h2_price { padding:0px 10px; border-right:1px dotted #cccccc; float:left;}
+.h2_price .tx { width:26px; border:1px solid #CCC; background-color:#FFF; padding:2px; float:left;}
+.h2_price .yes { padding:1px; width:40px; border:1px solid #CCC; background-color:#f9f9f9; border-radius:4px; margin-left:5px; cursor:pointer;}
+.h2_price span { float:left; margin:0px 3px;}
+.h2_area { float:left; padding:0px 10px; border-right:1px dotted #CCC; position:relative;}
+.h2_area span { padding-top:3px; float:left;}
+.h2_area .nat { float:left;}
+.nat a { border-radius:4px; padding:3px 8px; float:left; color:#FFF; background-color:#65ae16;}
+.nat a em { float:left; font-style:normal;}
+.nat a i { width:6px; height:3px; float:left; background:url(../images/special_img/icon_4.png) no-repeat; margin-top:7px; margin-left:2px;}
+
+.goods_ct { width:394px; position:absolute; top:28px; left:-70px; border:1px solid #dbf2db; padding:5px 10px; background-color:#dbf2db; z-index:999;}
+.goods_ct h3 { font-size:14px; font-weight:normal; height:22px; line-height:22px; width:394px; float:left; border-bottom:1px solid #65ae16; padding-bottom:5px; margin-bottom:5px;}
+.goods_ct .h3_l { float:left;}
+.goods_ct .h3_r { float:right;}
+.goods_ct p { width:394px; float:left; margin-bottom:5px;}
+.goods_ct p a { color:#999;}
+.goods_ct p a:hover { text-decoration:underline;}
+.Region { width:394px; float:left;}
+.Region ul { width:394px; float:left;}
+.Region ul li a { width:90px; font-size:12px; border:1px solid #dbf2db; float:left; text-align:center}
+.Region ul li a:hover,.Region .Cities ul li a:hover { border:1px solid #6cbe3d; background-color:#fafafa; color:#333; }
+.Region .item { position:relative;width:98px; float:left; padding-bottom:8px; white-space:nowrap; height:22px; line-height:22px;}
+.Region .Cities { width:470px; position:absolute; top:13px; left:53px; background-color:#fafafa; border:1px solid #e6e6e6; padding:10px; z-index:9999;}
+.Region .Cities ul { width:470px; float:left;}
+.Region .Cities ul li { width:67px; float:left; height:22px; line-height:22px; white-space:normal; overflow:hidden;}
+.Region .Cities ul li a { width:65px; height:20px; line-height:20px; border:none;border:1px solid #fafafa;}
+
+
+.h2_search { padding:0px 10px; float:left;}
+.h2_search .st input { border:1px solid #CCC; background-color:#FFF; float:left; width:117px; padding:3px 0px; border-radius:8px 0px 0px 8px; padding-left:5px;}
+.h2_search .sb input { border:1px solid #CCC; float:left; padding:2px 8px; margin-left:-1px; border-radius:0px 8px 8px 0px; cursor:pointer;}
+
+.Idle_lists { width:100%; float:left; margin-top:10px; border-bottom:1px solid #CCC;}
+.Idle_lists li { width:990px; float:left; border-radius:10px; background-color:#FFF; box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.05); padding-left:12px; margin-bottom:15px;}
+.li_left { width:800px; float:left; padding:10px 0px; height:125px;}
+.li_left .pic { width:120px; float:left; position:relative;}
+.li_left .pic span { width:57px; height:18px; line-height:18px; background-color: rgba(83, 83, 83, 0.5); color:#FFF; position:absolute; left:0px; top:102px; text-align:center;}
+.li_left .middle { width:656px; padding:0px 12px; float:left;}
+.middle h4 { width:100%; float:left; padding-bottom:5px;}
+.middle h4 a { color:#333;}
+.middle h4 a:hover { text-decoration:underline;}
+.middle .price { width:100%; float:left; font-size:14px; margin-bottom:5px;}
+.middle .price b { color:#F60; font-family: Verdana}
+.middle p { width:100%; float:left; line-height:20px;}
+.li_right { width:169px; height:125px; padding:10px; border-radius:0px 10px 10px 0px; border-left:1px solid #f8f6e4; float:left; background-color:#fffef8;}
+.li_right .portrait { width:169px; float:left;}
+.li_right .portrait .por { width:40px; border:1px solid #f8f6e4; background-color:#FFF; padding:3px; float:left; text-align:center;}
+.li_right .portrait .por img { width:40px; height:40px;}
+.li_right .portrait .name { width:109px; float:left; margin-bottom:8px;}
+.li_right .portrait .name em { font-style:normal;}
+.li_right .portrait .name i { margin-left:15px;}
+.li_right .portrait .reg { width:109px; float:left; color:#999; margin-bottom:8px;}
+.por_r { width:109px; float:left; padding-left:10px;}
+.li_right .num { width:169px; float:left; padding-top:10px;}
+.li_right .num b { color:#6cbe3d; font-weight:normal;}
+
+.Idle_page { width:1002px; float:left; text-align:center; margin-top:10px; padding:10px 0px;}
+.Idle_page a { background-color:#FFF; padding:8px 12px; color:#666;}
+.Idle_page a:hover,.Idle_page .this { background-color:#4b9808; color:#FFF}
+
+/***(闲置宝贝 详细页start)-----------------------------------------------------------------------------------****/
+.Detail { width:1002px; float:left;}
+.top_nav { width:1000px; height:60px; float:left; background:url(../images/special_img/Idle_04.png) repeat-x 0px 47px; border-left:1px solid #eeeeee; border-right:1px solid #eeeeee; border-bottom:1px solid #eeeeee;
+ border-radius:0px 0px 4px 4px;}
+.top_nav_lf { width:224px; float:left; background:url(../images/special_img/Idle_04.png) repeat-x 0px -58px; height:50px; padding-top:10px; border-right:1px solid #e6e6e6; border-radius:0px 0px 0px 4px; padding-left:10px;
+position:relative;}
+.top_nav_lf_hover { width:224px; float:left; background-color:#FFF; height:50px; padding-top:10px; border-right:1px solid #e6e6e6; padding-left:10px; box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+position:relative;}
+.top_nav_lf .pic { float:left; margin-right:10px;}
+.top_nav_lf .name i { margin-left:10px;}
+.top_nav_lf b { width:37px; height:8px; border:1px solid #e6e6e6; position:absolute; left:91px; top:51px; background-color:#FFF;}
+.top_nav_lf b em { width:6px; height:3px; position:absolute; left:14px; top:2px; }
+.top_nav_lf .details { width:214px; padding:10px; border:1px solid #e6e6e6; background-color:#FFF; position:absolute; left:-1px; top:59px;}
+.top_nav_lf .details li { width:214px; float:left; line-height:20px;}
+
+.top_nav_lf_hover .pic { float:left; margin-right:10px;}
+.top_nav_lf_hover .name i { margin-left:10px;}
+.top_nav_lf_hover .details { width:214px; padding:10px; border:1px solid #e6e6e6; background-color:#FFF; position:absolute; left:-1px; top:59px; box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);}
+.top_nav_lf_hover .details li {width:214px; float:left; line-height:20px;}
+
+.Detail_main { width:1002px; float:left; padding-top:10px;}
+.Detail_sub { width:600px; float:left;}
+.Detail_slider { width:600px; height:470px; position:relative; overflow:hidden; background:url(../images/special_img/Idle_03.png) repeat; text-align:center;}
+.Detail_slider li { width:600px; height:390px; float:left; display:table; text-align:center;}
+.Detail_slider li a { width:600px; height:390px; display:table-cell;vertical-align:middle;}
+
+/*.Detail_slider{ width:730px; height:570px; background:url(../images/special_img/Idle_03.png) repeat; position:relative;overflow:hidden;}
+.Detail_slider li{ width:730px; height:490px; position:absolute;left:50%;top:50%;}
+.Detail_slider li a{ width:730px; height:490px;position:relative;left:-50%;top:-50%;}*/
+
+.thumb_list { width:495px; height:60px; position:absolute; bottom:10px; margin-left:60px; _margin-left:40px;}
+.thumb_list ul li { width:96px; height:56px; float:left; display:table; text-align:center;}
+.thumb_list ul li a { width:76px; height:56px; display:table-cell; vertical-align:middle; border:2px solid #e6e6e6;}
+
+/*.thumb_list{ width:730px; height:570px; background:url(../images/special_img/Idle_03.png) repeat; position:relative;overflow:hidden;}
+.thumb_list li{ width:730px; height:490px; position:absolute;left:50%;top:50%;}
+.thumb_list li a{ width:730px; height:490px;position:relative;left:-50%;top:-50%;}*/
+
+.thumb_list ul li img { max-width:76px; max-height:56px;}
+.thumb_list .this { border:2px solid #418a01;}
+
+.Detail_right { width:390px; float:left; padding-left:12px;}
+.Detail_right .h1 { width:390px; float:left; border-bottom:1px solid #e6e6e6; padding-bottom:10px;}
+.h1 h1 { width:390px; float:left; line-height:45px; font-size:24px; color:#333;}
+.h1 ul { width:390px; float:left;}
+.h1 .para,.h2 .para { width:80px; text-align:right; float:left; padding-right:10px;}
+.h1 ul li,.h2 ul li { width:390px; float:left; font-size:14px; line-height:40px; height:40px;}
+.h1 ul li b { font-size:24px; color:#F30;}
+.Detail_right .h2 { width:390px; float:left;}
+.h2 .QQ a { margin-right:10px;}
+.h2 .QQ { width:105px; height:25px; float:left; margin-top:8px;}
+
+/**宝贝介绍-----------------*/
+.tit { width:1000px; height:44px; border:1px solid #e6e6e6; border-radius:3px; float:left; background:url(../images/special_img/Idle_04.png) repeat-x 0px -14px;}
+.tit li { float:left;}
+.tit li a { padding:0px 25px; line-height:46px; font-weight:bold; color:#333; font-size:14px; float:left;}
+.tit .this a { color:#FFF; background-color:#369103;}
+.tit .this a:hover { text-decoration:underline; color:#FFF;}
+.tit li a:hover { color:#369103; text-decoration:underline;}
+.baby_idle { width:1002px; float:left;}
+.baby_idle h2 { width:1002px; float:left; background:url(../images/special_img/Idle_04.png) repeat-x 0px -119px; margin:15px 0px;}
+.baby_idle h2 b { font-size:16px; background-color:#FFF; padding:0px 5px;}
+.baby_idle p { width:1002px; float:left; font-size:14px; line-height:24px;}
+
+/*搜索不到商品*/
+.starshop_list{ width:100%; overflow:hidden;}
+.sigh{  width:420px; margin-left:auto; margin-right:auto; overflow:hidden; margin-top:50px;}
+.sigh span{ width:120px; float:left; margin-right:20px;}
+.sigh  b{ width:280px; float:left; margin-top:30px; line-height:30px; font-size:14px;}
+
+
+
+
+

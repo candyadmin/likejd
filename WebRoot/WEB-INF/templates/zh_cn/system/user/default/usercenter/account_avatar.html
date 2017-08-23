@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>头像修改-$!{config.title}- Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/swfobject.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/buyer/account_nav.htm?op=account")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">我的账户</a> > <span>修改头像</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li><a href='$!webPath/buyer/account.htm' >基本信息</a></li>
+                <li><a href='$!webPath/buyer/account_password.htm'>修改密码</a></li>
+                <li><a href='$!webPath/buyer/account_email.htm'>修改电子邮件</a></li>
+				<li><a href='$!webPath/buyer/account_mobile.htm'>修改手机号码</a></li>
+                <li class="this"><a href='$!webPath/buyer/account_avatar.htm'>更换头像</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="modifyheadimg">
+			  #if($!user.photo)
+			    #set($img="$!webPath/$!user.photo.path/$!user.photo.name")
+			  #else 
+			    #set($img="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+			  #end
+			  <img src="$!img" width="132" height="132" /></div>
+			    <script language="JavaScript" type="text/javascript">
+			<!--
+			function getParamsFromUrl() {
+			    var url, pos, parastr, para;
+			    url = window.location.href;
+			    pos = url.indexOf("?")
+			    if (pos > -1) {
+			    	parastr = url.substring(pos + 1);
+			    } else {
+			    	parastr = "";
+			    }
+			    return parastr;
+			}
+			
+			function reload() {
+				window.location.reload();
+			}
+			
+			function getUploadUrl() {
+				return "$!webPath/buyer/upload_avatar.htm";
+			}
+			
+			function uploadSuccessHandler(callbackMsg) {				
+				//alert("上传成功，回调方法请写在这里");
+				window.location.reload();
+			}
+			
+			function uploadFailHandler(callbackMsg) {				
+				//alert("上传失败，回调方法请写在这里");
+				alert("上传失败：" + callbackMsg);
+			}
+			
+			//大头像：宽
+			function getBigAvatarWidth() {				
+				return 132;
+			}
+			
+			//大头像：高
+			function getBigAvatarHeight() {				
+				return 132;
+			}
+			
+			//中头像：宽
+			function getMiddleAvatarWidth() {				
+				return 60;
+			}
+			
+			//中头像：高
+			function getMiddleAvatarHeight() {				
+				return 60;
+			}
+			
+			//小头像：宽
+			function getLittleAvatarWidth() {				
+				return 32;
+			}
+			
+			//小头像：高
+			function getLittleAvatarHeight() {				
+				return 32;
+			}
+			
+			//裁剪框：宽
+			function getCutRectWidth() {				
+				return 132;
+			}
+			
+			//裁剪框：高
+			function getCutRectHeight() {				
+				return 132;
+			}
+			//截取框是否可缩放
+			function getCutRectScalable() {				
+				return "true";
+			}
+			function getBgImage() {
+				return "$!webPath/resources/style/common/images/avatar/bg_image.png"
+			}
+			
+			function getCopyRightName_1() {				
+				return "shopping多用户商城系统V1.3版";
+			}
+			
+			function getCopyRightName_2() {				
+				return "授权咨询电话:024-25872040";
+			}
+			
+			function getCopyRightUrl_1() {				
+				return "#";
+			}
+			
+			function getCopyRightUrl_2() {				
+				return "#";
+			}
+			
+			function getAvatarBgColor() {
+				return 0xffffff;
+			}
+			function getAvatarBgImage() {				
+　　				return "$!webPath/resources/style/common/images/avatar/bg_image.png";
+　　			}
+			var _curImage = "$!webPath/resources/style/common/images/avatar/bg_image.png";
+			function setSourceImage(s) {
+				_curImage = s;
+				jQuert('#shopping_avatar').setSourceImage();
+			}
+			function getSourceImage() {
+				return _curImage;
+			}
+			// -->
+		</script>
+        <script type="text/javascript">
+            // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
+            var swfVersionStr = "10.2.0";
+            // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
+            var xiSwfUrlStr = "$!webPath/resources/flash/playerProductInstall.swf";
+            var flashvars = {};
+            //跨域访问策略文件
+            flashvars.policy_file_url="$!webPath/resources/other/crossdomain.xml";
+            //初始化图片
+            flashvars.init_image_url="$!webPath/resources/style/common/images/avatar/init_image.jpg";
+            //大头像名称
+            flashvars.big_avatar_name="shopping_big_avatar";
+            //中头像名称
+            flashvars.middle_avatar_name="shopping_middle_avatar";
+            //小头像名称
+            flashvars.little_avatar_name="shopping_little_avatar";
+            flashvars.url_params = getParamsFromUrl();
+            var params = {};
+            params.quality = "high";
+            params.bgcolor = "#ffffff";
+            params.allowscriptaccess = "sameDomain";
+            params.allowfullscreen = "true";
+            var attributes = {};
+            attributes.id = "c_avatar_shopping";
+            attributes.name = "c_avatar_shopping";
+            attributes.align = "middle";
+            swfobject.embedSWF(
+                "$!webPath/resources/flash/shopping_avatar.swf", "flashContent", 
+                "600", "400", 
+                swfVersionStr, xiSwfUrlStr, 
+                flashvars, params, attributes);
+            // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
+            swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+        </script>
+              <div class="modifyimg">
+                <div id="flashContent" style="width:600px; height:450px;">
+                  
+                </div>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+   $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

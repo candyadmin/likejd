@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+   jQuery(":radio").click(function(){
+     var v=jQuery(this).val();
+     if(v=="tables"){
+	    jQuery("#table_list").show();
+	 }else{
+	    jQuery("#table_list").hide();
+		jQuery(":checkbox").attr("checked",false);
+	 }
+   });
+   jQuery(":checkbox[id=all]").click(function(){
+      var ck=jQuery(this).attr("checked");
+	  if(ck=="checked"){
+	    jQuery(":checkbox[id!=all]").attr("checked",true);
+	  }else{
+	    jQuery(":checkbox[id!=all]").attr("checked",false);
+	  }
+   });
+});
+function saveForm(){
+  var tables="";
+  jQuery(":checkbox:checked[id!=all]").each(function(){
+     tables=tables+","+jQuery(this).val();
+  });
+  jQuery("#tables").val(tables);
+  jQuery("#theForm").submit();
+}
+</script>
+<body>
+<form name="theForm" id="theForm" action="$!webPath/admin/database_backup.htm" method="post">
+  <input id="tables" name="tables" type="hidden" value=""/>
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/database_backup.htm" />
+  <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/database_restore.htm" />
+  <div class="cont">
+    <h1 class="seth1">数据库管理</h1>
+    <div class="settab"> <span class="tab-one" style="margin-left:25px;"></span> <span class="tabs"> <a href="$!webPath/admin/database_add.htm" class="this">备份</a> | <a href="$!webPath/admin/database_list.htm">恢复</a> </span> <span class="tab-two"></span> </div>
+    <div class="operation">
+      <h3>友情提示</h3>
+      <ul>
+        <li>备份的数据库通过【<a href="$!webPath/admin/database_list.htm">恢复</a>】功能恢复，或者采取第三方软件导入</li>
+        <li>建议定期备份数据库，选择性备份时注意关联表备份,数据量较大时候请注意分卷大小，采用多卷备份</li>
+      </ul>
+    </div>
+    <div class="edit">
+      <div class="editul ">
+        <ul class="set3">
+          <li style="margin-left:20px;">备份方式</li>
+          <li style="margin-left:20px;">
+            <input name="type" type="radio" value="all" checked="checked" />
+            备份全部数据</li>
+          <li style="margin-left:20px;">
+            <input name="type" type="radio" value="tables" />
+          备份指定表[非技术人员请不要使用]</li>
+        </ul>
+      </div>
+      <div class="specification" style="display:none;" id="table_list">
+        <h3 style="margin-left:20px;"> 数据表 </h3>
+        <li style="margin-left:20px; margin-top:10px;">
+          <input name="all" type="checkbox" id="all" value="" onclick="selectAllTable();" />
+          全选[备份时请注意关联表，表名带有2个"_"符号均为关联表]</li>
+        #foreach($list in $CommUtil.toRowChildList($!tables,5))
+        <ul class="spec_sports" id="rg_$!rg.id">
+          #foreach($table in $list)
+          <li> <span class="span1">
+            <input name="table" type="checkbox" id="table" value="$!table" style="border:none;width:16px;height:16px;" />
+            $!table </span> <span style="margin-left:10px; margin-top:3px;">$!role.roleName</span> </li>
+          #end
+        </ul>
+        #end
+      </div>
+	  <div class="editul" style="margin-top:10px;">
+          <ul class="set1" style="margin-left:20px; margin-top:10px;">
+            <li>分卷大小(kb):</li>
+            <li><span class="webname">
+              <input name="preBoundSize" type="text" id="preBoundSize" value="2048" />
+              </span></span>分卷大小不能小于20kb</li>
+          </ul>
+          <ul class="set1" style="margin-left:20px; margin-top:10px;">
+            <li>备份名称:</li>
+            <li><span class="webname">
+              <input name="name" type="text" id="name" value="$!name" />
+              </span></span></li>
+          </ul>
+        </div>
+    </div>
+    <div class="submit">
+      <input name="save" type="button" id="save" value="备份" onclick="saveForm();"/>
+    </div>
+  </div>
+</form>
+</body>
+</html>

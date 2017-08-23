@@ -1,0 +1,27 @@
+.jcarousel-skin-personal .jcarousel-direction-rtl { direction: rtl;}
+.jcarousel-skin-personal .jcarousel-container-horizontal { width: 768; padding: 0;}
+.jcarousel-skin-personal .jcarousel-clip { overflow: hidden;}
+.jcarousel-skin-personal .jcarousel-clip-horizontal {  width:768; height:358px; z-index:9;}
+.jcarousel-skin-personal .jcarousel-container-vertical,
+.jcarousel-skin-personal .jcarousel-clip-vertical,
+.jcarousel-skin-personal .jcarousel-item
+ { width: 170; height: 358;}
+.jcarousel-skin-personal .jcarousel-next-horizontal,
+.jcarousel-skin-personal .jcarousel-prev-horizontal
+{ filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#72000000', endColorstr='#72000000'); display:block; width: 40px; height: 80px; margin-top: -40px; border: solid #FFF; position: absolute; z-index: 99; top: 50%; cursor: pointer;}
+.jcarousel-skin-personal .jcarousel-next-horizontal { background-color:rgba(0,0,0,0.45); background-image: url(next-horizontal.gif); background-repeat: no-repeat; background-position:50% 50%; border-width: 1px 0 1px 1px; border-radius: 4px 0 0 4px; right: -19px;}
+.jcarousel-skin-personal .jcarousel-prev-horizontal { background-color:rgba(0,0,0,0.45); background-image: url(prev-horizontal.gif); background-repeat:  no-repeat; background-position:50% 50%; border-width: 1px 1px 1px 0; border-radius: 0 4px 4px 0; left: -9px;}
+.jcarousel-skin-personal .jcarousel-next-disabled-horizontal,
+.jcarousel-skin-personal .jcarousel-next-disabled-horizontal:hover,
+.jcarousel-skin-personal .jcarousel-next-disabled-horizontal:focus,
+.jcarousel-skin-personal .jcarousel-next-disabled-horizontal:active,
+.jcarousel-skin-personal .jcarousel-prev-disabled-horizontal,
+.jcarousel-skin-personal .jcarousel-prev-disabled-horizontal:hover,
+.jcarousel-skin-personal .jcarousel-prev-disabled-horizontal:focus,
+.jcarousel-skin-personal .jcarousel-prev-disabled-horizontal:active 
+{ -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=25)"; /* ie8  */
+filter:alpha(opacity=25);    /* ie5-7  */
+-moz-opacity:0.25;    /* old mozilla browser like netscape  */
+-khtml-opacity: 0.25;    /* for really really old safari */ 
+opacity: 0.25;    /* css standard, currently it works in most modern browsers like firefox,  */ cursor: none;}
+

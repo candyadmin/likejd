@@ -1,0 +1,65 @@
+﻿<script>
+		jQuery("tr[id^=table_tr_]").click(function(){
+		jQuery("td[id^=td_]").removeClass("oppertrsp opertable_store_list_td2").addClass("oppertrsp opertable_store_list_td1");	
+		 var id = jQuery(this).attr("tr_id");
+		 var goods_id = jQuery(this).attr("goods_id");
+		 jQuery("#td_"+id).removeClass("oppertrsp opertable_store_list_td1").addClass("oppertrsp opertable_store_list_td2");
+		 jQuery("span[id^=span_]").hide();
+		 jQuery("#span_"+id).show();
+		 jQuery("#goods_id").val(goods_id);
+		});
+
+//分享动态ajax
+	jQuery("#share_storeOrgoods").click(function(){	
+		var goods_id = jQuery("#goods_id").val();
+		var content = jQuery("#content").val();
+		var length = content.length;
+		if(length>140){
+			showDialog("less140words","系统提示","输入字数不能多于140个字！",0,"warning",3);
+			}
+		else{
+			if(length<5){
+			showDialog("less140words","系统提示","请输入不少于5个字！",0,"warning",3);
+				}else{	
+		   jQuery.post("$!webPath/buyer/dynamic_save.htm",
+				   {
+				    "content":content,
+					"goods_id":goods_id
+				   },
+				   function(data){
+					   if(data){
+						    jQuery("#goods_share").remove();
+                            showDialog("share_sns","系统提示","发布成功！",0,"succeed",3);
+						   }else{
+						     jQuery("#goods_share").remove();
+						     showDialog("share_sns","系统提示","发布失败！",0,"error",3);   
+						   }
+	   					},"text");	  
+		   }}
+  });	
+</script>
+<div style="margin-left:10px; float:left;" id="list_table">
+  <table width="450" border="0" cellspacing="0" cellpadding="0" class="opertable_store_list">
+    <tr style="cursor:pointer;" tr_id="$!obj.id" goods_id="$!obj.goods.id" id="table_tr_$!obj.id">
+      <td id="td_$!{obj.id}">
+      <div style="width:85px;float:left;"> #set($goods_logo="$!webPath/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}") 
+        <img src="$!goods_logo" width="80" height="80" />
+        <input id="goods_id" type="hidden" name="goods_id" value="$!obj.id"/>
+      </div> 
+      <div style="width:360px;float:left; text-align:left;">
+       <ul>
+        <li style="height:30px;">商品名称：$!CommUtil.substring("$!obj.goods_name",40)</li>
+        <li style="height:30px;">市场价格:¥$!obj.goods_price</li>
+        <li style="height:30px;">店铺价格:¥$!obj.goods_current_price</li>
+        </ul>
+      </div>
+     </td>
+    </tr>
+  </table>
+</div>
+<div style="height:100px; text-align:center; padding-top:35px; clear:both;">
+  <textarea id="content" name="content"  cols="65" rows="4" style="border-radius:5px; border-color:#666 #ccc #ccc #666; border-style:solid; border-width:1px;" ></textarea >
+</div>
+<div style="height:25px; text-align:center; padding-top:10px; clear:both">
+  <input style="background:url($!webPath/resources/style/system/front/default/images/usercenter/fav_sto_shatr.jpg) no-repeat; color:#FFF; width:69px; height:28px; line-height:28px; border:0px; text-align:center; cursor:pointer" value="分享" id="share_storeOrgoods" type="button"  />
+</div>

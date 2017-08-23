@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="main">
+	<div class="phone_hd">
+		<a class="back" href="$!webPath/wap/index.htm">
+			<img src="$!webPath/resources/style/system/front/wap/images/back.png" width="25" height="25">
+		</a>
+		关闭
+		<a class="edit" href="$!webPath/wap/index.htm">
+			<img src="$!webPath/resources/style/system/front/wap/images/home.png" width="25" height="25">
+		</a>
+	</div>
+	<div class="pd5">
+	
+  <div class="index">
+    <div style=" width:996px; border:2px solid #f1f1f1;margin-top:20px;">
+      <div style=" width:994px; border:1px solid #ccc; padding-bottom:30px; ">
+        <div style=" width:480px; overflow:hidden; margin-left:auto; margin-right:auto; margin-top:50px;">
+          <div style="float:left; width:80px;"><img src="$!imageWebServer/resources/style/system/front/default/images/ok.gif" width="48" height="48" /></div>
+          <div style=" width:400px; overflow:hidden; font-size:14px; font-weight:bold">
+            <ul>
+              <li>$!config.closeReason</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>
+	
+	$!httpInclude.include("/footer.htm") 
+
+</div>	
+	
+</body>
+</html>	

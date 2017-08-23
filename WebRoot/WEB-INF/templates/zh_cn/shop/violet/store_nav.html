@@ -1,0 +1,20 @@
+<div class="shopnavul">
+  <ul>
+    <li id="store_index"> <a href="$!webPath/store_$!{store.id}.htm" >首页</a></li>
+    #if($!{goods_view}==true)
+    <li id="store_goods" class="this"><a href="$!webPath/goods_$!{goods_id}.htm">商品详情</a></li>
+    #end
+    #if($!{goods_list}==true)
+    <li id="store_goods" class="this"><a href="$!webPath/goods_list.htm?store_id=$!{store.id}">商品列表</a></li>
+    #end
+    <li id="store_credit"> <a href="$!webPath/store_credit_$!{store.id}.htm">信用评价</a></li>
+    <li id="store_info"><a href="$!webPath/store_info_$!{store.id}.htm">店铺详情</a></li>
+    #foreach($nav in $navs)
+    #set($url="$!webPath/store_url.htm?id=$!{nav.id}")
+    #if($!{nav.url}&&$!{nav.url}!="") 
+      #set($url="$!nav.url")
+    #end
+    <li id="$!nav.id"><a href="$!url" #if($!nav.win_type=="new_win") target="_blank" #end>$!nav.title</a></li>
+    #end
+  </ul>
+</div>

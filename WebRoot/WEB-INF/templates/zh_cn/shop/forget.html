@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!config.title - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+     errorPlacement:function(error, element) {  
+        error.appendTo(element.parent().parent());  
+     },
+	rules: {
+			userName: {required:true},
+			email: {required:true,email:true},
+			code:{required:true,
+			      remote:{
+		             url: "$!webPath/verify_code.htm",     //后台处理程序
+                     type: "post",               //数据发送方式
+                     dataType: "json",           //接受数据格式   
+                     data: {                     //要传递的数据
+                           "code": function(){return jQuery("#code").val();}
+		              }
+		          }
+			}
+		 },
+		messages: {
+			userName: {required:"用户名不能为空"},
+			email: {required:"邮箱不能为空",email:"邮箱格式不对"},
+			code:{required:"验证码不能为空",remote:"验证码不正确"}
+					}
+  });
+});
+ function refreshCode(){
+    jQuery("#code_img").attr("src","$!webPath/verify.htm?d"+new Date().getTime());
+ }
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="position">当前位置：<a href="$!wbPath" >首页</a> > <span>忘记密码</span></div>
+    <div class="index2">
+      <div class="login_user">
+        <div class="login_user_big">
+          <h1>忘记密码<span>FIND PASSWORD</span></h1>
+          <div class="login_user_bottom" style="margin-left:auto; margin-right:auto">
+            <div class="login_user_img"></div>
+            <form action="$!webPath/find_pws.htm" method="post" id="theForm">
+            <table width="360" border="0" cellspacing="0" cellpadding="0" class="login_user_table">
+              <tr>
+                <td width="60" class="login_nameu">用户名：</td>
+                <td><span class="login_user_input input_size">
+                  <input name="userName" type="text" id="userName" />
+                  </span></td>
+              </tr>
+              <tr>
+                <td class="login_nameu">邮箱：</td>
+                <td><span class="login_user_input input_size">
+                  <input name="email" type="text" id="email" />
+                  </span></td>
+              </tr>
+              <tr>
+                <td class="login_nameu">验证码：</td>
+                <td><span class="login_user_input input_size2">
+                  <input name="code" type="text" id="code" style="text-transform:uppercase;" />
+                  </span><span class="yzm"><a href="javascript:void(0);"><img src="$!imageWebServer/verify.htm" name="code_img" width="59" height="27" id="code_img" style="cursor:pointer;" onclick="refreshCode();" /></a></span></td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><span class="login_user_find">
+                  <input name="input3" type="submit" value="提交找回" style="cursor:pointer;"/>
+                  </span></td>
+              </tr>
+            </table>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

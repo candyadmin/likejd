@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+<style type="text/css">
+body {
+    padding: 0px;
+    margin: 0px auto;
+}
+body {
+    background-color: #EEE;
+}
+.i-assets-container {
+    border: 1px solid #E1E1E1;
+    vertical-align: top;
+    display: block;
+    background-color: #FFF;
+    margin: 5px 10px;
+    color: #A1A1A1 !important;
+}
+#container.ui-container {
+    color: #666;
+}
+.i-assets-content {
+    margin: 10px 10px 10px 20px;
+}
+.fn-clear:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0px;
+    content: " ";
+    clear: both;
+    height: 0px;
+}
+.i-assets-header h3 {
+    font-size: 14px;
+}
+.fn-left {
+    display: inline;
+    float: left;
+}
+h3 {
+    margin: 0px;
+    padding: 0px;
+    font: 12px/1.5 tahoma, arial, "Hiragino Sans GB", "Microsoft Yahei",
+        "宋体";
+}
+.i-assets-balance-amount {
+    line-height: 24px;
+    margin-right: 20px;
+}
+.amount {
+    font-size: 24px;
+    font-weight: 400;
+    color: #666;
+    margin-left: 25px;
+}
+.amount .fen {
+    font-size: 18px;
+}
+#wx_bottom {
+    display: flex;
+}
+#wx_bottom {
+    overflow: hidden;
+    margin: 15px 0px;
+}
+#wx_bottom {
+    display: box;
+    display: -ms-box;
+    display: -webkit-box;
+    display: flex;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+}
+#wx_bottom  .a {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    margin: 0px 10px;
+    border: 1px solid #DDD;
+    text-align: center;
+    border-radius: 3px;
+    color: #666;
+    background: #fff;
+    text-decoration: none;
+}
+.WX_search {
+    background-color: #EFEFEF;
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+    border-bottom: 1px solid #DDD;
+    text-align: center;
+}
+.pay_buttom {
+    margin: 15px 0px;
+    width: 100%;
+    display: box;
+    display: -ms-box;
+    display: -webkit-box;
+    display: flex;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    width: 100%;
+}
+.pay_buttom a {
+    height: 40px;
+    line-height: 40px;
+    margin: 0px 10px;
+    border: 1px solid #DDD;
+    text-align: center;
+    border-radius: 3px;
+    color: #666;
+    background: #fff;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    flex: 1;
+    -ms-flex: 1;
+    -webkit-flex: 1;
+    box-flex: 1;
+    -ms-box-flex: 1;
+    -webkit-box-flex: 1;
+}
+</style>
+
+<body>
+
+    <div class="WX_search">
+        <p>订单支付信息确认</p>
+    </div>
+    
+    <div>
+        <input type="hidden" id="openId" value="$!{openId}"/>
+        <input type="hidden" id="sn" value="$!{sn}"/>
+        <div class="i-assets-container ui-bookblock-item">
+            <div class="i-assets-content">
+                <div class="i-assets-header fn-clear">
+                    <h3 class="fn-left">入款账户</h3>
+                </div>
+                <div class="i-assets-body fn-clear">
+                    <div class="i-assets-balance-amount fn-left">
+                        <strong class="amount"><span style="font-size: 15px;">$!{siteName}</span></strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="i-assets-content">
+                <div class="i-assets-header fn-clear">
+                    <h3 class="fn-left">商品名称</h3>
+                </div>
+                <div class="i-assets-body fn-clear">
+                    <div class="i-assets-balance-amount fn-left">
+                        <strong class="amount">
+                            <span style="font-size: 15px;" id="commodityName">$!{productName}</span>
+                        </strong>
+                    </div>
+                </div>
+            </div>
+            <div class="i-assets-content">
+                <div class="i-assets-header fn-clear">
+                    <h3 class="fn-left">支付总金额</h3>
+                </div>
+                <div class="i-assets-body fn-clear">
+                    <div class="i-assets-balance-amount fn-left">
+                        <strong class="amount">
+                        	<span id="total">$!{amount}</span>
+                        </strong>元
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="i-assets-container ui-bookblock-item">
+            <div class="i-assets-content">
+                <div class="i-assets-header fn-clear">
+                    <h3 class="fn-left">您需要支付金额</h3>
+                </div>
+                <div class="i-assets-body fn-clear">
+                    <div class="i-assets-balance-amount fn-left"
+                        style="color: #F37800;">
+                        <strong class="amount" style="color: #F37800;" id="totalPrice">
+                        $!{amount}
+                        </strong>元
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='pay_buttom'>
+            <a href="javscript:void(0)" style="background: #06C; color: #fff;" onclick="dopay();">确认支付</a>
+        </div>
+        
+	</div>
+
+<script type="text/javascript">  
+    
+    /*执行支付请求*/
+    function dopay() {
+        
+        //获取当前浏览器url全路径,如: http://www.xxx.com/wxpay.jsp
+        var clientUrl = window.location.href;
+
+        //请求后台，获取jssdk支付所需的参数
+        jQuery.ajax({
+            type : 'post',
+            url : '$!webPath/wechat/wxpay.htm',
+            dataType : 'json',
+            data:{
+            	"openId":'$!{openId}',
+                "sn":'$!{sn}',
+                "productName":jQuery("#commodityName").html(), //商品名称
+                "totalPrice":jQuery("#totalPrice").html(), //支付的总金额
+                "clientUrl":clientUrl //当前页面所在的浏览器URL全路径,由于该支付为jssdk支付，所以需要url地址.参与后台sign签名
+            },
+            cache : false,
+            error : function() {
+                alert("系统错误，请稍后重试");
+                return false;
+            },
+            success : function(data) {
+                //微信支付功能只有微信客户端版本大于等于5.0的才能调用
+                var arr=eval(data);
+                if(parseInt(arr[0].agent)<5){
+                    alert("您的微信版本低于5.0无法使用微信支付");
+                    return;  
+                }
+                //JSSDK支付所需的配置参数，首先会检查signature是否合法。
+                wx.config({
+                    debug : false, //开启debug模式，测试的时候会有alert提示
+                    appId : arr[0].appId, //公众平台中-开发者中心-appid
+                    timestamp : arr[0].config_timestamp, //时间戳
+                    nonceStr : arr[0].config_nonceStr,   //随机字符串,不长于32位
+                    signature : arr[0].config_sign,      //这里的signature是后台使用SHA1签名算法得出，不是MD5，与下面的wx.chooseWXPay中的paySign不同，下面的paySign是后台使用MD5加密得出
+                    jsApiList : ['chooseWXPay']       //指定哪些JS接口有权限访问
+                });
+
+                /*
+                    1、wx.chooseWXPay支付的回调：
+                        a、success ： 支付成功后，会调用该回调方法
+                        b、cancel ： 用户手动取消支付，关闭支付控件，会调用该回调方法
+                        c、fail ： 支付失败，会调用该回调方法
+                        d、complete ： 无论支付成功还是失败，都会调用该方法
+                    2、通过1中的描述，发起支付后的回调可以有2种方式进行处理：
+                        a、分别加入success、cancel、fail这3个回调函数，分别处理不同的支付状态，如：下方注释的代码片断。
+                        b、只写一个complete回调函数，然后判断回调函数中的res对象的errMsg属性值，处理不同的支付状态.
+                */
+                //上方的config检测通过后，会执行ready方法
+                wx.ready(function(){
+                    wx.chooseWXPay({
+                        timestamp : arr[0].timeStamp, // 支付签名时间戳。前端js中指定的timestamp字段均为小写。后台生成签名使用的timeStamp字段需大写其中的S字符，即：timeStamp
+                        nonceStr : arr[0].nonceStr, // 支付签名随机串，不长于 32 位
+                        package : arr[0].packageValue, // 统一支付接口返回的prepay_id参数值，格式：prepay_id=***）
+                        signType : arr[0].signType, // 签名方式MD5，不是SHA1，后台使用MD5加密，与上面的wx.config中的signature不同。
+                        paySign : arr[0].paySign , // 后台生成的支付签名串
+                        /*
+                        success: function (res) {
+                            alert("支付成功！");
+                            window.location.href = data[0].sendUrl; //成功后，跳转到自定义的支付成功的页面
+                        },
+                        cancel: function (res) {
+                            alert("您已手动取消该订单支付。");
+                        },
+                        fail : function(res){
+                            alert("订单支付失败。");
+                        },
+                        */
+                        //该complete回调函数，相当于try{}catch(){}异常捕捉中的finally，无论支付成功与否，都会执行complete回调函数。即使wx.error执行了，也会执行该回调函数.
+                        complete : function(res){
+                            //alert("complete回调方法返回值" + res.errMsg);
+                            /*注意：res对象的errMsg属性名称，是没有下划线的，与WeixinJSBridge支付里面的err_msg是不一样的。而且，值也是不同的。*/
+                         if(res.errMsg == "chooseWXPay:ok"){
+                                alert("支付成功");
+                                window.location.href = arr[0].sendUrl;
+                            }else if(res.errMsg == "chooseWXPay:cancel"){
+                                alert("你手动取消支付");
+                            }else if(res.errMsg == "chooseWXPay:fail"){
+                                alert("支付失败");
+                            }else if(res.errMsg == "config:invalid signature"){
+                                alert("支付签名验证错误，请检查签名正确与否 or 支付授权目录正确与否等");
+                            }
+                        }
+                    });
+                });
+                wx.error(function(res){
+                    if(res.errMsg == "config:invalid url domain"){
+                        alert("微信支付(测试)授权目录设置有误");
+                    }else{
+                        alert("检测出问题:" + res.errMsg);
+                    }
+                });
+            }
+        });
+    }
+    </script>
+</body>
+</html>

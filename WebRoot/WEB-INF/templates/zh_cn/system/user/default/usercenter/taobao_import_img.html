@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>淘宝数据导入-$!{config.title}- Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/swfupload.js"></script>
+<script src="$!webPath/resources/js/swfupload.queue.js"></script>
+<script>
+var swf_upload;
+var already_upload=0;
+jQuery(document).ready(function(){	
+	 var settings_object = {//定义参数配置对象
+            upload_url : "$!webPath/seller/taobao_img_upload.htm;jsessionid=$!{jsessionid}",
+            flash_url : "$!webPath/resources/flash/swfupload.swf",
+            file_post_name : "imgFile",
+            post_params : {
+              "user_id" : "$!user.id"
+            },
+            use_query_string : false,
+            requeue_on_error : false,
+            file_types : "*.tbi",
+            file_types_description: "淘宝商品图片",
+            file_size_limit : "$!config.imageFilesize",
+            file_upload_limit : 0,
+            file_queue_limit : 0,
+            debug : false,
+            prevent_swf_caching : true,
+            preserve_relative_urls : false,
+            button_placeholder_id : "upload_imgs",
+            button_image_url : "$!webPath/resources/style/common/images/upload.jpg",
+            button_width : 160,
+            button_height : 28,
+            button_text : "<b></b> <span class='upload_text'>选择上传商品图片</span>",
+            button_text_style : ".upload_text { color: #666666;font-size:12px;margin-left:40px; }",
+            button_text_left_padding : 3,
+            button_text_top_padding : 5,
+            button_action : SWFUpload.BUTTON_ACTION.SELECT_FILES,
+            button_disabled : false,
+            button_cursor : SWFUpload.CURSOR.HAND,
+            button_window_mode : SWFUpload.WINDOW_MODE.TRANSPARENT,
+			file_dialog_start_handler:fileDialogStart,
+			file_dialog_complete_handler:fileDialogComplete,
+            upload_start_handler:upload_start_handler,
+            upload_success_handler:uploadSuccess,
+			upload_complete_handler:uploadComplete
+			
+    };   
+    swf_upload = new SWFUpload(settings_object);//实例化一个SWFUpload，传入参数配置对象
+	function fileDialogStart(){
+
+	}
+	function fileDialogComplete(numFilesSelected, numFilesQueued) {
+       jQuery("#img_select_info").show();
+	   jQuery("#img_desc_info").text("本次共选择"+numFilesSelected+"图片，"+this.getStats().files_queued+"张等待上传");
+    }
+	function upload_start_handler(){
+	  jQuery("#upload_wait").show();
+	}
+	function uploadSuccess(file, serverData){//单个图片上传成功
+	  var obj=eval("("+serverData+")");
+	  var stats = this.getStats(); 
+	  if(obj.url!=""){
+	   
+	  }else{
+	    alert("您的店铺图片空间不足，请选择升级店铺或删除相册图片！");
+	  }
+	}
+	function uploadComplete(file) {
+	try {
+		if (this.getStats().files_queued == 0) {
+           jQuery("#upload_wait").hide();
+		   alert("成功上传"+(already_upload+1)+"张图片！");
+		   window.location.href="$!webPath/seller/taobao_import_finish.htm";
+		} else {	
+		    already_upload=already_upload+1;
+		    var count=this.getStats().files_queued;
+			if(count<0)count=0;
+			jQuery("#img_desc_info").text("正在上传第"+(already_upload+1)+"张,还剩下"+count+"张等待上传"); 
+		    this.startUpload();
+		}
+	} catch (ex) {
+		this.debug(ex);
+	}
+	}
+});
+function upload_img(){
+  var upload_album_id=jQuery("#upload_album_id").val();
+  swf_upload.addPostParam("album_id",upload_album_id); 
+  jQuery("#img_desc_info").text("正在上传第1张,还剩下"+(swf_upload.getStats().files_queued-1)+"张等待上传"); 
+  swf_upload.startUpload();
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=taobao")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>淘宝导入</span></div></div>
+        <div class="productmain">
+            <div class="pdctitle blue2">淘宝导入</div>
+            <div class="step">
+            <div class="step1">
+                <h1><span class="add"></span>第一步：导入CSV文件成功<span style="color:#F00">已成功导入$!{already_import_count}件商品，$!{no_import_count}件导入失败</span></h1>
+            </div>
+              <div class="step2">
+                <h1><span class="add2"></span>第二步：上传商品图片</h1>
+                <ul>
+                  <li class="hui2">请上传与csv文件同级的images目录(或与csv文件同名的目录)内的tbi文件</li>
+                  <li><span class="hui2">导入相册选择：</span><span>
+                     <select name="upload_album_id" id="upload_album_id">
+                      #foreach($album in $alubms)
+                      <option value="$!album.id">$!album.album_name</option>
+                      #end
+                    </select>
+                    </span></li>
+                 <li><span id="img_desc_info"></span></li>
+                  <li style="padding-top:10px;">
+                  <span class="upload" id="upload_imgs"></span> <img src="$!webPath/resources/style/common/images/wait.gif" style="display:none;" id="upload_wait" />
+                  </li>
+                  <li style="padding-top:10px;"><span class="import">
+                    <input type="button" value="上传图片" onclick="upload_img();" />
+                    </span></li>
+                </ul>
+              </div>
+              <div class="step3">
+                <h1>第三步：整理数据</h1>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+   $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

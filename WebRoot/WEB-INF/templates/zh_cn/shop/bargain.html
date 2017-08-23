@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!{config.bargain_title} - $!config.title - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" rel="stylesheet" type="text/css" />
+<link href="$!webPath/resources/style/system/front/default/css/index.css" rel="stylesheet" type="text/css" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" rel="stylesheet" type="text/css" />
+<link href="$!webPath/resources/style/system/front/default/css/goodshidden.css" rel="stylesheet" type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(function(){ 
+    jQuery(".special_list_pic img").lazyload({effect:"fadeIn",width:208,height:208});
+	jQuery(".special_list ul").hover(function(){
+		jQuery(this).parent().parent().find("ul[class='soon_list_ul_this']").attr("class","special_list_ul");
+		jQuery(this).attr("class","soon_list_ul_this");
+		},function(){
+		jQuery(this).attr("class","special_list_ul");	
+			});
+})
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index_special"> 
+    <script src="$!webPath/advert_invoke.htm?id=262145"></script>
+    <div class="special_date"> #foreach($date in $dates) <a #if("$!bg_time"=="$!CommUtil.formatShortDate($!date)")class="this"#end href="$!webPath/bargain.htm?bg_time=$!CommUtil.formatShortDate($!date)">$!CommUtil.formatShortDate($!date)#if($!velocityCount==1)（今日）#end</a> #end </div>
+    <form action="$!webPath/bargain.htm" method="post" id="ListForm">
+      <div class="special_main"> #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        #if($!obj.bg_goods.goods_main_photo)               
+        #set($img="$!imageWebServer/$!{obj.bg_goods.goods_main_photo.path}/$!{obj.bg_goods.goods_main_photo.name}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <div class="special_list">
+          <ul class="special_list_ul">
+            <li class="special_list_pic"><a href="$!webPath/goods_$!{obj.bg_goods.id}.htm"><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28"/></a></li>
+            <li class="special_list_name"><a href="$!webPath/goods_$!{obj.bg_goods.id}.htm">$!CommUtil.substring("$!obj.bg_goods.goods_name",30)</a></li>
+            <li class="special_price"><a class="price_left" href="$!webPath/goods_$!{obj.bg_goods.id}.htm">¥$!{obj.bg_price}</a> #if($!obj.bg_goods.bargain_status==2)
+              #if($!obj.bg_goods.goods_inventory>0) <a class="price_right"><img src="$!webPath/resources/style/system/front/default/images/special_2.jpg" width="84" height="25" /></a> #else <a href="javascript:void(0);" class="finish">已抢完</a> #end
+              #else <a class="soon" href="javascript:void(0);">即将开抢</a> #end </li>
+            <li class="special_price"> <a href="$!webPath/goods_$!{obj.bg_goods.id}.htm" class="market_price">市场价：¥$!{obj.bg_goods.goods_price}</a> <a href="$!webPath/goods_$!{obj.bg_goods.id}.htm" class="price_right">仅剩$!{obj.bg_goods.goods_inventory}件</a></li>
+          </ul>
+          <i class="deep"><b>$!{obj.bg_rebate}</b>折</i> </div>
+        #end
+        
+        #else
+        <div class="starshop_list" style="width:100%; background:#FFF;">
+          <div class="sigh" style="margin-top:10px;"> <span><img src="$!imageWebServer/resources/style/system/front/default/images/sigh.png" width="120" height="109" /></span> <b>今天没有特价商品!</b> </div>
+        </div>
+        #end 
+        #if($!bgs.size()>0)
+        <div class="special_times">即将开抢</div>
+        #foreach($obj in $bgs)      
+        #if($!obj.bg_goods.goods_main_photo)              
+        #set($img="$!imageWebServer/$!{obj.bg_goods.goods_main_photo.path}/$!{obj.bg_goods.goods_main_photo.name}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <div class="special_list">
+          <ul  class="special_list_ul">
+            <li class="special_list_pic"><a href="$!webPath/goods_$!{obj.bg_goods.id}.htm"><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28"/></a></li>
+            <li class="special_list_name"><a href="$!webPath/goods_$!{obj.bg_goods.id}.htm">$!CommUtil.substring("$!obj.bg_goods.goods_name",30)</a></li>
+            <li class="special_price"><a class="price_left" href="$!webPath/goods_$!{obj.bg_goods.id}.htm">¥$!{obj.bg_price}</a><a class="soon">即将开抢</a></li>
+            <li class="special_price"><a href="javascript:void(0);" class="market_price">市场价：¥$!{obj.bg_goods.goods_price}</a></li>
+          </ul>
+          <i class="deep"><b>$!{obj.bg_rebate}</b>折</i> </div>
+        #end
+        #end </div>
+      <div class="fenye" style="margin:0px auto; float:none; clear:both;">
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        <input name="bg_time" type="hidden" id="bg_time" value="$!bg_time" />
+        $!gotoPageFormHTML </div>
+    </form>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

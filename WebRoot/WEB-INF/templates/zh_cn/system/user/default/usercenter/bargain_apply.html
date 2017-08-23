@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>特价商品申请 -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+//
+	jQuery("#theForm").validate({						
+        rules:{
+	  	  bg_rebate:{required :true,number:true,max:$!bargain_rebate,min:0.01}
+	  	 },
+	    messages:{
+	  	  bg_rebate:{required:"折扣率不能为空",number:"折扣率只能为数字",max:"折扣率不能高于{0}",min:"折扣率不能低于0.01"}
+	  	}
+     });
+ });
+ function bargain_goods(){
+   var goods_name=jQuery("#goods_name").val();
+   if(goods_name!=""){
+	   jQuery.ajax({type:'POST',url:'$!webPath/seller/bargain_goods.htm',data:{"goods_name":goods_name},dataType:"json",
+				   beforeSend:function(){
+					     jQuery("#wait_img").show();
+					   },
+				   success:function(data){
+					          jQuery("#wait_img").hide();
+					          jQuery("#goods_ids").empty();																			  
+	                          jQuery.each(data,function(index,item){
+			                       jQuery("#goods_ids").append("<option value='"+item.goods_id+"'>"+item.goods_name+"</option>");
+		                       });
+					   }
+				 });
+   }else alert("请输入商品名称");
+ }
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=bargain")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>申请加入天天特价</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="other"><a href="$!webPath/seller/bargain.htm">天天特价</a></li>
+                <li class="this"><a href="$!webPath/seller/bargain_apply.htm">申请参加特价</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+                <form action="$!webPath/seller/bargain_apply_save.htm" method="post" name="theForm" id="theForm">
+                  <table width="98%" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                    <tr>
+                      <td align="right">特价名称：</td>
+                      <td class="px10">$!config.bargain_title</td>
+                    </tr>
+					<tr>
+                      <td align="right">特价说明：</td>
+                      <td class="px10">$!bargain_state</td>
+                    </tr>
+					<tr>
+                      <td align="right">申请日期：</td>
+                      <td class="px10">$!bargain_time</td>
+                    </tr>
+					<tr>
+					  <td align="right">默认折扣：</td>
+					  <td class="px10">$!bargain_rebate</td>
+				    </tr>
+					<tr>
+                      <td align="right">特价折扣：</td>
+                      <td class="px10"><span class="setinput">
+                        <input name="bg_rebate" type="text" id="bg_rebate" value="$!bargain_rebate" />
+                      八五折输入8.5</span></td>
+                    </tr>
+                    <tr>
+                      <td width="141" align="right">商品名称：</td>
+                      <td width="651" class="px10"><span class="setinput">
+                        <input name="goods_name" type="text" id="goods_name" />
+                        <input name="search" type="button" style="cursor:pointer;width:60px;"  value="搜索" onclick="bargain_goods();" />
+                        <img src="$!webPath/resources/style/common/images/wait.gif" style="display:none;" id="wait_img" >
+                      </span></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top">&nbsp;</td>
+                      <td  class="px10">
+                      <select name="goods_ids" size="10" multiple="multiple" id="goods_ids" style="width:500px; height:200px;">
+                      </select>
+                      按住ctrl多选</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td class="px10"><span class="setsub">
+                        <input type="submit"  value="保存" style="cursor:pointer;"/>
+                        <input name="bargain_time" type="hidden" id="bargain_time" value="$!bargain_time" />
+                      </span></td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

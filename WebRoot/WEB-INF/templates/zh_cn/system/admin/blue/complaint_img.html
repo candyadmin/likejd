@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>图片列表</title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="cont">
+  <div class="orderdetail">
+    <div class="orderh">图片列表</div>
+    <div class="tousul">
+      <ul>
+        #if($!type=="buyer")  
+        #if($!obj.from_acc1)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;"><img src="$!webPath/$!obj.from_acc1.path/$!obj.from_acc1.name" height="$!obj.from_acc1.height" width="$!obj.from_acc1.width" /></div><i class="del_all">图片一</i></span></li>
+        #end
+        #if($!obj.from_acc2)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;"><img src="$!webPath/$!obj.from_acc1.path/$!obj.from_acc2.name" height="$!obj.from_acc2.height" width="$!obj.from_acc2.width" /></div><i class="del_all">图片二</i></span></li>
+        #end
+        #if($!obj.from_acc3)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;"><img src="$!webPath/$!obj.from_acc1.path/$!obj.from_acc3.name" height="$!obj.from_acc3.height" width="$!obj.from_acc3.width" /></div><i class="del_all">图片三</i></span></li>
+        #end
+        #end
+        #if($!type=="seller")  
+        #if($!obj.to_acc1)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;"><img src="$!webPath/$!obj.to_acc1.path/$!obj.to_acc1.name" height="$!obj.to_acc1.height" width="$!obj.to_acc1.width" /></div><i class="del_all">图片一</i></span></li>
+        #end
+        #if($!obj.to_acc2)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;"><img src="$!webPath/$!obj.to_acc2.path/$!obj.to_acc2.name" height="$!obj.to_acc2.height" width="$!obj.to_acc2.width" /></div><i class="del_all">图片二</i></span></li>
+        #end
+        #if($!obj.to_acc3)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;"><img src="$!webPath/$!obj.to_acc3.path/$!obj.to_acc3.name" height="$!obj.to_acc3.height" width="$!obj.to_acc3.width" /></div><i class="del_all">图片三</i></span></li>
+        #end
+        #end
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

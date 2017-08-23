@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+	<script
+		src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+	<script
+		src="$!webPath/resources/style/system/front/wap/js/jquery.validate.min.js"></script>
+	<script>
+		jQuery(document).ready(function() {
+			jQuery("#theForm").validate({
+				errorPlacement : function(error, element) {
+					element.parent().addClass("bd_red");
+					error.appendTo(element.parent().next());
+				},
+				success : function(label) {
+					label.parent().prev().removeClass("bd_red");
+				},
+				rules : {
+					username : {
+						required : true
+					},
+					password : {
+						required : true
+					},
+					code : {
+						required : true,
+						remote : {
+							url : "$!webPath/verify_code.htm", //后台处理程序
+							type : "post", //数据发送方式
+							dataType : "json", //接受数据格式   
+							data : { //要传递的数据
+								"code" : function() {
+									return jQuery("#code").val();
+								}
+							}
+						}
+					}
+				},
+				messages : {
+					username : {
+						required : "用户名不能为空"
+					},
+					password : {
+						required : "密码不能为空"
+					},
+					code : {
+						required : "验证码不能为空",
+						remote : "验证码不正确"
+					}
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="phone_hd">
+		<a class="back" href="javascript:history.go(-1);">
+			<img
+			src="$!webPath/resources/style/system/front/wap/images/back.png"
+			width="25" height="25">
+		</a>登录<a class="menu home"
+			href="$!webPath/wap/index.htm"><img
+			src="$!webPath/resources/style/system/front/wap/images/home.png"
+			width="25" height="25"></a>
+	</div>
+	<div class="phone_main">
+		<!--登录页-->
+<script>
+	  var count=2;
+	  window.setInterval(go,1000);
+	  function go(){
+	    count--;
+	    if(count==0) window.location.href="$!url";
+	  }
+	</script>
+  <div class="index" style="height:300px;">
+    <div style="height:280px;border:1px solid #CCCCCC;overflow:hidden; margin-left:auto; margin-right:auto; margin-top:10px;">
+      <div style="font-size:16px; color:#666666;margin-top:100px; padding-left:40%;">
+      <span style="float:left;">
+      <img src="$!webPath/resources/style/common/images/icon/succeed.png" />
+      </span>
+      <span style=" padding-top:10px; line-height:30px; float:left;">$!{op_title}！</span>
+      </div>
+    </div>
+  </div>
+		<!--底部-->
+		<div class="phone_foot">
+			<div class="foot_top">
+				<span class="fl"><span><a
+						href="$!webPath/login.htm">登录</a></span><b>|</b><span><a
+						href="$!webPath/register.htm">注册</a></span></span><span
+					class="fr"><a href="#">TOP</a></span>
+			</div>
+			<div class="foot_nav">
+				<a class="this" href="javascript:void(0);">触屏版</a>
+				<a href="javascript:void(0);">电脑版</a> <a
+					href="javascript:void(0);">客户端</a>
+			</div>
+			<div class="foot_nav">$!webPath</div>
+		</div>
+
+		<!--按钮-->
+
+	</div>
+
+
+</body>
+</html>

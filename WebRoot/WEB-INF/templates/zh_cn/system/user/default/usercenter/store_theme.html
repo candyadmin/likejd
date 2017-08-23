@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>主题设置 -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery.fancybox-1.3.4.css" type="text/css" rel="stylesheet"  media="screen" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.fancybox-1.3.4.pack.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("a[id^=store_image_]").fancybox({
+	'overlayShow'	: false,
+    'transitionIn'	: 'elastic',
+	'transitionOut'	: 'elastic'
+  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=store_theme")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>店铺主题</span></div></div>
+        <div class="productmain">
+            <div class="pdctitle blue2">主题设置</div>
+            <div class="themeset">
+              <div class="themeset_l">
+                <ul>
+                  <li>店铺名称：<strong class="blue2"><a href="$!webPath/store.htm?id=$!store.id" target="_blank">$!store.store_name</a></strong></li>
+                  #set($template="$!store.template")
+                  #if(!$!store.template)
+                  #set($template="default")
+                  #end
+                  <li>店铺模板名称：<strong class="blue2">$!template</strong></li>
+                  <li style="display:none;">店铺风格名称：<strong class="blue2"></strong></li>
+                  <li><a href="$!webPath/store.htm?id=$!store.id" target="_blank" class="shopindex">店铺首页</a></li>
+                </ul>
+              </div>
+              <div class="themeset_r">
+                <div class="shops"><a href="$!webPath/store.htm?id=$!store.id" target="_blank"><img src="$!webPath/resources/style/shop/$!{template}/images/thumb.jpg" width="124" height="101" /></a></div>
+              </div>
+            </div>
+            <div class="abletheme blue2">可用主题</div>
+            <div class="shoptemple">
+               #foreach($info in $!CommUtil.splitByChar("$!store.grade.templates",","))
+               <ul class="shopul">
+                <li><span class="shoptemp"><a href="$!webPath/resources/style/shop/$!{info}/images/thumb_big.jpg"  id="store_image_$!velocityCount"><img src="$!webPath/resources/style/shop/$!{info}/images/thumb.jpg" width="240" height="202" /></a></span></li>
+                <li class="green">模板名称：<strong>$!info</strong></li>
+                <li class="green" style="display:none;">风格名称：<strong>我的默认小店</strong></li>
+                <li style="text-align:left;"><span class="use"><a href="$!webPath/seller/store_theme_save.htm?theme=$!info">使用</a></span><span class="see"><a  href="$!webPath/resources/style/shop/$!{info}/images/thumb_big.jpg"  id="store_image_$!velocityCount">预览</a></span></li>
+              </ul>
+              #end
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm") 
+</div>
+</body>
+</html>

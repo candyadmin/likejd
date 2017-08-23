@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/blue/Template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+function saveForm(){
+  var templates="";
+  jQuery(":checkbox:checked").each(function(){
+    templates=jQuery(this).val()+","+templates;
+  });
+  jQuery("#templates").val(templates);
+  jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/storegrade_template_save.htm" method="post" name="theForm" id="theForm">
+<div class="cont">
+  <h1 class="seth1">店铺模板</h1>
+  <div class="shop_level">
+    <div class="shop_level_list">
+      <ul class="shopul_level">
+        #foreach($info in $!CommUtil.str2list("$!config.templates"))
+        #if($!CommUtil.fileExist("$!{path}$!{separator}resources$!{separator}style$!{separator}shop$!{separator}$!{info}$!{separator}images$!{separator}thumb.jpg"))
+        <li><img src="$!webPath/resources/style/shop/$!{info}/images/thumb.jpg" width="240" height="202" /><span style="margin-left:3px; color:#999999"><label><input name="" type="checkbox" value="$!info" #if($!CommUtil.indexOf("$!obj.templates","$!info")>=0) checked="checked"#end />模板$!{info}</label></span></li>
+        #end
+        #end
+      </ul>
+  </div>
+  	  <div class="submit">
+            <input type="button" value="提交" onclick="saveForm();"/>
+            <input name="templates" type="hidden" id="templates" />
+  	        <input name="id" type="hidden" id="id" value="$!obj.id" />
+  	        <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/storegrade_list.htm" />
+  	  </div>
+    </div>
+</div>
+</form>
+</body>
+</html>

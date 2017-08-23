@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商城品牌 - $!config.title - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm") 
+$!httpInclude.include("/nav1.htm")
+  
+  <div class="recommend">
+  <div class="recommend_top"><span><img src="$!webPath/resources/style/system/front/default/images/recommend_brand.png"></span></div>
+  <div class="recommend_center">
+    <div class="recommend_center_bd_m">
+      <div style="overflow:hidden; position:relative; width:1200px" class="tempWrap">
+      <ul left: 0px; position: relative; overflow: hidden; padding: 0px; margin: 0px;">
+         <li style="float: left; width: 1200px;">  
+         #foreach($gb in $gbs) 
+         <a target="_blank" href="$!webPath/brand_goods_$!{gb.id}.htm"><img src="$!imageWebServer/$!gb.brandLogo.path/$!gb.brandLogo.name"></a> 
+         #end 
+         </li>
+      </ul>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="main"> 
+
+  <div class="index">
+    
+      
+      <div class="recommend_top"><span><img src="$!webPath/resources/style/system/front/default/images/brand_company.png"></span></div>
+      <div id="float_box" class="brand_list_nav"> 
+      	<span>BRANDS A-Z ：</span> 
+      	#foreach($list in $all_list) 
+      	<a mark="A" id="ReturnWord_" href="javascript:void(0);">$!list.get("word")</a>
+      	#end
+      </div>
+      
+      <div class="brand_list_main">
+      <div class="brand_list"> 
+        #foreach($list in $all_list)
+        #if($!list.get("brand_list").size()>0)
+        <h3 id="brand_$!{list.get('word')}" status="0">$!list.get("word")</h3>
+        <div class="brand_list_box"> #foreach($gb in $!list.get("brand_list")) <span><a href="$!webPath/brand_goods_$!{gb.id}.htm"><b><img src="$!webPath/$!gb.brandLogo.path/$!gb.brandLogo.name" width="98" height="35" /></b><em>$!gb.name</em></a></span> #end </div>
+        #end
+        #end 
+      </div>
+      </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

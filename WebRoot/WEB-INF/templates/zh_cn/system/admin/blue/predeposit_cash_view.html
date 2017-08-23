@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">预存款管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/predeposit_list.htm" class="this">充值管理</a>|<a href="$!webPath/admin/predeposit_cash.htm">提现管理</a>|<a href="$!webPath/admin/predeposit_modify.htm">人工操作</a>|<a href="javascript:void(0);" class="this">提现申请详情</a></span> <span class="tab-two"></span></div>
+   <div class="setcont">
+     <ul class="set1">
+       <li>预存款编号</li>
+       <li><span class="webname">
+         $!obj.cash_sn
+       </span></li>
+     </ul>
+     <ul class="set1">
+       <li>会员名称</li>
+       <li>$!obj.cash_user.userName</li>
+     </ul>
+     <ul class="set1">
+       <li>提交时间</li>
+       <li>$!CommUtil.formatShortDate($!obj.addTime)</li>
+     </ul>
+     <ul class="set1">
+       <li>支付方式</li>
+       #if($!obj.cash_payment=="outline")
+          #set($cash_payment="线下支付")
+        #end
+        #if($!obj.cash_payment=="alipay")
+          #set($cash_payment="支付宝")
+        #end
+        #if($!obj.cash_payment=="tenpay")
+          #set($cash_payment="财付通")
+        #end
+        #if($!obj.cash_payment=="bill")
+          #set($cash_payment="快钱")
+        #end
+        #if($!obj.cash_payment=="chinabank")
+          #set($cash_payment="网银在线")
+        #end
+       <li>$!cash_payment</li>
+     </ul>
+     <ul class="set1">
+       <li>提现金额</li>
+       <li>$!obj.cash_amount</li>
+     </ul>
+     <ul class="set1">
+       <li>收款账号</li>
+       <li>$!obj.cash_account</li>
+     </ul>
+     #if($!obj.cash_payment=="outline")
+     <ul class="set1">
+       <li>汇款人姓名</li>
+       <li>$!obj.cash_userName</li>
+     </ul>
+     <ul class="set1">
+       <li>汇款银行</li>
+       <li>$!obj.cash_bank</li>
+     </ul>
+     #end
+     <ul class="set1">
+       <li>支付状态</li>
+       #if($!obj.cash_pay_status==0)
+          #set($cash_pay_status="等待支付")
+        #end  
+        #if($!obj.cash_pay_status==1)
+          #set($cash_pay_status="等待审核")
+        #end       
+        #if($!obj.cash_pay_status==2)
+          #set($cash_pay_status="支付完成")
+        #end 
+       <li>$!cash_pay_status</li>
+     </ul>
+     <ul class="set1">
+       <li>提现状态</li>
+       #if($!obj.cash_status==-1)
+          #set($cash_status="已关闭")
+        #end
+        #if($!obj.cash_status==0)
+          #set($cash_status="未完成")
+        #end
+        #if($!obj.cash_status==1)
+          #set($cash_status="已完成")
+        #end
+       <li>$!cash_status</li>
+     </ul>
+     <ul class="set1">
+       <li>提现备注</li>
+       <li>$!obj.cash_remittance_info</li>
+     </ul>
+     #if($!obj.cash_admin)
+     <ul class="set1">
+       <li>操作管理员</li>
+       <li>$!obj.cash_admin.userName</li>
+     </ul>
+     #end
+     #if($!obj.cash_admin_info)
+     <ul class="set1">
+       <li>操作备注</li>
+       <li>$!obj.cash_admin_info</li>
+     </ul>
+     #end
+   </div>
+  <div class="submit">
+    <input name="save" type="button" value="返回列表" onclick="window.location.href='$!webPath/admin/predeposit_cash.htm'" />
+  </div>
+</div>
+</body>
+</html>

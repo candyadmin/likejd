@@ -1,0 +1,88 @@
+<script>
+jQuery(function(jQuery){
+  jQuery(".collection a").click(function(){
+    #if($!user)
+     #if($!user.id==$!obj.goods_store.user.id)
+	   alert("不能收藏自己的店铺");
+	 #else
+	   jQuery.post("$!webPath/add_store_favorite.htm",{"id":"$!store.id"},function(data){
+		 if(data==0){
+		     alert("店铺收藏成功！");
+		 }
+		 if(data==1){
+		    alert("该店铺已经被收藏！");
+		 }
+	   },"text");
+	 #end
+   #end
+  });
+  //
+  jQuery(".twocoad").css("cursor","pointer").mouseover(function(){
+     jQuery(".shop_botmhbox").fadeIn('fast'); 
+  }).mouseleave(function(){
+     jQuery(".shop_botmhbox").fadeOut('fast'); 
+  });
+  //
+});
+</script>
+
+<div class="shopindex_left">
+  <div class="shoptop">
+    <h1>$!store.store_name</h1>
+    <div class="shopvalue">
+      <dl class="shopvdl">
+        <dt><span> #if($!store.store_logo)
+          #set($store_logo="$!webPath/$!{store.store_logo.path}/$!{store.store_logo.name}")
+          #else
+          #set($store_logo="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+          #end <img src="$!store_logo" width="60" height="60" /> </span></dt>
+        #set($credit=$!storeViewTools.generic_store_credit("$!store.id"))
+        #set($img="$!imageWebServer/resources/style/common/images/level_0.gif")
+        #if($credit<10 && $credit>0)
+        #set($credit=${credit} / 2)
+        #set($credit=$credit+1)
+        #end
+        #if($credit>=20)
+        #set($img="$!imageWebServer/resources/style/common/images/level_2.gif") 
+        #set($credit=($credit - 20)/2) 
+        #set($credit=$credit+1)
+        #end
+        #if($credit>=10)
+        #set($img="$!imageWebServer/resources/style/common/images/level_1.gif") 
+        #set($credit=($credit - 10)/2)
+        #set($credit=$credit+1)
+        #end
+        #if($credit>5)#set($credit=5)#end
+        <dd><span >$!store.store_ower<a href="$!webPath/buyer/message_send.htm?userName=$!{store.user.userName}" target="_blank" class="shopemail"><img src="$!imageWebServer/resources/style/shop/green/images/mail.jpg" width="15" height="11" /></a></span><span>#if($!credit==0) <img src="$!imageWebServer/resources/style/common/images/level_-1.gif"/> #else #foreach($count in [1..$!credit])<img style="margin-left:1px;" src="$!img" />#end #end</span> #set($store_evaluate1="$!CommUtil.mul($!{store.point.store_evaluate1},100)%") <span class="hui2">好评率：$!{store_evaluate1}</span></dd>
+      </dl>    
+      <h1>店铺信息</h1>
+      <ul>
+        <li>创店时间：$!CommUtil.formatShortDate($!store.addTime)</li>
+        <li>所在地区：$!areaViewTools.generic_area_info("$!store.area.id")</li>
+        <li>店铺类型：$!{store.sc.className}</li>
+        #set($goods_count=0)
+              #foreach($!goods_info in $!store.goods_list)
+                #if($!goods_info.goods_status==0)
+                 #set($goods_count=$goods_count+1)
+                #end
+              #end
+              <li>商品数量：<strong class="blue">$!{goods_count}</strong>件商品</li>
+        <li>店铺收藏：<strong class="blue">$!{store.favorite_count}</strong>人收藏</li>
+        <li>联系电话：$!{store.store_telephone}</li>
+      </ul>
+      <h1>联系方式</h1>
+      <ul>
+        <li class="shopcusser"><span>店铺客服：</span> <span><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=$!store.store_qq&Site=$!store.store_qq&Menu=yes"><img alt="点击这里给我发消息" src="http://wpa.qq.com/pa?p=2:$!store.store_qq:51" /></a></span></li>
+      </ul>
+    </div>
+    <div class="shop_botm_hid">
+      <ul class="shopboh">
+        <li class="collection"><a href="javascript:void(0);" id="store_fav" #if(!$!user)dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="450" dialog_height="100" dialog_id="user_login"#end><span>收藏店铺</span></a></li>
+        <li class="this"><span class="twocoad">店铺二维码
+          <div class="shop_botmhbox" style="display:none;"> <span> <img src="$!imageWebServer/$!config.uploadFilePath/store/$!{store.id}/code.png" width="140" height="140" /></span> <i>手机扫描二维码<br />
+            快速收藏店铺</i> </div>
+          </span></li>
+      </ul>
+    </div>
+  </div>
+</div>

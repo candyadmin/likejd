@@ -1,0 +1,38 @@
+﻿<script>
+function saveImg(){
+	jQuery.post("$!webPath/buyer/share_img_save.htm",
+					   {    
+						"id":child_id,
+						"parent_id":parent_id
+					   },
+					   function(data){
+						   if(data){
+							   jQuery("#child_list_"+parent_id).html(data);
+							   showDialog("share_sns","系统提示","删除成功！",0,"succeed",3);
+							   }
+	   							},"text");
+	
+	};
+
+
+</script>
+
+
+
+
+<div id="showImg">
+#set($imgURL="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+    <span style="float:left; margin-left:10px; margin-right:40px; _margin-right:20px; width:180px; height:150px;"><img style="margin-right:10px;" src=$!imgURL width="180" height="150"></img></span>
+    <span style="float:left; text-align:center; width:200px; height:60px; background-color:#F00; margin-top:40px; background:url($!webPath/resources/style/system/front/default/images/usercenter/button_up.png) no-repeat;">
+    <input id="" name="" type="file" style="opacity:0; filter: alpha(opacity=0); width:200px; height:60px; cursor:pointer; float:left;"/>
+    
+    </span>
+
+</div>
+
+<div style="height:100px; text-align:center; padding-top:5px; clear:both;">
+  <textarea id="content" name="content"  cols="65" rows="4" style="border-radius:5px; border-color:#666 #ccc #ccc #666; border-style:solid; border-width:2px;" ></textarea >
+</div>
+<div style="height:25px; text-align:center; padding-top:10px; clear:both">
+	<input style="background:url($!webPath/resources/style/system/front/default/images/usercenter/fav_sto_shatr.jpg) no-repeat; color:#FFF; width:69px; height:28px; line-height:28px; border:0px; text-align:center; cursor:pointer" value="分享" id="share_storeOrgoods" type="button"  />
+</div>

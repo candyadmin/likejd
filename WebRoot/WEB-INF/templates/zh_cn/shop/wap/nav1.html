@@ -1,0 +1,106 @@
+﻿<script>
+jQuery(document).ready(function(){
+  jQuery(".navul a").each(function(){
+    var original_url=jQuery(this).attr("original_url");
+	if("$!{current_url}".indexOf(original_url)>=0){
+	   jQuery(this).addClass("this");	
+	}
+  });
+  jQuery(".shop_left_btn_con li").mouseover(function(){
+	  var child_count = jQuery(this).attr("child_count");
+	if(child_count>0){
+     var id=jQuery(this).attr("id");
+     jQuery("#child_"+id).show();
+	}
+  }).mouseleave(function(){
+	  var child_count = jQuery(this).attr("child_count");
+	if(child_count>0){
+     var id=jQuery(this).attr("id");
+     jQuery("#child_"+id).hide();
+	}
+  });  
+  jQuery(".navleft").mouseover(function(){
+	  jQuery(this).find(".nav_lefts img").attr("src","$!webPath/resources/style/system/front/default/images/navbottom.gif");
+	  jQuery(".index_menu").show();
+	  });
+  jQuery(".navleft").mouseleave(function(){
+	  jQuery(this).find(".nav_lefts img").attr("src","$!webPath/resources/style/system/front/default/images/navtop.gif");  
+	  jQuery(".index_menu").hide();	  
+		  });	   
+});
+ function all_class(obj){
+   var status=jQuery(obj).attr("status");
+   if(status==1){
+    jQuery(".shop_left_btn_con li").slideDown("fast");
+    jQuery(obj).attr("status",0);
+	jQuery("#class_switch").attr("src","$!webPath/resources/style/system/front/default/images/san2.gif");
+   }else{
+    jQuery(".shop_left_btn_con li").each(function(index){
+	  if(index>9) jQuery(this).slideUp('slow');
+	});
+    jQuery(obj).attr("status",1);
+	jQuery("#class_switch").attr("src","$!webPath/resources/style/system/front/default/images/san.gif"); 
+  }
+ }
+  </script>
+<div class="nav"> 
+<span class="navright"></span>
+    <div class="navleft">
+    <b class="nav_lefts" style="height:42px; line-height:42px;">全部商品分类
+    <span><img src="$!webPath/resources/style/system/front/default/images/navtop.gif" width="7" height="4" />
+    </span></b>   
+        <div class="index_menu" style="display:none">
+          <div class="shop_left_btn_con">
+            <ul>
+              #foreach($gc in $!gcs)
+               #set($icon_img="$!webPath/resources/style/common/images/icon/default_icon.png")
+                <li id="$!gc.id" style="cursor:pointer;" child_count="$!gc.childs.size()"><span class="d"><i class="d_img">
+                #if($!gc.icon_type==0)
+                #if($!gc.icon_sys!="")
+                #set($icon_img="$!webPath/resources/style/common/images/icon/icon_$!{gc.icon_sys}.png")
+                #end
+                #else
+                #if($!gc.icon_acc)
+                #set($icon_img="$!webPath/$!gc.icon_acc.path/$!gc.icon_acc.name")
+                #end
+                #end
+                <img src="$!icon_img" width="20" height="18" />
+                </i><a href="$!webPath/store_goods_list_$!{gc.id}.htm">$!gc.className</a></span>
+                <div class="shop_left_btn_layer" id="child_$!gc.id">
+                  <div class="shop_left_btn_layer_left"><i class="d_img"><img src="$!icon_img" width="20" height="18" /></i><a href="$!webPath/store_goods_list_$!{gc.id}.htm">$!gc.className</a></div>   
+                  <div class="shop_left_btn_layer_right"> 
+                   #foreach($gc1 in $gc.childs)
+                      #if($!gc1.display)
+                      <div class="shop_left_one">
+                        <div class="shop_left_btn_layer_tit"><span><a href="$!webPath/store_goods_list_$!{gc1.id}.htm" target="_blank">$!gc1.className</a></span></div>
+                        <div class="shop_left_btn_layer_con">
+                          <dl>
+                            <dd>#foreach($gc2 in $gc1.childs)#if($!gc2.display)<a href="$!webPath/store_goods_list_$!{gc2.id}.htm" target="_blank">$!gc2.className</a>#end#end
+                              <div class="clear"></div>
+                            </dd>
+                          </dl>
+                        </div>
+                      </div>
+                      #end
+                      #end 
+                      </div>
+                </div>
+              </li>
+              #end
+            </ul>
+          </div>
+          <div class="allclass"><a href="$!webPath/goods_class.htm">全部商品分类</a></div>
+        </div>
+    </div>
+    <ul class="navul">
+    #set($navs=$!navTools.queryNav(0,-1))
+    #foreach($nav in $navs)
+    #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+      #set($url="$!nav.url")
+    #else
+      #set($url="$!webPath/$!{nav.url}")
+    #end
+    <li><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a></li>
+    #end
+  </ul>   
+  </div>

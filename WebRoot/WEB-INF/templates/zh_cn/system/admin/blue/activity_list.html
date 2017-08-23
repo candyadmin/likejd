@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#beginTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  //
+});
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/activity_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">活动管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/activity_list.htm" class="this">所有活动</a> | <a href="$!webPath/admin/activity_add.htm" >新增活动</a> </span> <span class="tab-two"></span></div>
+  <form method="post" id="queryForm">
+  <div class="orders">
+    <ul>
+      <li><span>活动标题</span> <span class="allmen size6">
+        <input name="q_ac_title" type="text" id="q_ac_title" />
+        </span> <span>
+        <select name="ac_status" id="ac_status">
+          <option value="">活动状态</option>
+          <option value="1">启动中</option>
+          <option value="0">关闭中</option>
+        </select>
+        </span> <span>有效期</span> <span class="allmen size2">
+        <input name="beginTime" type="text" id="beginTime" />
+        </span><span>—</span><span class="allmen size2">
+        <input name="endTime" type="text" id="endTime" />
+        </span> <span class="btn_search">
+        <input name="" type="submit"  value="搜索" style="cursor:pointer;"/>
+        </span> </li>
+    </ul>
+  </div>
+  </form>
+  <form method="post" id="ListForm" action="$!webPath/admin/activity_list.htm">
+  <div class="allshop_table">
+    <table width="98%" border="0" cellspacing="0" cellpadding="0">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="30"></td>
+        <td width="60">排序</td>
+        <td width="160">活动标题</td>
+        <td width="150" >横幅图片</td>
+        <td width="100" align="center">开始时间</td>
+        <td align="center" width="100">结束时间</td>
+        <td  align="center" width="100">状态</td>
+        <td width="150"  align="center">操作</td>
+      </tr>
+      #foreach($obj in $objs)
+      <tr id="column_$!{obj.id}">
+        <td><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+        <td ><span class="allmen size5">
+          <input name="ac_sequence" type="text" id="ac_sequence" title="可编辑" onblur="ajax_update('$!obj.id','ac_sequence',this)" value="$!obj.ac_sequence" size="20" />
+          </span></td>
+        <td><span class="allmen size7">
+          <input name="ac_title" type="text" id="ac_title" title="可编辑" onblur="ajax_update('$!obj.id','ac_title',this)" value="$!obj.ac_title" size="30"  />
+        </span></td>
+        <td><span class="tpborder"><img src="$!webPath/$!{obj.ac_acc.path}/$!{obj.ac_acc.name}" width="90" height="33" /></span></td>
+        <td align="center">$!obj.ac_begin_time</td>
+        <td align="center">$!obj.ac_end_time</td>
+        #if($!obj.ac_status==0)
+          #set($status="关闭")
+        #end
+        #if($!obj.ac_status==1)
+          #set($status="启动")
+        #end
+        <td align="center">$!status</td>
+        <td  align="center" class="aoprater"><a href="$!webPath/admin/activity_edit.htm?id=$!obj.id&currentPage=$!currentPage" class="blue">编辑</a>|<a href="$!webPath/admin/activity_goods_list.htm?act_id=$!obj.id" class="blue">申请列表</a>|<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续？'))window.location.href='$!webPath/admin/activity_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">删除</a></td>
+      </tr>
+      #end
+      <tr style="background:#F2F2F2; height:30px;">
+        <td colspan="8"><div class="fenye3">
+          <input name="endTime" type="hidden" id="endTime" value="$!endTime" />
+          <input name="beginTime" type="hidden" id="beginTime" value="$!beginTime" />
+          <input name="ac_status" type="hidden" id="ac_status" value="$!ac_status" />
+          <input name="q_ac_title" type="hidden" id="q_ac_title" value="$!q_ac_title" />
+          <input type="hidden" name="mulitId" id="mulitId" />
+          <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+          $!gotoPageFormHTML</div>
+          <div class="shopbtn shopfx">
+            <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+            &nbsp;&nbsp;全部</div>
+          <div class="shop_btn_del shopbtn">
+            <input name="" type="button" value="删除" onclick="cmd('$!webPath/admin/activity_del.htm');"/>
+         </div></td>
+      </tr>
+    </table>
+  </div>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>合作伙伴账号登录 - $!config.title</title>
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+<script> 
+ var accessToken;
+ function callback(user){
+  window.location.href="$!webPath/qq_login_check.htm?qq_openid="+user.openid+"&accessToken="+accessToken;
+ }
+//应用的APPID，请改为你自己的
+ var appID = "$!config.qq_login_id";
+ //成功授权后的回调地址，请改为你自己的
+ var redirectURI = "$!webPath/qq_login_api.htm";
+//构造请求
+if (window.location.hash.length == 0){
+      var path = 'https://graph.qq.com/oauth2.0/authorize?';
+      var queryParams = ['client_id=' + appID,'redirect_uri=' + redirectURI,'scope=' + 'get_user_info,list_album,upload_pic,add_feeds,do_like','response_type=token'];       
+      var query = queryParams.join('&');
+      var url = path + query;
+       window.location.href=url;
+	}else{
+ //获取access token
+     accessToken= window.location.hash.substring(1);
+//使用Access Token来获取用户的OpenID
+     var path = "https://graph.qq.com/oauth2.0/me?";
+     var queryParams = [accessToken, 'callback=callback'];
+     var query = queryParams.join('&');
+     var url = path + query;
+     var script = document.createElement('script');
+     script.src = url;
+     document.body.appendChild(script);        
+ }
+ </script>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="index2">
+      <div class="paywaiting"> <span> <img src="$!imageWebServer/resources/style/common/images/loading.gif"  /></span> <span style="margin-top:10px;">正在进行第三方账号登录，请等待......</span></div>
+    </div>
+  </div>
+ $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

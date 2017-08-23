@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+function setDisplay(){
+	var url=arguments[0];
+	var type=arguments[1];
+	var mulitId="";
+	jQuery(":checkbox:checked").each(function(){
+	  if(jQuery(this).val()!=""){	  
+	    mulitId=mulitId+","+jQuery(this).val();
+	  }
+	});
+	if(mulitId!=""){
+	jQuery("#mulitId").val(mulitId);
+	jQuery("#type").val(type);
+	    jQuery("#ListForm").attr("action",url);
+	     jQuery("#ListForm").submit();
+	}else{
+       alert("至少选择一条数据记录");
+	}
+	};
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">店铺动态</h1>
+  <div class="settab"><span class="tab1"></span> <span class="tabs"> <a href="javascript:void(0);" class="this">动态列表</a> </span> <span class="tab2"></span></div>
+  <form id="queryForm" name="queryForm" method="post" action="$!webPath/admin/sns_store.htm">
+    <div class="orders">
+      <ul>
+        <li><span style="font-weight:bold">请输入店铺名称</span> <span class="allmen size6">
+          <input name="store_name" type="text" value="$!store_name" />
+          </span> </span> <span class="btn_search">
+          <input name="" type="submit"  value="搜索" style="cursor:pointer"/>
+          </span> </li>
+      </ul>
+    </div>
+  </form>
+  <form id="ListForm" name="ListForm" action="$!webPath/admin/sns_store.htm" method="post">
+    <input id="currentPage" name="currentPage" value="$!currentPage" type="hidden"/>
+    <input id="store_name" name="store_name" value="$!store_name" type="hidden"/>
+    <div class="allshop_table">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        #foreach($obj in $objs)
+        <tr>
+          <td width="5%" align="right" valign="top" style="padding-top:10px;"><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td width="5%px" align="center" valign="top" ><span class="allmen size5"> #set($user_img ="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+            #if($!obj.user.phtot)
+            #set($user_img ="$!webPath/$!obj.user.photo.path/$!obj.user.photo.name")
+            #end <img src="$!user_img" width="70" height="70" /> </span></td>
+          <td width="90%"  colspan="4"><div style="width:1002px;">
+              <div class="h1">$!obj.user.userName：$!obj.content</div>
+              <!--对应店铺信息-->
+              #if($!obj.store)
+              #set($store_logo="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+              #if($!obj.store.store_logo)
+              #set($store_logo="$!webPath/$!{obj.store.store_logo.path}/$!{obj.store.store_logo.name}")
+              #end
+              <div class="allshop_tu"> <span class="allshop_pic"><a href="$!webPath/store_$!{obj.store.id}.htm" target="_blank"><img src="$!store_logo" /></a></span> <span class="allshop_jj">
+                <h2>店铺名称：<a href="$!webPath/store_$!{obj.store.id}.htm" target="_blank">$!obj.store.store_name</a></h2>
+                <em>店铺星级：#set($credit=$!storeViewTools.generic_store_credit("$!obj.store.id"))
+                #set($img="$!imageWebServer/resources/style/common/images/level_0.gif")
+                #if($credit<10 && $credit>0)
+                #set($credit=${credit} / 2)
+                #set($credit=$credit+1)
+                #end
+                #if($credit>=20)
+                #set($img="$!imageWebServer/resources/style/common/images/level_2.gif") 
+                #set($credit=($credit - 20)/2) 
+                #set($credit=$credit+1)
+                #end
+                #if($credit>=10)
+                #set($img="$!imageWebServer/resources/style/common/images/level_1.gif") 
+                #set($credit=($credit - 10)/2)
+                #set($credit=$credit+1)
+                #end
+                #if($credit>5)#set($credit=5)#end
+                #if($!credit==0) <img src="$!imageWebServer/resources/style/common/images/level_-1.gif"/> #else
+                #foreach($count in [1..$!credit])<img style="margin-left:1px;" src="$!img" />#end 
+                #end</em> #set($store_evaluate1="$!CommUtil.mul($!{$!obj.store.point.store_evaluate1},100)%") <em>好评率：$!{store_evaluate1}</em> <em>创店时间：$!CommUtil.formatShortDate($!obj.store.addTime)</em> <em>所在地：$!obj.store.area.parent.parent.areaName $!obj.store.area.parent.areaName $!obj.store.area.areaName</em> </span> </div>
+              #end 
+              
+              #if($!obj.childs.size()>0)
+              <div class="allshop_tu"> <span class="allshop_jj"> #foreach($child in $obj.childs)
+                <h2>$!child.user.userName： $!child.content</h2>
+                #end </span> </div>
+              #end
+              <div class="allshop_b" style="color:#000"> $!CommUtil.formatLongDate($!obj.addTime) 转发($!obj.turnNum) | 评论($!obj.childs.size())&nbsp;&nbsp; 加密状态：#if($!obj.locked==true)已加密#else 未加密#end &nbsp;&nbsp; 可见度： #if($!obj.display==true)可见#else不可见#end </div>
+            </div></td>
+        </tr>
+        #end
+        <tr style="background:#F2F2F2; height:30px;">
+          <td colspan="8"><div class="fenye3">$!gotoPageFormHTML</div>
+            <div class="shopbtn shopfx">
+              <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+              &nbsp;&nbsp;
+              <label  for="all" >全部</label>
+            </div>
+            <div class="shop_btn_del shopbtn">
+              <input name="" type="button" value="删除" onclick="cmd('$!webPath/admin/sns_store_del.htm');"/>
+            </div>
+            <div class="shop_btn_del shopbtn">
+              <input name="" type="button" value="可见" onclick="setDisplay('$!webPath/admin/sns_set_display.htm','show');"/>
+            </div>
+            <div class="shop_btn_del shopbtn">
+              <input name="" type="button" value="不可见" onclick="setDisplay('$!webPath/admin/sns_set_display.htm','hide');"/>
+            </div></td>
+        </tr>
+      </table>
+    </div>
+    <input type="hidden" name="mulitId" id="mulitId" />
+    <input type="hidden" name="type" id="type" />
+    <input type="hidden" name="mark" id="mark" value="store" />
+  </form>
+</div>
+</body>
+</html>

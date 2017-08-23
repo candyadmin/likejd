@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!config.title - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("a[id^=remove_friend_]").click(function(){
+	jQuery("#obj_id").val(jQuery(this).attr("obj_id"));
+	showDialog("dele_friend","系统提示","您确定要解除和该用户的好友关系吗？",1,"question","",remove_friend);
+	});								
+});
+
+function remove_friend(){
+	jQuery.post("$!webPath/buyer/friend_del.htm",
+				{
+					"id":jQuery("#obj_id").val()
+					},
+					function(data){
+						if(data=="true"){
+							showDialog("sys","系统提示","解除成功！",0,"succeed","3");
+							jQuery("#li_"+jQuery("#obj_id").val()).remove();
+							}else{
+						showDialog("sys","系统提示","解除失败！",0,"error","3");		
+								}
+						},"text");
+	
+	};
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+#if($!owner.id==$!user.id)
+$!httpInclude.include("/buyer/homepage_head.htm")
+#else
+$!httpInclude.include("/buyer/homepage_head.htm?uid=$!owner.id")
+#end
+<!--通栏蓝色导航-->
+<div style="width:100%; height:40px; background-color:#ff8800">
+  <div class="main">
+    <div class="home_nav">
+      <ul class="home_nav_ul">
+      #if($!owner.id==$!user.id)
+        <li ><a href="$!webPath/buyer/homepage.htm">我的主页</a></li>
+      #else
+       <li ><a href="$!webPath/buyer/homepage.htm?uid=$!{owner.id}">TA的主页</a></li>
+      #end 
+     #if($!owner.id==$!user.id)
+        <li class="nav_this"><a href="$!webPath/buyer/homepage/myfriends.htm">好友</a></li>
+     #else
+     	<li class="nav_this"><a href="$!webPath/buyer/homepage/myfriends.htm?uid=$!owner.id">好友</a></li>
+     #end 
+     #if($!owner.id==$!user.id)  
+        <li><a href="$!webPath/buyer/homepage/myattention.htm">关注</a></li>
+     #else
+       <li ><a href="$!webPath/buyer/homepage/myattention.htm?uid=$!owner.id">关注</a></li>
+     #end
+     #if($!owner.id==$!user.id)   
+        <li ><a href="$!webPath/buyer/homepage/myfans.htm">粉丝</a></li>
+	 #else
+        <li ><a href="$!webPath/buyer/homepage/myfans.htm?uid=$!owner.id">粉丝</a></li>
+     #end
+      </ul>
+      <div class="home_nav_right"> <span>$!CommUtil.substring("$!{user.userName}",12)你好，欢迎来到$!CommUtil.substring("$!{config.websiteName}",8)！</span> </div>
+    </div>
+  </div>
+</div>
+<!--个人主页开始-->
+<div class="per_homepage_bg">
+    <div class="per_homepg_box">
+        <div class="per_home_page_frends_list">
+            <div class="fans_tab">
+                <ul>
+                 #set($fans_Url="$!webPath/buyer/homepage/myfans.htm")
+                #if($!owner.id!=$!user.id)
+                #set($fans_Url="$!webPath/buyer/homepage/myfans.htm?uid=$!owner.id")
+                #end
+                
+                 #set($atten_Url="$!webPath/buyer/homepage/myattention.htm")
+                #if($!owner.id!=$!user.id)
+                #set($atten_Url="$!webPath/buyer/homepage/myattention.htm?uid=$!owner.id")
+                #end
+               
+                	<li class="fans_tab_one"><a href="javascript:void(0);">好友列表（#if(!$!objs)0#end$!objs.size()）</a></li>
+                    <li><a href="$!atten_Url">关注列表</a></li>
+                    <li><a href="$!fans_Url">粉丝列表</a></li>
+                </ul>
+            </div>
+            <form id="ListForm" name="ListForm" action="$!webPath/buyer/homepage/myfriends.htm" method="post">
+            #if($!owner.id!=$!user.id)
+            <input id="uid" name="uid" type="hidden" value="$!owner.id"/>
+            #end
+        <div class="fans_main">
+            	<div class="fans_main_ul">
+                	<ul>
+                    #foreach($obj in $objs)
+                        #set($userImg="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+                        #if($!obj.toUser.photo)
+                        #set($userImg="$!webPath/$!obj.toUser.photo.path/$!obj.toUser.photo.name")
+                        #end    
+                    	<li id="li_$!obj.id">
+                            <span class="head_pic">
+                            <a href="$!webPath/buyer/homepage.htm?uid=$!{obj.toUser.id}" target="_blank">
+                            <img src=$!userImg width="80" height="80" /></a>
+                            </span>
+                            <span class="name">
+                            <a href="$!webPath/buyer/homepage.htm?uid=$!{obj.toUser.id}" target="_blank">$!obj.toUser.userName </a>
+                            <br />性别：
+                            #if($!obj.toUser.sex==-1)保密#end
+                            #if($!obj.toUser.sex==0)女#end
+                            #if($!obj.toUser.sex==1)男#end
+                            </span>
+                             <span class="gz"><a href="javascript:void(0);" id="remove_friend_$!obj.id" obj_id="$!obj.id">解除好友</a></span>
+                        </li>
+                    #end    
+                    </ul>
+            </div>
+            <div class="fenye_fans">$!gotoPageFormHTML</div>
+            </div>
+            <input id="obj_id" name="obj_id"  type="hidden"/>
+            <input id="currentPage" name="currentPage" value="$!currentPage" type="hidden"/>
+            </form>
+        </div>
+        $!httpInclude.include("/footer.htm")
+    </div>
+</div>
+</body>
+</html>

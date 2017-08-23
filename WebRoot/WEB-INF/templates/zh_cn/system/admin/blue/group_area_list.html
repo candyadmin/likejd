@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+function addorsubtract(obj,id){
+ var cls=jQuery(obj).attr("cls");
+ var level=jQuery(obj).attr("level");
+  if(cls=="jian"){
+  jQuery.ajax({type:'POST',
+		       url:'$!webPath/admin/group_area_data.htm',
+		        data:{"pid":id,"currentPage":"$!currentPage"},
+				success:function(data){
+	                jQuery("#"+id).after(data);
+					jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/add.jpg");
+					jQuery(obj).attr("cls","add");
+					tipStyle();
+              }
+  });
+  }else{
+       if(level=="0_"+id){
+	    jQuery("tr[level=child_"+id+"]").remove();
+	   }else
+	   jQuery("tr[parent="+id+"]").remove();
+	   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/jian.jpg");
+	   jQuery(obj).attr("cls","jian");
+  }
+  //
+}
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+    jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/group_area_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+jQuery(document).ready(function(){
+ 
+});
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">团购区域</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"><a href="$!webPath/admin/group_list.htm">团购列表</a> | <a href="$!webPath/admin/group_add.htm">新增团购</a>|<a href="$!webPath/admin/group_class_list.htm">团购分类</a> |<a href="$!webPath/admin/group_class_add.htm" >新增分类</a>|<a href="$!webPath/admin/group_area_list.htm"  class="this">团购区域</a>|<a href="$!webPath/admin/group_area_add.htm" >新增区域</a>|<a href="$!webPath/admin/group_price_list.htm" >价格区间</a>|<a href="$!webPath/admin/group_price_add.htm" >添加区间</a></span> <span class="tab-two"></span></div>
+   <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li> 团购区域为多级管理，团购页面默认显示一级</li>
+    </ul>
+  </div> 
+  <div class="classtable">
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/admin/group_area_list.htm" method="post">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="class_table">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="58">&nbsp;</td>
+        <td width="107">排序</td>
+        <td width="604" align="left">区域名称</td>
+        <td width="196" align="left">操作</td>
+      </tr>
+    
+      #foreach($obj in $objs)
+      <tr id="$!obj.id">
+	    <td align="center"><input name="ids" id="ids" type="checkbox" value="$!obj.id" /></td>
+        <td colspan="2" align="center"><ul class="addclass">
+          <li class="ac1">
+            <input name="addorsubtract_$!obj.id" id="addorsubtract_$!obj.id" type="hidden" value="true" />
+            <img src="$!webPath/resources/style/system/manage/blue/images/jian.jpg" cls="jian" level="0_$!obj.id" width="14" height="14" id="jian_$!obj.id" onclick="addorsubtract(this,$!obj.id);" style="cursor:pointer;"/> </li>
+          <li class="ac2"><span class="num">
+            <input type="text" name="$!obj.ga_sequence" id="$!obj.ga_sequence"  value="$!obj.ga_sequence"  onblur="ajax_update('$!obj.id','ga_sequence',this)" title="可编辑"/>
+            </span></li>
+          <li class="ac3"><span class="classies">
+            <input type="text" name="$!obj.id" id="$!obj.id" value="$!obj.ga_name" onblur="ajax_update('$!obj.id','ga_name',this)" title="可编辑"/>
+            </span> <span class="newclass"><a href="$!webPath/admin/group_area_add.htm?pid=$!obj.id">新增下级</a></span></li>
+        </ul></td>
+        <td align="left" class="ac8"><a href="$!webPath/admin/group_area_edit.htm?id=$!obj.id&currentPage=$!currentPage">编辑</a>|<a href="javascript:void(0);" onclick="if(confirm('删除区域会同时删除该区域的所有下级，是否继续?'))window.location.href='$!webPath/admin/group_area_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'">删除</a></td>
+      </tr>
+      #end  
+      <tr style="background:#F2F2F2; height:30px;">
+		<td align="center"><input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/></td>
+        <td colspan="2" align="center" class="sall"><span class="classall">全部</span><span class="shop_btn_del" id="alldel">
+          <input name="input" type="button" value="删除" style="cursor:pointer;" onclick="cmd('$!webPath/admin/group_area_del.htm')"/>
+        </span></td>
+        <td>&nbsp;</td>
+      </tr>   
+    </table>
+	  <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	  <input name="mulitId" type="hidden" id="mulitId" />
+	  <div class="fenye"> $!gotoPageHTML</div>	 
+   </FORM>
+  </div>  
+</div>
+</body>
+</html>

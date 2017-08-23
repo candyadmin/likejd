@@ -1,0 +1,427 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+	  websiteLogo:{
+	    accept:"$!config.imageSuffix"
+	  },
+	   img0:{
+	    accept:"$!config.imageSuffix"
+	  },
+	   img1:{
+	    accept:"$!config.imageSuffix"
+	  },
+	   img2:{
+	    accept:"$!config.imageSuffix"
+	  },
+	   img3:{
+	    accept:"$!config.imageSuffix"
+	  }
+	 },
+	messages:{
+	  websiteLogo:{accept:"系统不允许上传该文件类型"},
+	  img0:{accept:"系统不允许上传该文件类型"},
+	  img1:{accept:"系统不允许上传该文件类型"},
+	  img2:{accept:"系统不允许上传该文件类型"},
+	  img3:{accept:"系统不允许上传该文件类型"},
+	}
+  });
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  //
+//验证码类型
+   if("$!config.securityCodeType"=="normal"){
+     jQuery("#securityCodeType1").val("$!config.securityCodeType").attr("checked",true);
+   }
+   if("$!config.securityCodeType"=="voice"){
+    jQuery("#securityCodeType2").val("$!config.securityCodeType").attr("checked",true);
+   }
+//tab页
+jQuery("a[id^=site_]").click(function(){
+	var id = jQuery(this).attr("id");
+	var css = jQuery(this).attr("class");
+	if(css=="this") return false;
+	jQuery.each(jQuery("a[id^=site_]"),function(){
+		if(jQuery(this).attr("id")==id){
+			jQuery(this).addClass("this");
+			var tid = "#"+jQuery(this).attr("id").substring(5);
+			jQuery(tid).show();
+			}else{
+			jQuery(this).removeClass("this");
+		   var tid="#"+jQuery(this).attr("id").substring(5);
+		   jQuery(tid).hide();
+			}
+		})
+	});
+//鼠标经过logo图片显示
+	jQuery("img[src='$!webPath/resources/style/system/manage/blue/images/preview.jpg']").mouseover(function(){
+	jQuery(this).parent().parent().find(".bigimgpre").css('display','block');
+	});
+	jQuery("img[src='$!webPath/resources/style/system/manage/blue/images/preview.jpg']").mouseout(function(){
+	jQuery(this).parent().parent().find(".bigimgpre").css('display','none');
+	});
+//设置站点默认状态以及判断初始显示状态
+   var state = jQuery("#websiteState").val();
+   if(state=="true"){
+		jQuery("#websiteState_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	}else{
+		jQuery("#websiteState_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	}
+//允许游客咨询
+   var consultState = jQuery("#visitorConsult").val();
+    if(consultState=="true"){
+		jQuery("#visitorConsult_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	}else{
+		jQuery("#visitorConsult_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	}
+   var qq_login = jQuery("#qq_login").val();
+    if(qq_login=="true"){
+		jQuery("#qq_login_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	}else{
+		jQuery("#qq_login_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	}
+   var sina_login = jQuery("#sina_login").val();
+    if(sina_login=="true"){
+		jQuery("#sina_login_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	}else{
+		jQuery("#sina_login_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	}	
+//
+  jQuery("#websiteLogo").change(function(){
+	 jQuery("#textfield1").val(jQuery("#websiteLogo").val());
+   })
+//
+  jQuery(":checkbox").click(function(){
+     var id=jQuery(this).attr("name");
+	 id=id.substring(0,id.length-3);
+	 if(jQuery(this).attr("checked")=="checked"){
+	    jQuery("#"+id).val("true");
+	 }else jQuery("#"+id).val("false");
+  });
+//
+  jQuery("#qq_login_status").css("cursor","pointer").click(function(){
+    var qq_login=jQuery("#qq_login").val();
+   if(qq_login=="true"){
+     jQuery("#qq_login_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	 jQuery("#qq_login").val("false");
+   }else{
+     jQuery("#qq_login_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	 jQuery("#qq_login").val("true");
+   }
+  });
+ jQuery("#sina_login_status").css("cursor","pointer").click(function(){
+   var sina_login=jQuery("#sina_login").val();
+   if(sina_login=="true"){
+     jQuery("#sina_login_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	 jQuery("#sina_login").val("false");
+   }else{
+     jQuery("#sina_login_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	 jQuery("#sina_login").val("true");
+   }
+  });
+  jQuery("#visitorConsult_status").css("cursor","pointer").click(function(){
+    var state = jQuery("#visitorConsult").val();
+	if(state=="true"){
+		jQuery("#visitorConsult").val("false");
+		jQuery("#visitorConsult_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	}else{
+		jQuery("#visitorConsult").val("true");
+		jQuery("#visitorConsult_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	}
+  });
+  jQuery("#websiteState_status").css("cursor","pointer").click(function(){
+     var state = jQuery("#websiteState").val();
+	 if(state=="true"){
+		jQuery("#websiteState").val("false");
+		jQuery("#websiteState_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	}else{
+		jQuery("#websiteState").val("true");
+		jQuery("#websiteState_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	}
+  });
+  //
+    jQuery("input[id^=img][type=file]").change(function(){
+	   var id=jQuery(this).attr("id");
+	   jQuery("#"+id+"_text").val(jQuery(this).val());
+   })
+  //
+  jQuery(":radio[value=$!config.sysLanguage]").attr("checked",true);
+});
+function saveForm(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/sys_config_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <input name="id" id="id" type="hidden" value="$!config.id"/>
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/set_site.htm" />
+  <input name="op_title" type="hidden" id="op_title" value="站点设置成功" />
+  <div class="cont">
+    <h1 class="seth1">站点设置</h1>
+    <div class="settab"> <span class="tab-one"></span> <span class="tabs"> <a href="javascript:void(0);" class="this" id="site_base">基本信息</a> | <a href="javascript:void(0);" id="site_other">管理相关</a>|<a href="javascript:void(0);" id="site_service">客服设置</a>| <a href="javascript:void(0);" id="site_qq">QQ互联</a>| <a href="javascript:void(0);" id="site_sina">新浪微博</a>|<a href="javascript:void(0);" id="site_login">登录设置</a></span> <span class="tab-two"></span> </div>
+    <div class="setcont" id="base">
+      <ul class="set1">
+        <li>网站名称</li>
+        <li><span class="webname">
+          <input name="websiteName" type="text" id="websiteName" value="$!config.websiteName" />
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">将显示在前台顶部欢迎等位置</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li>默认语言</li>
+        <li><span class="webname">
+          <label><input type="radio" name="sysLanguage" id="sysLanguage" value="zh_cn" style="border:none; width:auto;" />
+          中文简体</label>
+        </span></li>
+      </ul>
+      <ul class="set1">
+        <li>网站标题</li>
+        <li> <span class="webname">
+          <input name="title" type="text" id="title" value="$!config.title" />
+          </span> <span id="nothis"> <strong class="q"></strong> <strong class="w">将显示在浏览器标题等位置</strong> <strong class="c"></strong> </span></li>
+        <li>网站网址</li>
+        <li> <span class="webname">
+          <input name="addrsss" type="text" id="addrsss" value="$!config.addrsss" />
+          </span> <span id="nothis"> <strong class="q"></strong> <strong class="w">请填写正确的网址，如:#</strong> <strong class="c"></strong> </span></li>  
+        <li>热门搜索</li>
+        <li> <span class="webname">
+          <input name="hotSearch" type="text" id="hotSearch" value="$!config.hotSearch" />
+          </span> <span id="nothis"> <strong class="q"></strong> <strong class="w">显示在搜索框下面 前台点击时直接作为关键词进行搜索 新增多个关键词是用" , "隔开</strong> <strong class="c"></strong> </span> </li>
+        <li>网站LOGO</li>
+        <li> <span class="size13" >
+          <input name="textfield" type="text" id="textfield1" />
+          </span> <span class="filebtn">
+          <input name="button" type="button" id="button1" value=""/>
+          </span> <span style="float:left;" class="file">
+          <input name="websiteLogo" type="file" id="websiteLogo" class="file-text" size="30"/>
+          </span> <span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span> <span id="nothis"><strong class="q"></strong><strong class="w">最佳尺寸:200px * 80px</strong><strong class="c"></strong></span>
+          <div class="bigimgpre" id="logoImg" style="display:none;"><img #if($!config.websiteLogo)src="$!webPath/$!config.websiteLogo.path/$!config.websiteLogo.name"#else src="$!webPath/resources/style/system/front/default/images/logo.png" #end width="200" height="80" id="logoShow2"/> </div>
+        </li>
+        <li>第三方流量统计代码</li>
+        <li><span class="webtj">
+          <textarea name="codeStat" cols="4" rows="6" id="codeStat">$!config.codeStat</textarea>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">设置网站统计代码，复制第三方统计代码到此即可</strong><strong class="c"></strong></span></li>
+        <li>百度分享代码</li>
+        <li><span class="webtj">
+          <textarea name="share_code" cols="4" rows="6" id="share_code">$!config.share_code</textarea>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">请使用百度“图标式”代码风格且保留2个按钮图标</strong><strong class="c"></strong></span></li>
+        <li>站点状态</li>
+        <li> <span class="webSwitch">
+          <input name="websiteState" id="websiteState" type="hidden" value="$!config.websiteState" />
+          <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="websiteState_status"/> </span> <span id="nothis"><strong class="q"></strong><strong class="w">对站点进行管理关闭状态将无法访问但不妨碍后台管理</strong><strong class="c"></strong></span></li>
+        <li>关闭原因</li>
+        <li><span class="webtj">
+          <textarea name="closeReason" cols="4" rows="6" id="closeReason">$!config.closeReason</textarea>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">站点处于关闭状态时，关闭原因显示在前台</strong><strong class="c"></strong></span></li>
+      </ul>
+    </div>
+    <!-- 管理相关 -->
+    <div class="setcont" id="other" style="display:none;">
+      <ul class="set1">
+        <li>允许游客咨询</li>
+        <li> <span class="webSwitch">
+          <input name="visitorConsult" id="visitorConsult" type="hidden" value="$!config.visitorConsult" />
+          <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="visitorConsult_status" style="cursor:pointer" /></span> <span id="nothis"><strong class="q"></strong><strong class="w">是否允许游客在商品的详细展示页面，对当前商品进行咨询</strong><strong class="c"></strong></span> </li>
+        <li>验证码类型</li>
+        <li><span class="use_code"> <label><strong>
+          <input name="securityCodeType" id="securityCodeType1" type="radio" value="normal"/>
+          </strong><strong class="usecode">普通验证码</strong>
+          </label>
+          </span> <span class="use_code">
+          <label>
+          <strong>
+          <input name="securityCodeType" id="securityCodeType2" type="radio" value="voice" />
+          </strong><strong class="usecode">语音验证码</strong>
+          </label>
+          </span> </li>
+        <li>使用验证码</li>
+        <li> <span class="use_code">
+        <label>
+        <strong>
+          <input name="securityCodeRegister_ck" type="checkbox" id="securityCodeRegister_ck" #if($!config.securityCodeRegister==true) checked="checked"#end/>
+          <input name="securityCodeRegister" type="hidden" id="securityCodeRegister" value="$!config.securityCodeRegister" />
+          </strong><strong class="usecode">前台注册</strong>
+         </label>
+          </span> <span class="use_code">
+          <label>
+          <strong>
+          <input name="securityCodeLogin_ck" type="checkbox" id="securityCodeLogin_ck" #if($!config.securityCodeLogin==true) checked="checked"#end/>
+          <input name="securityCodeLogin" type="hidden" id="securityCodeLogin" value="$!config.securityCodeLogin" />
+          </strong><strong class="usecode">前台登陆</strong>
+          </label>
+          </span> 
+          <span class="use_code">
+          <label>
+          <strong>
+          <input name="securityCodeConsult_ck" type="checkbox" id="securityCodeConsult_ck" value="true" #if($!config.securityCodeConsult==true) checked="checked"#end/>
+          <input name="securityCodeConsult" type="hidden" id="securityCodeConsult" value="$!config.securityCodeConsult" />
+          </strong><strong class="usecode">商品咨询</strong>
+          </label>
+          </span></li>
+      </ul>
+    </div>
+    <div class="setcont" id="service" style="display:none;">
+      <ul class="set1">
+        <li>平台客服电话</li>
+        <li><span class="webtj">
+          <textarea name="service_telphone_list" cols="4" rows="6" id="service_telphone_list">$!config.service_telphone_list</textarea>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">设置平台客服电话，一行一个</strong><strong class="c"></strong></span></li>
+        <li>平台客服QQ</li>
+        <li><span class="webtj">
+          <textarea name="service_qq_list" cols="4" rows="6" id="service_qq_list">$!config.service_qq_list</textarea>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">设置平台客服QQ，一行一个</strong><strong class="c"></strong></span></li>
+      </ul>
+    </div>
+    <div class="setcont" id="qq" style="display:none;">
+      <ul class="set1">
+        <li>是否启用qq互联功能</li>
+        <li><span class="webSwitch"><img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="qq_login_status" />
+          <input name="qq_login" type="hidden" id="qq_login" value="$!config.qq_login" />
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">开启后可使用QQ账号登录商城系统</strong><strong class="c"></strong></span></li>
+        <li>域名验证信息</li>
+        <li><span class="webtj">
+          <textarea name="qq_domain_code" cols="" rows="" id="qq_domain_code">$!config.qq_domain_code</textarea>
+          </span></li>
+      <li>应用标识</li>
+        <li><span class="webname">
+          <input name="qq_login_id" type="text" id="qq_login_id" value="$!config.qq_login_id" />
+          </span><span class="atonce"><a href="http://connect.qq.com" target="_blank">立即在线申请</a></span></li>
+        <li>应用密钥</li>
+        <li><span class="webname">
+          <input name="qq_login_key" type="text" id="qq_login_key" value="$!config.qq_login_key" />
+          </span></li>
+      </ul>
+    </div>
+    <div class="setcont" id="sina" style="display:none;">
+      <ul class="set1">
+        <li>是否启用新浪微博互联功能</li>
+        <li><span class="webSwitch"><img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="sina_login_status" />
+          <input name="sina_login" type="hidden" id="sina_login" value="$!config.sina_login" />
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">开启后可使用新浪微博账号登录商城系统</strong><strong class="c"></strong></span></li>
+        <li>域名验证信息</li>
+        <li><span class="webtj">
+          <textarea name="sina_domain_code" cols="" rows="" id="sina_domain_code">$!config.sina_domain_code</textarea>
+          </span></li>
+        <li>应用标识</li>
+        <li><span class="webname">
+          <input name="sina_login_id" type="text" id="sina_login_id" value="$!config.sina_login_id" />
+          </span><span class="atonce"><a href="http://open.weibo.com/index.php" target="_blank">立即在线申请</a></span></li>
+        <li>应用密钥</li>
+        <li><span class="webname">
+          <input name="sina_login_key" type="text" id="sina_login_key" value="$!config.sina_login_key" />
+          </span></li>
+      </ul>
+    </div>
+    <div class="setcont" id="login" style="display:none;">
+      <div class="operation">
+        <h3>友情提示</h3>
+        <ul>
+          <li>该处设置用户前台登录页左侧图片，可上传4张，每次随机显示一张</li>
+        </ul>
+      </div>
+      <ul class="set1">
+       <li>图片1:</li>
+        <li> <span class="size13" >
+          <input name="img0_text" type="text" id="img0_text" />
+          </span> <span class="filebtn">
+          <input name="button" type="button" id="button1" value=""/>
+          </span> <span style="float:left;" class="file">
+          <input name="img0" type="file" id="img0" class="file-text" size="30"/>
+          </span> <span class="preview"> 
+          <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span> <span id="nothis"><strong class="q"></strong><strong class="w">最佳尺寸:490px * 400px</strong><strong class="c"></strong></span>
+          #if($!config.login_imgs.size()>=1) 
+          <div class="bigimgpre" id="logoImg" style="display:none;">
+   		  #if($!config.login_imgs.get(0))
+          #set($imgUrl ="$!webPath/$!config.login_imgs.get(0).path/$!config.login_imgs.get(0).name")
+          #end
+          <img src="$!imgUrl"  width="164" height="42" id="logoShow2"/> 
+          </div>
+           #end
+        </li>
+      
+      
+      
+       <li>图片2:</li>
+        <li> <span class="size13" >
+          <input name="img1_text" type="text" id="img1_text" />
+          </span> <span class="filebtn">
+          <input name="button" type="button" id="button1" value=""/>
+          </span> <span style="float:left;" class="file">
+          <input name="img1" type="file" id="img1" class="file-text" size="30"/>
+          </span> <span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span> <span id="nothis"><strong class="q"></strong><strong class="w">最佳尺寸:490px * 400px</strong><strong class="c"></strong></span>
+           #if($!config.login_imgs.size()>=2) 
+          <div class="bigimgpre" id="logoImg" style="display:none;">
+   		  #if($!config.login_imgs.get(1))
+          #set($imgUrl ="$!webPath/$!config.login_imgs.get(1).path/$!config.login_imgs.get(1).name")
+          #end
+          <img src="$!imgUrl"  width="164" height="42" id="logoShow2"/> 
+          </div>
+           #end
+        </li>
+        
+        
+        <li>图片3:</li>
+        <li> <span class="size13" >
+          <input name="img2_text" type="text" id="img2_text" />
+          </span> <span class="filebtn">
+          <input name="button" type="button" id="button1" value=""/>
+          </span> <span style="float:left;" class="file">
+          <input name="img2" type="file" id="img2" class="file-text" size="30"/>
+          </span> <span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span> <span id="nothis"><strong class="q"></strong><strong class="w">最佳尺寸::490px * 400px</strong><strong class="c"></strong></span>
+          #if($!config.login_imgs.size()>=3) 
+          <div class="bigimgpre" id="logoImg" style="display:none;">
+   		  #if($!config.login_imgs.get(2))
+          #set($imgUrl ="$!webPath/$!config.login_imgs.get(2).path/$!config.login_imgs.get(2).name")
+          #end
+          <img src="$!imgUrl"  width="164" height="42" id="logoShow2"/> 
+          </div>
+           #end
+        </li>
+        <li>图片4:</li>
+        <li> <span class="size13" >
+          <input name="img3_text" type="text" id="img3_text" />
+          </span> <span class="filebtn">
+          <input name="button" type="button" id="button1" value=""/>
+          </span> <span style="float:left;" class="file">
+          <input name="img3" type="file" id="img3" class="file-text" size="30"/>
+          </span> <span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span> <span id="nothis"><strong class="q"></strong><strong class="w">最佳尺寸::490px * 400px</strong><strong class="c"></strong></span>
+          #if($!config.login_imgs.size()>=4) 
+          <div class="bigimgpre" id="logoImg" style="display:none;">
+   		  #if($!config.login_imgs.get(3))
+          #set($imgUrl ="$!webPath/$!config.login_imgs.get(3).path/$!config.login_imgs.get(3).name")
+          #end
+          <img src="$!imgUrl"  width="164" height="42" id="logoShow2"/> 
+          </div>
+           #end
+        </li>
+      
+       
+          
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/>
+  </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(e) {
+	
+	jQuery(".brand_nav_fixed a:first").addClass("this");
+	   jQuery(window).scroll(function(){
+		var top = 0;
+		var id;
+		 top = jQuery(document).scrollTop();
+			 jQuery(".brand_list h2").each(function(){
+		    var top=jQuery(this).offset().top - jQuery(window).scrollTop();
+			if(top<=10 && top>0){
+			  id = jQuery(this).attr("id");
+			  jQuery(".brand_nav_fixed a").removeClass("this");
+			  jQuery("#word_"+id).addClass("this");
+			}
+		  });	
+			
+	});	
+	   
+   /* jQuery("a[id^=ReturnWord_]").click(function(){
+		var mark = jQuery(this).attr("mark");
+		var status = jQuery("#brand_"+mark).attr("status");
+		if(status=="0"){
+		  var t= jQuery(".brand_list_cls").offset().top;
+		  var top = jQuery("#brand_"+mark).offset().top;
+		  var scrolla=jQuery(window).scrollTop();
+		  var i=t-scrolla;
+		 if(i>0){
+			 top = top-20;
+		  }
+		  var height =jQuery("#float_box").height(); 
+		  var i=top-height-30;
+		  jQuery(window).scrollTop(i);
+		  }
+	}); */
+	
+
+});
+</script>
+</head>
+<body>
+<div class="phone_hd">
+<a class="back" href="javascript:history.go(-1);"><img src="$!webPath/resources/style/system/front/wap/images/back.png" width="25" height="25"></a>
+品牌街
+<a class="menu home" href="$!webPath/wap/index.htm"><img src="$!webPath/resources/style/system/front/wap/images/home.png" width="25" height="25"></a>
+</div>
+<div class="phone_main">
+
+  <div class="brand_page">
+    
+      <div class="brand_recommend">
+        <h1><span class="fl">推荐品牌</span></h1>
+        <div class="brand_recommend_box"> 
+        #foreach($gb in $gbs) 
+        <span><a href="$!webPath/brand_goods_$!{gb.id}.htm" target="_blank"><b><img src="$!imageWebServer/$!gb.brandLogo.path/$!gb.brandLogo.name" /></b><!-- <em>$!gb.name</em> --></a></span> 
+        #end 
+        </div>
+      </div>
+      
+      <div class="brand_list"> 
+        #foreach($list in $all_list)
+	        #if($!list.get("brand_list").size()>0)
+	        <h2 id="brand_$!{list.get('word')}" status="0">$!list.get("word")</h2>
+	        <ul> 
+		        #foreach($gb in $!list.get("brand_list")) 
+		        <li>
+		        <a href="$!webPath/brand_goods_$!{gb.id}.htm"><span class="lg"><img src="$!webPath/$!gb.brandLogo.path/$!gb.brandLogo.name" height="66" width="142"/></span><p class="name">$!gb.name</p></a>
+		        </li> 
+		        #end 
+	        </ul>
+	        #end
+        #end 
+      </div>
+      
+      <!--右侧字母-->
+	  <!-- <div class="brand_nav_fixed">
+	  	#foreach($list in $all_list) <a href="javascript:void(0);" id="ReturnWord_$!{list.id}" mark="$!{list.get('word')}">$!list.get("word")</a> #end 
+	  </div> -->
+    
+  </div>
+  
+</div>
+ $!httpInclude.include("/footer.htm")
+</body>
+</html>

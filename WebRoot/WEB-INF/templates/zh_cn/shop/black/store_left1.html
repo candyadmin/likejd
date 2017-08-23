@@ -1,0 +1,79 @@
+<script>
+jQuery(function(jQuery){
+  jQuery(".collection a").click(function(){
+    #if($!user)
+     #if($!user.id==$!obj.goods_store.user.id)
+	   alert("不能收藏自己的店铺");
+	 #else
+	   jQuery.post("$!webPath/add_store_favorite.htm",{"id":"$!store.id"},function(data){
+		 if(data==0){
+		     alert("店铺收藏成功！");
+		 }
+		 if(data==1){
+		    alert("该店铺已经被收藏！");
+		 }
+	   },"text");
+	 #end
+   #end
+  });
+  //
+  jQuery("span[id^=ugc_]").css("cursor","pointer").click(function(){
+     var ugc_type=jQuery(this).attr("ugc_type");
+	 var ugc_id=jQuery(this).attr("ugc_id");
+	 if(ugc_type=="show"){
+	    jQuery(this).find("img").attr("src","$!webPath/resources/style/shop/$!{store.template}/images/add.jpg");
+		jQuery("#ugc_child_"+ugc_id).hide();
+	    jQuery(this).attr("ugc_type","hide");
+	 }else{
+	    jQuery(this).find("img").attr("src","$!webPath/resources/style/shop/$!{store.template}/images/add2.jpg");
+		jQuery("#ugc_child_"+ugc_id).show();
+	    jQuery(this).attr("ugc_type","show");
+	 }
+  });
+  //
+});
+</script>
+
+<div class="shopindex_left">
+  <div class="shopclassify">
+    <h1>商品分类</h1>
+    <ul class="shopcul">
+      <li><span><img src="$!imageWebServer/resources/style/shop/$!{store.template}/images/add2.jpg" width="15" height="15" /></span><a href="$!webPath/goods_list.htm?store_id=$!{store.id}" class="oneclass">所有商品</a> </li>
+      #foreach($ugc in $ugcs)
+      #if($!ugc.display)
+      <li><span id="ugc_$!{ugc.id}" ugc_type="show" ugc_id="$!ugc.id"><img src="$!imageWebServer/resources/style/shop/$!{store.template}/images/add2.jpg" width="15" height="15" /></span><a href="$!webPath/goods_list.htm?gc_id=$!{ugc.id}&store_id=$!{store.id}" class="oneclass">$!ugc.className</a> #if($! $ugc.childs.size()>0)
+        <ul id="ugc_child_$!{ugc.id}">
+          #foreach($cugc in $ugc.childs)
+          #if($!cugc.display)
+          <li><a href="$!webPath/goods_list.htm?gc_id=$!{cugc.id}&store_id=$!{store.id}">$!cugc.className</a></li>
+          #end
+          #end
+        </ul>
+        #end </li>
+      #end
+      #end
+    </ul>
+  </div>
+    <form action="$!webPath/store_goods_search.htm" method="post" id="store_search_form">
+    <div class="shopsearch">
+      <ul>
+        <li><span class="searspan">关键字：</span><span class="shopsear1">
+          <input name="keyword" type="text" id="keyword" />
+          </span></li>
+        <li><span class="searspan">&nbsp;</span><span class="searbtns">
+          <input name="input2" type="submit"  value="搜索"  style="cursor:pointer;"/>
+          </span>
+          <input name="store_id" type="hidden" id="store_id" value="$!store.id" />
+        </li>
+      </ul>
+    </div>
+  </form>
+  <div class="shopf">
+    <h1>友情链接</h1>
+    <ul>
+      #foreach($partner in $partners)
+      <li><a href="$!partner.url" target="_blank">$!partner.title</a></li>
+      #end
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>好友管理 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+function friend_del(id){
+ if(confirm("删除后不可恢复，是否继续?")){	
+  jQuery.post("$!webPath/buyer/friend_del.htm",{"id":id},function(){
+     window.location.reload();
+  },"text");
+ }
+}
+</script>
+</head>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/buyer/head.htm")
+  <form method="post" id="ListForm">
+    <div class="user_center">
+      <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+        <tr> $!httpInclude.include("/buyer/account_nav.htm?op=friend")
+          <td id="centerbg" valign="top">
+          <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">我的账户</a> > <span>好友列表</span></div></div>
+          <div class="productmain">
+              <div class="pdctitle blue2">好友列表</div>
+              <div class="alldel">
+                <div class="right"><a href="$!webPath/buyer/friend_add.htm"  class="button_common">添加好友</a></div>
+              </div>
+              #foreach($obj in $objs)
+              <div class="operation">
+                <div class="addrien">
+                  <div class="addfriend">
+                    <div class="friendadd"> 
+                    #if($!user.photo)
+			          #set($img="$!webPath/$!user.photo.path/$!user.photo.name")
+			        #else 
+			          #set($img="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+			        #end
+                    <span class="headimg"><img src="$!img" width="54" height="54" /></span>
+                      <ul>
+                        <li class="frid"><span class="green">$!obj.toUser.userName</span></li>
+                        <li class="frid2"><span class="webemail"><a href="$!webPath/buyer/message_send.htm?userName=$!obj.toUser.userName">站内信</a></span><span class="del"><a href="javascript:void(0);" onclick="friend_del('$!obj.id');">删除</a></span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              #end
+              <div class="alldel">  
+                  <div  class="userfenye">
+                    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                    $!gotoPageFormHTML</div>
+                </div>
+            </div></td>
+        </tr>
+      </table>
+    </div>
+  </form>
+     $!httpInclude.include("/footer.htm")
+</div>
+
+</body>
+</html>

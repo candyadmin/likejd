@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">广告管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/advert_list.htm">所有广告</a>| <a href="$!webPath/admin/advert_list_audit.htm" class="this">未审核广告</a> | <a href="$!webPath/admin/advert_add.htm" >新增广告</a>| <a href="$!webPath/admin/adv_pos_list.htm">所有广告位</a>| <a href="$!webPath/admin/adv_pos_add.htm">新增广告位</a> </span> <span class="tab-two"></span></div>
+  <form method="post" id="queryForm">
+  <div class="orders">
+    <ul>
+      <li><span>广告名称</span> <span class="allmen size6">
+        <input name="ad_title" type="text" id="ad_title" />
+        </span><span class="btn_search">
+        <input name="" type="submit"  value="搜索" style="cursor:pointer;" />
+        </span></li>
+    </ul>
+  </div>
+  </form>
+  <form method="post" id="ListForm">
+  <div class="allshop_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="yhj_table">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+       <td width="18%">广告名称</td>
+        <td  width="18%">所属广告位</td>
+        <td  width="8%" align="center">类别</td>
+        <td  width="8%" align="center">开始时间</td>
+        <td  width="8%" align="center">结束时间</td>
+        <td  width="8%" align="center"><span class="djl">点击率</span></td>
+        <td  width="8%">广告用户</td>
+        <td  align="center">操作</td>
+      </tr>
+      #foreach($obj in $objs)
+      <tr>
+        <td>$!obj.ad_title</td>
+        <td >$!obj.ad_ap.ap_title</td>
+       #if($!obj.ad_ap.ap_type=="img")
+          #set($type="图片")
+        #end
+        #if($!obj.ad_ap.ap_type=="scroll")
+          #set($type="滚动")
+        #end
+        #if($!obj.ad_ap.ap_type=="slide")
+          #set($type="幻灯")
+        #end
+        #if($!obj.ad_ap.ap_type=="wapslide")
+          #set($type="wap幻灯")
+        #end
+        #if($!obj.ad_ap.ap_type=="indexslide")
+          #set($type="首页幻灯")
+        #end
+        #if($!obj.ad_ap.ap_type=="text")
+          #set($type="文字")
+        #end 
+        <td align="center">$!type</td>
+        <td align="center">$!obj.ad_begin_time</td>
+        <td align="center">$!obj.ad_end_time</td>
+        <td align="center" class="blue">$!obj.ad_click_num</td>
+        <td >$!obj.ad_user.userName</td>
+        <td  align="center" class="aoprater"><a href="$!webPath/admin/advert_view.htm?id=$!obj.id&currentPage=$!currentPage" class="blue">审核</a>|<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/admin/advert_del.htm?mulitId=$!obj.id'" class="blue">删除</a></td>
+      </tr>
+      #end
+      <tr style="background:#F2F2F2; height:30px;">
+        <td colspan="8"><div class="fenye3">
+          <input name="ad_status" type="hidden" id="ad_status" value="$!ad_status" />
+          <input name="ad_title" type="hidden" id="ad_title" value="$!ad_title" />
+          <input type="hidden" name="mulitId" id="mulitId" />
+<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+          $!gotoPageFormHTML</div></td>
+      </tr>
+    </table>
+  </div>
+  </form>
+</div>
+</body>
+</html>

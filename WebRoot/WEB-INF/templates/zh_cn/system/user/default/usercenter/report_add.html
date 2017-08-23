@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>举报商品 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+     rules: {
+		    type_id:{
+			     required:true
+			    },
+			subject_id:{
+			     required:true
+			    },
+			 content:{
+			    required:true
+			 }
+			},
+     messages: {
+		   type_id:{
+			     required:"举报类型不能为空"
+			    },
+			subject_id:{
+			    required: "举报主题不能为空"	   
+			  },
+			content:{
+			    required:"举报内容不能为空"
+				}
+		  }
+  }); 
+  jQuery("#type_id").change(function(){
+     var type_id=jQuery(this).val();
+	 jQuery.post("$!webPath/buyer/report_subject_load.htm",{"type_id":type_id},function(data){
+		 jQuery("#subject_id option:gt(0)").remove();
+	     jQuery.each(data, function(index,item){
+			 jQuery("#subject_id").append("<option value='"+item.id+"'>"+item.title+"</option>");
+		 });
+	  },"json");
+  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/buyer/head.htm")
+    <div class="user_center">
+      <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+        <tr> $!httpInclude.include("/buyer/nav.htm?op=report")
+          <td id="centerbg" valign="top">
+          <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/index.htm">买家中心</a> > <span>举报商品</span></div></div>
+          <div class="productmain">
+              <div class="ordernav">
+                <ul class="orderul">
+                  <li><a href="$!webPath/buyer/report.htm">举报列表</a></li>
+                  <li class="this">举报商品</li>
+                </ul>
+              </div>
+              <div class="ordercon">
+                <div class="addnav">
+                  <form action="$!webPath/buyer/report_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+                    <table width="705" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                      <tr>
+                        <td width="100" align="right" valign="top">举报商品：</td>
+                        <td class="px10 message"><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank">$!{goods.goods_name}
+                          <input name="goods_id" type="hidden" id="goods_id" value="$!goods.id" />
+                          </a></td>
+                      </tr>
+                      <tr>
+                        <td width="100" align="right" valign="top"><span style="color:#F00">*</span>举报类型：</td>
+                        <td class="px10 message"><select name="type_id" id="type_id">
+                            <option value="">请选择举报类型</option>
+                            
+                 
+                      #foreach($type in $types)
+                      
+                 
+                            <option value="$!type.id">$!type.name</option>
+                            
+                 
+                      #end
+                    
+               
+                          </select></td>
+                      </tr>
+                      <tr>
+                        <td align="right" valign="top"><span style="color:#F00">*</span>举报主题：</td>
+                        <td class="px10"><select name="subject_id" id="subject_id">
+                            <option value="">请选择举报主题</option>
+                          </select></td>
+                      </tr>
+                      <tr>
+                        <td align="right" valign="top">取证图片1：</td>
+                        <td class="px10"><label>
+                            <input type="file" name="img1" id="img1" />
+                          </label></td>
+                      </tr>
+                      <tr>
+                        <td align="right" valign="top">取证图片2：</td>
+                        <td class="px10"><input type="file" name="img2" id="img2" /></td>
+                      </tr>
+                      <tr>
+                        <td align="right" valign="top">取证图片3：</td>
+                        <td class="px10"><input type="file" name="img3" id="img3" /></td>
+                      </tr>
+                      <tr>
+                        <td align="right" valign="top"><span style="color:#F00">*</span>举报内容：</td>
+                        <td class="px10"><textarea name="content" id="content" cols="45" rows="6" style="width:400px;"></textarea></td>
+                      </tr>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td class="px10"><span class="setsub">
+                          <input name="提交" type="submit"  value="确认举报"  style="cursor:pointer;"/>
+                          </span></td>
+                      </tr>
+                    </table>
+                  </form>
+                </div>
+              </div>
+            </div></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

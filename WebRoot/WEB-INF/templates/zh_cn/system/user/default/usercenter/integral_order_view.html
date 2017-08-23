@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>积分兑换详情 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">$!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr> $!httpInclude.include("/buyer/nav.htm?op=integral")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/index.htm">买家中心</a> > <span>兑换详情</span></div></div>
+          <div class="ordernav">
+            <ul class="orderul">
+              <li><a href="$!webPath/buyer/integral_order_list.htm">兑换记录</a></li>
+              <li class="this">兑换详情</li>
+            </ul>
+          </div>
+          <div class="ordercon">
+            <div class="exchane_one">
+              <h3>兑换信息</h3>
+              <ul class="exchane_oneul">
+                <li><span>兑换单号：</span><i><strong class="orange">$!{obj.igo_order_sn}</strong></i></li>
+                #if($!obj.igo_status==-1)
+                  #set($status="已取消")
+                #end
+                #if($!obj.igo_status==0)
+                  #set($status="待付款")
+                #end
+                #if($!obj.igo_status==10)
+                  #set($status="线下支付待审核")
+                #end
+                #if($!obj.igo_status==20)
+                  #set($status="已付款，待发货")
+                #end
+                #if($!obj.igo_status==30)
+                  #set($status="已发货")        
+                #end                
+                #if($!obj.igo_status==40)
+                #set($status="已收货完成")
+                #end     
+                <li><span>状态：</span><i>$!status</i></li>
+                <li><span>兑换积分：</span><i>$!{obj.igo_total_integral}</i></li>
+                <li><span>运费：</span><i>$!{obj.igo_trans_fee}</i></li>
+                <li class="exchane_width"><span>兑换时间：</span><i>$!CommUtil.formatShortDate($!obj.addTime)</i></li>
+              </ul>
+              <h3>会员信息</h3>
+              <ul class="exchane_oneul">
+                <li><span>会员名称：</span><i>$!{obj.igo_user.userName}</i></li>
+                <li><span>会员Email：</span><i>$!{obj.igo_user.email}</i></li>
+              </ul>
+              <ul class="exchange_txt">
+                <li class="exchane_width"><span>留言：</span><em>$!{obj.igo_msg}</em></li>
+              </ul>
+              <h3>支付信息</h3>
+              <ul class="exchane_oneul">
+                 #if($!obj.igo_payment=="alipay")
+                  #set($payment="支付宝")
+                  #end
+                  #if($!obj.igo_payment=="tenpay")
+                     #set($payment="财付通")
+                    #end
+                  #if($!obj.igo_payment=="bill")
+                  #set($payment="快钱")
+                  #end                 
+                  #if($!obj.igo_payment=="chinabank")
+                  #set($payment="网银在线")
+                  #end       
+                  #if($!obj.igo_payment=="outline")
+                  #set($payment="线下支付")
+                  #end                  
+                  #if($!obj.igo_payment=="balance")
+                  #set($payment="预存款支付")
+                  #end 
+                  #if($!obj.igo_payment=="no_fee")
+                  #set($payment="无运费订单")
+                  #end 
+                  #if(!$!obj.igo_payment)
+                  #set($payment="未支付")
+                  #end
+                <li><span>支付方式：</span><i>$!payment</i></li>
+                <li><span>支付时间：</span><i>$!CommUtil.formatLongDate($!obj.igo_pay_time)</i></li>
+                <li><span>支付留言：</span><i>$!obj.igo_pay_msg</i></li>
+              </ul>
+              <h3>收货人及发货信息</h3>
+              <ul class="exchane_oneul">
+                <li><span>收货人：</span><i>$!{obj.igo_addr.trueName}</i></li>
+                <li><span>所在地区：</span><i>$!{obj.igo_addr.area.parent.parent.areaName} $!{obj.igo_addr.area.parent.areaName} $!{obj.igo_addr.area.areaName}</i></li>
+                <li><span>邮政编码：</span><i>$!{obj.igo_addr.zip}</i></li>
+              </ul>
+              <ul class="exchange_txt">
+                <li class="exchane_width"><span>详细地址：</span><em>$!{obj.igo_addr.area_info}</em></li>
+              </ul>
+              <ul class="exchane_oneul">
+                <li><span>电话号码：</span><i>$!{obj.igo_addr.telephone}</i></li>
+                <li><span>手机号码：</span><i>$!{obj.igo_addr.mobile}</i></li>
+                #if($!obj.igo_ship_time)
+                <li><span>发货时间：</span><i>$!CommUtil.formatLongDate($!{obj.igo_ship_time})</i></li>
+                #end
+                #if($!obj.igo_ship_code)
+                <li><span>物流单号：</span><i>$!{obj.igo_ship_code}</i></li>
+                #end
+                 #if($!obj.igo_ship_content)
+                <li><span>发货说明：</span><i>$!{obj.igo_ship_content}</i></li>
+                #end
+              </ul>
+            </div>
+            <div class="exchange_w">
+              <table width="775" border="0" cellspacing="0" cellpadding="0" class="exchane_table">
+                <tr class="extable_bg">
+                  <td width="100">&nbsp;</td>
+                  <td width="430">礼品信息</td>
+                  <td width="130" align="center">兑换积分</td>
+                  <td align="center">兑换数量</td>
+                </tr>
+                #foreach($gc in $obj.igo_gcs)
+                <tr class="extable_trlist">
+                    #if($!gc.goods.ig_goods_img)
+                      #set($img="$!webPath/$!{gc.goods.ig_goods_img.path}/$!{gc.goods.ig_goods_img.name}_small.$!{gc.goods.ig_goods_img.ext}")
+                    #else
+                      #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                    #end
+                  <td align="center" valign="middle"><img src="$!img" width="60"  height="60"/></td>
+                  <td align="left" valign="middle"><a href="$!webPath/integral_view_$!{gc.goods.id}.htm" target="_blank" class="blue2">$!gc.goods.ig_goods_name</a></td>
+                  <td align="center">$!gc.count</td>
+                  <td align="center">$!gc.integral</td>
+                </tr>
+                #end
+              </table>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

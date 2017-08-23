@@ -1,0 +1,44 @@
+﻿<script>
+function search_form(){
+  var keyword=arguments[0];
+  var type=arguments[1];
+  if(keyword!=""&&keyword!=undefined){
+   jQuery("#keyword").val(keyword);
+  }
+  if(type!=""&&type!=undefined){
+    jQuery("#type").val(type);
+  }
+  jQuery("#searchtheForm").submit();	
+  jQuery("#keyword").val("");
+}
+
+function queryInSite(){
+	jQuery("form").attr("action","$!webPath/search.htm").attr("id","searchForm");
+	jQuery("#searchForm").submit();
+	}
+function querySpare(){
+	jQuery("form").attr("action","$!webPath/sparegoods_search.htm").attr("id","searchtheForm");
+	jQuery("#searchtheForm").submit();
+	}
+</script>
+
+<form action="$!webPath/sparegoods_search.htm" method="post" id="searchtheForm">
+<div class="head">
+        <div class="logo">
+        	#if($!config.websiteLogo)<a href="$!webPath/index.htm"><img src="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name" border="0" /></a> #else
+ <a href="$!webPath/index.htm"><img src="$!imageWebServer/resources/style/system/front/default/images/logo.png" border="0" /></a>
+ #end
+        </div>
+    <div class="bigsearch">
+          <div class="search_box">
+          <span class="search_box_sp"> <input name="keyword" type="text" id="keyword" value="$!keyword" placeholder="这里就可以找到您需要的二手商品！" /></span>
+           <input type="submit" onclick="querySpare()" class="search_btn_a" value="搜二手" style="cursor:pointer;"/>
+            <input type="button" onclick="queryInSite()" class="search_btn_b" value="搜全站" style="cursor:pointer;"/>
+          </div>
+          
+          <div class="keyword">
+          #foreach($info in $CommUtil.splitByChar("$!config.hotSearch",",")) <a href="javascript:void(0);" onclick="search_form('$info','goods');">$!info</a> #end
+          </div>
+        </div>
+  </div>
+  </form>

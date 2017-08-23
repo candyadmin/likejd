@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>shopping多用户商城$!{version}正式版 - 系统安装程序</title>
+<meta name="generator" content="shopping 1.3" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/common/css/install.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+   #if($!test_data=="true")
+   jQuery.ajax({type:'POST',url:'$!webPath/install_init_test.htm',async:false,data:{"title":"$!title","pws":"$!pws"},success:function(data){
+	   if(data=="true"){
+		  jQuery("#test_status").attr("src","$!webPath/resources/style/system/front/default/images/install/install_ok.jpg");
+		  jQuery(".instal_step i").removeClass("this");
+		  jQuery("i[id=finsish]").addClass("this");
+		  jQuery("#install_process").hide();
+		  jQuery("#install_success").show();
+		}else{
+	      jQuery("#test_status").attr("src","$!webPath/resources/style/system/front/default/images/install/install_error.jpg");
+		}
+	}});
+   #end
+ #if($!{test_data}=="")
+   jQuery.ajax({type:'POST',url:'$!webPath/install_init_base.htm',data:{"title":"$!title","pws":"$!pws"},async:false,success:function(data){
+	   if(data=="true"){
+		  jQuery("#base_status").attr("src","$!webPath/resources/style/system/front/default/images/install/install_ok.jpg");
+		  jQuery(".instal_step i").removeClass("this");
+		  jQuery("i[id=finsish]").addClass("this");
+		  jQuery("#install_process").hide();
+		  jQuery("#install_success").show();
+		}else{
+	      jQuery("#base_status").attr("src","$!webPath/resources/style/system/front/default/images/install/install_error.jpg");
+		}
+	}});
+  #end  
+});
+</script>
+</head>
+<body>
+<div class="install_head"> </div>
+<div class="install">
+  <div class="install_box" >
+    <div class="install_box_top"></div>
+    <div class="install_box_logo"><span class="install_edition">$!{version}版本</span>
+      <div class="install_logo"><img src="$!webPath/resources/style/common/images/install/ins_logo.png" width="197" height="49" /></div>
+      <span class="install_t">安装向导</span></div>
+    <div class="install_box_bg">
+      <div class="install_conent">
+        <div class="instal_step"> <span><i>1</i><b>注册软件</b></span> <span><i class="this">2</i><b>创建数据</b></span> <span><i id="finsish">3</i><b>完成安装</b></span> </div>
+        <div class="insprogess"><span class="insprogess_b"></span></div>
+        <div class="install_software_box" id="install_process">
+          <ul class="install_ul">
+            #if($!test_data=="true")
+            <li><span><img src="$!webPath/resources/style/common/images/loader.gif" width="28" height="28" id="test_status" /></span>正在安装测试数据...</li>
+            #end
+            #if($!test_data=="")
+            <li><span><img src="$!webPath/resources/style/common/images/loader.gif" width="28" height="28" id="base_status" /></span>正在安装基础数据...</li>
+            #end
+          </ul>
+        </div>
+        <div class="install_software_box" id="install_success" style="display:none;">
+          <ul class="install_ul2">
+            <li><span class="install_green"> 恭喜您已经安装完成</span></li>
+            <li> 建议：安装成功后删除WEB-INF\templates\install目录！</li>
+            <li> 如安装演示数据，演示用户名为shopping,密码为123456！</li>
+            <li>商城前台地址：<a href="$!shop_url" target="_blank">$!shop_url</a></li>
+            <li>商城后台地址：<a href="$!shop_manage_url" target="_blank">$!shop_manage_url</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ins_box_botm"></div>
+  </div>
+</div>
+<div class="install_foot">
+  <div class="install_foot_box">
+  </div>
+</div>
+</body>
+</html>

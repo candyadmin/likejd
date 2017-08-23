@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style"
+	content="black-translucent">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+<script>
+	jQuery(document).ready(function(e) {
+		jQuery(".category_center_list li").click(
+			function() {
+				var id = jQuery(this).attr("id");
+				var mark = jQuery(this).attr("mark");
+				if (mark == "true") {
+					jQuery(this).find("img")
+							.attr("src", "$!webPath/resources/style/system/front/wap/images/search_on_bg.png");
+					jQuery("#class2_" + id).fadeOut();
+					jQuery(this).attr("mark","false");
+				} else {
+					jQuery(this).find("img")
+							.attr("src", "$!webPath/resources/style/system/front/wap/images/search_off_bg.png");
+					jQuery("#class2_" + id).fadeIn();
+					jQuery(this).attr("mark", "true");
+				}
+			})
+		});
+</script>
+</head>
+
+<body class="index_bg">
+	<div class="phone_hd">
+		<a class="back" href="javascript:history.go(-1);"><img
+			src="$!webPath/resources/style/system/front/wap/images/back.png"
+			width="25" height="25"></a>商品分类<a class="menu home" href="$!webPath/wap/index.htm"><img
+			src="$!webPath/resources/style/system/front/wap/images/home.png"
+			width="25" height="25"></a>
+	</div>
+	<div class="category">
+		<div class="category_center">
+			<div class="category_center_list">
+				<ul>
+					#foreach($gc in $!gcs)
+					<li id="$!{gc.id}" mark="false">
+						<div class="category_center_list_left">$!gc.className</div> 
+						<i>
+						<img src="$!webPath/resources/style/system/front/wap/images/search_on_bg.png">
+						</i>
+					</li>
+					<div class="category_center_list_right" style="display: none;" id="class2_$!{gc.id}">
+					   	#foreach($gc1 in $gc.childs)
+                    		#foreach($gc2 in $gc1.childs)
+								<span>
+									<a href="$!webPath/store_goods_list_$!{gc2.id}.htm">$!gc2.className</a>
+								</span>
+							#end
+                     	#end
+					</div>
+					#end
+				</ul>
+			</div>
+		</div>
+ $!httpInclude.include("/footer.htm")
+
+
+
+</body>
+</html>

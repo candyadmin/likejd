@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>礼品列表 - 积分商城 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/integral.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/integral_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script src="$!webPath/resources/js/jquery.KinSlideshow.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#rang_ul").find("li a").click(function(){
+	var begin =	jQuery(this).attr("begin");
+	var end = jQuery(this).attr("end");
+	jQuery("#rang_begin").val(begin);
+	jQuery("#rang_end").val(end);
+	jQuery("#ListForm").submit();
+		});	
+	jQuery("#orderType").change(function(){
+		jQuery("#ListForm").submit();
+		});
+	#if($!orderBy!="addTime")
+	jQuery("#orderType").val("$!orderType");
+	#end
+	jQuery("#rank_ul").find("li").mouseover(function(){
+		jQuery(this).parent().find("li").removeClass("this");
+		jQuery(this).addClass("this");
+		});	
+   jQuery(".goods_img img").lazyload({effect:"fadeIn",width:160,height:160});
+});
+</script>
+</head>
+
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="integral_right">
+      <div class="inte_top">
+        <div class="inte_silder"> 
+          <script src="$!webPath/advert_invoke.htm?id=229376"></script> 
+        </div>
+        <script src="$!webPath/advert_invoke.htm?id=262155"></script> 
+      </div>
+      <div class="integral_select_box">
+        <dl class="integral_select">
+          <dt><span>积分选择区</span></dt>
+          <dd>
+            <ul id="rang_ul">
+              <li #if(!$!rang_begin) class="this" #end><a href="$!webPath/integral_list.htm" >全部</a></li>
+              <li #if($!rang_begin==0) class="this" #end><a href="javascript:void(0);" begin="0" end="1999">1999分以下</a></li>
+              <li #if($!rang_begin==2000) class="this" #end><a href="javascript:void(0);" begin="2000" end="3999">2000分~3999分</a></li>
+              <li #if($!rang_begin==4000) class="this" #end><a href="javascript:void(0);" begin="4000" end="5999">4000分~5999分</a></li>
+              <li #if($!rang_begin==6000) class="this" #end><a href="javascript:void(0);" begin="6000" end="9999">6000分~9999分</a></li>
+              <li #if($!rang_begin==10000) class="this" #end><a href="javascript:void(0);" begin="10000" end="0">10000分以上</a></li>
+            </ul>
+          </dd>
+        </dl>
+      </div>
+      <form id="ListForm" method="post">
+      <div class="exchange_goods">
+        <h4><b></b><span>全部兑换商品</span><em></em></h4>
+        <div class="exchage_sort">
+        <i>当前位置：
+        #if(!$!rang_begin)全部#end
+         #if($!rang_begin==0)1999分以下#end
+         #if($!rang_begin==2000)2000分~3999分#end
+         #if($!rang_begin==4000)4000分~5999分#end
+         #if($!rang_begin==6000)6000分~9999分#end
+         #if($!rang_begin==10000)10000分以上#end
+        </i>
+        <span><b>排序:</b>
+          <select  id="orderType" name="orderType">
+            <option value="">默认排序</option>
+            <option value="asc">积分从低到高</option>
+            <option value="desc">积分从高到低</option>
+          </select>
+          </span></div>
+         #if($!objs) 
+        <div class="exc_list">
+          #foreach($obj in $objs)
+           #if($!obj.ig_goods_img)
+           #set($img="$!imageWebServer/$!{obj.ig_goods_img.path}/$!{obj.ig_goods_img.name}_small.$!{obj.ig_goods_img.ext}")
+         #else
+           #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+         #end
+          <ul class="goods_one">
+            <li class="goods_img"><a href="$!webPath/integral_view_$!{obj.id}.htm"><img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28"/></a></li>
+            <li class="goods_name"><a href="$!webPath/integral_view_$!{obj.id}.htm">$!obj.ig_goods_name</a></li>
+            <li class="goods_market">市场价格:¥$!{obj.ig_goods_price}</li>
+            <li class="goods_want"><a href="$!webPath/integral_exchange1.htm?id=$!{obj.id}">我要兑换</a><strong>$!{obj.ig_goods_integral}分</strong></li>
+          </ul>
+          #end
+        </div>
+     
+        #else
+        <div class="starshop_list">
+              <div class="sigh" style="clear:both; margin:60px auto;"> <span><img src="$!imageWebServer/resources/style/system/front/default/images/sigh.png" width="120" height="109" /></span> <b>对不起，没有对应的数据!</b> </div>
+            </div>
+        #end
+           <div class="ext_page"> 
+         <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+          <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+          <input name="rang_begin" type="hidden" id="rang_begin" value="$!rang_begin" />
+          <input name="rang_end" type="hidden" id="rang_end" value="$!rang_end" />
+        <span>$!gotoPageFormHTML </span></div>
+      </div>
+      </form>
+    </div>
+    <div class="integral_left">
+      <div class="inte_login">
+        <div class="inte_in_login">
+          <div class="inte_bg">
+            <h3>商城积分信息</h3>
+            <ul class="intlogul">
+              <li class="inthui">登录显示积分情况</li>
+              #if(!$!user)
+              <li class="intlogin"> <a href="javascript:void(0);" dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="450" dialog_height="100" dialog_id="user_login">会员登录</a> </li>
+              #else
+              <li class="intlogined"><span>您的积分是<strong>$!user.integral</strong>分</span> <span><a href="$!webPath/integral_exchange1.htm"> 已选择兑换礼品<i>$!CommUtil.null2Int($!{integral_cart.size()})</i>个</a></span></li>
+              #end
+            </ul>
+            <ul class="explainul">
+              <li><a href="$!webPath/article_integralrule.htm" target="_blank">积分细则</a></li>
+              <li><a href="$!webPath/article_exchange.htm" target="_blank">积分兑换说明</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="exchange">
+        <h3>兑换排行榜</h3>
+        <ul id="rank_ul">
+          #foreach($obj in $exchange_igs)
+          #if($!{velocityCount}<=3)
+          <li id="$!obj.id"> <i> <strong class="imgcenter_span "> #if($!obj.ig_goods_img)
+            #set($img="$!imageWebServer/$!{obj.ig_goods_img.path}/$!{obj.ig_goods_img.name}_small.$!{obj.ig_goods_img.ext}")
+            #else
+            #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+            #end
+            <p><a href="$!webPath/integral_view_$!{obj.id}.htm" target="_blank"><img src="$!img" width="103" height="103" /></a></p>
+            </strong> <b>$!velocityCount</b> </i>
+            <h2><a href="$!webPath/integral_view_$!{obj.id}.htm" target="_blank">$!obj.ig_goods_name</a></h2>
+            <span class="market ">市场价格:¥$!{obj.ig_goods_price}</span> <span class="integral">兑换积分: <strong>$!{obj.ig_goods_integral}</strong> 分</span> <span class="integral">兑换数量: <strong>$!obj.ig_exchange_count</strong> 个</span> </li>
+          #else
+          <li><ahref="$!webPath/integral_view_$!{obj.id}.htm"><var><strong>$!{obj.ig_goods_integral}</strong>分</var><em><a href="$!webPath/integral_view_$!{obj.id}.htm" target="_blank">$!CommUtil.substring("$!obj.ig_goods_name",14)</em></a></li>
+          #end
+          #end
+        </ul>
+      </div>
+      <div class="integ_enjoy">
+        <h3></h3>
+        <script src="$!webPath/advert_invoke.htm?id=262156"></script></div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

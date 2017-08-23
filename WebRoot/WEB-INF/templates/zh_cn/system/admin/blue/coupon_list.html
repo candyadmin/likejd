@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+#if($!some.level>0)
+#foreach($count in [-1..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<!--[if IE]>
+<style type="text/css">
+.input{behavior: url($!webPath/resources/style/common/css/ie-css3.htc);}
+</style>
+<![endif]-->
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+ jQuery('#coupon_begin_time').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#coupon_end_time').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+});
+//
+function ajax_update(id,fieldName,obj,value){
+   var val;
+   if(value==undefined){
+	 val=jQuery(obj).val();
+   }else val=value; 
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/coupon_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }    
+				 if(value!=undefined){
+				   jQuery(obj.parentNode.parentNode).remove();
+				 }
+              }
+	    });
+}
+</script>
+</head>
+<body scroll="yes">
+<div class="cont">
+  <h1 class="seth1">优惠券管理</h1>
+  <div class="settab"> 
+	<span class="tab-one"></span> <span class="tabs"> 
+	<a href="$!webPath/admin/coupon_list.htm" class="this">所有优惠券</a>|<a href="$!webPath/admin/coupon_add.htm">新增优惠券</a></span> 
+  <span class="tab-two"></span>	</div>
+	<form name="queryForm" id="queryForm" action="" method="post">
+    <div class="allmem_search">
+      <ul>
+        <li> <span>优惠券名称</span> <span class="allmen size4">
+          <input name="coupon_name" type="text" id="coupon_name" />
+          </span> <span>使用时限</span><span class="allmen size4">
+          <input name="coupon_begin_time" type="text" id="coupon_begin_time" />
+          -
+          </span><span class="allmen size4">
+          <input name="coupon_end_time" type="text" id="coupon_end_time" />
+          </span><span class="btn_search">
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;" />
+        </span> </li>
+      </ul>
+    </div>
+  </form>
+  <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li>管理员添加优惠券，添加后只能编辑优惠券名称信息</li>
+      <li>优惠券只有平台管理员赠送用户才能获取</li>
+      <li>用户购物订单金额满足优惠券使用条件后可以使用优惠券</li>
+    </ul>
+  </div>
+  <form name="ListForm" id="ListForm" action="" method="post">
+    <div class="brandtable">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="brand_table">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="1%">&nbsp;</td>
+          <td width="25%">优惠券名称
+           </td>
+          <td width="12%">优惠券金额</td>
+          <td width="12%">可用订单金额</td>
+          <td width="10%">开始时间</td>
+          <td width="10%">结束时间</td>
+          <td width="6%" align="center">发行数量</td>
+          <td width="6%"  align="center">发放数量</td>
+          <td  align="center">操作</td>
+        </tr>
+      #foreach($obj in $objs)
+        <tr>
+          <td align="center">&nbsp;</td>
+          <td><label>
+            <input name="coupon_name" type="text" title="可编辑" onblur="ajax_update('$!obj.id','coupon_name',this)" value="$!obj.coupon_name" size="40" />
+          </label></td>
+          <td>$!obj.coupon_amount</td>
+          <td>$!obj.coupon_order_amount</td>
+          <td>$!obj.coupon_begin_time</td>
+          <td>$!obj.coupon_end_time</td>
+          <td align="center">#if($!{obj.coupon_count}==0)不限量 #else $!{obj.coupon_count}#end</td>
+          <td class="ac8" align="center">$!{obj.couponinfos.size()}</td>
+          #set($coupon_status=0)
+          #if($!{obj.coupon_count}>0)
+            #if($!{obj.couponinfos.size()}>=$!{obj.coupon_count})
+              #set($coupon_status=1)
+            #end
+          #end
+          <td class="ac8" align="center">#if($coupon_status==0)<a href="$!webPath/admin/coupon_send.htm?id=$!obj.id">发放</a>#else 发放完毕#end #if($!{obj.couponinfos.size()}>0)<a href="$!webPath/admin/coupon_info_list.htm?coupon_id=$!obj.id">发放列表</a>#end</td>
+        </tr>
+     #end
+	
+    </table>
+	  <div class="fenye" align="right">
+       <span id="queryCondition" style="display:none">
+		   #foreach($sm in $sms)
+<input name="$!sm.key" id="$!sm.key" type="hidden" value="$!sm.value"/>
+		   #end
+	 </span>
+	   <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      $!gotoPageFormHTML </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

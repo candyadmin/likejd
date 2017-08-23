@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"  charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery.validator.methods.endTime = function(value, element, param) {
+   var startDate = jQuery(param).val();
+   var date1=new Date(Date.parse(startDate));
+   var date2=new Date(Date.parse(value));
+   if(jQuery.browser.msie==true){
+      date1 = new Date(Date.parse(startDate.replace("-", "/")));
+      date2 = new Date(Date.parse(value.replace("-", "/")));
+   }
+   return date1 < date2;
+ };
+ jQuery.validator.methods.beginTime = function(value, element, param) {
+   var endDate = jQuery(param).val();
+   var date1=new Date(Date.parse(endDate));
+   var date2=new Date(Date.parse(value));
+   if(jQuery.browser.msie==true){
+      date1 = new Date(Date.parse(endDate.replace("-", "/")));
+      date2 = new Date(Date.parse(value.replace("-", "/")));
+   }
+   return date1 > date2;
+ };
+  jQuery("#theForm").validate({
+	errorPlacement: function(error, element) {  
+       error.appendTo(element.parent());  
+    },						  
+    rules:{
+	 group_name:{required:true},	
+	 beginTime:{required:true#if($!group),endTime:"#group_time"#end
+	  },
+	 endTime:{required:true,endTime:"#beginTime" },
+	 joinEndTime:{required:true,beginTime:"#endTime" }
+	 },
+    messages:{
+	 group_name:{required:"团购标题不能为空"},		
+	 beginTime:{required:"开始时间不能为空"#if($!group),endTime:"开始日期必须大于$!CommUtil.formatShortDate($!group.endTime)"#end},
+	 endTime:{required:"结束时间不能为空",endTime:"结束日期必须大于开始日期"},
+	 joinEndTime:{required:"报名截止日期不能为空",beginTime:"报名日期必须小于结束日期"}
+	}
+  });
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  //
+  jQuery('#beginTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#joinEndTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });  
+  //
+});
+
+function saveForm(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/group_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <div class="cont">
+    <h1 class="seth1">团购管理</h1>
+    <div class="settab"><span class="tab-one"></span> <span class="tabs"><a href="$!webPath/admin/group_list.htm">团购列表</a> | <a href="$!webPath/admin/group_add.htm" class="this">新增团购</a>|<a href="$!webPath/admin/group_class_list.htm" >团购分类</a> |<a href="$!webPath/admin/group_class_add.htm" >新增分类</a>|<a href="$!webPath/admin/group_area_list.htm" >团购区域</a>|<a href="$!webPath/admin/group_area_add.htm" >新增区域</a>|<a href="$!webPath/admin/group_price_list.htm" >价格区间</a>|<a href="$!webPath/admin/group_price_add.htm" >添加区间</a> #if($!edit)<a href="javascript:void(0);" class="this">编辑</a> #end</span> <span class="tab-two"></span></div>
+    <div class="setcont" id="base">
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>团购标题
+          <input name="id" type="hidden" id="id" value="$!obj.id" />
+          <input name="group_time" type="hidden" id="group_time" value="$!CommUtil.formatShortDate($!group.endTime)" />
+        </li>
+        <li><span class="webname">
+          <input name="group_name" type="text" id="group_name" value="$!obj.group_name" />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>开始时间</li>
+        <li> <span class="webname">
+          <input name="beginTime" type="text" id="beginTime" value="$!obj.beginTime" size="25" />
+          日
+          <select name="begin_hour" id="begin_hour">
+            <option value="0" selected="selected">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+          </select>时
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>结束时间</li>
+        <li> <span class="webname">
+          <input name="endTime" type="text" id="endTime" value="$!obj.endTime" size="25" />
+          日
+          <select name="end_hour" id="end_hour">
+            <option value="0" selected="selected">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+          </select>时
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>报名截止</li>
+        <li> <span class="webname">
+          <input name="joinEndTime" type="text" id="joinEndTime" value="$!obj.joinEndTime" />
+          日
+          <select name="join_hour" id="join_hour">
+            <option value="0" selected="selected">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+          </select>时
+          </span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/>
+  </div>
+</form>
+</body>
+</html>

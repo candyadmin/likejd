@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+	var state = jQuery("#emailEnable").val();
+	if(state=="true"){
+		jQuery("#emailOn").show();
+		jQuery("#emailOff").hide();
+	}else{
+		jQuery("#emailOn").hide();
+		jQuery("#emailOff").show();
+	}
+	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });	
+  //
+});
+function emailState(){
+	var state = jQuery("#emailEnable").val();
+	if(state=="true"){
+		jQuery("#emailEnable").val("false");
+		jQuery("#emailOff").show();
+		jQuery("#emailOn").hide();
+	}else{
+		jQuery("#emailEnable").val("true");
+		jQuery("#emailOff").hide();
+		jQuery("#emailOn").show();
+	}
+}
+function test_email(){
+  var emailTest=jQuery("#emailTest").val();
+  jQuery.post("$!webPath/admin/test_mail.htm",{"email":emailTest},function(data){
+    if(data==="true"){alert("邮件测试成功，系统可以发送邮件！");}else{alert("邮件测试失败，请检查邮件服务器设置！");}
+  },"text");
+}
+function emailSave(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/sys_config_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+<input name="id" id="id" type="hidden" value="$!config.id"/>
+<input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/set_email.htm" />
+<input name="op_title" type="hidden" id="op_title" value="Email设置成功" />
+<div class="cont">
+  <h1 class="seth1">Email设置</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="javascript:void(0);" class="this">Email设置</a> </span> <span class="tab-two"></span></div>
+  <div class="setcont">
+    <ul class="set1">
+      <li>邮件功能开启</li>
+      <li>
+	  <span class="webSwitch"> 
+	  <input name="emailEnable" id="emailEnable" type="hidden" value="$!config.emailEnable" />
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" style="cursor:pointer" onclick="emailState();" id="emailOn"/> 
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" style="cursor:pointer" onclick="emailState();" id="emailOff"/> 
+	  </span> 
+	  <span id="nothis"><strong class="q"></strong><strong class="w">设置是否启用邮件功能</strong><strong class="c"></strong></span></li>
+    </ul>
+    <!--鼠标经过样式-->
+    <ul class="set1">
+      <li>SMTP 服务器</li>
+      <li><span class="webname">
+        <input name="emailHost" type="text" id="emailHost" value="$!config.emailHost" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">SMTP邮件服务器地址</strong><strong class="c"></strong></span></li>
+    </ul>
+    <!--鼠标未经过样式-->
+    <ul class="set1">
+      <li>STMP 端口</li>
+      <li><span class="webname">
+        <input name="emailPort" type="text" id="emailPort" value="$!config.emailPort" reg="^-?\d+$" tip="端口只能为整数"/>
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">SMTP邮件服务器端口，常见默认为25</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>发件人</li>
+      <li><span class="webname">
+	   <input name="emailUserName" type="text" id="emailUserName" value="$!config.emailUserName" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">设置邮件发件人名称</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>邮件发送账号</li>
+      <li><span class="webname">
+               <input name="emailUser" type="text" id="emailUser" value="$!config.emailUser" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">设置发件人邮件账号</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>邮箱登陆密码</li>
+      <li><span class="webname">
+        <input name="emailPws" type="password" id="emailPws" value="$!config.emailPws" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">设置发件人邮箱登录密码</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>邮件发送测试</li>
+      <li><span class="webname">
+        <input name="emailTest" type="text" id="emailTest" value="" />
+        </span><span class="emailtest">
+        <input name="" type="button"  value="测试" style="cursor:pointer" onclick="test_email();" />
+        </span><span id="nothis"></span></li>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="提交" onclick="emailSave();" style="cursor:pointer;"/>
+  </div>
+</div>
+</form>
+</body>
+</html>

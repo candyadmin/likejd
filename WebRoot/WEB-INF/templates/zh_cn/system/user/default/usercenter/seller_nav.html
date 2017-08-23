@@ -1,0 +1,99 @@
+<script>
+jQuery(document).ready(function(){
+	//
+	jQuery(".sellul>li>a").click(function(){
+	  var child_show=jQuery(this).attr("child_show");
+	  if(child_show=="true"){
+	    jQuery(this).parent().find("img").attr("src","$!webPath/resources/style/system/front/default/images/usercenter/seller_menu_add.png");
+	    jQuery(this).parent().find("ul").slideUp('normal');
+	    jQuery(this).attr("child_show","false");
+	  }else{
+	    jQuery(this).parent().find("img").attr("src","$!webPath/resources/style/system/front/default/images/usercenter/seller_menu_sub.png");
+	    jQuery(this).parent().find("ul").slideDown('normal');
+	    jQuery(this).attr("child_show","true");
+	  }
+	});
+	//
+	jQuery(".sellul>ul>li").removeClass("this");
+	jQuery("li[op=$!op]").addClass("this");
+});
+</script>
+
+<td width="177" id="userbg" valign="top"> 
+  <div class="seller">
+    <!--店铺设置-->
+    <div class="product_manage2">
+      <div class="protitle_seller">卖家中心</div>
+      <ul class="sellul">
+        <li ><a href="javascript:void(0);" child_show="true"><b><img src="$!webPath/resources/style/system/front/default/images/usercenter/seller_menu_sub.png" width="9" height="9" /></b>商品管理</a>
+          <ul>
+            <li><a href="$!webPath/seller/add_goods_first.htm" target="_blank">商品发布</a></li>
+            <li op="goods"><a href='$!webPath/seller/goods.htm'>出售中的商品</a></li>
+            <li op="goods_storage"><a href='$!webPath/seller/goods_storage.htm'>仓库中的商品</a></li>
+            <li op="goods_out"><a href='$!webPath/seller/goods_out.htm'>违规下架商品</a></li>
+            <li op="usergoodsclass"><a href='$!webPath/seller/usergoodsclass_list.htm'>商品分类</a></li>
+            <li op="usergoodsbrand"><a href='$!webPath/seller/usergoodsbrand_list.htm'>品牌申请</a></li>
+            <li op="goods_report"><a href='$!webPath/seller/goods_report.htm'>被举报禁售</a></li>
+          </ul>
+        </li>
+        <li ><a href="javascript:void(0);" child_show="true"><b><img src="$!webPath/resources/style/system/front/default/images/usercenter/seller_menu_sub.png" width="9" height="9" /></b>闲置商品</a>
+          <ul>
+            <li><a href="$!webPath/seller/add_spare_goods.htm" target="_blank">闲置发布</a></li>
+            <li op="spare_goods"><a href='$!webPath/seller/spare_goods.htm?type=0'>闲置商品</a></li>
+          </ul>
+        </li>
+       <li ><a href="javascript:void(0);" child_show="true"><b><img src="$!webPath/resources/style/system/front/default/images/usercenter/seller_menu_sub.png" width="9" height="9" /></b>淘宝管理</a>
+          <ul>
+            <li op="taobao"><a href='$!webPath/seller/taobao.htm'>淘宝导入</a></li>
+          </ul>
+        </li>
+        <li ><a href="javascript:void(0);" child_show="true"><b><img src="$!webPath/resources/style/system/front/default/images/usercenter/seller_menu_sub.png" width="9" height="9" /></b>交易管理</a>
+          <ul>
+            <li op="order"><a href='$!webPath/seller/order.htm'>订单管理</a></li>
+            #if($!{config.config_payment_type}==0)
+            <li op="payment"><a href='$!webPath/seller/payment.htm'>支付方式</a></li>
+            #end
+            <li op="transport"><a href='$!webPath/seller/transport_list.htm'>物流工具</a></li>
+          </ul>
+        </li>
+        <li ><a href="javascript:void(0);" child_show="true"><b><img src="$!webPath/resources/style/system/front/default/images/usercenter/seller_menu_sub.png" width="9" height="9" /></b>店铺设置</a>
+          <ul>
+            <li><a href="$!webPath/store.htm?id=$!user.store.id" target="_blank">我的店铺</a></li>
+            <li op="store_set"><a href='$!webPath/seller/store_set.htm'>店铺设置</a></li>
+            <li op="sub_account"><a href='$!webPath/seller/sub_account_list.htm'>子账户管理</a></li>
+            <li op="store_theme"><a href='$!webPath/seller/store_theme.htm'>主题设置</a></li>
+            <li op="store_nav"><a href='$!webPath/seller/store_nav.htm'>导航管理</a></li>
+            <li op="store_partner"><a href='$!webPath/seller/store_partner.htm'>友情链接</a></li>
+          </ul>
+        </li>
+        <li ><a href="javascript:void(0);" child_show="true"><b><img src="$!webPath/resources/style/system/front/default/images/usercenter/seller_menu_sub.png" width="9" height="9" /></b>客户服务</a>
+          <ul>
+            <li op="refund"><a href='$!webPath/seller/refund.htm'>退款管理</a></li>
+            <li op="goods_return"><a href='$!webPath/seller/goods_return.htm'>退货管理</a></li>
+            <li op="consult"><a href='$!webPath/seller/consult.htm'>咨询管理</a></li>
+            <li op="complaint"><a href='$!webPath/seller/complaint.htm'>投诉管理</a></li>
+          </ul>
+        </li>
+        <li ><a href="javascript:void(0);" child_show="true"><b><img src="$!webPath/resources/style/system/front/default/images/usercenter/seller_menu_sub.png" width="9" height="9" /></b>促销管理</a>
+          <ul>
+            <li op="ztc_apply"><a href="$!webPath/seller/ztc_apply.htm">竞价直通车</a></li>
+            <li op="activity"><a href="$!webPath/seller/activity.htm">活动管理</a></li>
+            <li op="group"><a href="$!webPath/seller/group.htm">团购管理</a></li>
+            <li op="bargain"><a href="$!webPath/seller/bargain.htm">天天特价</a></li>
+            <li op="combin"><a href="$!webPath/seller/combin.htm">组合销售</a></li>
+            <li op="delivery"><a href="$!webPath/seller/delivery.htm">买就送</a></li>
+          </ul>
+        </li>
+        <li ><a href="javascript:void(0);" child_show="true"><b><img src="$!webPath/resources/style/system/front/default/images/usercenter/seller_menu_sub.png" width="9" height="9" /></b>其他设置</a>
+          <ul>
+            <li op="gold_record"><a href="$!webPath/seller/gold_record.htm">金币管理</a></li>
+            <li op="advert"><a href="$!webPath/seller/advert_list.htm">广告管理</a></li>
+            <li op="album"><a href="$!webPath/seller/album.htm">图片管理</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <!--店铺设置-->
+  </div>
+  $!httpInclude.include("/chatting.htm")
+</td>

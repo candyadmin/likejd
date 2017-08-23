@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>店铺列表 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goodshidden.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jcarousellite_1.0.1.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	var orderBy =jQuery("#orderBy").val();
+	if(orderBy=="addTime"){
+		 jQuery("#search_orderby_addTime").addClass("this");		
+	}else{	
+		 jQuery("#search_orderby_"+orderBy).parent().find("a").removeClass("this");
+		 jQuery("#search_orderby_"+orderBy).addClass("this");
+	}
+	var checkbox_id = jQuery("#checkbox_id").val();
+	if(checkbox_id!=null){
+		 jQuery("#"+checkbox_id).attr("checked","checked");
+	}	
+					
+	var storeGrade_id =	jQuery("#storeGrade_id").val();
+	if(storeGrade_id!=""){
+		jQuery("#grade_name").html(jQuery("#grade_"+storeGrade_id).html());
+	}
+	jQuery(".Hot_cf_store_top_panel_pr").hover(
+		 function(){
+			jQuery(this).find("ul").css("display","block");
+			jQuery(this).find(".tb_home_box").css("display","block");
+			},function(){
+			jQuery(this).find("ul").css("display","none");
+			jQuery(this).find(".tb_home_box").css("display","none");
+		});
+	jQuery(".descr").mouseover(function(){
+	   jQuery(this).find(".descr_xl").show();
+	}).mouseleave(function(){
+	   jQuery(this).find(".descr_xl").hide();
+	});
+	jQuery("a[id^=sc_search_]").click(function(){
+		var sc =jQuery(this).attr("sc");
+			jQuery("#sc_id").val(sc);
+			jQuery("#type").val("store");
+			jQuery("#ListForm").submit();
+		});
+	jQuery("a[id^=search_orderby_]").click(function(){
+			var mark = jQuery(this).attr("mark");
+			var mark_id = jQuery(this).attr("mark_id");
+			jQuery("#orderBy").val(mark);
+			if(mark=="addTime"){
+				jQuery("#checkbox_id").val("");
+				jQuery("#sc_id").val("");
+				jQuery("#storepoint").val("");
+				}	
+            jQuery("#ListForm").submit();
+		 });
+	jQuery("input[type='checkbox']").click(function(){
+			var checked = jQuery(this).attr("checked");	
+			if(checked=="checked"){
+				jQuery("#checkbox_id").val(jQuery(this).attr("id"));		
+				}else{
+					jQuery(this).removeAttr("checked");
+					jQuery("#checkbox_id").val("");
+					}
+		   jQuery("#ListForm").submit();			
+		 });
+	jQuery("a[id^=grade_]").click(function(){
+				var grade_id =	jQuery(this).attr("grade_id");
+					jQuery("#storeGrade_id").val(grade_id);
+					jQuery("#ListForm").submit();
+			});
+	jQuery("#storepoint").parent().find("ul[class='Hot_cf_store_top_panel_pr_ul'] li a").click(function(){
+					var mark =	jQuery(this).attr("mark");
+					jQuery("#storepoint").val(mark);
+					jQuery("#ListForm").submit();
+						});
+	
+	jQuery("span.hot_bt").find("input[type='button']").click(function(){
+			jQuery("#keyword2").val(jQuery(this).parent().find("input:first").val());
+			jQuery("#ListForm").submit();
+		});
+	
+	jQuery("a[id^=searchBy_area_]").click(function(){
+		 var area_id = jQuery(this).attr("area_id");
+			jQuery("#area_id").val(area_id);
+			jQuery("#ListForm").submit();
+		  });
+	jQuery("#searchBy_areaName").click(function(){
+			jQuery("#ListForm").submit();
+		  });
+	//
+	
+	 var search_bar_top=jQuery(".Hot_cf_store_top").offset().top;
+  jQuery(window).scroll(function(){
+      var top= jQuery(".Hot_cf_store_top").offset().top;
+	  var scrolla=jQuery(window).scrollTop();
+	  var i=top-scrolla;
+	 if(i<=0){
+	   jQuery(".Hot_cf_store_top").addClass("Hot_cf_store_top_add");	  
+	 }
+	 if(scrolla<search_bar_top){
+	   jQuery(".Hot_cf_store_top").removeClass("Hot_cf_store_top_add");;
+	 }
+  });
+	});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm?type=$!type")
+  <!--热门分类start-->
+  <div class="Hot_cf">
+    <h1>热门分类</h1>
+    <div class="Hot_cf_list">
+      <ul>
+        #foreach($storeClass in $scs)
+        <li> <span><a href="javascript:void(0);" id="sc_search_$!storeClass.id" sc="$!storeClass.id">$!storeClass.className</a></span> #foreach($child in $storeClass.childs) <a  href="javascript:void(0);" id="sc_search_$!child.id" sc="$!child.id">$!child.className</a> #end </li>
+        #end
+      </ul>
+    </div>
+    <form action="$!webPath/search.htm" name="ListForm" id="ListForm" method="post">
+      <input type="hidden" id="type" name="type" value="$!type" />
+      <input type="hidden" id="currentPage" name="currentPage" value="$!currentPage" />
+      <input type="hidden" id="orderType" name="orderType" value="$!orderType" />
+      <input type="hidden" id="orderBy" name="orderBy" value="$!orderBy" />
+      <input type="hidden" id="sc_id" name="sc_id" value="$!sc_id" />
+      <input type="hidden" id="storeGrade_id" name="storeGrade_id" value="$!storeGrade_id" />
+      <input type="hidden" id="checkbox_id" name="checkbox_id" value="$!checkbox_id" />
+      <input type="hidden" id="storepoint" name="storepoint" value="$!storepoint" />
+      <input type="hidden" id="keyword2" name="keyword" value="$!store_name" />
+      <input type="hidden" id="area_id" name="area_id" value="$!area_id" />
+      <div class="Hot_cf_store_top">
+        <div class="Hot_cf_store_top_sort"> <a title="默认排序" href="javascript:void(0);" id="search_orderby_addTime" mark="addTime">默认</a> <a title="按收藏人气排序" href="javascript:void(0);" id="search_orderby_favorite_count" mark="favorite_count">收藏</a> <b class="tb_sortbar_ul_d"></b> <a title="按信用额度排序" href="javascript:void(0);" id="search_orderby_store_credit" mark="store_credit">信用</a> <b class="tb_sortbar_ul_d"></b> </div>
+        <div class="Hot_cf_store_top_input"> <span>
+          <input type="checkbox" id="store_recommend" />
+          <label for="store_recommend" >商城推荐</label>
+          </span> <span>
+          <input type="checkbox"  id="realstore_approve"/>
+          <label for="realstore_approve">实体认证</label>
+          </span> <span>
+          <input type="checkbox" id="card_approve" />
+          <label for="card_approve" >实名认证</label>
+          </span> <span class="hot_bt" style="margin-left:70px"> 关键字：
+          <input id="" name="" size="12" style="cursor:auto;"  value="$!store_name" type="text"/>
+          <input class="hot_btn" type="button" value="确定" />
+          </span> </div>
+        <div class="Hot_cf_store_top_panel"  >
+          <div class="Hot_cf_store_top_panel_pr"> <span class="select" id="storepoint"><span>好评率</span></span>
+            <ul class="Hot_cf_store_top_panel_pr_ul" style="display:none;">
+              <li><a href="javascript:void(0);" mark="1">100%</a></li>
+              <li><a href="javascript:void(0);" mark="0.99">99%以上</a></li>
+              <li><a href="javascript:void(0);" mark="0.98">98%以上</a></li>
+              <li><a href="javascript:void(0);" mark="0.97">97%以上</a></li>
+              <li><a href="javascript:void(0);" mark="0.96">96%以上</a></li>
+              <li><a href="javascript:void(0);" mark="0.95">95%以上</a></li>
+              <li><a href="javascript:void(0);" mark="0">不限</a></li>
+            </ul>
+          </div>
+          <div class="Hot_cf_store_top_panel_pr"> <span class="select"><span>所在地</span></span>
+            <div class="tb_home_box" style="display:none;">
+              <h1><span>所在地</span></h1>
+              <div class="loc_2">
+                <input type="text" id="area_name" name="area_name" value="$!area_name"  class="ip1" placeholder="输入地区名称" />
+                <span class="i">
+                <input type="button" id="searchBy_areaName" value="确定" class="ip2"/>
+                </span> </div>
+              <ul class="loc_3">
+                #foreach($area in $areas)
+                <li><a href="javascript:void(0);" id="searchBy_area_$!area.id" area_id="$!area.id">$!area.areaName</a></li>
+                #end
+              </ul>
+            </div>
+          </div>
+          <div class="Hot_cf_store_top_panel_pr"> <span class="select"><span id="grade_name">店铺等级</span></span>
+            <ul class="Hot_cf_store_top_panel_pr_ul" style="display:none;">
+              #foreach($grade in $storeGrades)
+              <li><a href="javascript:void(0);" id="grade_$!grade.id" grade_id = "$!grade.id">$!grade.gradeName</a></li>
+              #end
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="Hot_cf_main">
+        <!--店铺列表开始-->
+        #set($store_list_class_count= 0)
+        #foreach($obj in $objs)    
+        #if($!obj.store_logo)
+        #set($store_logo="$!webPath/$!{obj.store_logo.path}/$!{obj.store_logo.name}")
+        #else
+        #set($store_logo="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+        #end 
+        
+        #if($!store_list_class_count== 0)
+        #set($store_list_class ="")
+        #end
+        #if($!store_list_class_count== 1)
+        #set($store_list_class ="_c")
+        #end
+        #set($store_list_class_count = $!store_list_class_count + 1)
+        <div class="Hot_cf_main_list$!store_list_class">
+          <!--左侧 start-->
+          <div class="Hot_cf_main_list_left">
+            <ul>
+              <li class="li_left"> <a href="$!webPath/store_$!{obj.id}.htm" target="_blank"><img src="$!store_logo" width="70" height="70" /> </a></li>
+              <li class="li_right">
+                <h4><a class="hc" href="$!webPath/store_$!{obj.id}.htm" target="_blank">$!obj.store_name</a> #set($credit=$!storeViewTools.generic_store_credit("$!obj.id"))
+                  #set($img="$!imageWebServer/resources/style/common/images/level_0.gif")
+                  #if($credit<10 && $credit>0)
+                  #set($credit=${credit} / 2)
+                  #set($credit=$credit+1)
+                  #end
+                  #if($credit>=20)
+                  #set($img="$!imageWebServer/resources/style/common/images/level_2.gif") 
+                  #set($credit=($credit - 20)/2) 
+                  #set($credit=$credit+1)
+                  #end
+                  #if($credit>=10)
+                  #set($img="$!imageWebServer/resources/style/common/images/level_1.gif") 
+                  #set($credit=($credit - 10)/2)
+                  #set($credit=$credit+1)
+                  #end
+                  #if($credit>5)#set($credit=5)#end <a class="hg" href="#"></a> #if($!credit==0) <img src="$!imageWebServer/resources/style/common/images/level_-1.gif" class="hg"/> #else #foreach($count in [1..$!credit])<img style="margin-left:1px;" src="$!img"  width="16px" height="16px" class="hg"/>#end #end </h4>
+                <p class="describe "> <strong>主营：</strong> <span class="Hot_color">$!obj.sc.parent.className</span> <span class="Hot_color"> $!obj.sc.className</span> </p>
+                <p class="mail"> 店主：$!obj.store_ower &nbsp; <a class="shopemail"#if(!$!user) dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="450" dialog_height="100" dialog_id="user_login" href="javascript:void(0);" #else target="_blank" href="$!webPath/buyer/message_send.htm?userName=$!obj.user.userName" #end> <img width="15" height="11" src="$!webPath/resources/style/system/front/default/images/mail.jpg"> </a> </p>
+              </li>
+              <li class="li_mid"> #if($!credit==0)
+                #set($store_evaluate1="0")
+                #set($store_evaluate1="0%")
+                #else
+                #set($store_evaluate1="$!CommUtil.mul($!{obj.point.store_evaluate1},100)%")  
+                #end
+                <div class="good_comt">好评率: $!store_evaluate1</div>
+                <div class="descr">$!CommUtil.null2Double($!{obj.point.description_evaluate})
+                  <!--下拉 start-->
+                  #set($map=$!storeViewTools.query_point($!obj))
+                  <div class="descr_xl" style="display:none;">
+                    <div class="hd">
+                      <div class="descr_b">
+                        <div class="bl">
+                          <ul>
+                            <li><em>描述相符：</em><a href="javascript:void(0);">$!CommUtil.null2Double($!{obj.point.description_evaluate}) 分</a></li>
+                            <li><em>服务态度：</em><a href="javascript:void(0);">$!CommUtil.null2Double($!{obj.point.service_evaluate}) 分</a></li>
+                            <li><em>发货速度：</em><a href="javascript:void(0);">$!CommUtil.null2Double($!{obj.point.ship_evaluate}) 分</a></li>
+                          </ul>
+                        </div>
+                        <div class="br">
+                          <ul>
+                            <li><em class='$!map.get("description_css")'>$!map.get("description_type")</em> $!map.get("description_result")</li>
+                            <li><em class='$!map.get("service_css")'>$!map.get("service_type")</em>$!map.get("service_result")</li>
+                            <li><em class='$!map.get("ship_css")'>$!map.get("ship_type")</em> $!map.get("ship_result")</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--下拉 end-->
+                </div>
+                <div class="icon_list" style="display:none"> <a href="javascript:void(0);" title="卖家承诺消费者保障服务"></a> <a href="javascript:void(0);" title="卖家承诺消费者保障服务"></a> </div>
+                <div class="place">$!obj.area.parent.parent.areaName $!obj.area.parent.areaName $!obj.area.areaName</div>
+              </li>
+              <li class="li_mid"> <span class="lf">共<strong>$!obj.goods_list.size()</strong>件宝贝</span>
+              #if($!{obj.store_qq}&&$!{obj.store_qq}!="") 
+               <span class="rg"><i><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=$!obj.store_qq&Site=$!obj.store_qq&Menu=yes"><img src="http://wpa.qq.com/pa?p=2:$!obj.store_qq:51" /></a></i></span> 
+              #end
+              </li>
+            </ul>
+          </div>
+          <!--右侧 start-->
+          #set($recommend_goods=$!storeViewTools.query_recommend_store_goods($!obj,-1,-1))
+          #if($!recommend_goods.size()>0)
+          <script>
+		        jQuery(function(){ 
+			       jQuery("#store_goods_img_$!{obj.id}").jCarouselLite({
+	                    btnNext: "#to_right_$!{obj.id}",
+　　                     btnPrev: "#to_left_$!{obj.id}", 
+	                    auto: null,
+	                    speed: 2000,
+	                    visible:5,
+				        scroll:1
+                    });			   
+			     })
+		       </script>
+          #end
+          <div class="Hot_cf_main_list_right">
+            <div class="right_list_bt">
+              <div class="right_list" id="store_goods_img_$!{obj.id}" store_id="$!obj.id">
+                <ul>
+                  #foreach($goods in $recommend_goods)                    
+                  #if($!CommUtil.isNotNull($!{goods}))
+                  #set($goodsImg = "$!webPath/resources/style/common/images/thumb.jpg")
+                  #if($!goods.goods_main_photo)
+                  #set($goodsImg = "$!webPath/$!goods.goods_main_photo.path/$!goods.goods_main_photo.name")
+                  #end
+                  <li><a href="$!webPath/goods_$!{goods.id}.htm" target="_blank"> <img src="$!goodsImg" width="120" height="102" /> </a><span>￥$!{goods.store_price}</span></li>
+                  #else
+                  <li><a href="javascript:void(0);"> <img src="$!webPath/resources/style/common/images/thumb.jpg" width="120" height="102" /> </a></li>
+                  #end
+                  #end
+                </ul>
+                <a href="javascript:void(0);" id="to_left_$!{obj.id}" obj_id="$!obj.id" type="left"  class="to_left" ></a> <a href="javascript:void(0);" id="to_right_$!{obj.id}" obj_id="$!obj.id" type="right"  class="to_right" ></a> </div>
+               <a href="$!webPath/search.htm?type=store&sc_id=$!{obj.sc.id}" class="bt_r">相似店铺》</a> </div>
+          </div>
+        </div>
+        <!--店铺相邻不同样式-->
+        #if($!store_list_class_count== 2)
+        #set($store_list_class_count=0)
+        #end 
+        #end </div>
+      <div class="fenye">
+        <div class="fenyes"> $!gotoPageFormHTML</div>
+      </div>
+    </form>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

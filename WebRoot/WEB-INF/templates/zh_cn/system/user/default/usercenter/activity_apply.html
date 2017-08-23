@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>直通车申请 -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+//
+	jQuery("#theForm").validate({
+        rules:{
+	  	  goods_id:{required :true},
+		  ztc_price:{required:true,digits:true,min:$!config.ztc_price,max:$!{user.gold}},
+		  ztc_begin_time:{required :true},
+		  ztc_gold:{required:true,digits:true,min:$!config.ztc_price,max:$!{user.gold}}
+	  	 },
+	    messages:{
+	  	  goods_id:{required:"直通车商品不能为空"},
+		  ztc_price:{required:"直通车价格不能为空",digits:"直通车价格只能为整数",min:"直通车价格不能少于$!{config.ztc_price}",max:"金币不能超过$!{user.gold}"},
+		  ztc_begin_time:{required :"开始时间不能为空"},
+		  ztc_gold:{required:"直通车金币不能为空",digits:"直通车价格只能为整数",min:"直通车价格不能少于$!{config.ztc_price}",max:"金币不能超过$!{user.gold}"}
+	  	}
+     });
+    jQuery('#ztc_begin_time').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true,
+	  minDate:1, maxDate: "+10D", 
+	  onSelect:function(dateText,inst){
+
+	  }
+  });
+ });
+ function activity_goods(){
+   var goods_name=jQuery("#goods_name").val();
+   if(goods_name!=""){
+	  jQuery.post("$!webPath/seller/activity_goods.htm",{"goods_name":goods_name},function(data){
+		   jQuery("#goods_ids").empty();																			  
+	       jQuery.each(data,function(index,item){
+			   jQuery("#goods_ids").append("<option value='"+item.goods_id+"'>"+item.goods_name+"</option>");
+		   });
+	  },"json");
+   }
+ }
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=activity")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>申请参加活动</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="other"><a href="$!webPath/seller/activity.htm">活动列表</a></li>
+                <li class="this"><a href="$!webPath/seller/activity_apply.htm?id=$!act.id">申请参加活动</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+                <form action="$!webPath/seller/activity_apply_save.htm" method="post" name="theForm" id="theForm">
+                  <table width="98%" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                    <tr>
+                      <td align="right">活动名称：</td>
+                      <td class="px10">$!act.ac_title</td>
+                    </tr>
+					<tr>
+                      <td align="right">活动说明：</td>
+                      <td class="px10">$!act.ac_content</td>
+                    </tr>
+                    <tr>
+                      <td width="141" align="right">商品名称：</td>
+                      <td width="651" class="px10"><span class="setinput">
+                        <input name="goods_name" type="text" id="goods_name" />
+                        <input name="search" type="button" style="cursor:pointer;width:60px;"  value="搜索" onclick="activity_goods();" />
+                      </span></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top">&nbsp;</td>
+                      <td  class="px10">
+                      <select name="goods_ids" size="10" multiple="multiple" id="goods_ids" style="width:500px; height:200px;">
+                      </select>
+                      按住ctrl多选</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td class="px10"><span class="setsub">
+                        <input type="submit"  value="保存" style="cursor:pointer;"/>
+                        <input name="activity_session" type="hidden" id="activity_session" value="$!activity_session" />
+                        <input name="act_id" type="hidden" id="act_id" value="$!act.id" />
+                      </span></td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

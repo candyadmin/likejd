@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){																
+jQuery("#cid").val("$!obj.sgc.id");
+//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });								
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  title:{required :true},
+	  cid:{required:true},
+	   advert_img:{
+	    accept:"$!config.imageSuffix"
+	  }
+	 },
+	messages:{
+	  title:{required:"楼层标题不能为空"},
+	  cid:{required:"请选择分类"},
+	   advert_img:{
+	    accept:"不允许的图片格式"
+	  }
+	}
+  });
+   jQuery("#advert_img").change(function(){
+	 jQuery("#textfield1").val(jQuery("#advert_img").val());
+   })
+   #if($!obj)
+   #if($!obj.adver_type==0)
+        jQuery("#adv_img").show();
+		jQuery("#adv_url").show();
+		jQuery("#adv_system").hide();
+   #end
+   
+    #if($!obj.adver_type==1)
+      	jQuery("#adv_system").show();	
+		jQuery("#adv_img").hide();
+		jQuery("#adv_url").hide();
+		jQuery("#ap_id").val("$!obj.adp.id");
+   #end
+   #end
+   
+   jQuery("#logoShow").hover(function(){						   
+			jQuery(".bigimgpre").css("display","block");						 
+		},function(){
+			jQuery(".bigimgpre").css("display","none");
+			});
+});
+
+function selectAdver(obj){
+	if(obj=='0'){
+		jQuery("#adv_img").show();
+		jQuery("#adv_url").show();
+		jQuery("#adv_system").hide();
+		}else{
+		jQuery("#adv_system").show();	
+		jQuery("#adv_img").hide();
+		jQuery("#adv_url").hide();
+			}
+	}
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">闲置商品楼层</h1>
+  <div class="settab"><span class="tab-one"></span>
+      <span class="tabs">
+	<a href="$!webPath/admin/sparegoodsfloor_list.htm" >管理</a> | 
+    <a href="$!webPath/admin/sparegoodsfloor_add.htm" #if(!$!edit)  class="this" #end>新增</a>   
+       #if($!edit) | 
+	   <a href="javascript:void(0);" class="this">编辑</a>
+	   #end
+	   </span>
+      
+      <span class="tab-two"></span></div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/sparegoodsfloor_save.htm"  method="post" enctype="multipart/form-data">
+  <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/sparegoodsfloor_list.htm" />
+  <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/sparegoodsfloor_add.htm" />
+  <div class="setcont">
+    <ul class="set1">
+      <li><strong class="orange fontsize20">*</strong>楼层标题</li>
+      <li><span class="webname">
+        <input name="title" type="text" id="title" value="$!obj.title" size="40" />
+      </span></li>
+    </ul>
+    <!--鼠标未经过样式-->
+    <ul class="set1">
+      <li>所属分类</li>
+      <li><span class="webnamesec sizese">
+        <select name="cid" id="cid">
+              <option value="">请选择分类...</option>
+			  #foreach($sgc in $sgcs)
+              <option value="$!sgc.id">$!sgc.className</option>             
+              #end
+         </select>
+      </span></li>
+    </ul>
+    
+    <ul class="set4">
+      <li>是否显示</li>
+      <li class="radiosp"><span>
+        <input name="display" id="display" type="radio" value="true" #if($!obj.display==true || !$!obj.display) checked="checked" #end/>
+        </span><span>是</span><span>
+        <input name="display" id="display" type="radio" value="false" #if($!obj.display==false) checked="checked" #end />
+        </span><span>否</span></li>
+    </ul>
+    
+   <ul class="set4">
+      <li>楼层广告类型</li>
+      <li class="radiosp"><span><label>
+        <input name="adver_type" onclick="selectAdver(0)"  type="radio" value="0" #if($!obj.adver_type==0 || !$!obj.adver_type) checked="checked" #end/>
+        图片上传</label></span><label>
+        <input name="adver_type"  onclick="selectAdver(1)" type="radio" value="1" #if($!obj.adver_type==1) checked="checked" #end />
+       系统广告</label></span></li> 
+    </ul>
+       
+    <ul class="set1" id="adv_img" >
+        <li>广告图片</li>
+        <li> <span class="size13" >
+          <input name="textfield" type="text" id="textfield1" />
+          </span> <span class="filebtn">
+          <input name="button" type="button" id="button1" value=""/>
+          </span> <span style="float:left;" class="file">
+          <input name="advert_img" type="file" id="advert_img" class="file-text" size="30"/>
+          </span> <span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span><span id="nothis"><strong class="q"></strong><strong class="w">暂无图片，最佳上传尺寸：200X240</strong><strong class="c"></strong></span>
+          #if($!obj.advert_img)
+          <div class="bigimgpre" style="display:none;"><img src="$!webPath/$!obj.advert_img.path/$!obj.advert_img.name"  width="$!obj.advert_img.width" height="$!obj.advert_img.height" id="logoShow2"/> </div>
+          #end
+        </li>
+      </ul>
+       <ul class="set1" id="adv_url">
+      <li>广告链接：</li>
+      <li><span class="webname">
+        <input name="advert_url" type="text" id="advert_url" value="$!obj.advert_url" />
+        </span></li>
+    </ul> 
+    
+      <ul class="set1" id="adv_system" style="display:none">
+      <li>系统广告位：</li>
+      <li><span class="webname">
+        <select  id="ap_id" name="ap_id">
+        <option>请选择...</option>
+        #foreach($position in $advertposition)
+        <option  value="$!position.id">$!position.ap_title（$!{position.ap_width} X $!{position.ap_height}）</option>
+        #end
+        </select>
+        </span>
+        <span id="nothis"><strong class="q"></strong><strong class="w">只可选择200X240的广告位，并且广告位类别为图片，广告图片为该广告位默认图片</strong><strong class="c"></strong></span>
+        </li>
+    </ul> 
+
+    <ul class="set1">
+      <li>排序</li>
+      <li><span class="webname">
+        <input name="sequence" type="text" id="sequence" value="$!obj.sequence" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小，分类显示越靠前，在前台页面中显示越靠上</strong><strong class="c"></strong></span></li>
+    </ul>
+    </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

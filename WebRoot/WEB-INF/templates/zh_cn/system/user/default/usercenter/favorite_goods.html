@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商品收藏 -  Powered by shoppingl</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+          $!httpInclude.include("/buyer/nav.htm?op=favorite") 
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/index.htm">买家中心</a> > <span>商品收藏</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="this"><a href="$!webPath/buyer/favorite_goods.htm">商品收藏</a></li>
+                <li><a href='$!webPath/buyer/favorite_store.htm' class="other">店铺收藏</a></li>
+              </ul>
+            </div>
+            <form action="$!webPath/buyer/favorite_goods.htm" method="post" id="ListForm">
+            <div class="ordercon">
+              <div class="alldel">
+                <div class="alldel_l"> <span class="alldel_la">
+                  <input name="all" type="checkbox" id="all" value="" onclick="selectAll(this);"/>
+                  </span><span class="alldel_lb"><label for="all">全选</label></span> <span  class="alldel_lc"><a href="javascript:void(0);" onclick="cmd('$!webPath/buyer/favorite_del.htm','')">删除</a></span> </div>
+              </div>
+              <div class="operation">
+                <table width="790" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                  <tr id="opertitle">
+                    <td width="280">宝贝<input name="mulitId" type="hidden" id="mulitId" />
+                      <input name="type" type="hidden" id="type" value="0" /></td>
+                    <td width="80">单价</td>
+                    <td width="120" align="center">收藏时间</td>
+                    <td width="150" align="center">店铺名称</td>
+                    <td align="center">操作</td>
+                  </tr>
+                </table>
+                #foreach($obj in $objs)
+                     #if($!obj.goods.goods_main_photo)
+                        #set($img="$!webPath/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")
+                     #else
+                        #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                     #end
+                <div class="shelves_goods2">
+                  <table width="790" border="0" cellspacing="0" cellpadding="0" class="goodstable1">
+                    <tr>
+                      <td width="300"><ul class="goodsul">
+                          <li><span class="goodscheck">
+                           <input name="id" type="checkbox" id="id" value="$!obj.id" />
+                            </span></li>
+                          <li><span class="goodsimg"><a href="$!webPath/goods_$!{obj.goods.id}.htm" target="_blank"><img src="$!img" width="50" height="50" /></a></span></li>
+                          <li class="goodsp"><span><a href="$!webPath/goods_$!{obj.goods.id}.htm" target="_blank" class="blue2">$!obj.goods.goods_name</a></span></li>
+                        </ul></td>
+                      <td width="90"><strong class="orange">$!{config.currency_code}$!{obj.goods.store_price}</strong></td>
+                      <td width="130">$!CommUtil.formatLongDate($!obj.addTime)</td>
+                      <td width="150" align="center"; class="goodsp2"><span>$!obj.goods.goods_store.store_name</span> <span><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=$!{obj.goods.goods_store.user.QQ}&Site=$!{obj.goods.goods_store.user.QQ}&Menu=yes"><img alt="点击这里给我发消息" src="http://wpa.qq.com/pa?p=2:$!{obj.goods.goods_store.user.QQ}:47" /></a></span></td>
+                      <td align="center" class="goodsp3"><span class="del"><a href="javascript:void(0);" onclick="if(confirm('确定删除收藏?'))window.location.href='$!webPath/buyer/favorite_del.htm?mulitId=$!obj.id&currentPage=$!currentPage&type=0'" class="blue">删除</a></span></td>
+                    </tr>
+                  </table>
+                </div>
+                #end
+              </div>
+              <div class="alldel">
+                <div  class="userfenye">$!gotoPageFormHTML</div>
+                <div class="alldel_l"> <span class="alldel_la">
+                   <input name="all1" type="checkbox" id="all1" value="" onclick="selectAll(this);"/>
+                  </span><span class="alldel_lb"><label for="all">全选</label></span> <span  class="alldel_lc"><a href="javascript:void(0);" onclick="cmd('$!webPath/buyer/favorite_del.htm','')">删除</a></span> </div>
+              </div>
+            </div>
+            </form>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

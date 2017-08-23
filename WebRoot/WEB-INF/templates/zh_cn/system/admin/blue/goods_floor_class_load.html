@@ -1,0 +1,8 @@
+<li class="box_edit_li">
+  <h6><a href="javascript:void(0);" ondblclick="javascript:jQuery(this.parentNode.parentNode).remove();" pid="$!gc.id">$!gc.className</a></h6>
+  <span>
+  #foreach($c_gc in $gc.childs)
+  <a href="javascript:void(0);" ondblclick="javascript:jQuery(this).remove();" id="$!c_gc.id">$!c_gc.className</a>
+  #end
+  </span>
+</li>

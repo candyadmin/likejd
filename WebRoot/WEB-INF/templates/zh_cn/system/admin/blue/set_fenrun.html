@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#alipay_fenrun_status").click(function(){
+	   var alipay_fenrun=jQuery("#alipay_fenrun").val();
+	   if(alipay_fenrun=="1"){
+	      jQuery("#alipay_fenrun_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+		  jQuery("#alipay_fenrun").val("0");
+	   }else{
+	      jQuery("#alipay_fenrun_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+		  jQuery("#alipay_fenrun").val("1");
+	   }
+	});
+	//
+	jQuery("#balance_fenrun_status").click(function(){
+	   var balance_fenrun=jQuery("#balance_fenrun").val();
+	   if(balance_fenrun=="1"){
+	      jQuery("#balance_fenrun_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+		  jQuery("#balance_fenrun").val("0");
+	   }else{
+	      jQuery("#balance_fenrun_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+		  jQuery("#balance_fenrun").val("1");
+	   }
+	});	
+	//
+	#if($!config.alipay_fenrun==1)
+	jQuery("#alipay_fenrun_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	#else
+	jQuery("#alipay_fenrun_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+	#end
+	#if($!config.balance_fenrun==1)
+	jQuery("#balance_fenrun_status").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	#else
+	jQuery("#balance_fenrun_status").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+	#end	
+});
+
+function saveForm(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/set_fenrun_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <div class="cont">
+  <h1 class="seth1">分润管理
+    <input name="id" id="id" type="hidden" value="$!config.id"/>
+  </h1>
+  <div class="settab">
+  <span class="tab-one" style="margin-left:25px;"></span> 
+  <span class="tabs"> <a href="javascript:void(0);" class="this">基本设置</a> </span> 
+  <span class="tab-two"></span>
+</div>
+  <div class="setcont">
+    <ul class="set1">
+      <li style="margin-left:20px;">支付宝分润</li>
+      <li style="margin-left:20px;">
+	  <span class="webSwitch"> 
+	  <input name="alipay_fenrun" id="alipay_fenrun" type="hidden" value="$!config.alipay_fenrun" />
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg" width="61" height="23" style="cursor:pointer" id="alipay_fenrun_status"/></span> 
+	  <span id="nothis"><strong class="q"></strong><strong class="w">开启支付宝分润平台支付宝信息请使用“支付宝平台商账号”，否则会造成付款失败</strong><strong class="c"></strong></span></li>
+    </ul>
+ 	<ul class="set1">
+      <li style="margin-left:20px;">预存款分润</li>
+      <li style="margin-left:20px;">
+	  <span class="webSwitch"> 
+	  <input name="balance_fenrun" id="balance_fenrun" type="hidden" value="$!config.balance_fenrun" />
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg" width="61" height="23" style="cursor:pointer" id="balance_fenrun_status"/></span>
+	  <span id="nothis"><strong class="q"></strong><strong class="w">系统开启预存款功能后，开启预存款分润方可生效</strong><strong class="c"></strong></span></li>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="提交" onclick="saveForm();"/>
+  </div>
+</div>
+</form>
+</body>
+</html>

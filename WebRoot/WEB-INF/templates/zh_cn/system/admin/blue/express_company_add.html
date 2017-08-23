@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script>
+jQuery(document).ready(function(){
+//
+  jQuery("#theForm").validate({
+	ignore: "",						  
+    rules:{
+	  company_name:{required :true},
+	  company_sequence:{number:true},
+	  company_mark:{
+		    required :true,
+		    remote:{
+				   url: "$!webPath/admin/express_company_mark.htm",     //后台处理程序
+                   type: "post",               //数据发送方式
+                   dataType: "json",           //接受数据格式   
+                   data: {                     //要传递的数据
+                     "company_mark": function(){return jQuery("#company_mark").val();},
+					 "id":"$!obj.id"
+		           }
+				}
+		  }
+	 },
+	messages:{
+	  company_name:{required:"快递名称不能为空"},
+	  company_sequence:{number:"序号只能为数字"},
+	  company_mark:{required:"公司代码不能为空",remote:"公司代码已经存在"}
+	}
+  });
+  //
+  jQuery("#company_status_img").click(function(){
+    var company_status=jQuery("#company_status").val();
+	if(company_status=="0"){
+	  jQuery("#company_status_img").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+	  jQuery("#company_status").val("-1");
+	}else{
+	  jQuery("#company_status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	  jQuery("#company_status").val("0");
+	}
+  }); 
+  //
+  jQuery("#company_type[value=$!{obj.company_type}]").attr("checked",true);
+});
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">快递公司</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/express_company_list.htm">管理</a> | <a href="$!webPath/admin/express_company_add.htm" #if(!$!edit)class="this"#end>新增</a> #if($!edit) <a href="javascript:void(0);" class="this">编辑</a> #end </span> <span class="tab-two"></span></div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/express_company_save.htm" method=post>
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/express_company_list.htm" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/express_company_add.htm" />
+    <div class="setcont">
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>快递名称</li>
+        <li><span class="webname">
+          <input name="company_name" type="text" id="company_name" value="$!obj.company_name" size="40" />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>快递代码</li>
+        <li><span class="webname">
+          <input name="company_mark" type="text" id="company_mark" value="$!obj.company_mark" size="40" />
+          </span><a href="http://code.google.com/p/kuaidi-api/wiki/Open_API_API_URL" target="_blank"><span id="nothis"><strong class="q"></strong><strong class="w">查询快递代码</strong><strong class="c"></strong></span></a></li>
+		  
+      </ul>
+      <ul class="set1">
+        <li>是否显示</li>
+		<li>
+        <input name="company_status" id="company_status" type="hidden" value="$!obj.company_status" >
+        <img #if($!obj.company_status==0)src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg"#else src="$!webPath/resources/style/system/manage/blue/images/no.jpg"#end width="61" height="23" id="company_status_img" style="cursor:pointer"/>
+		</li>
+      </ul>
+      <ul class="set1">
+        <li>快递类型</li>
+        <li>
+          <label>
+            <input type="radio" name="company_type" id="company_type"  value="POST"  />
+            平邮
+          </label>
+          <label>
+            <input type="radio" name="company_type" id="company_type" value="EXPRESS" />快递
+          </label>
+          <label>
+            <input type="radio" name="company_type" id="company_type" value="EMS" />EMS
+          </label>
+         </li>
+      </ul>
+      <ul class="set1">
+        <li>快递序号</li>
+        <li><span class="webname">
+          <input name="company_sequence" type="text" id="company_sequence" value="$!obj.company_sequence" size="40" />
+          </span></li>
+      </ul>
+    </div>
+  </form>
+  <div class="submit">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+  </div>
+</div>
+</body>
+</html>

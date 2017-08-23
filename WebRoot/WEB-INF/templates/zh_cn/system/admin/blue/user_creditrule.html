@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+var data='$!config.user_creditrule';
+var obj=eval("("+data+")");
+ jQuery.each(obj, function(id,val){
+    jQuery("#"+id).val(val);
+ });
+//
+});
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/user_creditrule_save.htm" method="post" name="theForm" id="theForm">
+<div class="cont">
+  <h1 class="seth1">店铺管理
+    <input name="id" type="hidden" id="id" value="$!config.id" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/user_creditrule.htm" />
+  </h1>
+  <div class="settab">
+  	<span class="tab-one"></span> 
+	<span class="tabs"> 
+		<a href="javascript:void(0);" class="this">会员信用</a>
+	</span> 
+	<span class="tab-two"></span>
+	</div>
+  <div class="reputh">信用额度</div>
+  <div class="reputation" style="float:left;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="reputation_table">
+      <tr>
+        <td width="215"><strong>等级</strong></td>
+        <td><strong>信用介于</strong></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule0" type="text" id="creditrule0" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule1" type="text" id="creditrule1" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule2" type="text" id="creditrule2" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule3" type="text" id="creditrule3" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule4" type="text" id="creditrule4" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule5" type="text" id="creditrule5" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule6" type="text" id="creditrule6" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule7" type="text" id="creditrule7" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_0.gif" width="15" height="14" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule8" type="text" id="creditrule8" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule9" type="text" id="creditrule9" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule10" type="text" id="creditrule10" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule11" type="text" id="creditrule11" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule12" type="text" id="creditrule12" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule13" type="text" id="creditrule13" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule14" type="text" id="creditrule14" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule15" type="text" id="creditrule15" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule16" type="text" id="creditrule16" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule17" type="text" id="creditrule17" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span><span><img src="$!webPath/resources/style/common/images/level_1.gif" width="15" height="14" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule18" type="text" id="creditrule18" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule19" type="text" id="creditrule19" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule20" type="text" id="creditrule20" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule21" type="text" id="creditrule21" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule22" type="text" id="creditrule22" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule23" type="text" id="creditrule23" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule24" type="text" id="creditrule24" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule25" type="text" id="creditrule25" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule26" type="text" id="creditrule26" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule27" type="text" id="creditrule27" />
+          </span></td>
+      </tr>
+      <tr>
+        <td class="spoprat"><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span><span><img src="$!webPath/resources/style/common/images/level_2.gif" width="16" height="16" /></span></td>
+        <td class="spoprat"><span class="allmen size5">
+          <input name="creditrule28" type="text" id="creditrule28" />
+          </span><span>-</span><span class="allmen size5">
+          <input name="creditrule29" type="text" id="creditrule29" />
+          </span></td>
+      </tr>
+    </table>
+  </div>
+  <div class="submit">
+    <input name="" type="submit" value="提交" />
+  </div>
+</div>
+</form>
+</body>
+</html>

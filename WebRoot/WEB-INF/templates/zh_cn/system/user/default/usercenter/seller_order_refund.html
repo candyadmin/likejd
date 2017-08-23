@@ -1,0 +1,63 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+#set($remain=$!CommUtil.subtract($!{obj.totalPrice},$!obj.refund))
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+	   rules:{
+		   refund:{number:true,max:$!remain}
+		   },
+	   messages:{
+	       refund:{number:"只能为数字",max:"超过可退金额"}
+	   }
+	});
+});
+</script>
+<form action="$!webPath/seller/order_refund_save.htm" method="post" id="theForm">
+  <table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td colspan="2" align="left" valign="top" >&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="100" align="right" valign="top">订单金额：
+        <input name="id" type="hidden" id="id" value="$!obj.id" />
+      </td>
+      <td align="left">$!obj.totalPrice</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">已退金额：</td>
+      <td align="left">$!CommUtil.null2Double($!obj.refund)（可退:$!remain）</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">退款金额：</td>
+      <td align="left"><input name="refund" type="text" id="refund" value="0" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">退款方式：</td>
+      <td align="left">
+      #if($!paymentTools.queryPayment("balance").get("install")==true)
+       <input name="refund_type" type="radio" id="radio1" value="预存款" checked="checked" />
+预存款
+	#end
+      <input name="refund_type" type="radio" id="radio4" value="线下支付"/>
+线下支付
+  <input type="radio" name="refund_type" id="radio" value="支付宝" />
+        支付宝
+          <input type="radio" name="refund_type" id="radio2" value="网银在线" />
+          网银在线
+          <input type="radio" name="refund_type" id="radio3" value="快钱" />
+快钱
+<input type="radio" name="refund_type" id="radio5" value="财付通" />
+财付通</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">操作说明：</td>
+      <td align="left"><textarea name="refund_log" id="refund_log" cols="35" rows="5"></textarea></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+        <input name="" type="submit" value="提交" style="cursor:pointer;"/>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      </span></td>
+    </tr>
+  </table>
+</form>

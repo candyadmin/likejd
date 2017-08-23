@@ -1,0 +1,25 @@
+<script>
+jQuery(document).ready(function(){
+ jQuery("a[id^=favorite_a_]").click(function(){
+		 var obj_id =jQuery(this).attr("obj_id");
+		 var store_id =jQuery(this).attr("store_id");
+		 jQuery("#store_id").val(store_id);
+		 jQuery("li[id^=favorite_li_]").removeClass("this");
+		 jQuery("#favorite_li_"+obj_id).addClass("this");
+												
+	});								
+});
+</script>
+
+<ul>
+          #set($f_img="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+           #foreach($fav in $favorites)
+           #if($!fav.store.store_logo)
+           #set($f_img="$!webPath/$!fav.store.store_logo.path/$!fav.store.store_logo.name" )
+           #end
+         <li #if($!velocityCount==1)class="this"#end  store_id="$!fav.store.id"  id="favorite_li_$!fav.id">
+         <a href="javascript:void(0);" id="favorite_a_$!fav.id" obj_id="$!fav.id" store_id="$!fav.store.id" title="$!fav.store.store_name">
+         <img src="$!f_img" width="60" height="60" />
+         </a></li>
+         #end 
+        </ul>

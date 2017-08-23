@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery(".memimg").mouseover(function(){
+     jQuery(this).css("cursor","pointer");
+	 jQuery(".mem_detail[id^=user_detail_]").hide();
+     var id=jQuery(this).attr("id");
+	 jQuery("#user_detail_"+id).show();
+  });
+  jQuery(".mem_detail[id^=user_detail_]").mouseleave(function(){
+    jQuery(this).hide();
+  });
+});
+</script>
+<body>
+  <div class="cont">
+    <h1 class="seth1">会员管理</h1>
+    <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/user_list.htm"  class="this">管理</a> | <a href="$!webPath/admin/user_add.htm">新增</a> </span> <span class="tab-two"></span></div>
+	<form>
+    <div class="allmem_search">
+      <ul>
+        <li> <span>
+          <select name="condition" id="condition">
+            <option value="userName">会员名</option>
+            <option value="email">注册邮箱</option>
+            <option value="trueName">真实姓名</option>
+          </select>
+          </span> <span class="allmen size4">
+          <input name="value" type="text" id="value" />
+          </span><span class="btn_search">
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;" title="搜索会员"/>
+          </span> </li>
+      </ul>
+    </div>
+	</form>
+    <div class="operation">
+      <h3>友情提示</h3>
+      <ul>
+        <li>可用金额，买家会员可以用来支付订单、提现，卖家可以用来支付商城收费服务</li>
+        <li>冻结金额，当会员进行提现操作后，提现金额变为冻结金额等待管理员审核操作。当会员使用预存款支付购买时，在订单支付后且未收货之前，
+          可用金额减少，支付的金额变为冻结金额，直到确认收货后，冻结金额减少，卖家可用金额增加。冻结金额不能用来支付或提现</li>
+      </ul>
+    </div>
+	<FORM name="ListForm" id="ListForm"  action="$!webPath/admin/user_list.htm" method="post">
+    <div class="allmem_table">
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="8%" align="left">&nbsp;</td>
+          <td width="25%" align="left">会员名</td>
+          <td width="6%" align="center">会员积分</td>
+          <td width="6%" align="center">会员金币</td>
+          <td width="6%" align="center">登录次数</td>
+          <td width="15%" align="center">最后登录</td>
+          <td width="6%" align="center">预存款</td>
+          <td width="15%" align="center">店铺</td>
+          <td  align="center">操作</td>
+        </tr>
+        #foreach($!obj in $objs)
+        <tr>
+          <td  align="left"><input name="id" type="checkbox" id="id" style="width:16px; border:none;" value="$!obj.id" /></td>
+          <td  align="left"><span class="memimg"><img  src="#if($!obj.photo)$!webPath/$!obj.photo.path/$!obj.photo.name #else $!webPath/resources/style/system/manage/blue/images/default_user_photo.gif #end" width="45" height="49" /></span> <span class="mem_detail">
+            <ul>
+              <li class="mem_font">$!obj.userName<i>(真实姓名：$!obj.trueName)</i></li>
+              <li>注册时间：$!CommUtil.formatLongDate($!obj.addTime)</li>
+              <li class="open"><span class="email"><a href="mailto:$!obj.email" title="用户邮箱:$!obj.email"><img src="$!webPath/resources/style/system/manage/blue/images/mail.jpg" width="15" height="11" /></a></span> <span><a href="#if($!obj.QQ)http://wpa.qq.com/msgrd?v=3&uin=$!obj.QQ&Site=$!obj.QQ&Menu=yes #else javascript:void(0);#end" #if($!obj.QQ)target="_blank"#end  title="#if($!obj.QQ)用户QQ:$!{obj.QQ}#else 用户没填写QQ#end"><img src="$!webPath/resources/style/system/manage/blue/images/qq.jpg" width="19" height="20" /></a></span> <span><a href="#if($!obj.WW)http://amos1.taobao.com/msg.ww?v=2&uid=$!{obj.WW}&s=2 #else javascript:void(0);#end" #if($!obj.WW)target="_blank"#end title="#if($!obj.WW)用户旺旺:$!obj.WW #else 用户没填写旺旺#end"><img src="$!webPath/resources/style/system/manage/blue/images/ww.jpg" width="17" height="17" border="0" /></a></span> <span><a  href="#if($!obj.MSN)msnim:chat?contact=$!{obj.MSN}#else javascript:void(0);#end"  title="#if($!obj.MSN)用户MSN:$!{obj.MSN}#else 用户没填写MSN #end" #if($!obj.MSN)target="_blank"#end><img src="$!webPath/resources/style/system/manage/blue/images/hotm.jpg" width="20" height="17" border="0" /></a></span> </li>
+            </ul>
+            </span></td>
+          <td align="center">$!obj.integral</td>
+          <td class="lightred">$!obj.gold</td>
+          <td class="lightred">$!obj.loginCount</td>
+          <td class="lightred"><ul>
+              <li>$!CommUtil.formatLongDate($!obj.lastLoginDate)</li>
+              <li>$!obj.lastLoginIp</li>
+            </ul></td>
+          <td class="lightred"><ul>
+              <li>可用：<strong>#if($!{obj.availableBalance})$!{obj.availableBalance}#else 0 #end元</strong></li>
+              <li>冻结：<strong>#if($!{obj.freezeBlance})$!{obj.freezeBlance}#else 0 #end元</strong></li>
+            </ul></td>
+          <td class="blue" align="center">#if($!storeTools.query_store_with_user("$!obj.id")==1)<a href="javascript:void(0);" onclick="window.parent.openURL('url','$!webPath/admin/store_edit.htm?id=$!obj.store.id','main_workspace','store_manage_op','about_store')">店铺</a>#else <span style="color:#F00">未开店</span>#end</td>
+          <td align="center"  class="blue xiahua"><a href="$!webPath/admin/user_edit.htm?id=$!obj.id">编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0);" onclick="if(confirm('删除会员会同步删除删除该会员所有信息，且不可恢复，是否继续？'))window.location.href='$!webPath/admin/user_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'">删除</a></td>
+        </tr>
+        #end
+        <tr style="background:#F2F2F2; height:30px;">
+          <td colspan="9"><div class="shopbtn shopfx">
+              <input name="all" type="checkbox" id="all" onclick="selectAll(this)" value="" />
+              &nbsp;&nbsp;全部</div>
+            <div class="shop_btn_del shopbtn">
+              <input name="" type="button" value="删除" style="cursor:pointer;" onclick="cmd('$!webPath/admin/user_del.htm')"/>
+            </div></td>
+        </tr>
+      </table>
+    </div>
+    <div class="fenye">
+      <input name="userRole" type="hidden" id="userRole" value="BUYER" />
+      <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+      <input name="mulitId" type="hidden" id="mulitId" />
+      $!gotoPageHTML
+	</div>
+	</FORM>
+  </div>
+</body>
+</html>

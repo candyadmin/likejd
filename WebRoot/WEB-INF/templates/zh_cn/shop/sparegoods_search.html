@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>闲置商品搜索页 -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/second.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/second_auto.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){					
+jQuery("a[id^=search_by_],input[id^=search_by_]").click(function(){
+	var orderBy = jQuery(this).attr("orderBy");
+	jQuery("#orderBy").val(orderBy)
+	if(orderBy=="goods_price"){
+		jQuery("#price_begin").val(jQuery("#goods_price_begin").val());
+		jQuery("#price_end").val(jQuery("#goods_price_end").val());
+		}else{
+		jQuery("#price_begin").val("");	
+		jQuery("#price_end").val("");	
+			}
+	jQuery("#ListForm").submit();
+	});	
+jQuery(".nat a").click(function(){
+	var display = jQuery(".goods_ct").css("display");
+	if(display=="none"){
+		jQuery(".goods_ct").show();
+		}else{
+		jQuery(".goods_ct").hide();	
+			}
+	});
+jQuery(".Region ul li[class='item']").mouseover(function(){
+		jQuery(".Cities").hide();												   
+		jQuery(this).find(".Cities").show();													   
+	  });
+jQuery(".h3_r").find("a").click(function(){
+		jQuery(this).parent().parent().parent().hide().find(".Cities").hide();							 
+	  });
+jQuery(".goods_ct").mouseleave(function(){
+	jQuery(this).hide();									
+	 });
+jQuery("a[id^=byArea_]").click(function(){
+var area_id=jQuery(this).attr("area_id");
+	jQuery("#area_id").val(area_id);
+	jQuery("#ListForm").submit();
+	});
+});
+
+
+</script>
+</head>
+
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> 
+$!httpInclude.include("/sparegoods_head.htm") 
+</div>
+$!httpInclude.include("/sparegoods_nav.htm")
+<div class="Idle_list">
+  <div class="main">
+    <div class="Idle_list_box">
+      <h1>个人闲置：<span> <a href="$!webPath/sparegoods_search.htm">全部 #if(!$!sgc)（$!allCount） #end</a> #if($!sgc)  >
+        #if($!sgc.parent.parent.id) <a href="$!webPath/sparegoods_search.htm?cid=$!{sgc.parent.parent.id}"> $!{sgc.parent.parent.className}</a> > #end   
+        #if($!sgc.parent.id) <a href="$!webPath/sparegoods_search.htm?cid=$!{sgc.parent.id}"> $!{sgc.parent.className}</a> > #end <a href="$!webPath/sparegoods_search.htm?cid=$!{sgc.id}"> $!{sgc.className}</a>（$!allCount）#end</span> </h1>
+      #if($!sgc.childs.size()>0)
+      <div class="Idle_list_ul">
+        <ul>
+          #foreach($sgc in $sgc.childs)
+          <li> <a href="$!webPath/sparegoods_search.htm?cid=$!sgc.id">$!sgc.className</a></li>
+          #end
+        </ul>
+      </div>
+      #end
+      #if($!objs.size()>0)
+      <form action="$!webPath/sparegoods_search.htm" id="ListForm" name="ListForm" method="post">
+        <input id="cid" name="cid" value="$!sgc.id" type="hidden"/>
+        <input id="orderBy" name="orderBy" value="$!orderBy" type="hidden"/>
+        <input id="orderType" name="orderType" value="$!orderType" type="hidden"/>
+        <input id="currentPage" name="currentPage" value="$!currentPage" type="hidden"/>
+        <input id="price_begin" name="price_begin" value="$!price_begin" type="hidden"/>
+        <input id="price_end" name="price_end" value="$!price_end" type="hidden"/>
+        <input id="area_id" name="area_id" value="$!area_id" type="hidden"/>
+        <div class="h2">
+          <div class="h2_left"> <span class="help #if($!orderBy=='recommend')this #end"> <a href="javascript:void(0);" id="search_by_recommend" orderBy="recommend">帮你淘</a></span> <span class="time #if(!$!orderBy || $!orderBy=='addTime')this #end"> <a href="javascript:void(0);" id="search_by_addTime" orderBy="addTime">最新发布</a></span> <span class="price #if($!orderBy=='goods_price')this #end"> <a href="javascript:void(0);" id="search_by_price" orderBy="goods_price">价格</a></span> </div>
+          <div class="h2_price">
+            <input class="tx"  id="goods_price_begin"  placeholder="#if($!price_begin!="")$!price_begin#else￥#end" type="text" />
+            <span>-</span>
+            <input class="tx" id="goods_price_end"  placeholder="#if($!price_end!="")$!price_end#else￥#end" type="text" />
+            <input class="yes" type="button" id="search_by_price" orderBy="goods_price" value="确定" />
+          </div>
+          <div class="h2_area"> <span>地区选择：</span>
+            <div class="nat"><a href="javascript:void(0);"><em>#if($!area)$!area.areaName #else全国#end</em><i></i></a></div>
+            <div class="goods_ct" style="display:none">
+              <h3> <span class="h3_l">选择你的收货城市</span> <span class="h3_area"> #if($!area)
+                当前选择城市： $!area.areaName <a href="$!webPath/sparegoods_search.htm"><em>[返回全国]</em></a> #end </span> <span class="h3_r"><a href="javascript:void(0);"><img src="$!webPath/resources/style/system/front/default/images/area_close.png"/></a></span> </h3>
+              <div class="Region">
+                <ul>
+                  #foreach($city in $citys)
+                  <li class="item"> <a href="javascript:void(0);">$!city.areaName</a>
+                    <div class="Cities" style="display:none">
+                      <ul>
+                        #foreach($c in $city.childs)
+                        <li><a id="byArea_$!{c.id}" href="javascript:void(0);" area_id="$!c.id">$!c.areaName</a></li>
+                        #end
+                      </ul>
+                    </div>
+                  </li>
+                  #end
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="h2_search"> <span class="st">
+            <input type="text" />
+            </span> <span class="sb">
+            <input type="button" value="确定" />
+            </span> </div>
+        </div>
+        <div class="Idle_lists">
+          <ul>
+            #foreach($obj in $objs)
+            <li>
+              <div class="li_left">
+                <div class="pic"> <a href="$!webPath/sparegoods_$!{obj.id}.htm" target="_blank"><img src="$!webPath/$!obj.main_img.path/$!obj.main_img.name"  width="120" height="120" /></a> #if($!obj.oldAndnew==1) <span>全新转卖</span> #end </div>
+                <div class="middle">
+                  <h4><a href="$!webPath/sparegoods_$!{obj.id}.htm"  target="_blank">$!obj.title</a></h4>
+                  <span class="price">¥<b>$!obj.goods_price</b></span> #set($content = $!SpareGoodsTools.ClearContent($!obj.content))
+                  <p>$!CommUtil.substring("$!content",150)</p>
+                </div>
+              </div>
+              <div class="li_right"> <span class="portrait"> #set($user_img ="$!webPath/$!config.memberIcon.path/$!config.memberIcon.name")
+                #if($!obj.user.phtot)
+                #set($user_img ="$!webPath/$!obj.user.photo.path/$!obj.user.photo.name")
+                #end <a class="por"  href="$!webPath/sparegoods_$!{obj.id}.htm"  target="_blank"><img src="$!user_img" /></a>
+                <div class="por_r">
+                  <div class="name"> <em><a href="$!webPath/sparegoods_$!{obj.id}.htm" target="_blank">$!obj.name</a></em> <i> #if($!user) <a href="$!webPath/buyer/message_send.htm?userName=$!obj.user.userName" target="_blank"><img src="$!webPath/resources/style/system/front/default/images/usercenter/order_04.gif" width="15" height="11" /></a> #else <a href="javascript:void(0);"  dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="450" dialog_height="100" dialog_id="user_login"><img src="$!webPath/resources/style/system/front/default/images/usercenter/order_04.gif" width="15" height="11" /></a> #end </i> </div>
+                  <span></span> #if($!obj.QQ)
+                  <div><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=$!obj.QQ&Site=$!obj.QQ&Menu=yes"><img src="http://wpa.qq.com/pa?p=2:$!{obj.QQ}:51" /></a></div>
+                  #end </div>
+                </span> <span class="num">电话：$!obj.phone</span> <span class="num">所在地：$!obj.area.parent.parent.areaName $!obj.area.parent.areaName $!obj.area.areaName</span> </div>
+            </li>
+            #end
+          </ul>
+        </div>
+        <div class="Idle_page"> $!gotoPageFormHTML </div>
+      </form>
+      #else
+      <div class="starshop_list">
+        <div class="sigh"> <span><img src="$!imageWebServer/resources/style/system/front/default/images/sigh.png" width="120" height="109" /></span> <b>对不起，没有对应的数据!</b> </div>
+      </div>
+    </div>
+    #end </div>
+</div>
+<div class="main"> $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

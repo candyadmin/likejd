@@ -1,0 +1,370 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>投诉管理 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+   jQuery("#theForm").validate({
+	   rules:{
+		     to_user_content:{required:true},
+			 img1:{accept:"$!config.imageSuffix"},
+			 img2:{accept:"$!config.imageSuffix"},
+			 img3:{accept:"$!config.imageSuffix"}
+		   },
+	   messages:{
+		     to_user_content:{required:"申诉内容不能为空"},
+			 img1:{accept:"不允许的图片类型"},
+			 img2:{accept:"不允许的图片类型"},
+			 img3:{accept:"不允许的图片类型"}
+		   }
+	});
+   jQuery(".comp_poces b").removeClass("this");
+   jQuery("#complaint_$!{obj.status}").addClass("this");
+});
+function complaint_appeal(){
+  jQuery("#theForm").attr("action","$!webPath/buyer/complaint_appeal.htm");
+  jQuery("#theForm").submit();
+}
+function complaint_arbitrate(){
+ if(confirm("确定提交仲裁吗？")){	
+  jQuery("#theForm").attr("action","$!webPath/buyer/complaint_arbitrate.htm");
+  jQuery("#theForm").submit();
+ }
+}
+function complaint_talk(){
+   var talk_content=jQuery("#talk_content").val();
+  jQuery.post("$!webPath/buyer/complaint_talk.htm",{"talk_content":talk_content,"id":"$!obj.id"},function(data){
+	  jQuery("#talk_content_detail").empty();	
+      jQuery.each(data, function(index,item){
+	      jQuery("#talk_content_detail").append("<li class='"+item.role+"'>"+item.content+"</li>");
+	  })
+  },"json");
+   jQuery("#talk_content").val("");
+   alert("发布对话成功！");
+}
+function complaint_talk_reload(){
+  jQuery.post("$!webPath/buyer/complaint_talk.htm",{"talk_content":"","id":"$!obj.id"},function(data){
+	  jQuery("#talk_content_detail").empty();	
+      jQuery.each(data, function(index,item){
+	       jQuery("#talk_content_detail").append("<li class='"+item.role+"'>"+item.content+"</li>");
+	  })
+  },"json");
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <form method="post" enctype="multipart/form-data" id="theForm">
+      <input name="id" type="hidden" id="id" value="$!obj.id" />
+      <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+        <tr> $!httpInclude.include("/seller/nav.htm?op=complaint")
+          <td id="centerbg" valign="top"><div class="productmain">
+              <div class="ordernav">
+                <ul class="orderul">
+                  <li><a href="$!webPath/seller/complaint.htm">投诉列表</a></li>
+                  <li class="this">投诉详情</li>
+                </ul>
+              </div>
+              <div class="ordercon">
+                <div class="complaint_one">
+                  <h1 class="complaint_h">投诉进程</h1>
+                  <div class="comp_poces">
+                    <ul>
+                      <li><b class="this" id="complaint_0">新投诉</b><em></em></li>
+                      <li><b id="complaint_1">待申诉</b><em></em></li>
+                      <li><b id="complaint_2">对话中</b><em></em></li>
+                      <li><b id="complaint_3">待仲裁</b><em></em></li>
+                      <li><b id="complaint_4">已完成</b></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="complaint_one">
+                  <h1 class="complaint_h">订单详情</h1>
+                  <div class="comp_goodetails">
+                    <dl class="comp_goodl">
+                      <dt>订单信息</dt>
+                      <dd>
+                        <ul class="comp_gdul">
+                          #if($!obj.of.order_status==0)
+                          #set($status="已取消")
+                          #end
+                          #if($!obj.of.order_status==10)
+                          #set($status="待付款")
+                          #end
+                          #if($!obj.of.order_status==15)
+                          #set($status="线下支付待审核")
+                          #end
+                          #if($!obj.of.order_status==20)
+                          #set($status="已付款")
+                          #end
+                          #if($!obj.of.order_status==30)
+                          #set($status="已发货")        
+                          #end                
+                          #if($!obj.of.order_status==40)
+                          #set($status="已收货")
+                          #end
+                          #if($!obj.of.order_status==50)
+                          #set($status="已完成,已评价")                                              
+                          #end
+                          #if($!obj.of.order_status==60)
+                          #set($status="已结束")                                              
+                          #end
+                          <li> 订单状态：<strong>$!status</strong></li>
+                          <li> 订单号：<b> $!obj.of.order_id</b> </li>
+                          <li> 下单时间：$!CommUtil.formatLongDate($!obj.of.addTime)</li>
+                          <li> 订单总额：¥$!{obj.of.totalPrice}</li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl class="comp_goodl">
+                      <dt>卖家信息</dt>
+                      <dd>
+                        <ul class="comp_gdul">
+                          <li> 卖家店铺：<b><a href="$!webPath/store_$!{obj.of.store.id}.htm" target="_blank">$!{obj.of.store.store_name}</a></b></li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl class="comp_goodl">
+                      <dt>买家信息</dt>
+                      <dd>
+                        <ul class="comp_gdul">
+                          <li> 买家名称：$!{obj.of.user.userName}</li>
+                        </ul>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="complaint_one">
+                  <h1 class="complaint_h">投诉详情</h1>
+                  <div class="comp_goodetails">
+                    <dl class="comp_goodl">
+                      <dt>投诉信息</dt>
+                      <dd>
+                        <ul class="comp_gdul">
+                          #if($!obj.status==0)
+                          #set($status="新投诉")
+                          #end
+                          #if($!obj.status==1)
+                          #set($status="待申诉")
+                          #end
+                          #if($!obj.status==2)
+                          #set($status="对话中")
+                          #end
+                          #if($!obj.status==3)
+                          #set($status="待仲裁")
+                          #end
+                          #if($!obj.status==4)
+                          #set($status="已完成")
+                          #end
+                          <li> 投诉状态：$!status</li>
+                          #if($!obj.type=="buyer")
+                          #set($type="买家投诉")
+                          #else
+                          #set($type="卖家投诉")
+                          #end
+                          <li> 投诉类别：$!type</li>
+                          <li> 投诉人：$!obj.from_user.userName</li>
+                          <li> 投诉主题：$!obj.cs.title</li>
+                          <li> 取证图片：<a href="$!webPath/buyer/complaint_img.htm?id=$!obj.id&type=buyer" target="_blank">查看图片</a></li>
+                          <li> 投诉时间：$!CommUtil.formatLongDate($!obj.addTime)</li>
+                        </ul>
+                      </dd>
+                    </dl>
+                    <dl class="comp_goodl">
+                      <dt>投诉的商品</dt>
+                      <dd>
+                        <table width="715" border="0" cellspacing="0" cellpadding="0" class="compgoods_table">
+                          <tr class="compgoods_th">
+                            <td width="240">&nbsp;</td>
+                            <td width="180">商品信息</td>
+                            <td width="100" align="center">数量</td>
+                            <td align="center">价格</td>
+                          </tr>
+                          #foreach($cg in $obj.cgs)
+                          #foreach($gc1 in $obj.of.gcs)
+                          #if($cg.goods.id==$gc1.goods.id)
+                          #set($gc=$gc1)
+                          #end
+                          #end
+                          <tr>
+                            <td><b class="comp_tab_b"> &nbsp;&nbsp; </b><em class="comp_tab_em"><span class="compimg_span tab_span">
+                              <p><img width="50" height="50" src="$!webPath/$!{gc.goods.goods_main_photo.path}/$!{gc.goods.goods_main_photo.name}_small.$!{gc.goods.goods_main_photo.ext}" /></p>
+                              </span></em><span class="comp_tab_sp"><a href="$!webPath/goods_$!{gc.goods.id}.htm" target="_blank">$!{gc.goods.goods_name}</a></span></td>
+                            <td>$!{gc.spec_info}</td>
+                            <td align="center">$!{gc.count}</td>
+                            <td align="center"><b class="red">¥$!{gc.goods.store_price}</b></td>
+                          </tr>
+                          <tr class="comp_noneb">
+                            <td colspan="4"><div class="comp_question">
+                                <p ><span>问题描述：</span>$cg.content</p>
+                              </div></td>
+                          </tr>
+                          #end
+                        </table>
+                      </dd>
+                    </dl>
+                    <dl class="comp_goodl">
+                      <dt>投诉内容：</dt>
+                      <dd>
+                        <div class="comp_text">
+                          <p class="comp_cont">$!obj.from_user_content</p>
+                        </div>
+                      </dd>
+                    </dl>
+                    #if($!obj.status==1 && $!obj.to_user.id==$!user.id)
+                    <div class="complaint_one">
+                      <h1 class="complaint_h">申诉详情</h1>
+                      <div class="comp_goodetails">
+                        <dl class="comp_goodl">
+                          <dt>申诉内容:</dt>
+                          <dd>
+                            <div class="comp_text">
+                              <textarea name="to_user_content" cols="" rows="" id="to_user_content"></textarea>
+                            </div>
+                          </dd>
+                        </dl>
+                        <dl class="comp_goodl">
+                          <dt>申诉图片<b class="orange fsize12">(图片必须是jpg/jpeg/gif/png格式)</b></dt>
+                          <dd>
+                            <div class="comp_uploadimg">
+                              <ul>
+                                <li>
+                                  <input name="img1" type="file" id="img1" />
+                                </li>
+                                <li>
+                                  <input name="img2" type="file" id="img2" />
+                                </li>
+                                <li>
+                                  <input name="img3" type="file" id="img3" />
+                                </li>
+                              </ul>
+                            </div>
+                          </dd>
+                        </dl>
+                      </div>
+                    </div>
+                    #end
+                    #if($!obj.status>1)
+                    <div class="complaint_one">
+                      <h1 class="complaint_h">申诉详情</h1>
+                      <div class="comp_goodetails">
+                        <dl class="comp_goodl">
+                          <dt>申诉信息</dt>
+                          <dd>
+                            <ul class="comp_gdul">
+                              <li> 申诉人：$!obj.to_user.userName</li>
+                              <li> 申诉证据：<b><a href="$!webPath/buyer/complaint_img.htm?id=$!obj.id&type=seller" target="_blank"> 查看图片</a></b> </li>
+                              <li> 申诉时间：$!CommUtil.formatLongDate($!obj.appeal_time)</li>
+                            </ul>
+                          </dd>
+                        </dl>
+                        <dl class="comp_goodl">
+                          <dt>申诉内容：</dt>
+                          <dd>
+                            <div class="comp_text">
+                              <p class="comp_cont">$!obj.to_user_content</p>
+                            </div>
+                          </dd>
+                        </dl>
+                      </div>
+                    </div>
+                    <div class="complaint_one">
+                      <h1 class="complaint_h">买卖双方对话详情</h1>
+                      <div class="comp_goodetails">
+                        <dl class="comp_goodl">
+                          <dt>对话记录：</dt>
+                          <dd>
+                            <div class="comp_text_dlg">
+                              <div class="comp_dlg_f">
+                                <ul id="talk_content_detail">
+                                  #foreach($talk in $CommUtil.str2list("$!obj.talk_content"))
+                                  #if($!CommUtil.indexOf("$!talk","管理员")==0)
+                                  #set($class="admin")
+                                  #end
+                                  #if($!CommUtil.indexOf("$!talk","申诉")==0)
+                                  #set($class="from_user")
+                                  #end
+                                  #if($!CommUtil.indexOf("$!talk","投诉")==0)
+                                  #set($class="to_user")
+                                  #end
+                                  <li class="$!class">$!talk</li>
+                                  #end
+                                </ul>
+                              </div>
+                            </div>
+                          </dd>
+                        </dl>
+                        #if($!obj.status>1 && $!obj.status<4)
+                        <dl class="comp_goodl">
+                          <dt>发布对话:</dt>
+                          <dd>
+                            <div class="comp_text">
+                              <textarea name="talk_content" cols="" rows="" id="talk_content"></textarea>
+                            </div>
+                          </dd>
+                        </dl>
+                        #end </div>
+                    </div>
+                    #end </div>
+                </div>
+              </div>
+              #if($!obj.status==4)
+              <div class="complaint_one">
+                <h1 class="complaint_h">仲裁详情</h1>
+                <div class="comp_goodetails">
+                  <dl class="comp_goodl">
+                    <dt>仲裁信息</dt>
+                    <dd>
+                      <ul class="comp_gdul">
+                        <li> 仲裁管理员：$!obj.handle_user.userName</li>
+                        <li> 仲裁时间：$!CommUtil.formatLongDate($!obj.handle_time)</li>
+                      </ul>
+                    </dd>
+                  </dl>
+                  <dl class="comp_goodl">
+                    <dt>仲裁意见：</dt>
+                    <dd>
+                      <div class="comp_text">
+                        <p class="comp_cont">$!obj.handle_content</p>
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              #end
+              #if($!obj.status==1 && $!obj.to_user.id==$!user.id)
+              <div class="comp_btn"> <span class="setsub nsp">
+                <input name="" type="button"  value="提交申诉" style="cursor:pointer;" onclick="complaint_appeal();"/>
+                </span></div>
+              #end
+              #if($!obj.status>=2 && $!obj.status<4)
+              <div class="comp_btn"> <span class="setsub nsp">
+                <input name="" type="button"  value="发布对话" onclick="complaint_talk();" style="cursor:pointer;"/>
+                </span><span class="setsub nsp">
+                <input name="" type="button"  value="刷新对话" onclick="complaint_talk_reload();" style="cursor:pointer;"/>
+                </span><span class="setsub">
+                <input name="" type="button"  value="提交仲裁" style="cursor:pointer;" onclick="complaint_arbitrate();"/>
+                </span></div>
+              #end </div></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

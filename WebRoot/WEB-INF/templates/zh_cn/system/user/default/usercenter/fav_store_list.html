@@ -1,0 +1,92 @@
+﻿
+<script>
+		jQuery("tr[id^=table_tr_]").click(function(){
+		jQuery("td[id^=td_]").removeClass("oppertrsp opertable_store_list_td2").addClass("oppertrsp opertable_store_list_td1");	
+		 var id = jQuery(this).attr("tr_id");
+		 var store_id = jQuery(this).attr("store_id");
+		 jQuery("#td_"+id).removeClass("oppertrsp opertable_store_list_td1").addClass("oppertrsp opertable_store_list_td2");
+		 jQuery("span[id^=span_]").hide();
+		 jQuery("#span_"+id).show();
+		 jQuery("#store_id").val(store_id);
+		});
+function ajaxPage(url,page,obj){
+ jQuery.ajax({type:'POST',url:url,data:{"currentPage":page},
+			  success:function(data){
+					jQuery("#list_table").html(data);																											               }																																		    });
+}
+
+//分享动态ajax
+	jQuery("#share_storeOrgoods").click(function(){	
+		#if(!$!objs)
+				showDialog("less140words","系统提示","您还没有关注任何商品哦！",0,"warning",3);
+			#else											 
+		var store_id = jQuery("#store_id").val();
+		var content = jQuery("#content").val();
+		var length = content.length;
+		if(length>140){
+			showDialog("less140words","系统提示","输入字数不能多于140个字！",0,"warning",3);
+			}
+		else{
+			if(length<5){
+			showDialog("less140words","系统提示","请输入不少于5个字！",0,"warning",3);
+				}else{		
+			content =replace_em(content);		
+		   jQuery.post("$!webPath/buyer/dynamic_save.htm",
+				   {
+				    "content":content,
+					"store_id":store_id
+				   },
+				   function(data){
+					   if(data){
+						   jQuery("#ListForm").html(data);
+						   jQuery("#fav_store_list").remove();
+                           showDialog("share_sns","系统提示","发布成功！",0,"succeed",3);
+						   }
+						   else{
+						   jQuery("#fav_store_list").remove();
+						   showDialog("share_sns","系统提示","发布失败！",0,"error",3);   
+							   }
+	   					},"text");	  
+		   }}
+		   #end
+			});
+</script>
+
+<div style="margin-left:10px; float:left;" id="list_table">
+    <table width="450" border="0" cellspacing="0" cellpadding="0" class="opertable_store_list" >
+                        #foreach($obj in $objs)
+                        <tr style="cursor:pointer;" tr_id="$!obj.id" store_id="$!obj.store.id" id="table_tr_$!obj.id">
+                          <td class="#if($!velocityCount==1)oppertrsp opertable_store_list_td2 #else oppertrsp opertable_store_list_td1 #end"    id="td_$!{obj.id}">
+                          <span class="oppersp2">
+                            #if($!obj.store.store_logo)
+                            #set($store_logo="$!webPath/$!{obj.store.store_logo.path}/$!{obj.store.store_logo.name}")
+                            #else
+                            #set($store_logo="$!webPath/$!config.storeImage.path/$!config.storeImage.name")
+                            #end <img src="$!store_logo" width="50" height="50" /></span>
+                            #if($!velocityCount==1)
+                            <input id="store_id" type="hidden" name="store_id" value="$!obj.store.id"/>
+                            #end
+                            <span style="margin-top:18px;">$!obj.store.store_name</span>   
+                            <span id="span_$!obj.id" store_id="$!obj.id" style="font-size:18px; color: #FC3; float:right; margin-right:30px; margin-top:10px;#if($!velocityCount!=1)display:none#end"><img src="$!webPath/resources/style/common/images/icon/succeed.png"/></span>
+                           </td>
+                           
+                        </tr>
+                        
+                        #end
+                        #if(!$!objs)
+                        您还没有关注任何店铺哦，赶紧去关注一些店铺吧！
+                        #end
+                        <tr>
+                        <td style="text-align:center; height:20px; line-height:20px; clear:both; padding-bottom:10px; padding-top:5px;">
+                           	$!gotoPageAjaxHTML
+                           </td>
+                        </tr>
+    </table>
+</div>
+
+<div style="height:100px; text-align:center; padding-top:35px; clear:both;">
+	<textarea id="content" name="content"  cols="65" rows="4" style="border-radius:5px; border-color:#666 #ccc #ccc #666; border-style:solid; border-width:2px;" ></textarea >
+</div>
+<div style="height:25px; text-align:center; padding-top:10px; clear:both">
+	<input style="background:url($!webPath/resources/style/system/front/default/images/usercenter/fav_sto_shatr.jpg) no-repeat; color:#FFF; width:69px; height:28px; line-height:28px; border:0px; text-align:center; cursor:pointer" value="分享" id="share_storeOrgoods" type="button"  />
+</div>

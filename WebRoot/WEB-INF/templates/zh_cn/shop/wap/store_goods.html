@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>$!config.title</title>
+	
+<script>	
+#set($group=0)
+#set($current_price=$!obj.goods_current_price)
+#if($!{obj.group_buy}==2)
+  #set($group=1)
+#end
+#if($!group==1)
+  #foreach($info in $obj.group_goods_list)
+    #if($info.group.id==$!obj.group.id)
+	  var store_price=$!info.gg_price;
+	  #set($current_price=$!{info.gg_price})
+      #if($!info.gg_max_count>0)
+        var goods_inventory=$!info.gg_max_count;
+      #else
+        var goods_inventory=$!info.gg_count;
+      #end
+	#end
+  #end
+#else
+  var store_price=$!obj.goods_current_price;
+  var goods_inventory=$!obj.goods_inventory;
+#end
+</script>
+
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+	<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+	<script src="$!webPath/resources/style/system/front/wap/js/TouchSlide.1.1.js"></script>
+	<script src="$!webPath/resources/style/system/front/wap/js/jquery.validate.min.js"></script>
+	<script>
+		var goods_cod = "0";
+		//var store_price = "0.00";
+		jQuery(document).ready(function() {
+
+			//初始化数据
+			var data='$!obj.goods_property';
+			if(data!=""){
+			    var properties=eval("("+data+")");
+			    jQuery.each(properties,function(index,item){
+			        jQuery(".goodsintro").append("<li>"+item.name+":"+item.val+"</li>");
+			    });
+			}
+			  
+			//
+			jQuery("#log_cur a").click(function(){
+			   jQuery(this).parent().parent().find(".goods_ct").show();
+			});
+			//
+			jQuery(".titleback>a").click(function(){
+			   jQuery(".Cities").hide();
+			   jQuery(".goods_ct").hide();
+			   //jQuery(this).parent().parent().parent().hide();
+			});
+			//
+			jQuery(".item a").click(function(){
+			   jQuery(".Cities").hide();								 
+			   jQuery(this).parent().find(".Cities").show();
+			});
+			//
+			jQuery(".Cities>ul>li>a").click(function(){
+			  var city_name=jQuery(this).attr("city_name");	
+			  jQuery.ajax({type:'POST',url:'$!webPath/trans_fee.htm',dataType:'json',data:{"city_name":city_name,"goods_id":"$!{obj.id}"},
+						   beforeSend:function(){
+							    jQuery("#current_city_info").html('<img style="padding-top:3px;" src="$!webPath/resources/style/common/images/wait.gif" width="14" height="14" />');
+							    jQuery("#goods_mail_fee").html('<img style="padding-top:3px;" src="$!webPath/resources/style/common/images/wait.gif" width="14" height="14" />');
+								jQuery("#goods_express_fee").html('<img style="padding-top:3px;" src="$!webPath/resources/style/common/images/wait.gif" width="14" height="14" />');
+								jQuery("#goods_ems_fee").html('<img style="padding-top:3px;" src="$!webPath/resources/style/common/images/wait.gif" width="14" height="14" />');				
+							},
+						   success:function(json){
+							    jQuery("#current_city_info").html(json.current_city_info);
+							    jQuery("#goods_mail_fee").html('¥'+json.mail_fee);
+								jQuery("#goods_express_fee").html('¥'+json.express_fee);
+								jQuery("#goods_ems_fee").html('¥'+json.ems_fee);
+							 }
+						  });
+			  jQuery(".Cities").hide();	
+			  jQuery(".goods_ct").hide();
+			});
+			
+			<!--商品中自定义的规格值赋值-->
+
+			<!--商品中自定义的规格值赋值结束-->
+		});
+		jQuery(function() {
+
+			/* if (goods_cod == "0") {
+				jQuery("#show_count").html("x" + jQuery("#count").val() + "&nbsp&nbsp");
+			} else {
+				jQuery("#show_count").html("x" + jQuery("#count").val());
+			} */
+			jQuery("#show_spec").click(function(e) {
+				if (jQuery("#spec_select").css("display") == "block") {
+					jQuery("#img_spec").attr("src", "$!webPath/resources/style/system/front/wap/images/details_right.gif");
+					jQuery("#img_spec").attr("width", "9");
+					jQuery("#img_spec").attr("height", "18");
+					
+				} else {
+					jQuery("#img_spec").attr("src", "$!webPath/resources/style/system/front/wap/images/details_right_b.gif");
+					jQuery("#img_spec").attr("width", "18");
+					jQuery("#img_spec").attr("height", "9");
+					
+				}
+				jQuery("#spec_select").toggle();
+			});
+			
+			jQuery("#show_num").click(function(e) {
+					if (jQuery("#spec_count").css("display") == "block") {
+						jQuery("#img_spec").attr("src", "$!webPath/resources/style/system/front/wap/images/details_right.gif");
+						jQuery("#img_spec").attr("width", "9");
+						jQuery("#img_spec").attr("height", "18");
+						if (goods_cod == "0") {
+							jQuery("#show_count").html("x" + jQuery("#count").val() + "&nbsp&nbsp");
+						} else {
+							jQuery("#show_count").html("x" + jQuery("#count").val());
+						}
+					} else {
+						jQuery("#img_spec").attr("src", "$!webPath/resources/style/system/front/wap/images/details_right_b.gif");
+						jQuery("#img_spec").attr("width", "18");
+						jQuery("#img_spec").attr("height", "9");
+						if (goods_cod == "0") {
+							jQuery("#show_count").html("x" + jQuery("#count").val() + "&nbsp&nbsp");
+						} else {
+							jQuery("#show_count").html("x" + jQuery("#count").val());
+						}
+
+					}
+					jQuery("#spec_count").toggle();
+			});
+			
+			jQuery("#show_introduce").click(function(e) {
+				if (jQuery("#goods_introduce").css("display") == "block") {
+					jQuery("#img_spec").attr("src", "$!webPath/resources/style/system/front/wap/images/details_right.gif");
+					jQuery("#img_spec").attr("width", "9");
+					jQuery("#img_spec").attr("height", "18");
+					
+				} else {
+					jQuery("#img_spec").attr("src", "$!webPath/resources/style/system/front/wap/images/details_right_b.gif");
+					jQuery("#img_spec").attr("width", "18");
+					jQuery("#img_spec").attr("height", "9");
+					
+				}
+				jQuery("#goods_introduce").toggle();
+			});
+
+			jQuery(".details_standard>a").click(function() {
+				jQuery(".standard_bottom").slideToggle();
+				if (jQuery(this).find("ul").is(".standard_active")) {
+					jQuery(this).find("ul").removeClass("standard_active");
+				} else {
+					jQuery(this).find("ul").addClass("standard_active");
+				}
+			})
+			jQuery(".standard_check").not(":eq(0)").each(function() {
+				var th = jQuery(this).find("a").first();
+				goods_spec_set(th);
+			});
+			//商品收藏
+			/* jQuery(".details_star").click(function() {
+					if (jQuery(".details_star img").attr("mark") == 0) {
+						jQuery.post("/add_goods_favorite.htm",
+							{"id" : "53"},
+							function(data) {
+								if (data == 0) {
+									var img = "/resources/style/system/front/wap/images/star.png";
+									jQuery(".details_star img").attr("src", img);
+
+									jQuery(".details_star img").attr("mark", "1");
+								} else if (data == 1) {
+									alert("您已收藏该商品");
+								}
+
+							}, "text");
+					}
+				}); */
+		});
+		<!--end-->
+		
+		//添加购物车
+		function add_cart() {
+			
+			
+			#if($!user.id==$!obj.goods_store.user.id)
+				 alert("不能购买自己的商品！");
+			#else
+				 var add=true
+				 var gsp="";
+				 if(jQuery(".colordate").length==0){
+				    add=true;
+				 }else{
+					jQuery(".colordate").each(function(){
+					   jQuery.each(jQuery(this).find("a[class=this]"),function(){
+						  gsp=jQuery(this).attr("gsp")+","+gsp; 
+					   });
+				       if(jQuery(this).find("a[class=this]").length==0) 
+				    	   add=false;
+					});
+				 } 
+				 var count=jQuery("#count").val();
+				 if(count==0){
+				    add=false;
+					alert("至少购买一件商品!");
+					return;
+				 }
+				 if(goods_inventory==0){
+				    add=false;
+					alert("商品库存为0,不能购买!");
+					return;
+				 }  
+				 if(add){
+					var count = jQuery("#count").val() - 0;
+					
+					var goods_inventory = jQuery("#goods_inventory").attr("inventory") - 0;
+					
+					if (goods_inventory != 0) {
+						if (goods_inventory < count) {
+							count = goods_inventory;
+						}
+						jQuery.ajax({
+									type : 'POST',
+									url : '$!webPath/add_goods_cart.htm',
+									data : {
+										"id" : "$!obj.id",
+										"gsp" : gsp,
+										"count" : count,
+										"price":store_price
+									},
+									success : function(data) {
+										var result=eval("("+data+")");  
+										if("false"==result.flag){
+											alert("多个卖家的商品无法同时加入购物车结算");
+										} 
+										jQuery("#cart_goods_count").html(result.count);
+										 //jQuery("#cart_goods_totalprice").html(data.total_price);
+										 //jQuery(".goodscar").fadeIn();
+									     //time_id=window.setInterval(cart_fadeOut,1000);
+									}
+						});
+					}
+				 }else{
+				    //jQuery("#goods_spec_info").removeClass().addClass("detailsbottom detailsbottom_hover");  
+					//jQuery("#goods_spec_info_close").show();
+					jQuery("#spec_select").show();
+					jQuery("#goods_spec_chose").show();
+				 }
+			#end
+		}
+		//直接购买
+		function buy_goods() {
+			
+			#if($!user.id==$!obj.goods_store.user.id)
+				 alert("不能购买自己的商品！");
+			#else
+				  var add=true
+				  var gsp="";
+				  if(jQuery(".colordate").length==0){
+				    add=true;
+				  }else{
+					jQuery(".colordate").each(function(){
+					   jQuery.each(jQuery(this).find("a[class=this]"),function(){
+						  gsp=jQuery(this).attr("gsp")+","+gsp; 
+					   });
+				       if(jQuery(this).find("a[class=this]").length==0) add=false;
+					});
+				  }
+				  var count=jQuery("#count").val();
+				  if(count==0){
+				    add=false;
+					alert("至少购买一件商品!");
+					return;
+				  }
+				  if(goods_inventory==0){
+				    add=false;
+					alert("商品库存为0,不能购买!");
+					return;
+				  }    
+				  var buy_type=arguments[0];
+				  if(add){
+					  var count = jQuery("#count").val() - 0;
+				  	  var goods_inventory = jQuery("#goods_inventory").attr("inventory") - 0;
+					  if (goods_inventory != 0) {
+						  if (goods_inventory < count) {
+								count = goods_inventory;
+						  }
+						  jQuery.ajax({
+								type : 'POST',
+								url : '$!webPath/add_goods_cart.htm',
+								data : {
+									"id" : "$!obj.id",
+									"gsp" : gsp,
+									"count" : count,
+									"price":store_price,
+									"buy_type":buy_type
+								},
+								success : function(data) {
+									var result=eval("("+data+")");  
+									if("false"==result.flag){
+										alert("多个卖家的商品无法同时加入购物车结算");
+									} else {
+										window.location.href = "$!webPath/goods_cart1.htm";
+									}
+									jQuery("#cart_goods_count").html(result.count);
+								}
+							});
+						}
+					/* jQuery.post("$!webPath/add_goods_cart.htm",{"id":"$!obj.id","count":count,"price":store_price,"gsp":gsp,"buy_type":buy_type},function(data){
+					     jQuery("#cart_goods_count").html(data.count);
+						 jQuery("#cart_goods_totalprice").html(data.total_price);
+						 window.location.href="$!webPath/goods_cart1.htm";
+					},"json"); */
+				  }else{
+					//jQuery("#goods_spec_info").removeClass().addClass("detailsbottom detailsbottom_hover");  
+					//jQuery("#goods_spec_info_close").show();
+					jQuery("#spec_select").show();
+					jQuery("#goods_spec_chose").show();
+				  }
+			#end  
+		}
+		/* function f_cart() {
+			var add = true
+			var gsp = "";
+			jQuery("li[mark^=spec_]").each(function() {
+				if (jQuery(this).find("a[class=this]").length == 0)
+					add = false;
+			});
+			if (add) {
+				jQuery("li[mark^=spec_]").each(
+						function() {
+							gsp = jQuery(this).find("a[class=this]").attr("gsp") + "," + gsp;
+						});
+			}
+			if (add) {
+				var count = jQuery("#count").val() - 0;
+				var goods_inventory = jQuery("#goods_inventory").attr("inventory") - 0;
+				if (goods_inventory != 0) {
+					if (goods_inventory < count) {
+						count = goods_inventory;
+					}
+					window.location.href = "$!webPath/f_code_cart.htm?goods_id=53&gsp=" + gsp;
+				}
+			} else {
+				alert("请选择规格！")
+			}
+		} */
+		
+	</script>
+</head>
+
+<body class="index_relative">
+	<div class="phone_hd">
+		<a class="back" href="javascript:history.go(-1);"><img src="$!webPath/resources/style/system/front/wap/images/back.png" width="25" height="25"></a> 商品详情
+	</div>
+	<div class="details_index">
+		<div class="details_top">
+			<div class="details_photo" id="details_photo">
+				<div class="deta_photo">
+					<div class="tempWrap" style="overflow: hidden; position: relative;">
+						<ul style="width: 230px; position: relative; overflow: hidden; padding: 0px; margin: 0px; transition-duration: 200ms; transform: translate(0px, 0px) translateZ(0px);">
+							
+				            #if($!obj.goods_main_photo)
+				            	#set($small_img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+				            	#set($big_img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}")
+				            #else
+				            	#set($small_img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+				            	#set($big_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+				            #end 
+							<li style="display: table-cell; vertical-align: top; width: 230px;">
+								<img src="$!big_img">
+							</li>
+							
+							#foreach($img in $obj.goods_photos)
+							<li style="display: table-cell; vertical-align: top; width: 230px;">
+								<img src="$!imageWebServer/$!img.path/$!{img.name}_small.$!{img.ext}">
+							</li>
+							#end
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				TouchSlide({
+					slideCell : "#details_photo",
+					mainCell : ".deta_photo ul",
+					effect : "left",
+					autoPlay : true,//自动播放			
+					switchLoad : "_src" //切换加载，真实图片路径为"_src" 
+				});
+			</script>
+			<section>
+			<div class="details_price">
+				<ul>
+					<li class="details_price_money"><strong id="store_price">¥$!{current_price}</strong></li>
+					<li class="details_price_money">$!obj.goods_name</li>
+				</ul>
+				<span> <a href="javascript:void(0);" class="details_star"><img
+						src="$!webPath/resources/style/system/front/wap/images/star_bg.png"
+						mark="0"></a>
+				</span>
+			</div>
+			</section>
+		</div>
+
+		<!--商品规格-->
+		<script>
+			 function goods_spec_set(obj){
+				var spec=jQuery(obj).attr("spec");
+				var gsp="";
+				var load=true;
+				jQuery(".colordate a[spec="+spec+"]").removeClass("this");
+			    jQuery(obj).addClass("this");
+				jQuery(".colordate").each(function(){
+                    jQuery.each(jQuery(this).find("a[class=this]"),function(){
+					  gsp=jQuery(this).attr("gsp")+","+gsp; 
+					});
+	            });
+				jQuery(".colordate").each(function(){
+                     if(jQuery(this).find("a[class=this]").length==0) 
+                    	 load=false;
+	             });
+			  if(load){
+				//jQuery("#goods_spec_info").removeClass().addClass("detailsbottom");  
+	            //jQuery("#goods_spec_info_close").hide();    
+				jQuery("#goods_spec_chose").hide();
+				jQuery.post("$!webPath/load_goods_gsp.htm",{"id":"$!obj.id","gsp":gsp},function(data){
+				   goods_inventory=data.count;
+				   store_price=data.price;
+				   jQuery("#goods_inventory").html(goods_inventory);
+				   jQuery("#store_price").html("¥"+store_price);
+				   //jQuery("#rest").html("¥"+(goods_price-store_price));
+				  },"json");
+			    }
+			 }
+		</script>
+		
+		<div class="details_box" id="goods_spec_info">
+			<dl class="stand">
+				<dt id="show_spec">
+					<span class="fl">选择 &nbsp;规格: &nbsp;&nbsp;&nbsp;</span> 
+					<span class="fr"><img id="img_spec" src="$!webPath/resources/style/system/front/wap/images/details_right.gif" width="9" height="18"></span>
+				</dt>
+				<dd id="spec_select" style="display: none;">
+	                <ul>
+	                  <li id="goods_spec_chose" class="detail_chose" style="display:none;">请选择商品属性</li>
+	                  #foreach($spec in $goodsViewTools.generic_spec("$!obj.id"))
+	                  <li class="colordate">
+		                  <span class="datespan">$!{spec.name}：</span> 
+		                  <span class="chosecolor"> 
+		                  #foreach($gsp in $obj.goods_specs)
+		                    #if($!{gsp.spec.id}==$!spec.id) 
+		                    <b style="font-weight:lighter;"><a href="javascript:void(0);" onclick="goods_spec_set(this);" spec="$!gsp.spec.id" gsp="$!gsp.id">$!gsp.value</a></b> 
+		                    #end
+		                   #end
+		                  </span>
+	                  </li>
+	                  #end
+	                </ul>
+                </dd>
+			</dl>
+        </div>
+
+		<div class="details_box">
+			<dl class="stand">
+				<dt id="show_num">
+					<span class="fl">选择 &nbsp;数量: &nbsp;&nbsp;&nbsp;<em id="show_count">x1&nbsp;&nbsp;</em></span> 
+					<span class="fr"><img id="img_spec" src="$!webPath/resources/style/system/front/wap/images/details_right.gif" width="9" height="18"></span>
+				</dt>
+				<dd id="spec_count" style="display: none;">
+					<ul>
+						<li>
+							<span class="fl">库存：</span>
+							#if($!obj.group_buy==2)
+			                    #foreach($gg_info in $obj.group_goods_list)
+			                    	#if($!gg_info.gg_goods.id==$!obj.id)
+			                    		#set($goods_inventory=$!{gg_info.gg_count}) 
+			                    	#end                  
+			                    #end
+		                    #else
+		                    	#set($goods_inventory="$!{obj.goods_inventory}")
+		                    #end
+							<strong id="goods_inventory" inventory="$!{goods_inventory}">$!{goods_inventory}件</strong>
+						</li>
+						<li>
+							<span class="fl">数量：</span>
+							<span class="num">
+								<a class="minus" href="javascript:void(0);" onclick="minus()">－</a>
+								<input type="text" id="count" name="count" value="1">
+								<a class="plus" href="javascript:void(0);" onclick="plus()">+</a>
+							</span>
+						</li>
+						<script>
+							jQuery(function() {
+								jQuery("#count").keyup(function(e) {
+									var count = jQuery("#count").val().replace(/\D/g, '');
+									if (count == "") {
+										count = 1;
+									}
+									var goods_inventory = jQuery("#goods_inventory").attr("goods_inventory") - 0;
+									if (count > goods_inventory) {
+										jQuery("#count").val(goods_inventory);
+									} else if (count < 1) {
+										jQuery("#count").val(1);
+									} else {
+										jQuery("#count").val(count);
+									}
+									if (goods_cod == "0") {
+										jQuery("#show_count").html("x"+ jQuery("#count").val()+ "&nbsp&nbsp");
+									} else {
+										jQuery("#show_count").html("x"+ jQuery("#count").val());
+									}
+								});
+
+							})
+							function plus() {
+								var cc = jQuery("#count").val() - 0;
+								var goods_inventory = jQuery("#goods_inventory").attr("goods_inventory") - 0;
+								if (cc >= goods_inventory) {
+									jQuery("#count").val(goods_inventory);
+								} else {
+									jQuery("#count").val(cc + 1);
+								}
+								if (goods_cod == "0") {
+									jQuery("#show_count").html("x" + jQuery("#count").val() + "&nbsp&nbsp");
+								} else {
+									jQuery("#show_count").html("x" + jQuery("#count").val());
+								}
+							}
+							function minus() {
+								var cc = jQuery("#count").val() - 0;
+								if (cc <= 1) {
+									jQuery("#count").val(1);
+								} else {
+									jQuery("#count").val(cc - 1);
+								}
+								if (goods_cod == "0") {
+									jQuery("#show_count").html("x" + jQuery("#count").val() + "&nbsp&nbsp");
+								} else {
+									jQuery("#show_count").html("x" + jQuery("#count").val());
+								}
+							}
+						</script>
+					</ul>
+				</dd>
+			</dl>
+				
+			<dl class="stand">
+		    	<dt>
+					<span class="detbt">物流运费：</span>
+	                <div class="logistics"> 
+	                	<!-- <span class="start">$!{store.area.parent.areaName} | 至</span> -->
+	                    <div class="log_ps"> 
+	                      <span id="log_cur" class="log_cur"><a href="javascript:void(0);"><em id="current_city_info">$!{current_city}</em><i></i></a></span>
+	                      <div class="goods_ct" style="display:none;">
+		                      <div class="goods_ct_mask"></div>
+		                      <div class="goods_ct_list" style="opacity: 1; transform-origin: 0px 0px 0px; transform: scale(1, 1);">
+		                        <h3>
+		                        <span class="titleback">
+		                        	<a href="javascript:void(0);"><img src="$!webPath/resources/style/shop/default/images/14-14.png" /></a>
+		                        </span>
+		                        <span class="h3_title">
+		                                                         选择你的收货城市
+		                        </span>
+		                        </h3>
+		                        <!-- <p>您当前所在地：$!{current_city}</p> -->
+		                        <div class="Region">
+		                          <div class="spacer44"></div>
+		                          <ul>
+		                            #foreach($area in $areas)
+		                            <li class="item"> 
+		                              <a  href="javascript:void(0);" area_id="$!area.id" area_name="$!area.areaName">
+		                              <span>$!CommUtil.substring("$!area.areaName",5)</span>
+		                              </a>
+		                              <div class="Cities" style="display:none;">
+		                                <ul>
+		                                  #foreach($c_area in $area.childs)
+		                                  <li><a href="javascript:void(0);" city_id="$!c_area.id" city_name="$!c_area.areaName">$!{c_area.areaName}</a></li>
+		                                  #end
+		                                </ul>
+		                              </div>
+		                            </li>
+		                            #end
+		                          </ul>
+		                        </div>
+		                      </div>
+	                      </div>
+	                    </div>
+	                    
+	                </div>
+	                <!--物流运费新增start-->
+                    #if($!obj.goods_transfee==1) 
+                    	<span class="detbt"></span><span>卖家承担</span> 
+                    #else
+                    	#if($!obj.transport) 
+                    	<span> 
+                    	#if($!obj.transport.trans_mail)
+                    		平邮: <i id="goods_mail_fee">
+                    			¥$!transportTools.cal_goods_trans_fee("$!obj.transport.id","mail","$!obj.goods_weight","$!obj.goods_volume","$!{current_city}") </i> 
+                    	#end
+                    	#if($!obj.transport.trans_express)
+                    		快递: <i id="goods_express_fee"> 
+                    			¥$!transportTools.cal_goods_trans_fee("$!obj.transport.id","express","$!obj.goods_weight","$!obj.goods_volume","$!{current_city}") </i> 
+                    	#end 
+                    	#if($!obj.transport.trans_ems)
+                    		EMS: <i id="goods_ems_fee"> 
+                    			¥$!transportTools.cal_goods_trans_fee("$!obj.transport.id","ems","$!obj.goods_weight","$!obj.goods_volume","$!{current_city}") </i> 
+                    	#end 
+                    	</span> 
+                    	#else 
+                    	<span>
+                    		平邮:<em>¥$!CommUtil.null2Float($!{obj.mail_trans_fee})</em>&nbsp;
+                    		快递:<em>¥$!CommUtil.null2Float($!{obj.express_trans_fee})</em>&nbsp;
+                    		EMS:<em>¥$!CommUtil.null2Float($!{obj.ems_trans_fee})</em>&nbsp;
+                    	</span> 
+                    	#end
+                  	#end 
+		        </dt>
+	    	</dl>
+			
+			<!-- 商品详情 -->
+			<dl class="stand">
+				<dt id="show_introduce">
+					<span class="fl">商品详情</span> 
+					<span class="fr"><img id="img_spec" src="$!webPath/resources/style/system/front/wap/images/details_right.gif" width="9" height="18"></span>
+				</dt>
+		    	<dd id="goods_introduce" style="display: none;">
+					<div class="pro_intro_tabone">
+		                <ul class="goodsintro"></ul>
+		            </div>
+              		<div> 
+	              		<div align="center">
+							$!obj.goods_details
+						</div> 
+					</div>
+				</dd>
+		    </dl>
+		    
+		    <!-- 咨询信息 -->
+		    <!-- 
+		    <dl class="stand">
+		    	<dt><a href="/wap/consult.htm?id=1103"><span class="fl">咨询信息<span class="gray">(0)</span></span><span class="fr"><img src="/details_right.gif" height="18" width="9"></span></a></dt>
+		    </dl>
+		     -->
+		     
+		    <!-- 
+		    <dl class="send">
+		    	<dt>
+		        	<ul class="eva">
+		            	<li><a href="$!webPath/goods_order.htm?goods_id=$!{obj.id}&id=$!{store.id}">成交记录<span class="gray"></span></a></li>
+		                <li><a href="$!webPath/goods_evaluation.htm?goods_id=$!{obj.id}&id=$!{store.id}">商品评价<span class="gray"></span></a></li>
+		            </ul>
+		        </dt>
+		    </dl>
+		     -->
+		    
+			
+		</div>
+		
+		<!--评价等--> 
+		<!-- <div class="evaluation_top">
+		    <div class="evaluation_top_box"><b>好评度：</b><span><i style="width:0.0%"></i></span><strong>0.0%</strong></div>
+		    <ul>
+		      <li class="this"><span>好评：<br>
+		        <i>0.0%</i></span></li>
+		      <li><span>中评：<br>
+		        <i>0.0%</i></span></li>
+		      <li><span>差评：<br>
+		        <i>0.0%</i></span></li>
+		    </ul>
+		</div>
+		<div class="evaluation_box"> 
+		    <ul>
+		        <li class="details_eli" style="border-bottom:0px;"><a href=""><b><i><em><img src="/resources/style/system/front/wap/images/evel_star.png"></em><em><img src="/resources/style/system/front/wap/images/evel_star.png"></em><em><img src="/resources/style/system/front/wap/images/evel_star.png"></em><em><img src="/resources/style/system/front/wap/images/evel_star.png"></em><em><img src="/resources/style/system/front/wap/images/evel_star_bg.png"></em></i>100%&nbsp;(2)</b><span>评价</span></a>
+		        </li>
+		      </ul> 
+		        <div style="line-height:40px; text-align:center"> 还没有评价内容 </div>
+		</div>
+		<div class="loading" id="loading" style="display:none">
+		    <ul>
+		      <li><img src="/loading.gif" height="16" width="16"></li>
+		      <li>正在加载....</li>
+		    </ul>
+		</div>
+		<div class="loading" id="loading_none" style="display:none">
+		    <ul>
+		      <li>没有更多了....</li>
+		    </ul>
+		</div> -->
+  
+		<div style="height: 10px;"></div>
+		<div class="details_total">
+			<a href="$!webPath/goods_cart1.htm" class="details_enjoy">
+				<img src="$!webPath/resources/style/system/front/wap/images/enjoy.png" width="35" height="35"><i id="cart_goods_count" class="car_num">0</i>
+			</a> 
+			<a href="javascript:void(0)" onclick="add_cart()" class="add_car">加入购物车</a>
+			<a href="javascript:void(0)" onclick="buy_goods()" class="atonce">立即购买</a>
+		</div>
+	</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<body>
+</head>
+<div class="cont">
+  <h1 class="seth1">举报管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/report_list.htm">未处理举报</a> | <a href="$!webPath/admin/report_handle_list.htm" class="this">已处理举报</a>|<a href="$!webPath/admin/reporttype_list.htm">举报类型</a>|<a href="$!webPath/admin/reporttype_add.htm">新增举报类型</a>|<a href="$!webPath/admin/reportsubject_list.htm">举报主题</a>|<a href="$!webPath/admin/reportsubject_add.htm">新增举报主题</a> </span> <span class="tab-two"></span></div>
+  <form name="queryForm" id="queryForm" action="" method="post">
+    <div class="allmem_search">
+      <ul>
+        <li><span>商品名称</span> <span class="allmen size4">
+          <input name="goods_name" type="text" id="goods_name" />
+          </span> <span>举报人</span> <span class="allmen size4">
+          <input name="userName" type="text" id="userName" />
+          </span><span class="btn_search">
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;"/>
+          </span> </li>
+      </ul>
+    </div>
+  </form>
+  <form method="post" id="ListForm">
+    <div class="brandtable">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="friend_table">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="291">商品名称</td>
+          <td width="143">举报人</td>
+          <td  width="174">举报类型</td>
+          <td width="239" >举报主题</td>
+          <td width="124" align="left">处理结果</td>
+          <td width="139" align="left">操作</td>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+          <td><span class="pxnum size5"> $!obj.goods.goods_name </span></td>
+          <td><span class="pxnum size7">$!obj.user.userName</span></td>
+          <td>$!obj.subject.type.name</td>
+          <td>$!obj.subject.title</td>
+          #set($result="等待处理")
+          #if($!obj.result==1)
+            #set($result="有效举报")
+          #end
+          #if($!obj.result==-1)
+            #set($result="无效举报")
+          #end
+          #if($!obj.result==-2)
+            #set($result="恶意举报")
+          #end
+          <td>$result</td>
+          <td class="ac8" align="left"><a href="javascript:void(0);" onclick="javascript:jQuery('tr[id=$!obj.id]').show();">详情</a> </td>
+        </tr>
+        <tr id="$!{obj.id}" style="display:none;">
+          <td colspan="7"><div class="detailsjb"> <span class="claso"><a href="javascript:void(0);" onclick="javascript:jQuery('tr[id=$!obj.id]').hide();"><img src="$!webPath/resources/style/system/manage/blue/images/claso.jpg" width="15" height="15" /></a></span>
+            <h3>举报内容</h3>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="report_table">
+               <tr>
+                    <td width="114" align="right" valign="top">举报商品：</td>
+                  <td valign="top">$!obj.goods.goods_name</td>
+                </tr>
+				   <tr>
+                    <td width="114" align="right" valign="top">举报类型：</td>
+                    <td valign="top">$!obj.subject.type.name</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">举报主题：</td>
+                    <td valign="top">$!obj.subject.title</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">举报时间：</td>
+                    <td valign="top">$!CommUtil.formatLongDate($!obj.addTime)</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">举报内容：</td>
+                    <td valign="top">$!obj.content</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">举报状态：</td>
+                    <td valign="top">#if($!obj.status==0)未处理#else 已处理 #end</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">处理结果：</td>
+                     #set($result="等待处理")
+                      #if($!obj.result==1)
+                      #set($result="有效举报")
+                      #elseif($!obj.result==-1)
+                      #set($result="无效举报")
+                      #end
+                    <td valign="top">$!result</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">取证图片1：</td>
+                    <td valign="top">
+                    #if($!obj.acc1)
+                      #set($width=$!CommUtil.div($!obj.acc1.width,3))
+                      #set($heigh=$!CommUtil.div($!obj.acc1.height,3))
+                      <a href="$!webPath/$!obj.acc1.path/$!obj.acc1.name" target="_blank" title="查看原图"><img src="$!webPath/$!obj.acc1.path/$!obj.acc1.name" width="$!width" height="$!heigh" /></a>
+                    #end
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">取证图片2：</td>
+                    <td valign="top">
+                     #if($!obj.acc2)
+                      #set($width=$!CommUtil.div($!obj.acc2.width,3))
+                      #set($heigh=$!CommUtil.div($!obj.acc2.height,3))
+                      <a href="$!webPath/$!obj.acc2.path/$!obj.acc2.name" target="_blank" title="查看原图"><img src="$!webPath/$!obj.acc2.path/$!obj.acc2.name" width="$!width" height="$!heigh" /></a>
+                    #end
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">取证图片3：</td>
+                    <td valign="top">
+                     #if($!obj.acc3)
+                      #set($width=$!CommUtil.div($!obj.acc3.width,3))
+                      #set($heigh=$!CommUtil.div($!obj.acc3.height,3))
+                      <a href="$!webPath/$!obj.acc3.path/$!obj.acc3.name" target="_blank" title="查看原图"><img src="$!webPath/$!obj.acc3.path/$!obj.acc3.name" width="$!width" height="$!heigh" /></a>
+                    #end
+                    </td>
+                  </tr>
+            </table>
+          </div></td>
+        </tr>
+        #end
+        <tr style="background:#F2F2F2; height:30px;">
+          <td colspan="6"><div class="fenye">
+              <input name="status" type="hidden" id="status" value="$!status" />
+              $!gotoPageFormHTML</div></td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</div>
+</body>
+</html>

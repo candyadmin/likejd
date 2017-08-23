@@ -1,0 +1,90 @@
+<script>
+jQuery(document).ready(function(){
+   jQuery("#floor_brand_info").sortable({containment:"#floor_brand_info",opacity:0.9,cursor:"move"});
+   jQuery("#floor_brand_info").disableSelection();
+});
+function ajaxPage(url,page,obj){
+ jQuery.ajax({type:'POST',url:url,data:{"currentPage":page},
+			  success:function(data){
+					jQuery("#goods_brand_list").empty().append(data);																											               }																																		    });
+}
+function goods_floor_brand(){
+  var name=jQuery("#name").val();
+ jQuery.ajax({type:'POST',url:"$!webPath/admin/goods_floor_brand_load.htm",data:{"name":name},
+			  success:function(data){
+					jQuery("#goods_brand_list").empty().append(data);																											               }																																		    });  
+}
+function goods_floor_brand_set(obj){
+  var brand_id=jQuery(obj).attr("brand_id");
+  var brand_img=jQuery(obj).attr("brand_img");
+  var brand_name=jQuery(obj).attr("brand_name");
+  var add=0;
+ jQuery(".floor_box_pls ul").each(function(){
+   if(jQuery(this).attr("brand_id")==brand_id){
+	  add=1;
+	  alert("已经存在该品牌！");
+	  return;
+	}
+ });
+ if(jQuery(".floor_box_pls ul").length>10){
+ 	  add=2;
+	  alert("最多选择11个品牌！");
+	  return;
+ }
+ if(add==0){
+  var s="<ul onDblClick='jQuery(this).remove();' brand_id='"+brand_id+"' class='fl_brands'><li class='fl_brands_img'><img src='"+brand_img+"' width='98' height='35' /></li><li class='fl_brands_name'>"+brand_name+"</li></ul>";
+  if(jQuery(".floor_box_pls ul").length>0){
+    jQuery(".floor_box_pls ul:last").after(s);
+  }else{
+	jQuery(".floor_box_pls").append(s);  
+  }
+ }
+}
+function save_form(){
+  var ids="";
+  jQuery(".floor_box_pls ul").each(function(){
+      ids=ids+","+jQuery(this).attr("brand_id");
+  });
+  jQuery("#ids").val(ids);
+  jQuery("#theForm").submit();
+}
+</script>
+<form action="$!webPath/admin/goods_floor_brand_save.htm" method="post" id="theForm">
+<div class="box_floor">
+  <div class="box_fl_brand"> <span class="floor_choose">
+    <input name="id" type="hidden" id="id" value="$!obj.id">
+    <input type="hidden" name="ids" id="ids">
+    已选推荐品牌：</span>
+    <div class="fl_brand_box"> <em class="floor_warning">注释：最多选择11个品牌，双击删除已选品牌，按下鼠标拖动品牌次序</em>
+      <div class="floor_box_pls" id="floor_brand_info"> 
+      #foreach($brand in $gf_tools.generic_brand("$!obj.gf_brand_list"))
+        <ul onDblClick="jQuery(this).remove();" brand_id="$!brand.id" class="fl_brands">
+          <li class="fl_brands_img"><img src="$!webPath/$!brand.brandLogo.path/$!brand.brandLogo.name" width="98" height="35" /></li>
+          <li class="fl_brands_name">$!brand.name</li>
+        </ul>
+      #end
+      </div>
+    </div>
+    <span class="floor_choose">选择要展示的品牌：</span>
+    <div class="floor_choose_box"><span class="floor_search_sp"><b>品牌名称：</b>
+      <input name="name" type="text" id="name" />
+      <input name="" type="button"  class="floor_sear_btn" value="搜索" onClick="goods_floor_brand();" style="cursor:pointer;" />
+      </span> <em class="floor_warning">注释：商城品牌列表，单击选择品牌到推荐品牌</em>
+      <div id="goods_brand_list">
+       <ul class="fl_sear_brand">
+        #foreach($obj in $objs)
+        <li> <a href="javascript:void(0);" onclick="goods_floor_brand_set(this)" brand_id="$!obj.id" brand_img="$!webPath/$!obj.brandLogo.path/$!obj.brandLogo.name" brand_name="$!obj.name" class="fl_searbrand_a"> <span  class="fl_sear_brandimg">
+        <img src="$!webPath/$!obj.brandLogo.path/$!obj.brandLogo.name" width="98" height="35" />
+        </span> <span class="fl_sear_brandname">$!obj.name</span></a>
+        </li>
+        #end
+      </ul>
+      <div class="floor_page"><span>$!gotoPageAjaxHTML</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="提交" onClick="save_form();" />
+  </div>
+</div>
+</form>

@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>订单商品评价 -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery.rating.css" type="text/css" rel="stylesheet"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.metadata.js"></script>
+<script src="$!webPath/resources/js/jquery.rating.pack.js" type="text/javascript" language="javascript"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('input.description_evaluate').rating({
+     callback: function(value, link){
+	   var id=jQuery(this).attr("name");
+       jQuery("#"+id).val(value);
+     },
+	focus:function(value, link){
+      var gc_id=jQuery(this).attr("gc_id");
+	  var title=jQuery(this).attr("title");
+      jQuery("#description_evaluate_text"+gc_id).text(title); 
+    },
+	blur:function(value, link){
+	
+	}
+  });
+  jQuery('input.service_evaluate').rating({
+     callback: function(value, link){
+       var id=jQuery(this).attr("name");
+       jQuery("#"+id).val(value);
+     },
+	 focus: function(value, link){
+      var gc_id=jQuery(this).attr("gc_id");
+	  var title=jQuery(this).attr("title");
+      jQuery("#service_evaluate_text"+gc_id).text(title); 
+    }
+  });
+  jQuery('input.ship_evaluate').rating({
+     callback: function(value, link){
+       var id=jQuery(this).attr("name");
+       jQuery("#"+id).val(value);
+     },
+	 focus: function(value, link){
+      var gc_id=jQuery(this).attr("gc_id");
+	  var title=jQuery(this).attr("title");
+      jQuery("#ship_evaluate_text"+gc_id).text(title); 
+    }
+  });
+ //
+});
+function save_form(){
+ if(confirm("评价后不可修改，是否确定评价？")){
+    jQuery("#theForm").submit();
+ }
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  <div class="position">当前位置：<a href="$!webPath/index.htm">首页</a> > <a href="$!webPath/buyer/index.htm">用户中心</a> > <a href="$!webPath/buyer/order.htm">订单列表</a> > 订单商品评价</div>
+  <form action="$!webPath/buyer/order_evaluate_save.htm" method="post" id="theForm">
+    <div class="orderdetail">
+      <div class="orderdh">
+        <h1>订单详情
+          <input name="id" type="hidden" id="id" value="$!obj.id" />
+        </h1>
+      </div>
+      <div class="ordersee">
+        <div class="order_eva">
+          <h2>评价商品<i>店铺名：<strong>$!obj.store.store_name</strong></i></h2>
+          #foreach($gc in $obj.gcs)
+          <div class="order_eva_table">
+            <table width="925" border="0" cellspacing="0" cellpadding="0" class="orderevatable">
+              <tr class="order_eva_th">
+                <td width="680"><strong class="eva_thname">商品名称</strong></td>
+                <td width="130" align="center">数量</td>
+                <td align="center">价格</td>
+              </tr>
+              <tr> #if($!gc.goods.goods_main_photo)
+                #set($img="$!webPath/$!{gc.goods.goods_main_photo.path}/$!{gc.goods.goods_main_photo.name}_small.$!{gc.goods.goods_main_photo.ext}")
+                #else
+                #set($img="$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                #end
+                <td><span class="eva_img"><a href="$!webPath/goods_$!{gc.goods.id}.htm" target="_blank"><img width="60" height="60" src="$!img" /></a></span><span class="eva_info">
+                  <h3 class="eva_h3"><a href="$!webPath/goods_$!{gc.goods.id}.htm" target="_blank">$!gc.goods.goods_name</a></h3>
+                  <b class="eva_b">#foreach($gsp in $obj.gsps)
+                  #if($!gsp.spec)
+                  $!gsp.spec.name: $!gsp.value
+                  #end
+                  #end</b></span></td>
+                <td align="center">$!gc.count</td>
+                <td align="center">¥$!{gc.goods.store_price}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="my_eva">
+            <div class="my_eva_left">
+              <h4>我的评价</h4>
+              <div class="my_eval">
+                <ul>
+                  <li><i>
+                    <input name="description_evaluate$!{gc.id}" type="hidden" id="description_evaluate$!{gc.id}" value="3" />
+                    描述相符：</i><b id="description_evaluate_text$!{gc.id}">一般</b><em>
+                      <input class="description_evaluate {split:2}" type="radio" name="description_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="0.5" title="非常不满"/>
+                    <input class="description_evaluate {split:2}" type="radio" name="description_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="1" title="非常不满"/>
+                    <input class="description_evaluate {split:2}" type="radio" name="description_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="1.5" title="不满意"/>
+                    <input class="description_evaluate {split:2}" type="radio" name="description_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="2" title="不满意"/>
+                    <input class="description_evaluate {split:2}" type="radio" name="description_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="2.5" title="一般"/>
+                    <input class="description_evaluate {split:2}" type="radio" name="description_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="3" title="一般" checked="checked"/>
+                    <input class="description_evaluate {split:2}" type="radio" name="description_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="3.5" title="满意"/>
+                    <input class="description_evaluate {split:2}" type="radio" name="description_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="4" title="满意"/>
+                    <input class="description_evaluate {split:2}" type="radio" name="description_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="4.5" title="非常满意"/>
+                    <input class="description_evaluate {split:2}" type="radio" name="description_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="5" title="非常满意"/>
+                    </em></li>
+                  <li><i>
+                    <input name="service_evaluate$!{gc.id}" type="hidden" id="service_evaluate$!{gc.id}" value="3" />
+                    服务态度：</i><b id="service_evaluate_text$!{gc.id}">一般</b><em> 
+                    <input class="service_evaluate {split:2}" type="radio" name="service_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="0.5" title="非常不满"/>
+                    <input class="service_evaluate {split:2}" type="radio" name="service_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="1" title="非常不满"/>
+                    <input class="service_evaluate {split:2}" type="radio" name="service_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="1.5" title="不满意"/>
+                    <input class="service_evaluate {split:2}" type="radio" name="service_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="2" title="不满意"/>
+                    <input class="service_evaluate {split:2}" type="radio" name="service_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="2.5" title="一般"/>
+                    <input class="service_evaluate {split:2}" type="radio" name="service_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="3" title="一般" checked="checked" />
+                    <input class="service_evaluate {split:2}" type="radio" name="service_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="3.5" title="满意"/>
+                    <input class="service_evaluate {split:2}" type="radio" name="service_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="4" title="满意"/>
+                    <input class="service_evaluate {split:2}" type="radio" name="service_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="4.5" title="非常满意"/>
+                    <input class="service_evaluate {split:2}" type="radio" name="service_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="5" title="非常满意"/>
+                  </em></li>
+                  <li><i>
+                    <input name="ship_evaluate$!{gc.id}" type="hidden" id="ship_evaluate$!{gc.id}" value="3" />
+                    发货速度：</i><b id="ship_evaluate_text$!{gc.id}">一般</b><em> 
+                    <input class="ship_evaluate {split:2}" type="radio" name="ship_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="0.5" title="非常不满"/>
+                    <input class="ship_evaluate {split:2}" type="radio" name="ship_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="1" title="非常不满"/>
+                    <input class="ship_evaluate {split:2}" type="radio" name="ship_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="1.5" title="不满意"/>
+                    <input class="ship_evaluate {split:2}" type="radio" name="ship_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="2" title="不满意"/>
+                    <input class="ship_evaluate {split:2}" type="radio" name="ship_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="2.5" title="一般"/>
+                    <input class="ship_evaluate {split:2}" type="radio" name="ship_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="3" title="一般" checked="checked" />
+                    <input class="ship_evaluate {split:2}" type="radio" name="ship_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="3.5" title="满意"/>
+                    <input class="ship_evaluate {split:2}" type="radio" name="ship_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="4" title="满意"/>
+                    <input class="ship_evaluate {split:2}" type="radio" name="ship_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="4.5" title="非常满意"/>
+                    <input class="ship_evaluate {split:2}" type="radio" name="ship_evaluate$!{gc.id}" gc_id="$!{gc.id}" value="5" title="非常满意"/>
+                  </em></li>
+                </ul>
+              </div>
+              <div class="my_eval">
+              <label>
+              <span>
+                <input name="evaluate_buyer_val$!{gc.id}" type="radio" value="1" checked="checked" />
+                <em class="red">好评</em><i class="hui2">(加1分)</i></span>
+               </label> 
+               <label>
+               <span>
+                <input name="evaluate_buyer_val$!{gc.id}" type="radio" value="0" />
+                <em class="green">中评</em><i class="hui2">(不加分)</i></span>
+                </label>
+                <label>
+                <span>
+                <input name="evaluate_buyer_val$!{gc.id}" type="radio" value="-1" />
+                <em>差评</em><i class="hui2">(减1分)</i></span>
+                </label>
+                </div>
+              <div class="eva_text">
+                <textarea name="evaluate_info_$!{gc.id}" cols="" rows="" id="evaluate_info_$!{gc.goods.id}"></textarea>
+              </div>
+            </div>
+            <div class="my_eva_right">
+              <h4>注意</h4>
+              <p>评价后不可更改，请您根据本次交易，给予真实、客观、仔细地评价。
+                您的评价将是其他买家的参考，也将影响卖家的信用。
+                累积信用和计分规则：
+                中评不计分，但会影响卖家的好评率，请慎重本次评价。</p>
+            </div>
+          </div>
+          #end
+          <div class="eva_btn"><span class="setsub">
+            <input name="按钮" type="button" value="评价" onclick="save_form();" style="cursor:pointer;"/>
+            </span><span class="setsub2">
+            <input name="" type="button" value="以后再评" onclick="window.close();"  style="cursor:pointer;"/>
+            </span></div>
+        </div>
+      </div>
+    </div>
+  </form>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

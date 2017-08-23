@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!config.title -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav.htm")
+  <div class="index">
+    <div class="index2">
+      <div class="openshop">
+        <div class="openshopstep">
+          <div class="openstep1"></div>
+          <div class="openstep2"></div>
+          <div class="openstep3"></div>
+        </div>
+        <div class="stepdetail">
+          #foreach($sg in $sgs)
+          <div class="stepdetailleft">
+            <div class="system"> <span><strong>$!sg.gradeName</strong></span> </div>
+            <div class="systemdetail">
+              <ul>
+                <li><span class="hui2">商品数量：</span><span>#if($!sg.goodsCount==0)不限#else $!{sg.goodsCount}#end</span></li>
+                <li><span class="hui2">模板套数：</span><span>$!{CommUtil.splitLength("$!sg.templates",",")}套</span></li>
+				<li><span class="hui2">附件空间：</span><span>$!{sg.spaceSize}M</span></li>
+                <li><span class="hui2">收费标准：</span><span class="red">$!sg.price</span></li>
+                <li><span class="hui2">需要审核：</span><span>#if($!{sg.audit}==true)是#else 否#end</span></li>
+              </ul>
+            </div>
+            <div class="system_other"><span>附加功能：$!storeTools.genericFunction($!sg)</span></div>
+            <div class="system_trans"><span>$!sg.content</span></div>
+            <div class="system_btn"> <span class="sysbtn">
+            #if($!{sg.gradeLevel}< $!{store.grade.gradeLevel})
+              低级别店铺
+            #else
+              #if($!sg.id==$!store.grade.id)
+               当前店铺等级
+              #else
+              <input type="button" onclick="window.location.href='$!webPath/seller/store_grade_finish.htm?grade_id=$sg.id'"  value="马上升级"/>
+              #end
+            #end
+              </span></div>
+          </div>
+		  #end
+        </div>
+      </div>
+      <br />
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

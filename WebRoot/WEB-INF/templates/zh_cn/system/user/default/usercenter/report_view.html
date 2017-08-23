@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>举报详情 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+     rules: {
+			 content:{
+			    required:true
+			 }
+			},
+     messages: {
+			content:{
+			    required:"回复内容不能为空"
+				}
+		  }
+  }); 
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> 
+$!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/buyer/nav.htm")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/index.htm">买家中心</a> > <span>举报详情</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li><a href="$!webPath/buyer/report.htm">举报列表</a></li>
+                <li class="this">举报详情</li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+			  <form action="$!webPath/buyer/message_reply.htm" method="post" name="theForm" id="theForm">
+                <table width="705" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                  <tr>
+                    <td width="114" align="right" valign="top">举报商品：</td>
+                    <td width="591" class="px10 message">$!obj.goods.goods_name</td>
+                  </tr>
+				   <tr>
+                    <td width="114" align="right" valign="top">举报类型：</td>
+                    <td class="px10 message">$!obj.subject.type.name</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">举报主题：</td>
+                    <td class="px10">$!obj.subject.title</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">举报时间：</td>
+                    <td class="px10">$!CommUtil.formatLongDate($!obj.addTime)</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">举报内容：</td>
+                    <td class="px10">$!obj.content</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">举报状态：</td>
+                    <td class="px10">#if($!obj.status==0)未处理#else 已处理 #end</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">处理结果：</td>
+                     #set($result="等待处理")
+                      #if($!obj.result==1)
+                      #set($result="有效举报")
+                      #elseif($!obj.result==-1)
+                      #set($result="无效举报")
+                      #end
+                    <td class="px10">$!result</td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">取证图片1：</td>
+                    <td class="px10">
+                    #if($!obj.acc1)
+                      #set($width=$!CommUtil.div($!obj.acc1.width,3))
+                      #set($heigh=$!CommUtil.div($!obj.acc1.height,3))
+                      <a href="$!webPath/$!obj.acc1.path/$!obj.acc1.name" target="_blank" title="查看原图"><img src="$!webPath/$!obj.acc1.path/$!obj.acc1.name" width="$!width" height="$!heigh" /></a>
+                    #end
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">取证图片2：</td>
+                    <td class="px10">
+                     #if($!obj.acc2)
+                      #set($width=$!CommUtil.div($!obj.acc2.width,3))
+                      #set($heigh=$!CommUtil.div($!obj.acc2.height,3))
+                      <a href="$!webPath/$!obj.acc2.path/$!obj.acc2.name" target="_blank" title="查看原图"><img src="$!webPath/$!obj.acc2.path/$!obj.acc2.name" width="$!width" height="$!heigh" /></a>
+                    #end
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="right" valign="top">取证图片3：</td>
+                    <td class="px10">
+                     #if($!obj.acc3)
+                      #set($width=$!CommUtil.div($!obj.acc3.width,3))
+                      #set($heigh=$!CommUtil.div($!obj.acc3.height,3))
+                      <a href="$!webPath/$!obj.acc3.path/$!obj.acc3.name" target="_blank" title="查看原图"><img src="$!webPath/$!obj.acc3.path/$!obj.acc3.name" width="$!width" height="$!heigh" /></a>
+                    #end
+                    </td>
+                  </tr>
+                </table>
+			</form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

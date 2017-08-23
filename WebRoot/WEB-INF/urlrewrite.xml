@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 2.6//EN"
+        "http://tuckey.org/res/dtds/urlrewrite2.6.dtd">
+<urlrewrite>
+	<!--  
+		<rule>
+		<note>二级域名</note>
+		<condition type="server-name" operator="notequal">
+		www.myshop.com
+		</condition>
+		<from>^/index.htm$</from>
+		<to type="forward">/store.htm</to>
+		</rule>
+	-->
+	<rule>
+		<note>id参数文章管理</note>
+		<from>^/article_([0-9]+).htm$</from>
+		<to type="forward">/article.htm?param=$1</to>
+	</rule>
+	<rule>
+		<note>mark参数文章管理</note>
+		<from>^/article_([A-Za-z]+).htm$</from>
+		<to type="forward">/article.htm?param=$1</to>
+	</rule>
+	<rule>
+		<note>id参数文章列表管理</note>
+		<from>^/articlelist_([0-9]+).htm$</from>
+		<to type="forward">/articlelist.htm?param=$1</to>
+	</rule>
+	<rule>
+		<note>mark参数文章列表管理</note>
+		<from>^/articlelist_([A-Za-z]+).htm$</from>
+		<to type="forward">/articlelist.htm?param=$1</to>
+	</rule>
+	<rule>
+		<note>文章分页</note>
+		<from>^/articlelist_([0-9]+)_([0-9]+).htm$</from>
+		<to type="forward">
+			/articlelist.htm?param=$1&amp;currentPage=$2
+		</to>
+	</rule>
+	<rule>
+		<note>mark参数系统文章</note>
+		<from>^/doc_([A-Za-z]+).htm$</from>
+		<to type="forward">/doc.htm?mark=$1</to>
+	</rule>
+	<rule>
+		<note>商品查看</note>
+		<from>^/goods_([0-9]+).htm$</from>
+		<to type="forward">/goods.htm?id=$1</to>
+	</rule>
+	<rule>
+		<note>商品查看</note>
+		<from>^/app/goods_([0-9]+).htm$</from>
+		<to type="forward">/app/goods.htm?id=$1</to>
+	</rule>
+	<rule>
+		<note>商品商城分类查看</note>
+		<from>^/store_goods_list_?([0-9]+).htm$</from>
+		<to type="forward">/store_goods_list.htm?gc_id=$1</to>
+	</rule>
+	<rule>
+		<note>店铺查看</note>
+		<from>^/store_([0-9]+).htm$</from>
+		<to type="forward">/store.htm?id=$1</to>
+	</rule>
+	<rule>
+		<note>店铺信用</note>
+		<from>^/store_credit_([0-9]+).htm$</from>
+		<to type="forward">/store_credit.htm?id=$1</to>
+	</rule>
+	<rule>
+		<note>店铺详情</note>
+		<from>^/store_info_([0-9]+).htm$</from>
+		<to type="forward">/store_info.htm?id=$1</to>
+	</rule>
+	<rule>
+		<note>品牌查看商品</note>
+		<from>^/brand_goods_([0-9]+).htm$</from>
+		<to type="forward">/brand_goods.htm?id=$1</to>
+	</rule>
+	<rule>
+		<note>店铺分类</note>
+		<from>^/store_list_([0-9]+).htm$</from>
+		<to type="forward">/store_list.htm?sc_id=$1</to>
+	</rule>
+	<rule>
+		<note>商城活动</note>
+		<from>^/activity_([0-9]+).htm$</from>
+		<to type="forward">/activity.htm?id=$1</to>
+	</rule>
+	<rule>
+		<note>积分礼品查看</note>
+		<from>^/integral_view_([0-9]+).htm$</from>
+		<to type="forward">/integral_view.htm?id=$1</to>
+	</rule>
+		<rule>
+		<note>团购信息查看</note>
+		<from>^/group_view_([0-9]+).htm$</from>
+		<to type="forward">/group_view.htm?id=$1</to>
+	</rule>
+	<rule>
+		<note>闲置商品信息查看</note>
+		<from>^/sparegoods_([0-9]+).htm$</from>
+		<to type="forward">/sparegoods_detail.htm?id=$1</to>
+	</rule>
+</urlrewrite>
+

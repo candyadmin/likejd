@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+	 ac_title:{required:true},
+	 ac_rebate:{required:true,max:9.9},	
+	 ac_begin_time:{required:true},
+     #if(!$!obj.ac_acc)acc:{required:true,accept:"$!config.imageSuffix"},#end
+	 ac_end_time:{required:true}
+	 },
+    messages:{
+	 ac_title:{required:"活动标题不能为空"},
+	 ac_rebate:{required:"活动折扣不能为空",max:"请输入小于10的数"},		
+	 ac_begin_time:{required:"开始时间不能为空"},
+	 #if(!$!obj.ac_acc)acc:{required:"横幅不能为空",accept:"系统不允许上传该文件类型"},#end
+	 ac_end_time:{required:"结束时间不能为空"}
+	}
+  });
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  //
+  jQuery("#acc").change(function(){
+	 jQuery("#textfield1").val(jQuery("#acc").val());
+   })
+  //
+  jQuery('#ac_begin_time').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#ac_end_time').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  //
+  jQuery("#ac_status_img").click(function(){
+     var ac_status=jQuery("#ac_status").val();
+	 if(ac_status==0){
+	    jQuery("#ac_status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+		jQuery("#ac_status").val("1");
+	 }
+	 if(ac_status==1){
+	    jQuery("#ac_status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+		jQuery("#ac_status").val("0");
+	 }	 
+  });
+  //
+  jQuery("#logoShow").mouseover(function(){
+	    jQuery("#logoImg").css('display','block');
+   }).mouseout(function(){
+		jQuery("#logoImg").css('display','none');
+	});
+  //
+  #if($!obj.ac_status==1)
+    jQuery("#ac_status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+  #end
+  #if($!obj.ac_status==0)
+    jQuery("#ac_status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+  #end
+});
+
+function saveForm(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/activity_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <div class="cont">
+    <h1 class="seth1">活动管理</h1>
+    <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/activity_list.htm">所有活动</a> | <a href="$!webPath/admin/activity_add.htm"  #if(!$!edit)class="this"#end>新增活动</a> #if($!edit)<a href="javascript:void(0);" class="this">编辑</a>
+	   #end</span> <span class="tab-two"></span></div>
+    <div class="setcont" id="base">
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>活动标题
+          <input name="id" type="hidden" id="id" value="$!obj.id" />
+        </li>
+        <li><span class="webname">
+          <input name="ac_title" type="text" id="ac_title" value="$!obj.ac_title" />
+        </span></li>
+      </ul>
+	  <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>活动折扣</li>
+        <li><span class="webname">
+          <input name="ac_rebate" type="text" id="ac_rebate" value="$!obj.ac_rebate" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">输入格式 例：八折输入8</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>开始时间</li>
+        <li> <span class="webname">
+          <input name="ac_begin_time" type="text" id="ac_begin_time" value="$!obj.ac_begin_time" />
+        </span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>结束时间</li>
+        <li> <span class="webname">
+          <input name="ac_end_time" type="text" id="ac_end_time" value="$!obj.ac_end_time" />
+        </span></li>
+      </ul>
+      <ul class="set1">
+        <li>活动序号</li>
+        <li> <span class="webname">
+          <input name="ac_sequence" type="text" id="ac_sequence" value="$!obj.ac_sequence" />
+        </span></li>
+      </ul>
+      <ul class="set1">
+        <li><strong class="orange fontsize20">*</strong>活动横幅</li>
+        <li> <span class="size13" >
+          <input name="textfield" type="text" id="textfield1" />
+          </span> <span class="filebtn">
+          <input name="button" type="button" id="button1" value=""/>
+          </span> <span style="float:left;" class="file">
+          <input name="acc" type="file" id="acc" class="file-text" size="30"/>
+          </span> <span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span> <span id="nothis"><strong class="q"></strong><strong class="w">最佳尺寸:980px * 340px</strong><strong class="c"></strong></span>
+          #if($!obj.ac_acc)
+          <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!webPath/$!obj.ac_acc.path/$!obj.ac_acc.name"  width="168" height="42" id="logoShow2"/> </div>
+          #end
+        </li>
+      </ul>
+      <ul class="set1">
+        <li>活动状态</li>
+        <li> <span class="webSwitch">
+          <input name="ac_status" id="ac_status" type="hidden" value="$!CommUtil.null2Int($!obj.ac_status)" />
+          <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="ac_status_img" style="cursor:pointer;" /> </span></li>
+      </ul>  
+      <ul class="set1">
+        <li>活动说明</li>
+        <li><span class="webtj">
+          <textarea name="ac_content" cols="4" rows="6" id="ac_content">$!obj.ac_content</textarea>
+        </span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/>
+  </div>
+</form>
+</body>
+</html>

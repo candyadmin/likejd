@@ -1,0 +1,22 @@
+<div class="limishop_hidden">
+#foreach($!store_reommend_good in $store_reommend_goods)
+<ul>
+  #if($!store_reommend_good.goods_main_photo)
+  #set($img="$!imageWebServer/$!{store_reommend_good.goods_main_photo.path}/$!{store_reommend_good.goods_main_photo.name}_small.$!{store_reommend_good.goods_main_photo.ext}")
+  #else
+  #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+  #end
+  #set($goods_url="$!webPath/goods_$!{store_reommend_good.id}.htm")
+  #if($!config.second_domain_open)
+  #set($goods_url="http://$!{store_reommend_good.goods_store.store_second_domain}.$!{domainPath}/goods_$!{store_reommend_good.id}.htm")
+  #end
+  <li class="limishop_img"><a href="$!goods_url" target="_blank"><span>
+    <p><img src="$!img" width="160" height="160" /></p>
+    </span></a><i class="recommend_new"></i> </li>
+   <li class="limitmone"><span>¥$!{store_reommend_good.goods_current_price}<i>¥$!{store_reommend_good.goods_price}</i></span></li>
+  <li><a href="$!goods_url" target="_blank" class="limihui">$!CommUtil.substring("$!store_reommend_good.goods_name",20)</a></li>
+  <li class="limitmo_ems"><em>店铺：<a href="$!webPath/store_$!{store_reommend_good.goods_store.id}.htm">$!{store_reommend_good.goods_store.store_name}</a></em></li>
+  <li class="limitmo_ems"><span><em>所在地：</em><b>$!{store_reommend_good.goods_store.area.parent.areaName}</b></span></li>
+</ul>
+#end
+</div>

@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加买就送 -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+ function delivery_goods(obj){
+   var search_target=jQuery(obj).attr("search_target"); 
+   var goods_name=jQuery("#"+search_target).val(); 
+   var node_id=jQuery(obj).attr("target_id");
+   if(goods_name!=""){
+	   jQuery.ajax({type:'POST',url:"$!webPath/seller/delivery_goods.htm",data:{"goods_name":goods_name,"node_id":node_id},
+				    beforeSend:function(){
+						      jQuery(obj).parent().find("img").show();
+						    },
+					success:function(data){
+							  jQuery(obj).parent().find("img").hide();						
+						      jQuery("#"+node_id).parent().show();
+							  jQuery("#"+node_id).empty().append(data);
+							}
+				  });
+   }else alert("请输入商品名称");
+ }
+ jQuery(function(){ 
+	//
+ jQuery.validator.methods.endTime = function(value, element, param) {
+   var startDate = jQuery(param).val();
+   var date1=new Date(Date.parse(startDate));
+   var date2=new Date(Date.parse(value));
+   if(jQuery.browser.msie==true){
+      date1 = new Date(Date.parse(startDate.replace("-", "/")));
+      date2 = new Date(Date.parse(value.replace("-", "/")));
+   }
+   return date1 < date2;
+ };
+ jQuery.validator.methods.beginTime = function(value, element, param) {
+   var endDate = jQuery(param).val();
+   var date1=new Date(Date.parse(endDate));
+   var date2=new Date(Date.parse(value));
+   if(jQuery.browser.msie==true){
+      date1 = new Date(Date.parse(endDate.replace("-", "/")));
+      date2 = new Date(Date.parse(value.replace("-", "/")));
+   }
+   return date1 > date2;
+ };
+	//			 
+    jQuery('#d_begin_time').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true,
+	  minDate:$!{minDate}, 
+	  maxDate: "+$!{maxDate}D", 
+	  onSelect:function(dateText,inst){
+
+	  }
+   });
+  jQuery('#d_end_time').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true,
+	   minDate:$!{minDate}, 
+	  maxDate: "+$!{maxDate}D", 
+	  onSelect:function(dateText,inst){
+
+	  }
+   });	
+  //
+  jQuery("#theForm").validate({
+		ignore: "",					  
+        rules:{
+	  	  d_begin_time:{required :true},
+		  d_end_time:{required:true,endTime:"#d_begin_time"},
+		  main_goods_id:{required :true},
+		  give_goods_id:{required:true}
+	  	 },
+	    messages:{
+	  	  d_begin_time:{required:"开始时间不能为空"},
+		  d_end_time:{required:"结束时间不能为空",endTime:"结束时间必须大于开始时间"},
+		  main_goods_id:{required:"商品名称不能为空"},
+		  give_goods_id:{required:"赠品不能为空"}
+	  	}
+     });
+ })
+ function save_form(){
+    var main_goods_id=jQuery("#main_goods_list").find("p[class=this]").attr("goods_id");
+	var give_goods_id=jQuery("#give_goods_list").find("p[class=this]").attr("goods_id");
+	if(main_goods_id!=null&&main_goods_id!=undefined){
+	  jQuery("#main_goods_id").val(main_goods_id);
+	}
+	if(give_goods_id!=null&&give_goods_id!=undefined){
+	  jQuery("#give_goods_id").val(give_goods_id);
+	}
+	jQuery("#theForm").submit();
+ }
+
+function select_goods(obj){
+  jQuery(obj).parent().parent().find("p").removeClass("this");
+  jQuery(obj).find("p").addClass("this");
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+           $!httpInclude.include("/seller/nav.htm?op=delivery")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position">
+           <div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>添加买就送</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                 <li><a href="$!webPath/seller/delivery.htm">买就送商品</a></li>
+                 <li><a href="$!webPath/seller/delivery_buy.htm">购买套餐</a></li>
+                 <li><a href="$!webPath/seller/delivery_log.htm">套餐购买日志</a></li>
+                <li class="this"><a href="$!webPath/seller/delivery_apply.htm">添加买就送</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+                <form action="$!webPath/seller/delivery_apply_save.htm" method="post" name="theForm" id="theForm">
+                  <table width="98%" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+					<tr>
+                      <td align="right">开始日期：</td>
+                      <td class="px10"><span class="setinput">
+                        <input name="d_begin_time" type="text" id="d_begin_time" value="$!obj.d_begin_time" readonly="readonly" />
+                      </span></td>
+                    </tr>
+					<tr>
+                      <td align="right">结束日期：</td>
+                      <td class="px10"><span class="setinput">
+                        <input name="d_end_time" type="text" id="d_end_time" value="$!obj.d_end_time" readonly="readonly" />
+                      </span></td>
+                    </tr>
+                    <tr>
+                      <td width="141" align="right">商品名称：</td>
+                      <td width="651" class="px10"><span class="setinput">
+                        <input name="goods_name" type="text" id="goods_name" value="$!obj.d_goods.goods_name" />
+                        <input name="search" search_target="goods_name" type="button" target_id="main_goods_list" style="cursor:pointer;width:60px;"  value="搜索" onclick="delivery_goods(this);" />
+                        <input name="main_goods_id" type="hidden" id="main_goods_id" value="$!{obj.d_goods.id}" />
+                        <img src="$!webPath/resources/style/common/images/wait.gif" style="display:none;" >
+                      </span></td>
+                    </tr>
+                    <tr id="main_goods_info" style="display:none;">
+                      <td align="right" valign="top">&nbsp;</td>
+                      <td  class="px10" id="main_goods_list">
+                       
+                      </td>
+                    </tr>
+					<tr>
+                      <td width="141" align="right">赠送商品：</td>
+                      <td width="651" class="px10"><span class="setinput">
+                        <input name="present_goods_name" type="text" id="present_goods_name" value="$!obj.d_delivery_goods.goods_name" />
+                        <input name="search" search_target="present_goods_name" type="button" style="cursor:pointer;width:60px;" target_id="give_goods_list"  value="搜索" onclick="delivery_goods(this);"/>
+                         <img src="$!webPath/resources/style/common/images/wait.gif" style="display:none;" >
+                        <input name="give_goods_id" type="hidden" id="give_goods_id" value="$!{obj.d_delivery_goods.id}" />
+                      </span></td>
+                    </tr>
+                    <tr id="give_goods_info" style="display:none;">
+                      <td align="right" valign="top">&nbsp;</td>
+                      <td  class="px10" id="give_goods_list">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td class="px10"><span class="setsub">
+                        <input name="button" type="button" style="cursor:pointer;" onclick="save_form();"  value="保存"/>
+                        <input name="delivery_session" type="hidden" id="delivery_session" value="$!delivery_session" />
+                      </span></td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+  $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+﻿ <div class="Select_box">
+    <ul>
+        #foreach($area in $childs)
+        <li obj_id="$!area.id" obj_name="$!area.areaName" area_mark="$!area_mark">
+        <a href="javascript:void(0);">$!area.areaName</a>
+        </li>
+        #end
+    </ul>
+</div>

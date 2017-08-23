@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+	var state = jQuery("#smsEnbale").val();
+	if(state=="true"){
+		jQuery("#smsOn").show();
+		jQuery("#smsOff").hide();
+	}else{
+		jQuery("#smsOn").hide();
+		jQuery("#smsOff").show();
+	}
+	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });	
+});
+function smsState(){
+	var state = jQuery("#smsEnbale").val();
+	if(state=="true"){
+		jQuery("#smsEnbale").val("false");
+		jQuery("#smsOff").show();
+		jQuery("#smsOn").hide();
+	}else{
+		jQuery("#smsEnbale").val("true");
+		jQuery("#smsOff").hide();
+		jQuery("#smsOn").show();
+	}
+}
+function test_sms(){
+  var smsTest=jQuery("#smsTest").val();
+  jQuery.post("$!webPath/admin/test_sms.htm",{"mobile":smsTest},function(data){
+    if(data==="true"){alert("短信测试成功，系统可以发送手机短信！");}else{alert("短信测试失败，请检查短信平台设置！");}
+  },"text");
+}
+function smsSave(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/sys_config_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+<input name="id" id="id" type="hidden" value="$!config.id"/>
+<input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/set_sms.htm" />
+<input name="op_title" type="hidden" id="op_title" value="手机短信设置成功" />
+<div class="cont">
+  <h1 class="seth1">手机短信设置</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="javascript:void(0);" class="this">手机短信设置</a> </span> <span class="tab-two"></span></div>
+  <div class="setcont">
+    <ul class="set1">
+      <li>短信功能开启</li>
+      <li>
+	  <span class="webSwitch"> 
+	  <input name="smsEnbale" id="smsEnbale" type="hidden" value="$!config.smsEnbale" />
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" style="cursor:pointer" onclick="smsState();" id="smsOn"/> 
+	  <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" style="cursor:pointer" onclick="smsState();" id="smsOff"/> 
+	  </span> 
+	  <span id="nothis"><strong class="q"></strong><strong class="w">设置是否启用手机短信功能</strong><strong class="c"></strong></span></li>
+    </ul>
+    <!--鼠标未经过样式-->
+    <ul class="set1">
+      <li>短信平台用户名</li>
+      <li><span class="webname">
+        <input name="smsUserName" type="text" id="smsUserName" value="$!config.smsUserName" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">短信平台用户名</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+      <li>短信平台密码</li>
+      <li><span class="webname">
+	   <input name="smsPassword" type="password" id="smsPassword" value="$!config.smsPassword" />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">短信平台发送密码</strong><strong class="c"></strong></span></li>
+    </ul>
+     <ul class="set1">
+      <li>短信发送测试</li>
+      <li><span class="webname">
+        <input name="smsTest" type="text" id="smsTest" />
+        </span><span class="emailtest">
+        <input name="" type="button"  value="测试" style="cursor:pointer" onclick="test_sms();" />
+        </span><span id="nothis"></span></li>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="" type="button" value="提交" onclick="smsSave();" style="cursor:pointer;"/>
+  </div>
+</div>
+</form>
+</body>
+</html>

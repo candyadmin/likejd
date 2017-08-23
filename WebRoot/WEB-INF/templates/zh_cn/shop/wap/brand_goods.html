@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>$!config.title</title>
+<link href="$!webPath/resources/style/system/front/wap/css/style.css" rel="stylesheet" type="text/css">
+<script src="$!webPath/resources/style/system/front/wap/js/jquery-1.10.2.min.js"></script>
+<script src="$!webPath/resources/style/system/front/wap/js/jquery.lazyload.js"></script>
+<script>
+jQuery(document).ready(function(){
+
+	jQuery("#top_goods_salenum").addClass("this");
+	   if(jQuery("#orderBy").val()=="store_price"){
+		  if("desc"==jQuery("#orderType").val()){
+			  jQuery("#top_store_price img").attr("src","$!webPath/resources/style/system/front/wap/images/goodsclass_down.png");
+		  }else{
+		  	  jQuery("#top_store_price img").attr("src","$!webPath/resources/style/system/front/wap/images/goodsclass_up.png");
+		  }
+	   }else{
+	   	  jQuery("#top_goods_salenum img").attr("src","$!webPath/resources/style/system/front/wap/images/goodsclass_down.png");
+	   }
+	   var begin_count=2;
+	   var ret = 1;
+	   jQuery(window).scroll(function(){								  
+		 if (jQuery(document).scrollTop() >= jQuery(document).height() - jQuery(window).height()&&ret==1) {
+			 
+			 jQuery.ajax({
+			 		  type:'POST',
+		              url:'$!webPath/brand_goods_ajax.htm',
+					  data:{"currentPage":begin_count,
+			  				"id":"$!{gb.id}",
+							"orderBy":jQuery("#orderBy").val(),
+							"orderType":jQuery("#orderType").val()
+				},
+				beforeSend:function(){
+					  //begin_count = begin_count +1;
+					  jQuery("#loading_none").hide();
+					  jQuery("#loading").show();
+					  ret = 0;
+				},
+				success:function(data){
+					
+					var result=eval("("+data+")");  
+					var currentPage = result.currentPage;
+					var totalPage = result.totalPage;
+					
+					jQuery("#loading").hide();
+					
+					if(begin_count <= totalPage){
+						begin_count = begin_count +1;
+						//最后一页
+						if(currentPage >= totalPage){
+							ret = 0;
+							jQuery("#loading_none").show();
+						}
+						if(currentPage < totalPage){
+							ret = 1;
+						}
+						else {
+							ret = 0;
+							jQuery("#loading_none").show();
+						}
+						jQuery("#orderBy").val(result.orderBy);
+		     			jQuery("#orderType").val(result.orderType);
+		     			jQuery("#currentPage").val(result.currentPage);
+		     			jQuery("#totalPage").val(result.totalPage);
+		     			jQuery(".group_list").find("a").last().after(result.ajaxLoadHtml);
+					  	jQuery(".group_list img").lazyload({effect:"fadeIn",width:90,height:90});
+		            	
+					} else {
+						ret = 0;
+						jQuery("#loading_none").show();
+					}
+	            	  
+	            }
+		    });
+		 }
+		});		
+	   
+		//排序
+		jQuery(".group_top li").click(function(){
+			var orderBy = jQuery(this).attr("id").substring(4);
+			var orderType = jQuery(this).attr("orderType");
+			jQuery("#orderBy").val(orderBy);
+			jQuery("#orderType").val(orderType);
+			if(orderBy=="store_price"){
+				if("asc"==orderType){
+					window.location.href="$!webPath/brand_goods.htm?id=$!{gb.id}&orderBy="+orderBy+"&&orderType=desc";
+				}else{
+					window.location.href="$!webPath/brand_goods.htm?id=$!{gb.id}&orderBy="+orderBy+"&&orderType=asc";
+				}	
+				window.location.href="$!webPath/brand_goods.htm?id=$!{gb.id}&orderBy="+orderBy+"&orderType="+orderType;
+			}else{
+				window.location.href="$!webPath/brand_goods.htm?id=$!{gb.id}&orderBy="+orderBy;
+			}
+		})
+		#if($!orderBy)
+		jQuery(".group_top li").removeClass("this");
+		jQuery(".group_top li[orderBy='$!orderBy']").addClass("this");
+		#end
+		
+   //图片延迟加载
+  jQuery(".group_list img").lazyload({effect:"fadeIn",width:90,height:90});
+});
+</script>
+</head>
+<body>
+
+<div class="main">
+
+    <div class="phone_hd">
+	<a class="back" href="javascript:history.go(-1);"><img src="$!webPath/resources/style/system/front/wap/images/back.png" width="25" height="25"></a>
+	品牌街
+	<a class="menu home" href="$!webPath/wap/index.htm"><img src="$!webPath/resources/style/system/front/wap/images/home.png" width="25" height="25"></a>
+	</div>
+
+    <div class="main">
+    	<div class="mt50"></div>
+    	
+          <div class="allgoods">
+          
+            <div class="group_top" id="search_bar">
+              
+              <ul>
+               <li id="top_goods_salenum" orderBy="goods_salenum" orderType="desc" class="this">
+               <a href="javascript:void(0)"><span><b><img src="$!webPath/resources/style/system/front/wap/images/goodsclass_down.png"></b>销量</span></a>
+               </li>
+               <li id="top_goods_collect" orderBy="goods_collect" orderType="desc">
+               <a href="javascript:void(0)"><span><b><img src="$!webPath/resources/style/system/front/wap/images/group_down.png"></b>人气</span></a>
+               </li>
+               <li id="top_store_price" orderBy="store_price"   orderType="asc">
+               <a href="javascript:void(0)"><span><b><img src="$!webPath/resources/style/system/front/wap/images/group_sort.png"></b>价格</span></a>
+               </li>
+               <!-- <a href="javascript:void(0);" class="sort_a this" orderBy="addTime"  orderType="asc">默认排序</a> -->
+              </ul>
+            </div>
+            
+            <!--商品列表开始-->
+            #if($!objs.size()>0)
+            <div class="group_list" >
+            #foreach($obj in $objs)
+              #if($!obj.goods_main_photo)
+              #set($img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+              #else
+              #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+              #end
+              #set($goods_url="$!webPath/goods_$!{obj.id}.htm")
+              #if($!config.second_domain_open)
+              #set($goods_url="http://$!{obj.goods_store.store_second_domain}.$!{domainPath}/goods_$!{obj.id}.htm")
+              #end
+              
+	          <a href="$!goods_url">
+              <dl> 
+	            <dt> 
+	                <img src="$!imageWebServer/resources/style/common/images/loader.gif" original="$!img" onerror="this.src='$!webPath/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" />
+	            </dt>
+                <dd>
+                  <h3> 
+                    #if($!obj.group_buy==2) <span style="color:#F00;">[团购]</span> #end
+                    #if($!obj.activity_status==2) <span style="color:#F00;">[活动]</span> #end
+                    #if($!obj.combin_status==2)<span style="color:#F00;">[组合]</span>#end
+                    #if($!obj.bargain_status==2)<span style="color:#F00;">[特价]</span>#end
+                    #if($!obj.delivery_status==2)<span style="color:#F00;">[买就送]</span>#end 
+                    <b>$!CommUtil.substring("$!obj.goods_name",25)</b>
+                   </h3>
+                   
+                   <span>市场价：<b class="goods2market">¥$!{obj.goods_price}</b><i>，</i> </span>
+                   
+                   <span>商城价：<strong>¥$!{obj.store_price}</strong></span>
+                   
+                   <em>
+                    <span>描述相符：<i style="color:#F00">$!CommUtil.null2Double($!{obj.description_evaluate})</i> 分， </span>
+                    
+                    <span>累计评价：<i style="color:#f60">$!{obj.evaluates.size()}，</i></span>
+                    
+                    <span>已售出<strong class="orange">$!{obj.goods_salenum}</strong>笔</span>
+                   </em>
+                </dd>
+              </dl>
+              </a> 
+              #end 
+            </div>
+            #else
+            <div class="starshop_list">
+              <div class="sigh"> <span><img src="$!imageWebServer/resources/style/system/front/default/images/sigh.png" width="120" height="109" /></span> <b>对不起，没有对应的数据!</b> </div>
+            </div>
+            #end 
+          </div>
+          
+        <div class="loading" id="loading" style="display: none;">
+		    <ul>
+		      <li><img src="$!webPath/resources/style/system/front/wap/images/loading.gif" height="16" width="16"></li>
+		      <li>正在加载....</li>
+		    </ul>
+		</div>
+		<div class="loading" id="loading_none" style="display: block;">
+		    <ul>
+		      <li>没有更多了....</li>
+		    </ul>
+		</div>
+		
+		<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+		<input name="totalPage" type="hidden" id="totalPage" value="$!totalPage" />
+        <input name="goods_view" type="hidden" id="goods_view" value="$!goods_view" />
+        <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+        <input name="orderType" type="hidden" id="orderType" value="$!orderType" /> 
+       
+    </div>
+    
+  
+  $!httpInclude.include("/footer.htm") 
+  
+  </div>
+</body>
+</html>

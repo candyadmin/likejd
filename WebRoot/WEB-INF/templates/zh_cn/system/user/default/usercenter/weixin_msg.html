@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>微信商城  -  Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" href="$!webPath/resources/editor/themes/default/default.css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery(".seller_name").mouseover(function(){
+      jQuery(this).addClass("this");
+	  jQuery(this).find(".seller_wx_oper").show();
+  }).mouseleave(function(){
+      jQuery(this).removeClass("this");
+	  jQuery(this).find(".seller_wx_oper").hide();
+  });
+  //
+  jQuery(".seller_wx_enjoy").click(function(){
+    var show=jQuery(this).parent().parent().parent().find(".seller_name_replay").css("display");
+	if(show!="none"){
+      jQuery(this).parent().parent().parent().find(".seller_name_replay").hide();
+	}else{
+      jQuery(this).parent().parent().parent().find(".seller_name_replay").show();
+	}
+  });
+  //
+  jQuery(".seller_wx_send").find("a:first").click(function(){
+     jQuery(this).parent().parent().parent().hide();
+  });
+  jQuery(".seller_wx_person b a").click(function(){
+	  jQuery(this).parent().parent().find("span[style='display:none']").show();
+	  });
+	  
+	  
+jQuery(".seller_wx_send input").click(function(){
+var mark =	jQuery(this).attr("mark");
+var content =jQuery("#con_"+mark).val();
+if(content.length==0){
+	alert("回复内容不能为空");
+}else{
+	if( content.length>=140  ){
+	alert("回复内容不能超过140个字符");
+	}else{
+	jQuery.post("$!webPath/seller/weixin_msg_reply.htm",{
+		"id":mark,
+		"reply":content
+		},
+		function(data){
+		if(data=="true"){
+		jQuery("#con_"+mark).val("");
+		jQuery("#con_"+mark).parent().parent().hide();
+		jQuery("#b_"+mark).show();	
+			}
+		},"text");
+	}
+}
+});	  
+	  
+});
+</script>
+</head>
+<body class="seller_body">
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/seller/nav_head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        <td width="177" id="userbg" valign="top"> $!httpInclude.include("/seller/nav.htm?op=weixin_msg") </td>
+        <td id="centerbg" valign="top"><div class="table_sellerleft">
+            <div class="seller_position">
+              <div class="seller_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>微信消息</span></div>
+            </div>
+            <form id="ListForm" method="post">
+            <div class="seller_index_box">
+              <div class="seller_index_wx">
+               #foreach($obj in $objs)
+                <ul class="seller_wx_ul">
+                  <li class="seller_name">
+                    <dl class="seller_wx_person">
+                      <dt style="display:none"><img src="" width="50" height="50" /></dt>
+                      <dd >
+                        <h3><span style="display:none">$!obj.FromUserName</span><b style="display:none"><a href="javascript:void(0);"></a></b>
+                        </h3>
+                        <div class="seller_wx_p">$!CommUtil.substring("$!obj.content",30)<b id="b_$!{obj.id}" style="color:#F00;#if($!obj.status==0)display:none;#end">[已回复]</b></div>
+                      </dd>
+                    </dl>
+                    <span class="seller_wx_time">$!CommUtil.formatLongDate($!obj.addTime)   $!obj.id</span> <span class="seller_wx_oper" style="display:none;"><a href="javascript:void(0);" class="seller_wx_enjoy" title="回复微信"></a></span> </li>
+                  <li class="seller_name_replay" style="display:none;">
+                    <div class="seller_wx_repbox">
+                      <h4>快速回复：</h4>
+                      <textarea name="" id="con_$!obj.id" cols="" rows="" class="seller_wx_text"></textarea>
+                      <div class="seller_wx_botom"><span class="seller_wx_right">最多可以输入140个字</span>
+                        <div class="seller_wx_express" style="display:none"><a href="" class="seller_wx_exp"></a><span class="wx_express" style="display:none;"><b><img src="" width="30" height="30" /></b><b><img src="" width="30" height="30" /></b><b><img src="" width="30" height="30" /></b><b><img src="" width="30" height="30" /></b></span></div>
+                      </div>
+                      <div class="seller_wx_send"><input id="sub" mark="$!obj.id" type="button" class="seller_wx_btn" value="回复信息"  style="cursor:pointer"/><a href="javascript:void(0);">收起</a></div>
+                    </div>
+                  </li>
+                </ul>
+                  #end
+                <div class="userfenye">
+                <input id="currentPage" name="currentPage" value="$!currentPage" type="hidden"/>
+                $!gotoPageFormHTML
+                </div>
+              </div>
+            
+            </div>
+            </form>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+   $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

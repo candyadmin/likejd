@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>电子邮件修改-$!{config.title}-Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+       rules: {
+			password:{required:true},
+			email:{required:true,
+			       email:true,
+			       remote:{
+				        url: "$!webPath/verify_email.htm",     //后台处理程序
+                        type: "post",               //数据发送方式
+                        dataType: "json",           //接受数据格式   
+                        data: {                     //要传递的数据
+                           "email": function(){return jQuery("#email").val();},"id":"$!user.id"
+		                    }
+				     } 
+			     }
+		  },
+	   messages: {
+		    password:{required:"当前密码不能为空"},
+			email:{required:"邮箱不能为空",email:"邮箱格式不对",remote:"该邮箱已存在"}
+		}
+  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main">
+  $!httpInclude.include("/buyer/head.htm")
+  <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+         $!httpInclude.include("/buyer/account_nav.htm?op=account")
+        <td id="centerbg" valign="top">
+        <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/buyer/account.htm">我的账户</a> > <span>修改电子邮件</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li><a href='$!webPath/buyer/account.htm' >基本信息</a></li>
+                <li><a href='$!webPath/buyer/account_password.htm'>修改密码</a></li>
+                <li class="this"><a href='$!webPath/buyer/account_email.htm'>修改电子邮件</a></li>
+				<li><a href='$!webPath/buyer/account_mobile.htm'>修改手机号码</a></li>
+                <li><a href='$!webPath/buyer/account_avatar.htm'>更换头像</a></li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+			    <form action="$!webPath/buyer/account_email_save.htm" method="post" name="theForm" id="theForm">
+                <table width="705" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                  <tr>
+                    <td width="80" align="right" valign="top" class="modifysp"><span>您的密码：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                    <td  class="px10"><span class="setinput">
+                      <input name="password" type="password" id="password" />
+                      </span></td>
+                  </tr>
+                  <tr>
+                    <td width="80" align="right" valign="top" class="modifysp"><span>电子邮件：</span><span><strong class="red" style="font-size:14px;">*</strong></span></td>
+                    <td  class="px10"><span class="setinput">
+                      <input name="email" type="text" id="email" />
+                      </span></td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td class="px10"><span class="setsub">
+                       <input name="" type="submit"  value="提交" style="cursor:pointer;"/>
+                      </span></td>
+                  </tr>
+                </table>
+				</form>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+   $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

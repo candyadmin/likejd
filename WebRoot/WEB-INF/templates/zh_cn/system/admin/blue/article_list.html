@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">文章管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/article_list.htm"  class="this">管理</a> | <a href="$!webPath/admin/article_add.htm">新增</a> </span> <span class="tab-two"></span></div>
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/admin/article_list.htm" method="post">
+  <div class="leveltable">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="level_table">
+      <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+        <td width="56">&nbsp;</td>
+        <td width="322">文章标题</td>
+        <td width="401" >文章分类</td>
+        <td  width="91">是否显示</td>
+        <td width="205">操作</td>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" />        </td>
+        <td>$!obj.title</td>
+        <td>$!obj.articleClass.className</td>
+        <td>#if($!obj.display==true)是#else 否#end</td>
+        <td class="ac9"><a href="$!webPath/admin/article_edit.htm?id=$!obj.id&amp;currentPage=$!currentPage">编辑</a> |<a href="$!webPath/admin/article_del.htm?mulitId=$!obj.id&amp;currentPage=$!currentPage">删除</a></td>
+      </tr>
+      #end
+      <tr>
+        <td><input type="checkbox" name="all" id="all" onclick="selectAll(this)" value="" /></td>
+        <td><span class="allevel">全部</span><span class="shop_btn_del">
+          <input name="" type="button" value="删除" style="cursor:pointer;" onclick="cmd('$!webPath/admin/article_del.htm')"/>
+          </span></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  <div class="fenye"><input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	  <input name="mulitId" type="hidden" id="mulitId" />
+	  $!gotoPageFormHTML</div>
+ </FORM>
+</div>
+</body>
+</html>

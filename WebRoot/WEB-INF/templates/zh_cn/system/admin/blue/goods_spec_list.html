@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/goods_spec_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth1">规格管理</h1>
+  <div class="settab"> <span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/goods_spec_list.htm"  class="this">管理</a> | <a href="$!webPath/admin/goods_spec_add.htm">新增</a></span> <span class="tab-two"></span></div>
+  <form name="ListForm" id="ListForm" action="$!webPath/admin/goods_spec_list.htm" method="post">
+  <div id="list">
+    <div class="typemanager">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="specific_table">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="5%">&nbsp;</td>
+          <td width="10%">排序</td>
+          <td width="20%">规格名称</td>
+          <td width="40%">规格值</td>
+          <td align="center">操作</td>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+          <td align="center"><input name="id" type="checkbox" id="id" value="$!obj.id" /></td>
+          <td><span class="pxnum size5">
+            <input type="text" name="$!obj.sequence" id="$!obj.sequence"  value="$!obj.sequence"  onblur="ajax_update('$!obj.id','sequence',this)"  title="可编辑"/>
+          </span></td>
+          <td><span class="pxnum size7"><span class="pxnum size5">
+            <input type="text" name="$!obj.name" id="$!obj.name"  value="$!obj.name"  onblur="ajax_update('$!obj.id','name',this)"  title="可编辑"/>
+          </span></span></td>
+          <td>$!shopTools.genericProperty($!obj)</td>
+          <td align="center" class="ac8"><a href="$!webPath/admin/goods_spec_edit.htm?id=$!obj.id&currentPage=$!currentPage">编辑</a>|<a href="javascript:voud(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/admin/goods_spec_del.htm?mulitId=$!obj.id&currentPage=$!currentPage'">删除</a></td>
+        </tr>
+        #end
+        <tr>
+          <td align="center"><input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+             
+          </td>
+          <td colspan="2" class="bdel"><span class="sp1">全部</span> <span class="sp2">
+            <div class="shop_btn_del shopbtn">
+              <input name="Input" type="button" value="删除" onclick="cmd('$!webPath/admin/goods_spec_del.htm');" style="cursor:pointer;"/>
+            </div>
+          </span> </td>
+          <td colspan="4"></td>
+        </tr>
+      </table>
+    </div>
+    <div class="fenye">
+      <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	  <input name="mulitId" type="hidden" id="mulitId" />
+      $!gotoPageFormHTML</div>
+  </div>
+</form>
+</div>
+</body>
+</html>

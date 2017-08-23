@@ -1,0 +1,24 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<script>
+function ajax_form(){
+   var users=jQuery("#users").val();
+   jQuery.post("$!webPath/buyer/friend_add_save.htm",{"users":users},function(data){
+     window.location.reload();
+   },"text");
+}
+</script>
+<table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="box_table">
+  <tr>
+    <td colspan="2" align="left" valign="top" >&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="100" align="right" valign="top">好友名称：</td>
+    <td align="left"><input name="users" type="text" id="users" size="30" />
+      多个好友用“,”隔开</td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><span class="inputbtn">
+      <input name="" type="button" value="保存" onclick="ajax_form();" style="cursor:pointer;"/>
+      </span></td>
+  </tr>
+</table>

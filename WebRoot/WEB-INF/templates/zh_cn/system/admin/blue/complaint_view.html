@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+function complaint_audit(){
+ if(confirm("确定要审核通过该订单吗?")){	
+   jQuery("#theForm").attr("action","$!webPath/admin/complaint_audit.htm");
+   jQuery("#theForm").submit();
+ }
+}
+function complaint_close(){
+  jQuery("div[id^=complaint_op_]").hide();
+  jQuery("#complaint_close").show();
+  jQuery('#complaint_handle').show();
+}
+function complaint_talk(){
+   var talk_content=jQuery("#talk_content").val();
+  jQuery.post("$!webPath/admin/complaint_talk.htm",{"talk_content":talk_content,"id":"$!obj.id"},function(data){
+	  jQuery("#talk_content_detail").empty();	
+      jQuery.each(data, function(index,item){
+	      jQuery("#talk_content_detail").append("<li class='"+item.role+"'>"+item.content+"</li>");
+	  })
+  },"json");
+   jQuery("#talk_content").val("");
+   alert("发布对话成功！");
+}
+function complaint_talk_reload(){
+  jQuery.post("$!webPath/buyer/complaint_talk.htm",{"talk_content":"","id":"$!obj.id"},function(data){
+	  jQuery("#talk_content_detail").empty();	
+      jQuery.each(data, function(index,item){
+	      jQuery("#talk_content_detail").append("<li class='"+item.role+"'>"+item.content+"</li>");
+	  })
+  },"json");
+}
+function complaint_handle_close(){
+  if(confirm("处理后不可更改，确定处理该投诉吗？")){	
+	if(jQuery("#handle_content").val()!=""){
+	  jQuery("#theForm").attr("action","$!webPath/admin/complaint_handle_close.htm");
+	  jQuery("#theForm").submit();
+	}else{
+      alert("请输入处理意见！");
+	}
+  }
+}
+jQuery(document).ready(function(){
+  jQuery(".comp_box_proces li").removeClass("this");
+  jQuery("#complaint_$!{obj.status}").addClass("this");
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">投诉管理</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"><a href="$!webPath/admin/complaint_list.htm?status=new" #if($!status=="new")class="this"#end>新投诉</a> | <a href="$!webPath/admin/complaint_list.htm?status=complain" #if($!status=="complain")class="this"#end>待申诉</a>|<a href="$!webPath/admin/complaint_list.htm?status=talk" #if($!status=="talk")class="this"#end>对话中</a>|<a href="$!webPath/admin/complaint_list.htm?status=arbitrate" #if($!status=="arbitrate")class="this"#end>等仲裁</a>|<a href="$!webPath/admin/complaint_list.htm?status=close" #if($!status=="close")class="this"#end>已关闭</a>|<a href="$!webPath/admin/complaintsubject_list.htm">投诉主题</a>|<a href="$!webPath/admin/complaintsubject_add.htm">新增投诉主题</a>|<a href="$!webPath/admin/complaint_set.htm">投诉设置</a>|<a href="javascript:void(0);" class="this">投诉详情</a></span> <span class="tab-two"></span></div>
+  <form action="" method="post" id="theForm">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <div class="compback">
+    <div class="backcomp">
+      <div class="reputh">投诉进度</div>
+      <div class="comp_box_proces">
+        <ul>
+          <li class="this" id="complaint_0">新投诉</li>
+          <li id="complaint_1"> 待申诉 </li>
+          <li id="complaint_2">对话中</li>
+          <li id="complaint_3"> 待仲裁</li>
+          <li id="complaint_4"> 已完成</li>
+        </ul>
+      </div>
+    </div>
+    <div class="backcomp">
+      <div class="reputh">订单详情</div>
+      <div class="backcomp_box">
+        <dl class="backcomp_d">
+          <dt>订单信息</dt>
+          <dd>
+            <ul class="backcomp_u">
+              #if($!obj.of.order_status==0)
+              #set($status="已取消")
+              #end
+              #if($!obj.of.order_status==10)
+              #set($status="待付款")
+              #end
+              #if($!obj.of.order_status==15)
+              #set($status="线下支付待审核")
+              #end
+              #if($!obj.of.order_status==20)
+              #set($status="已付款")
+              #end
+              #if($!obj.of.order_status==30)
+              #set($status="已发货")        
+              #end                
+              #if($!obj.of.order_status==40)
+              #set($status="已收货")
+              #end
+              #if($!obj.of.order_status==50)
+              #set($status="已完成,已评价")                                              
+              #end
+              #if($!obj.of.order_status==60)
+              #set($status="已结束")                                              
+              #end
+              <li>订单状态：<strong>$!status</strong></li>
+              <li>订单号：<b class="blue">$!obj.of.order_id</b> </li>
+              <li>下单时间：<strong>$!CommUtil.formatLongDate($!obj.of.addTime)</strong></li>
+              <li>订单总额:<strong>¥$!{obj.of.totalPrice}</strong></li>
+            </ul>
+          </dd>
+        </dl>
+        <dl class="backcomp_d">
+          <dt>卖家信息</dt>
+          <dd>
+            <ul class="backcomp_u">
+              <li>卖家店铺：<b><a href="$!webPath/store_$!{obj.of.store.id}.htm" target="_blank">$!{obj.of.store.store_name}</a></b> </li>
+            </ul>
+          </dd>
+        </dl>
+        <dl class="backcomp_d">
+          <dt>买家信息</dt>
+          <dd>
+            <ul class="backcomp_u">
+              <li>买家名称：<strong>$!{obj.of.user.userName}</strong> </li>
+            </ul>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    <div class="backcomp">
+      <div class="reputh">投诉详情</div>
+      <div class="backcomp_box">
+        <dl class="backcomp_d">
+          <dt>投诉信息</dt>
+          <!--class="backcomp_hover"去掉背景消失-->
+          <dd class="backcomp_hover">
+            <ul class="backcomp_u">
+              #if($!obj.status==0)
+              #set($status="新投诉")
+              #end
+              #if($!obj.status==1)
+              #set($status="待申诉")
+              #end
+              #if($!obj.status==2)
+              #set($status="对话中")
+              #end
+              #if($!obj.status==3)
+              #set($status="待仲裁")
+              #end
+              #if($!obj.status==4)
+              #set($status="已完成")
+              #end
+              <li>投诉状态：<strong>$status</strong></li>
+              #if($!obj.type=="buyer")
+              #set($type="买家投诉")
+              #else
+              #set($type="卖家投诉")
+              #end
+              <li>投诉类别<strong>$!type</strong></li>
+              <li>投诉人:<strong>$!obj.from_user.userName</strong></li>
+              <li>投诉主题：<strong>$!obj.cs.title</strong></li>
+              <li>投诉证据:<b class="blue"><a href="$!webPath/admin/complaint_img.htm?id=$!obj.id&type=buyer" target="_blank"> 查看图片</a></b> </li>
+              <li>投诉时间:<strong>$!CommUtil.formatLongDate($!obj.addTime)</strong></li>
+            </ul>
+          </dd>
+        </dl>
+        <dl class="backcomp_d">
+          <dt>投诉商品</dt>
+          <dd>
+            <table width="95%" border="0" cellspacing="0" cellpadding="0" class="backcomp_table">
+              <tr class="backcomp_table_th">
+                <td width="50%">商品名称</td>
+                <td width="20%">商品信息</td>
+                <td width="15%" align="center">数量</td>
+                <td width="15%" align="center">价格</td>
+              </tr>
+              #foreach($cg in $obj.cgs)
+              #foreach($gc1 in $obj.of.gcs)
+              #if($cg.goods.id==$gc1.goods.id)
+              #set($gc=$gc1)
+              #end
+              #end
+              <tr>
+              <tr class="backcom_table_boder">
+                <td class="backcomp_img_deta"><strong><a href=""><img width="80px" height="80px" src="$!webPath/$!{gc.goods.goods_main_photo.path}/$!{gc.goods.goods_main_photo.name}_small.$!{gc.goods.goods_main_photo.ext}" /></a></strong><b><a href="$!webPath/goods_$!{gc.goods.id}.htm" target="_blank">$!{gc.goods.goods_name}</a></b></td>
+                <td class="backcomp_img_deta">$!{gc.spec_info}</td>
+                
+                <td align="center">$!{gc.count}</td>
+                <td align="center">¥$!{gc.goods.store_price}</td>
+              </tr>
+              <tr>
+                <td colspan="4" class="hui2">问题描述:$!cg.content</td>
+              </tr>
+              #end
+            </table>
+          </dd>
+        </dl>
+        <dl class="backcomp_d">
+          <dt>投诉内容</dt>
+          <dd>
+            <div class="backcomp_cont">$!obj.from_user_content</div>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    #if($!obj.status>1)
+    <div class="backcomp">
+      <div class="reputh">申诉详情</div>
+      <div class="backcomp_box">
+        <dl class="backcomp_d">
+          <dt>申诉信息</dt>
+          <dd>
+            <ul class="backcomp_u">
+              <li>申诉人：<strong>$!obj.to_user.userName</strong></li>
+              <li>申诉证据：<b class="blue"><a href="$!webPath/admin/complaint_img.htm?id=$!obj.id&type=seller" target="_blank">查看图片</a></b> </li>
+              <li>申诉时间：<strong>$!CommUtil.formatLongDate($!obj.appeal_time)</strong></li>
+            </ul>
+          </dd>
+        </dl>
+        <dl class="backcomp_d">
+          <dt>申诉内容</dt>
+          <dd>
+            <div class="backcomp_cont">$!obj.to_user_content</div>
+          </dd>
+        </dl>  
+      </div>
+    </div>
+    <div class="backcomp">
+      <div class="reputh">对话详情</div>
+      <div class="backcomp_box">
+        <dl class="backcomp_d">
+          <dt>对话记录</dt>
+          <dd>
+            <div class="backcomp_cont_text">
+              <div class="backcomp_cont_scol">
+                <ul id="talk_content_detail">
+                 #foreach($talk in $CommUtil.str2list("$!obj.talk_content"))
+                    #if($!CommUtil.indexOf("$!talk","管理员")==0)
+                       #set($class="admin")
+                    #end
+                    #if($!CommUtil.indexOf("$!talk","申诉")==0)
+                       #set($class="from_user")
+                    #end
+                    #if($!CommUtil.indexOf("$!talk","投诉")==0)
+                       #set($class="to_user")
+                    #end
+                    <li class="$!class">$!talk</li>
+                  #end
+                 </ul>
+              </div>
+            </div>
+          </dd>
+        </dl>
+        #if($!obj.status>1 && $!obj.status<4)
+        <dl class="backcomp_d">
+          <dt>仲裁对话</dt>
+          <dd>
+            <div class="backcomp_cont_text">
+              <textarea name="talk_content" cols="" rows="" id="talk_content"></textarea>
+            </div>
+            <span class="submit">
+        <input name="" type="button" value="加入对话" style="cursor:pointer;" onclick="complaint_talk();"/>
+        </span><span class="submit">
+        <input type="button" value="刷新对话" style="cursor:pointer;" onclick="complaint_talk_reload();"/>
+        </span>
+          </dd>
+        </dl>
+        #end
+      </div>
+    </div>
+   #end
+   #if($!obj.status==4)
+   <div class="backcomp">
+      <div class="reputh">仲裁详情</div>
+      <div class="backcomp_box">
+        <dl class="backcomp_d">
+          <dt>仲裁信息</dt>
+          <dd>
+            <ul class="backcomp_u">
+              <li>仲裁管理员：<strong>$!obj.handle_user.userName</strong></li>
+              <li>仲裁时间：<strong>$!CommUtil.formatLongDate($!obj.handle_time)</strong></li>
+            </ul>
+          </dd>
+        </dl>
+        <dl class="backcomp_d">
+          <dt>仲裁内容</dt>
+          <dd>
+            <div class="backcomp_cont">$!obj.handle_content</div>
+          </dd>
+        </dl>  
+      </div>
+    </div>
+   #end
+   #if($!obj.status>=0 && $!obj.status<4)
+   <div class="backcomp" id="complaint_handle" style="display:none;">
+      <div class="reputh">处理意见</div>
+      <div class="backcomp_box">
+        <dl class="backcomp_d">
+          <dd>
+            <div class="backcomp_cont_text">
+              <textarea name="handle_content" cols="" rows="" id="handle_content"></textarea>
+            </div>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    #end
+    #if($!obj.status!=1 && $!obj.status<4)
+    <div class="backcomp">
+      <div class="reputh">投诉处理</div>
+      #if($!obj.status==0)
+      <div class="comback_btn" id="complaint_op_0"><span class="submit">
+        <input name="" type="button" value="审核" style="cursor:pointer;" onclick="complaint_audit();"/>
+        </span><span class="submit">
+        <input name="" type="button" value="关闭投诉" style="cursor:pointer;" onclick="complaint_close();"/>
+        </span>
+      </div>
+      #end
+       #if($!obj.status>1 && $!obj.status<4)
+      <div class="comback_btn" id="complaint_op_0"><span class="submit">
+        <input name="" type="button" value="关闭投诉" style="cursor:pointer;" onclick="complaint_close();"/>
+        </span>
+      </div>
+      #end
+        <div class="comback_btn" id="complaint_close" style="display:none;"><span class="submit">
+        <input name="" type="button" value="提交" style="cursor:pointer;" onclick="complaint_handle_close();"/>
+        </span><span class="submit">
+        <input name="" type="button" value="取消" style="cursor:pointer;" onclick="jQuery('#complaint_op_0').show();jQuery('#complaint_close').hide();jQuery('#complaint_handle').hide();"/>
+        </span></div>
+    </div>
+    #end
+  </div>
+  </form>
+</div>
+</body>
+</html>

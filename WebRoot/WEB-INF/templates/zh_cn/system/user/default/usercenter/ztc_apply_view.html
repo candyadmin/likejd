@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>直通车申请详情 - Powered by shopping</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> 
+$!httpInclude.include("/seller/nav_head.htm")
+     <div class="user_center">
+    <table width="1000" border="0" cellspacing="0" cellpadding="0" class="user_table">
+      <tr>
+        $!httpInclude.include("/seller/nav.htm?op=ztc_apply")
+        <td id="centerbg" valign="top">
+         <div class="buyer_position"><div class="buyer_p_box"><a href="$!webPath/seller/index.htm">卖家中心</a> > <span>直通车详情</span></div></div>
+        <div class="productmain">
+            <div class="ordernav">
+              <ul class="orderul">
+                <li class="other"><a href='$!webPath/seller/ztc_apply.htm'>直通车申请</a></li>
+                   <li class="other"><a href='$!webPath/seller/ztc_apply_list.htm'>直通车申请列表</a></li>
+                  <li class="other"><a href='$!webPath/seller/ztc_list.htm'>直通车商品</a></li>
+                <li class="this">直通车申请详情</li>
+              </ul>
+            </div>
+            <div class="ordercon">
+              <div class="addnav">
+                <table width="705" border="0" cellspacing="0" cellpadding="0" class="addnavtable">
+                  <tr>
+                    <td width="100" align="right" valign="top">商品名称：</td>
+                    <td class="px10 message">$!obj.goods_name</td>
+                  </tr>
+                  #foreach($reply in $obj.replys)
+				  #end
+                  <tr>
+                    <td align="right" valign="top">直通车价格：</td>
+                    <td class="px10">$!{obj.ztc_price}金币/天</td>
+                  </tr>
+                  <tr>
+                    <td  align="right" valign="top">消耗金币：</td>
+                    <td class="px10">$!{obj.ztc_gold}金币                  </td>
+                  </tr>
+                  <tr>
+                    <td  align="right" valign="top">开始时间：</td>
+                    <td class="px10">$!obj.ztc_begin_time</td>
+                  </tr>
+                  <tr>
+                    <td  align="right" valign="top">支付状态：</td>
+                    #if($!obj.ztc_pay_status==0)
+                      #set($ztc_pay_status="等待支付")
+                    #end
+                    #if($!obj.ztc_pay_status==1)
+                      #set($ztc_pay_status="支付成功")
+                    #end
+                    <td class="px10">$!ztc_pay_status</td>
+                  </tr>
+                  <tr>
+                    <td  align="right" valign="top">直通车状态：</td>
+                    #if($!obj.ztc_status==1)
+                      #set($ztc_status="待审核")
+                    #end
+                    #if($!obj.ztc_status==2)
+                      #set($ztc_status="审核通过")
+                    #end
+                    #if($!obj.ztc_status==-1)
+                      #set($ztc_status="审核失败")
+                    #end
+                    <td class="px10">$!ztc_status</td>
+                  </tr>
+                  #if($!obj.ztc_admin)
+                  <tr>
+                    <td  align="right" valign="top">操作管理员：</td>
+                    <td class="px10">$!obj.ztc_admin.userName</td>
+                  </tr>
+                  #end
+                  #if($!obj.ztc_admin_content)
+                  <tr>
+                    <td  align="right" valign="top">操作备注：</td>
+                    <td class="px10">$!obj.ztc_admin_content</td>
+                  </tr>
+                  #end
+                  <tr>
+                    <td  align="right" valign="top">&nbsp;</td>
+                    <td class="px10"><span class="setsub">
+                        <input type="button"  value="返回列表" style="cursor:pointer;" onclick="window.location.href='$!webPath/seller/ztc_apply.htm'" />
+                        </span></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div></td>
+      </tr>
+    </table>
+  </div>
+   $!httpInclude.include("/footer.htm")
+</div>
+</body>
+</html>

@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!obj.ig_goods_name - 积分商城 - Powered by shopping</title>
+<meta name="keywords" content="$!obj.ig_seo_keywords" />
+<meta name="description" content="$!obj.ig_seo_description" />
+<meta name="generator" content="shopping 2.0" />
+<meta name="author" content="www.shopping.com">
+<meta name="copyright" content="shopping Inc. All Rights Reserved">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/integral.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script>
+function copyToClipBoard(txt)
+{
+    if(window.clipboardData)
+    { 
+        // the IE-manier
+        window.clipboardData.clearData();
+        window.clipboardData.setData("Text", txt);
+        alert("复制到剪贴板成功!");
+    }
+    else if(navigator.userAgent.indexOf("Opera") != -1)
+    {
+        window.location = txt;
+        alert("复制到剪贴板成功!");
+    }
+    else if (window.netscape)
+    {
+        try {
+            netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+        } catch (e) {
+            alert("被浏览器禁止了相关设置！\n请在浏览器地址栏输入\'about:config\'并回车\n然后将\'signed.applets.codebase_principal_support\'设置为\'true\'");
+            return false;
+        }
+        var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+        if (!clip){return;}
+        var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+        if (!trans){return;}
+        trans.addDataFlavor('text/unicode');
+        var str = new Object();
+        var len = new Object();
+        str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+        var copytext = txt;
+        str.data = copytext;
+        trans.setTransferData("text/unicode",str,copytext.length*2);
+        var clipid = Components.interfaces.nsIClipboard;
+        if (!clip){return false;}
+        clip.setData(trans,null,clipid.kGlobalClipboard);
+        alert("复制到剪贴板成功!!");
+    }
+}
+function copy_url(){
+  var url=jQuery("#view_url").val();
+  copyToClipBoard(url);
+}
+jQuery(document).ready(function(){
+  #if($!obj.ig_limit_type==true)
+    #set($max=$!{obj.ig_limit_count})
+  #else
+    #set($max=$!{obj.ig_goods_count})
+  #end
+  jQuery("#theForm").validate({
+      rules:{
+		   exchange_count:{required:true,digits:true,max:$!{max}}
+		  },
+	  messages:{
+		    exchange_count:{required:"兑换数量不能为空",digits:"只能为整数",max:"最多兑换{0}"}
+		  }
+   });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="main"> $!httpInclude.include("/head.htm")
+  $!httpInclude.include("/nav1.htm")
+  <div class="index">
+    <div class="integ_details">
+    <form action="$!webPath/integral_exchange1.htm" method="post" id="theForm">
+      <div class="details_in">
+        <h1>$!obj.ig_goods_name</h1>
+        <div class="integ_img"> <img src="$!imageWebServer/$!{obj.ig_goods_img.path}/$!{obj.ig_goods_img.name}" width="384" height="384" /> </div>
+        <ul class="detailsul">
+          <li><span class="detulsp">商品编号:</span><span>$!{obj.ig_goods_sn}</span></li>
+          <li><span class="detulsp">上架时间:</span><span>$!CommUtil.formatShortDate($!obj.addTime)</span></li>
+          <li><span class="detulsp">市场价格:</span><span><strong>¥$!{obj.ig_goods_price}</strong></span></li>
+          <li><span class="detulsp">我的积分:</span><span><b>#if($!user)$!{user.integral}分#else 尚未登录 #end</b></span></li>
+          <li><span class="detulsp">消耗积分:</span><span><strong class="font_size">$!{obj.ig_goods_integral}</strong><a href="$!webPath/article_freeintegral.htm" target="_blank" class="detula">如何免费获取积分?</a></span></li>
+          <li><span class="detulsp">兑换数量:</span><span><i class="txt_detul">
+            <input name="exchange_count" type="text" id="exchange_count" value="1" />
+            </i>剩余<em>$!{obj.ig_goods_count}</em>件</span></li>
+          <li><i class="detspan">
+            <input name="" type="submit"  value="我要兑换" style="cursor:pointer;"/>
+            </i>
+            <input name="id" type="hidden" id="id" value="$!obj.id" />
+          </li>
+          <li><span class="detst">分享该礼品地址给朋友:</span><span class="detstinput"><i class="detqtxt">
+            <input name="view_url" type="text" id="view_url" value="$!view_url" />
+            </i><i class="detqbtn">
+            <input name="" type="button" value="复制地址" onclick="copy_url();" style="cursor:pointer;" />
+            </i></span></li>
+          <li><i class="collection">分享该礼品到：</i>$!config.share_code</li>
+        </ul>
+      </div>
+      </form>
+      <div class="gift_explain">
+        <h1><span>礼品介绍</span></h1>
+        <div class="explain_det">$!{obj.ig_content}</div>
+      </div>
+    </div>
+    <div class="gift_recode">
+      <h1>礼品兑换记录</h1>
+      <ul>
+        #foreach($gc in $gcs)
+          <li> <span><a href="$!webPath/integral_view_$!{gc.goods.id}.htm" target="_blank">$!{gc.order.igo_user.userName}兑换：$!CommUtil.substring("$!{gc.goods.ig_goods_name}",12)</a></span> <span><b>使用积分：<strong> $!{gc.integral}分</strong></b> <i>$!CommUtil.formatLongDate($!gc.addTime)</i></span> </li>
+        #end
+      </ul>
+    </div>
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

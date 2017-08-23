@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#beginTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  //
+});
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/delivery_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+//向前count天 向后count天
+function before_set(count,date){
+   jQuery.post("$!webPath/admin/delivery_date_query.htm",{"count":count,"date":date},function(data){
+	 jQuery("#the_day").html(data);
+   });
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth1">组合销售</h1>
+  <div class="settab"><span class="tab-one"></span> <span class="tabs"> <a href="$!webPath/admin/set_combin.htm">通用设置</a> | <a href="$!webPath/admin/combin_goods.htm" class="this">申请列表</a> </span> <span class="tab-two"></span></div>
+  <form method="post" id="queryForm">
+    <div class="orders">
+      <ul>
+        <li><span>商品名称</span> <span class="allmen size6">
+          <input name="goods_name" type="text" id="goods_name" />
+          <select name="combin_status" id="combin_status">
+            <option value="">组合销售状态</option>
+            <option value="2">审核通过</option>
+            <option value="1">等待审核</option>
+            <option value="-1">审核拒绝</option>
+          </select>
+          </span><span class="btn_search">
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;"/>
+          </span> </li>
+      </ul>
+    </div>
+  </form>
+  <form method="post" id="ListForm">
+    <div class="allshop_table">
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background: #if($!config.websiteCss=='blue') #2A7AD2 #end 
+      #if($!config.websiteCss=='black')#333 #end; height:30px; color:#FFF">
+          <td width="30"></td>
+          <td width="25%">主体商品</td>
+          <td width="20%">赠品</td>
+          <td width="10%" align="center">组合价格</td>
+          <td width="10%" align="center">开始时间</td>
+          <td align="center" width="10%">结束时间</td>
+          <td align="center" width="8%">状态</td>
+          <td align="center">操作</td>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+          <td><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td><a href="$!webPath/goods_$!{obj.id}.htm" target="_blank">$!CommUtil.substring("$!obj.goods_name",18)</a></td>
+          <td><div>
+              <ul>
+                #foreach($info in $obj.combin_goods)
+                <li style="list-style:none;"><a href="$!webPath/goods_$!{info.id}.htm" target="_blank">$!{velocityCount}、$!CommUtil.substring("$!info.goods_name",10)</a></li>
+                #end
+              </ul>
+            </div></td>
+          <td align="center">$!obj.combin_price</td>
+          <td align="center">$!CommUtil.formatShortDate($!obj.combin_begin_time)</td>
+          <td align="center">$!CommUtil.formatShortDate($!obj.combin_end_time)</td>
+          #set($status="等待审核")
+          #if($!obj.combin_status==2)
+          #set($status="审核通过")
+          #end
+          #if($!obj.combin_status==-1)
+          #set($status="拒绝通过")
+          #end
+          <td align="center">$!status</td>
+          <td  align="center" class="aoprater"> #if($!obj.combin_status==1||$!obj.combin_status==-1)<a href="javascript:void(0);" onclick="if(confirm('确定审核通过该组合销售商品？'))window.location.href='$!webPath/admin/combin_goods_audit.htm?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">通过</a>#end #if($!obj.combin_status!=-1)<a href="javascript(0);" onclick="if(confirm('确定拒绝该组合销售商品？'))window.location.href='$!webPath/admin/combin_goods_refuse.htm?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">拒绝</a>#end</td>
+        </tr>
+        #end
+        <tr style="background:#F2F2F2; height:30px;">
+          <td colspan="8"><div class="fenye3">
+              <input name="combin_status" type="hidden" id="combin_status" value="$!combin_status" />
+              <input name="goods_name" type="hidden" id="goods_name" value="$!goods_name" />
+              <input type="hidden" name="mulitId" id="mulitId" />
+              <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+              $!gotoPageFormHTML</div>
+            <div class="shopbtn shopfx">
+              <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+              &nbsp;&nbsp;全部</div>
+            <div class="shop_btn_del shopbtn">
+              <input type="button" value="通过" onclick="cmd('$!webPath/admin/delivery_goods_audit.htm?delivery_time=$!delivery_time');" style="cursor:pointer;" />
+              <input type="button" value="拒绝" onclick="cmd('$!webPath/admin/delivery_goods_refuse.htm?delivery_time=$!delivery_time&currentPage=$!currentPage');" style="cursor:pointer;" />
+            </div></td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</div>
+</body>
+</html>

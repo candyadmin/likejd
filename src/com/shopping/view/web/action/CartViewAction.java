@@ -1455,7 +1455,7 @@ public class CartViewAction {
 				// 拿到codeUrl，生成二维码图片
 				byte[] imgs = QRCodeEncoderHandler.createQRCode(codeUrl);
 
-				String urls = request.getServletContext().getRealPath("/")+this.configService.getSysConfig().getUploadFilePath()
+				String urls = "/"+this.configService.getSysConfig().getUploadFilePath()
 						+ java.io.File.separator + "weixin_qr" + java.io.File.separator + "wxpay"
 						+ java.io.File.separator;
 				// 图片的实际路径
